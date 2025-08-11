@@ -1,408 +1,144 @@
 package pss.tourism.pnr;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import javax.swing.JTabbedPane;
-
-import pss.core.ui.components.JPssCalendarEdit;
-import pss.core.ui.components.JPssEdit;
-import pss.core.ui.components.JPssLabel;
 import pss.core.win.JWin;
-import pss.core.winUI.controls.JFormLista;
 import pss.core.winUI.forms.JBaseForm;
-import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
+import pss.core.winUI.responsiveControls.JFormPanelResponsive;
 
-public class FormPNRHotel  extends JBaseForm {
+public class FormPNRHotel extends JBaseForm {
 
+    private static final long serialVersionUID = 1502224695647L;
 
-private static final long serialVersionUID = 1502224695647L;
-JPssEdit secuence_id = new JPssEdit  ();
-JPssLabel lproduct_code = new JPssLabel();
-JPssEdit product_code = new JPssEdit  ();
-JPssEdit control_data = new JPssEdit  ();
-JPssEdit action = new JPssEdit  ();
-JPssLabel lfecha_reserva = new JPssLabel();
-JPssCalendarEdit fecha_reserva = new JPssCalendarEdit  ();
-JPssLabel lproducto_secundario = new JPssLabel();
-JPssEdit producto_secundario = new JPssEdit  ();
-JPssLabel lpasajeros = new JPssLabel();
-JPssEdit pasajeros = new JPssEdit  ();
-JPssLabel lhabitaciones = new JPssLabel();
-JPssEdit habitaciones = new JPssEdit  ();
-JPssLabel lcar_code = new JPssLabel();
-JPssEdit car_code = new JPssEdit  ();
-JPssLabel lconfirmacion = new JPssLabel();
-JPssEdit confirmacion = new JPssEdit  ();
-JPssLabel laeropuerto = new JPssLabel();
-JPssEdit aeropuerto = new JPssEdit  ();
-JPssLabel lhotel_codigo = new JPssLabel();
-JPssEdit hotel_codigo = new JPssEdit  ();
-JPssLabel lfecha_salida = new JPssLabel();
-JPssCalendarEdit fecha_salida = new JPssCalendarEdit  ();
-JPssLabel lnoches = new JPssLabel();
-JPssEdit noches = new JPssEdit  ();
-JPssLabel ltour_name = new JPssLabel();
-JPssEdit tour_name = new JPssEdit  ();
-JPssLabel lhotel_name = new JPssLabel();
-JPssEdit hotel_name = new JPssEdit  ();
-JPssLabel lcodigo_producto = new JPssLabel();
-JPssEdit codigo_producto = new JPssEdit  ();
-JPssLabel limporte_base = new JPssLabel();
-JPssEdit importe_base = new JPssEdit  ();
-JPssEdit moneda_base = new JPssEdit  ();
-JPssLabel limporte = new JPssLabel();
-JPssEdit importe = new JPssEdit  ();
-JPssEdit moneda = new JPssEdit  ();
-JPssLabel ltasas = new JPssLabel();
-JPssEdit tasas = new JPssEdit  ();
-JPssLabel lprecio_total = new JPssLabel();
-JPssEdit precio_total = new JPssEdit  ();
-JPssEdit moneda_precio_total = new JPssEdit  ();
-JPssLabel ldomicilio = new JPssLabel();
-JPssEdit domicilio = new JPssEdit  ();
-JPssLabel ltelefono = new JPssLabel();
-JPssEdit telefono = new JPssEdit  ();
-JPssLabel lfax = new JPssLabel();
-JPssEdit fax = new JPssEdit  ();
-JPssLabel lcodigo_confirmacion = new JPssLabel();
-JPssEdit codigo_confirmacion = new JPssEdit  ();
-JPssLabel lcomision_codigo = new JPssLabel();
-JPssEdit comision_codigo = new JPssEdit  ();
-JPssLabel lcomision_texto = new JPssLabel();
-JPssEdit comision_texto = new JPssEdit  ();
-JPssLabel lcomision_monto = new JPssLabel();
-JPssEdit comision_monto = new JPssEdit  ();
-JPssLabel ltipo_tarjeta = new JPssLabel();
-JPssEdit tipo_tarjeta = new JPssEdit  ();
-JPssLabel ltarjeta = new JPssLabel();
-JPssEdit tarjeta = new JPssEdit  ();
-JPssLabel ltax_breakdown1 = new JPssLabel();
-JPssEdit tax_breakdown1 = new JPssEdit  ();
-JPssLabel ltax_breakdown2 = new JPssLabel();
-JPssEdit tax_breakdown2 = new JPssEdit  ();
-JPssLabel ltax_breakdown3 = new JPssLabel();
-JPssEdit tax_breakdown3 = new JPssEdit  ();
-JPssLabel ltax_breakdown4 = new JPssLabel();
-JPssEdit tax_breakdown4 = new JPssEdit  ();
-JPssLabel lsurchange1 = new JPssLabel();
-JPssEdit surchange1 = new JPssEdit  ();
-JPssLabel lsurchange2 = new JPssLabel();
-JPssEdit surchange2 = new JPssEdit  ();
-JPssLabel lsurchange3 = new JPssLabel();
-JPssEdit surchange3 = new JPssEdit  ();
-JPssLabel lsurchange4 = new JPssLabel();
-JPssEdit surchange4 = new JPssEdit  ();
-JPssLabel ldisclaimer1 = new JPssLabel();
-JPssEdit disclaimer1 = new JPssEdit  ();
-JPssLabel ldisclaimer2 = new JPssLabel();
-JPssEdit disclaimer2 = new JPssEdit  ();
-JPssLabel lpickup_point = new JPssLabel();
-JPssEdit pickup_point = new JPssEdit  ();
-JPssLabel ldrop_off_date = new JPssLabel();
-JPssEdit drop_off_date = new JPssEdit  ();
-JPssLabel lcar_type = new JPssLabel();
-JPssEdit car_type = new JPssEdit  ();
-JPssLabel lupgrade = new JPssLabel();
-JPssEdit upgrade = new JPssEdit  ();
-JPssLabel larribo_hora = new JPssLabel();
-JPssEdit arribo_hora = new JPssEdit  ();
-JPssLabel lreorno_Arrivo = new JPssLabel();
-JPssEdit reorno_Arrivo = new JPssEdit  ();
-JPssLabel ldop_off_location = new JPssLabel();
-JPssEdit dop_off_location = new JPssEdit  ();
-JPssLabel ldrop_off_charge = new JPssLabel();
-JPssEdit drop_off_charge = new JPssEdit  ();
-JPssLabel lgarantia = new JPssLabel();
-JPssEdit garantia = new JPssEdit  ();
-JPssLabel lcorporate_discount = new JPssLabel();
-JPssEdit corporate_discount = new JPssEdit  ();
-JPssLabel ltourcode = new JPssLabel();
-JPssEdit tourcode = new JPssEdit  ();
-JPssLabel lequipamiento = new JPssLabel();
-JPssEdit equipamiento = new JPssEdit  ();
-JPssLabel lremarks = new JPssLabel();
-JPssEdit remarks = new JPssEdit  ();
-JPssLabel lpasajero_frecuente = new JPssLabel();
-JPssEdit pasajero_frecuente = new JPssEdit  ();
-JPssLabel lnombre_cliente = new JPssLabel();
-JPssEdit nombre_cliente = new JPssEdit  ();
-JPssLabel lcupon = new JPssLabel();
-JPssEdit cupon = new JPssEdit  ();
-JPssLabel ltasa_garantia = new JPssLabel();
-JPssEdit tasa_garantia = new JPssEdit  ();
-JPssLabel lbooking_source = new JPssLabel();
-JPssEdit booking_source = new JPssEdit  ();
-JPssLabel lrate_code = new JPssLabel();
-JPssEdit rate_code = new JPssEdit  ();
-JPssLabel lprecio = new JPssLabel();
-JPssEdit precio = new JPssEdit  ();
-JPssLabel lvehiculo_proveedor = new JPssLabel();
-JPssEdit vehiculo_proveedor = new JPssEdit  ();
-JPssLabel lvoucher_tipo = new JPssLabel();
-JPssEdit voucher_tipo = new JPssEdit  ();
-JPssLabel lvoucher_numero = new JPssLabel();
-JPssEdit voucher_numero = new JPssEdit  ();
-JPssLabel lvoucher_biling = new JPssLabel();
-JPssEdit voucher_biling = new JPssEdit  ();
-JPssLabel lvoucher_format = new JPssLabel();
-JPssEdit voucher_format = new JPssEdit  ();
-JPssLabel linfo = new JPssLabel();
-JPssEdit info = new JPssEdit  ();
-JPssLabel lequipamiento_confirmado = new JPssLabel();
-JPssEdit equipamiento_confirmado = new JPssEdit  ();
-JPssLabel lgarantia_info = new JPssLabel();
-JPssEdit garantia_info = new JPssEdit  ();
-JPssLabel lvendedor = new JPssLabel();
-JPssEdit vendedor = new JPssEdit  ();
-JPssLabel lcompany = new JPssLabel();
-JPssEdit company = new JPssEdit  ();
-private JTabbedPane tabbedPane;
-private final JPanel panel = new JPanel();
+    public FormPNRHotel() throws Exception {
+    }
 
+    public GuiPNROtro getWin() {
+        return (GuiPNROtro) getBaseWin();
+    }
 
-  /**
-   * Constructor de la Clase
-   */
-  public FormPNRHotel() throws Exception {
-    try { jbInit(); }
-    catch (Exception e) { e.printStackTrace(); } 
-  }
+    @Override
+    public void InicializarPanel(JWin zWin) throws Exception {
+        AddItemEdit(null, CHAR, REQ, "company").setHide(true);
 
-  public GuiPNROtro getWin() { return (GuiPNROtro) getBaseWin(); }
+        JFormPanelResponsive row = AddItemRow();
+        row.AddItemEdit("Secuencia", UINT, REQ, "secuence_id").setSizeColumns(4);
+        row.AddItemEdit("Producto", CHAR, REQ, "product_desc").setSizeColumns(4);
+        row.AddItemEdit("Control", CHAR, REQ, "control_data").setSizeColumns(4);
 
-  /**
-   * Inicializacion Grafica
-   */
-  protected void jbInit() throws Exception {
-    setLayout(null);
-    setSize(new Dimension(671, 572));
+        row = AddItemRow();
+        row.AddItemEdit("Acción", CHAR, REQ, "action").setSizeColumns(4);
+        row.AddItemDateTime("Fecha reserva", DATE, REQ, "fecha_reserva").setSizeColumns(4);
+        row.AddItemEdit("Producto secundario", CHAR, OPT, "producto_secundario").setSizeColumns(4);
 
+        row = AddItemRow();
+        row.AddItemEdit("Pasajeros", UINT, OPT, "pasajeros").setSizeColumns(4);
+        row.AddItemEdit("Habitaciones", UINT, OPT, "habitaciones").setSizeColumns(4);
+        row.AddItemEdit("Car code", CHAR, OPT, "car_code").setSizeColumns(4);
 
-    lproduct_code.setText( "Producto" );
-    lproduct_code.setBounds(new Rectangle(10, 11, 123, 22)); 
-    product_code.setBounds(new Rectangle(84, 11, 197, 22)); 
-    add(lproduct_code, null);
-    add(product_code , null);
+        row = AddItemRow();
+        row.AddItemEdit("Confirmación", CHAR, OPT, "confirmacion").setSizeColumns(4);
+        row.AddItemEdit("Aeropuerto", CHAR, OPT, "aeropuerto").setSizeColumns(4);
+        row.AddItemEdit("Hotel código", CHAR, OPT, "hotel_codigo").setSizeColumns(4);
 
+        row = AddItemRow();
+        row.AddItemDateTime("Fecha salida", DATE, OPT, "fecha_salida").setSizeColumns(4);
+        row.AddItemEdit("Noches", UINT, OPT, "noches").setSizeColumns(4);
+        row.AddItemEdit("Tour", CHAR, OPT, "tour_name").setSizeColumns(4);
 
-    lfecha_reserva.setText( "Fecha reserva" );
-    lfecha_reserva.setBounds(new Rectangle(10, 65, 123, 22)); 
-    fecha_reserva.setBounds(new Rectangle(84, 65, 197, 22)); 
-    add(lfecha_reserva, null);
-    add(fecha_reserva , null);
+        row = AddItemRow();
+        row.AddItemEdit("Hotel", CHAR, OPT, "hotel_name").setSizeColumns(4);
+        row.AddItemEdit("Código prod.", CHAR, OPT, "codigo_producto").setSizeColumns(4);
+        row.AddItemEdit("Importe base", UFLOAT, OPT, "importe_base").setSizeColumns(4);
 
+        row = AddItemRow();
+        row.AddItemEdit("Moneda base", CHAR, OPT, "moneda_base").setSizeColumns(4);
+        row.AddItemEdit("Importe", UFLOAT, OPT, "importe").setSizeColumns(4);
+        row.AddItemEdit("Moneda", CHAR, OPT, "moneda_local").setSizeColumns(4);
 
+        row = AddItemRow();
+        row.AddItemEdit("Tasas", UFLOAT, OPT, "tasas").setSizeColumns(4);
+        row.AddItemEdit("Precio total", UFLOAT, OPT, "precio_total").setSizeColumns(4);
+        row.AddItemEdit("Moneda total", CHAR, OPT, "moneda_precio_total").setSizeColumns(4);
 
+        row = AddItemRow();
+        row.AddItemEdit("Domicilio", CHAR, OPT, "domicilio").setSizeColumns(4);
+        row.AddItemEdit("Teléfono", CHAR, OPT, "telefono").setSizeColumns(4);
+        row.AddItemEdit("Fax", CHAR, OPT, "fax").setSizeColumns(4);
 
-    lpasajeros.setText( "Pasajeros" );
-    lpasajeros.setBounds(new Rectangle(138, 203, 63, 22)); 
-    pasajeros.setBounds(new Rectangle(206, 203, 51, 22)); 
-    add(lpasajeros, null);
-    add(pasajeros , null);
+        row = AddItemRow();
+        row.AddItemEdit("Código conf.", CHAR, OPT, "codigo_confirmacion").setSizeColumns(4);
+        row.AddItemEdit("Comisión código", CHAR, OPT, "comision_codigo").setSizeColumns(4);
+        row.AddItemEdit("Comisión texto", CHAR, OPT, "comision_texto").setSizeColumns(4);
 
+        row = AddItemRow();
+        row.AddItemEdit("Comisión monto", UFLOAT, OPT, "comision_monto").setSizeColumns(4);
+        row.AddItemEdit("Tipo tarjeta", CHAR, OPT, "tipo_tarjeta").setSizeColumns(4);
+        row.AddItemEdit("Tarjeta", CHAR, OPT, "tarjeta").setSizeColumns(4);
 
-    lhabitaciones.setText( "Habitaciones" );
-    lhabitaciones.setBounds(new Rectangle(10, 228, 75, 22)); 
-    habitaciones.setBounds(new Rectangle(84, 228, 51, 22)); 
-    add(lhabitaciones, null);
-    add(habitaciones , null);
+        row = AddItemRow();
+        row.AddItemEdit("Tax1", CHAR, OPT, "tax_breakdown1").setSizeColumns(4);
+        row.AddItemEdit("Tax2", CHAR, OPT, "tax_breakdown2").setSizeColumns(4);
+        row.AddItemEdit("Tax3", CHAR, OPT, "tax_breakdown3").setSizeColumns(4);
 
+        row = AddItemRow();
+        row.AddItemEdit("Tax4", CHAR, OPT, "tax_breakdown4").setSizeColumns(4);
+        row.AddItemEdit("Surch1", CHAR, OPT, "surchange1").setSizeColumns(4);
+        row.AddItemEdit("Surch2", CHAR, OPT, "surchange2").setSizeColumns(4);
 
-    lcar_code.setText( "Tipo producto" );
-    lcar_code.setBounds(new Rectangle(10, 255, 75, 22)); 
-    car_code.setBounds(new Rectangle(84, 255, 143, 22)); 
-    add(lcar_code, null);
-    add(car_code , null);
+        row = AddItemRow();
+        row.AddItemEdit("Surch3", CHAR, OPT, "surchange3").setSizeColumns(4);
+        row.AddItemEdit("Surch4", CHAR, OPT, "surchange4").setSizeColumns(4);
+        row.AddItemEdit("Desc1", CHAR, OPT, "disclaimer1").setSizeColumns(4);
 
+        row = AddItemRow();
+        row.AddItemEdit("Desc2", CHAR, OPT, "disclaimer2").setSizeColumns(4);
+        row.AddItemEdit("Pickup point", CHAR, OPT, "pickup_point").setSizeColumns(4);
+        row.AddItemDateTime("Drop off", DATE, OPT, "drop_off_date").setSizeColumns(4);
 
+        row = AddItemRow();
+        row.AddItemEdit("Car type", CHAR, OPT, "car_type").setSizeColumns(4);
+        row.AddItemEdit("Upgrade", CHAR, OPT, "upgrade").setSizeColumns(4);
+        row.AddItemEdit("Arribo hora", CHAR, OPT, "arribo_hora").setSizeColumns(4);
 
-    lhotel_codigo.setText( "Hotel codigo" );
-    lhotel_codigo.setBounds(new Rectangle(10, 124, 123, 22)); 
-    hotel_codigo.setBounds(new Rectangle(84, 124, 197, 22)); 
-    add(lhotel_codigo, null);
-    add(hotel_codigo , null);
+        row = AddItemRow();
+        row.AddItemEdit("Retorno", CHAR, OPT, "retorno").setSizeColumns(4);
+        row.AddItemEdit("Drop off loc.", CHAR, OPT, "dop_off_location").setSizeColumns(4);
+        row.AddItemEdit("Drop off chg.", CHAR, OPT, "drop_off_charge").setSizeColumns(4);
 
+        row = AddItemRow();
+        row.AddItemEdit("Garantía", CHAR, OPT, "garantia").setSizeColumns(4);
+        row.AddItemEdit("Corp. discount", CHAR, OPT, "corporate_discount").setSizeColumns(4);
+        row.AddItemEdit("Tourcode", CHAR, OPT, "tourcode").setSizeColumns(4);
 
-    lfecha_salida.setText( "Fecha salida" );
-    lfecha_salida.setBounds(new Rectangle(10, 92, 123, 22)); 
-    fecha_salida.setBounds(new Rectangle(84, 92, 197, 22)); 
-    add(lfecha_salida, null);
-    add(fecha_salida , null);
+        row = AddItemRow();
+        row.AddItemEdit("Equipamiento", CHAR, OPT, "equipamiento").setSizeColumns(4);
+        row.AddItemEdit("Remarks", CHAR, OPT, "remarks").setSizeColumns(4);
+        row.AddItemEdit("Pasajero freq.", CHAR, OPT, "pasajero_frecuente").setSizeColumns(4);
 
+        row = AddItemRow();
+        row.AddItemEdit("Nombre cliente", CHAR, OPT, "nombre_cliente").setSizeColumns(4);
+        row.AddItemEdit("Cupon", CHAR, OPT, "cupon").setSizeColumns(4);
+        row.AddItemEdit("Tasa garantía", CHAR, OPT, "tasa_garantia").setSizeColumns(4);
 
-    lnoches.setText( "Noches" );
-    lnoches.setBounds(new Rectangle(10, 203, 123, 22)); 
-    noches.setBounds(new Rectangle(84, 203, 51, 22)); 
-    add(lnoches, null);
-    add(noches , null);
+        row = AddItemRow();
+        row.AddItemEdit("Booking source", CHAR, OPT, "booking_source").setSizeColumns(4);
+        row.AddItemEdit("Rate code", CHAR, OPT, "rate_code").setSizeColumns(4);
+        row.AddItemEdit("Vehículo prov.", CHAR, OPT, "vehiculo_proveedor").setSizeColumns(4);
 
+        row = AddItemRow();
+        row.AddItemEdit("Voucher tipo", CHAR, OPT, "voucher_tipo").setSizeColumns(4);
+        row.AddItemEdit("Voucher número", CHAR, OPT, "voucher_numero").setSizeColumns(4);
+        row.AddItemEdit("Voucher biling", CHAR, OPT, "voucher_biling").setSizeColumns(4);
 
-    ltour_name.setText( "Tour name" );
-    ltour_name.setBounds(new Rectangle(10, 177, 123, 22)); 
-    tour_name.setBounds(new Rectangle(84, 177, 197, 22)); 
-    add(ltour_name, null);
-    add(tour_name , null);
+        row = AddItemRow();
+        row.AddItemEdit("Voucher format", CHAR, OPT, "voucher_format").setSizeColumns(4);
+        row.AddItemEdit("Info", CHAR, OPT, "info").setSizeColumns(4);
+        row.AddItemEdit("Equip. confirmado", CHAR, OPT, "equipamiento_confirmado").setSizeColumns(4);
 
+        row = AddItemRow();
+        row.AddItemEdit("Garantía info", CHAR, OPT, "nombre_pasajero").setSizeColumns(4);
+        row.AddItemEdit("Vendedor", CHAR, OPT, "vendedor").setSizeColumns(4);
 
-    lhotel_name.setText( "Hotel name" );
-    lhotel_name.setBounds(new Rectangle(10, 153, 123, 22)); 
-    hotel_name.setBounds(new Rectangle(84, 153, 260, 22)); 
-    add(lhotel_name, null);
-    add(hotel_name , null);
-    panel.setBorder(new TitledBorder(null, "Montos", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-    panel.setBounds(364, 69, 283, 208);
-    
-    add(panel);
-    panel.setLayout(null);
-        limporte_base.setBounds(7, 16, 123, 22);
-        panel.add(limporte_base);
-    
-    
-        limporte_base.setText( "Importe base" );
-        importe_base.setBounds(134, 16, 143, 22);
-        panel.add(importe_base);
-    limporte.setBounds(7, 43, 123, 22);
-    panel.add(limporte);
+        AddItemTabPanel().AddItemList(120);
+    }
+}
 
-
-    limporte.setText( "Importe" );
-    importe.setBounds(134, 44, 143, 22);
-    panel.add(importe);
-    ltasas.setBounds(7, 75, 123, 22);
-    panel.add(ltasas);
-
-
-    ltasas.setText( "Tasas" );
-    tasas.setBounds(134, 73, 143, 22);
-    panel.add(tasas);
-    lprecio_total.setBounds(7, 100, 123, 22);
-    panel.add(lprecio_total);
-
-
-    lprecio_total.setText( "Precio total" );
-    precio_total.setBounds(134, 100, 143, 22);
-    panel.add(precio_total);
-    lcomision_codigo.setBounds(7, 128, 123, 22);
-    panel.add(lcomision_codigo);
-
-
-    lcomision_codigo.setText( "Comision codigo" );
-    comision_codigo.setBounds(134, 128, 143, 22);
-    panel.add(comision_codigo);
-    lcomision_texto.setBounds(6, 152, 123, 22);
-    panel.add(lcomision_texto);
-
-
-    lcomision_texto.setText( "Comision texto" );
-    comision_texto.setBounds(134, 152, 143, 22);
-    panel.add(comision_texto);
-    lcomision_monto.setBounds(6, 179, 123, 22);
-    panel.add(lcomision_monto);
-
-
-    lcomision_monto.setText( "Comision monto" );
-    comision_monto.setBounds(134, 179, 143, 22);
-    panel.add(comision_monto);
-
-
-
-
-
-    lgarantia_info.setText( "Pasajero" );
-    lgarantia_info.setBounds(new Rectangle(10, 38, 123, 22)); 
-    garantia_info.setBounds(new Rectangle(84, 38, 556, 22)); 
-    add(lgarantia_info, null);
-    add(garantia_info , null);
-    
-    tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-    tabbedPane.setBounds(10, 288, 651, 273);
-    add(tabbedPane);
-  }
-  /**
-   * Linkeo los campos con la variables del form
-   */
-  public void InicializarPanel( JWin zWin ) throws Exception {
-    AddItem( secuence_id, UINT, REQ, "secuence_id" );
-    AddItem( product_code, CHAR, REQ, "product_desc" );
-    AddItem( control_data, CHAR, REQ, "control_data" );
-    AddItem( action, CHAR, REQ, "action" );
-    AddItem( fecha_reserva, DATE, REQ, "fecha_reserva" );
-    AddItem( producto_secundario, CHAR, REQ, "producto_secundario" );
-    AddItem( pasajeros, UINT, REQ, "pasajeros" );
-    AddItem( habitaciones, UINT, REQ, "habitaciones" );
-    AddItem( car_code, CHAR, REQ, "car_code" );
-    AddItem( confirmacion, CHAR, REQ, "confirmacion" );
-    AddItem( aeropuerto, CHAR, REQ, "aeropuerto" );
-    AddItem( hotel_codigo, CHAR, REQ, "hotel_codigo" );
-    AddItem( fecha_salida, DATE, REQ, "fecha_salida" );
-    AddItem( noches, UINT, REQ, "noches" );
-    AddItem( tour_name, CHAR, REQ, "tour_name" );
-    AddItem( hotel_name, CHAR, REQ, "hotel_name" );
-    AddItem( codigo_producto, CHAR, REQ, "codigo_producto" );
-    AddItem( importe_base, UFLOAT, REQ, "importe_base" );
-    AddItem( moneda_base, CHAR, REQ, "moneda_base" );
-    AddItem( importe, UFLOAT, REQ, "importe" );
-    AddItem( moneda, CHAR, REQ, "moneda_local" );
-    AddItem( tasas, UFLOAT, REQ, "tasas" );
-    AddItem( precio_total, UFLOAT, REQ, "precio_total" );
-    AddItem( moneda_precio_total, CHAR, REQ, "moneda_precio_total" );
-    AddItem( domicilio, CHAR, REQ, "domicilio" );
-    AddItem( telefono, CHAR, REQ, "telefono" );
-    AddItem( fax, CHAR, REQ, "fax" );
-    AddItem( codigo_confirmacion, CHAR, REQ, "codigo_confirmacion" );
-    AddItem( comision_codigo, CHAR, REQ, "comision_codigo" );
-    AddItem( comision_texto, CHAR, REQ, "comision_texto" );
-    AddItem( comision_monto, UFLOAT, REQ, "comision_monto" );
-    AddItem( tipo_tarjeta, CHAR, REQ, "tipo_tarjeta" );
-    AddItem( tarjeta, CHAR, REQ, "tarjeta" );
-    AddItem( tax_breakdown1, CHAR, REQ, "tax_breakdown1" );
-    AddItem( tax_breakdown2, CHAR, REQ, "tax_breakdown2" );
-    AddItem( tax_breakdown3, CHAR, REQ, "tax_breakdown3" );
-    AddItem( tax_breakdown4, CHAR, REQ, "tax_breakdown4" );
-    AddItem( surchange1, CHAR, REQ, "surchange1" );
-    AddItem( surchange2, CHAR, REQ, "surchange2" );
-    AddItem( surchange3, CHAR, REQ, "surchange3" );
-    AddItem( surchange4, CHAR, REQ, "surchange4" );
-    AddItem( disclaimer1, CHAR, REQ, "disclaimer1" );
-    AddItem( disclaimer2, CHAR, REQ, "disclaimer2" );
-    AddItem( pickup_point, CHAR, REQ, "pickup_point" );
-    AddItem( drop_off_date, DATE, REQ, "drop_off_date" );
-    AddItem( car_type, CHAR, REQ, "car_type" );
-    AddItem( upgrade, CHAR, REQ, "upgrade" );
-    AddItem( arribo_hora, CHAR, REQ, "arribo_hora" );
-    AddItem( reorno_Arrivo, CHAR, REQ, "retorno" );
-    AddItem( dop_off_location, CHAR, REQ, "dop_off_location" );
-    AddItem( drop_off_charge, CHAR, REQ, "drop_off_charge" );
-    AddItem( garantia, CHAR, REQ, "garantia" );
-    AddItem( corporate_discount, CHAR, REQ, "corporate_discount" );
-    AddItem( tourcode, CHAR, REQ, "tourcode" );
-    AddItem( equipamiento, CHAR, REQ, "equipamiento" );
-    AddItem( remarks, CHAR, REQ, "remarks" );
-    AddItem( pasajero_frecuente, CHAR, REQ, "pasajero_frecuente" );
-    AddItem( nombre_cliente, CHAR, REQ, "nombre_cliente" );
-    AddItem( cupon, CHAR, REQ, "cupon" );
-    AddItem( tasa_garantia, CHAR, REQ, "tasa_garantia" );
-    AddItem( booking_source, CHAR, REQ, "booking_source" );
-    AddItem( rate_code, CHAR, REQ, "rate_code" );
-    AddItem( vehiculo_proveedor, CHAR, REQ, "vehiculo_proveedor" );
-    AddItem( voucher_tipo, CHAR, REQ, "voucher_tipo" );
-    AddItem( voucher_numero, CHAR, REQ, "voucher_numero" );
-    AddItem( voucher_biling, CHAR, REQ, "voucher_biling" );
-    AddItem( voucher_format, CHAR, REQ, "voucher_format" );
-    AddItem( info, CHAR, REQ, "info" );
-    AddItem( equipamiento_confirmado, CHAR, REQ, "equipamiento_confirmado" );
-    AddItem( garantia_info, CHAR, REQ, "nombre_pasajero" );
-    AddItem( vendedor, CHAR, REQ, "vendedor" );
-    AddItem( company, CHAR, REQ, "company" );
-
-		JFormLista l =AddItem(tabbedPane, 30);
-		l.setKeepHeight(true);
-		l.setKeepWidth(true);
-		AddItem(tabbedPane, 120);
-		l.setKeepHeight(true);
-		l.setKeepWidth(true);
-
-  } 
-} 
