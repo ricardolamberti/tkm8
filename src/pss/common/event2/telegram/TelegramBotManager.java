@@ -26,7 +26,14 @@ import pss.core.tools.WinServiceTools;
 
 public class TelegramBotManager {
 
+<<<<<<< HEAD
 	private static String TELEGRAM_BOT_DEV = "933876754:AAEMnUKsNK9F4mEH19wS9il1uvXY414UEA8";
+=======
+        private static String TELEGRAM_BOT_DEV = "933876754:AAEMnUKsNK9F4mEH19wS9il1uvXY414UEA8";
+        private static final String TELEGRAM_BOT_ID_ENV = System.getenv("TELEGRAM_BOT_ID") != null
+                        ? System.getenv("TELEGRAM_BOT_ID")
+                        : "";
+>>>>>>> 286f4515ae39b68b8ae41e6a8ec84fad00379da4
 
 	public TelegramBotManager() throws Exception {
 	}
@@ -87,7 +94,11 @@ public class TelegramBotManager {
 				try {
 					TelegramBotManager mng = new TelegramBotManager();
 					mailSuffix = BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_MAIL_SUFFIX", mailSuffix);
+<<<<<<< HEAD
 					bot = new TelegramBot(BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_BOT_ID", "1222057292:AAGbW-ggwiBhxnvMH7Uu8LsIEpx2BLyQKkQ"));
+=======
+                                        bot = new TelegramBot(BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_BOT_ID", TELEGRAM_BOT_ID_ENV));
+>>>>>>> 286f4515ae39b68b8ae41e6a8ec84fad00379da4
 					mng.processTelegramDevMessages();
 				} catch (Exception eee) {
 
@@ -120,7 +131,11 @@ public class TelegramBotManager {
 		System.out.println("Telegrams messages");
 		TelegramBotManager mng = new TelegramBotManager();
 		mng.setDefaultConfigFromIni();
+<<<<<<< HEAD
 		mng.setBot(new TelegramBot(BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_BOT_ID", "1222057292:AAGbW-ggwiBhxnvMH7Uu8LsIEpx2BLyQKkQ")));
+=======
+                mng.setBot(new TelegramBot(BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_BOT_ID", TELEGRAM_BOT_ID_ENV)));
+>>>>>>> 286f4515ae39b68b8ae41e6a8ec84fad00379da4
 		mng.processBotMessages();
 	}
 
@@ -149,7 +164,11 @@ public class TelegramBotManager {
 	}
 
 	public void sendTelegramMessage(String chatId, String msg) throws Exception {
+<<<<<<< HEAD
 		bot = new TelegramBot(BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_BOT_ID", "1222057292:AAGbW-ggwiBhxnvMH7Uu8LsIEpx2BLyQKkQ"));
+=======
+                bot = new TelegramBot(BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_BOT_ID", TELEGRAM_BOT_ID_ENV));
+>>>>>>> 286f4515ae39b68b8ae41e6a8ec84fad00379da4
 		bot.execute(new SendMessage(chatId, msg));
 	}
 
