@@ -914,6 +914,16 @@ public class JBaseForm  {
 		return "form_" + this.getOwnerAction().getActionSource().getProviderName();
 	}
 
+	public JFormLocalForm AddItemLocalForm(String title) throws Exception {
+
+		JFormLocalForm oForm = new JFormLocalForm();
+		oForm.setForm(this);
+		oForm.setTabPane(getInternalTabPanel(null));
+		oForm.setIdControl("tf_" + buildTabName(title));
+		oForm.SetDisplayName(title);
+		getControles().AddControl(oForm);
+		return oForm;
+	}
 
 
 	public IControl createControlTree(final BizAction action) throws Exception {

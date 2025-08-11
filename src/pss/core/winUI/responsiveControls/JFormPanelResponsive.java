@@ -26,6 +26,7 @@ import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.controls.JFormControles;
 import pss.core.winUI.controls.JFormForm;
 import pss.core.winUI.controls.JFormLista;
+import pss.core.winUI.controls.JFormLocalForm;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.icons.GuiIcon;
 import pss.core.winUI.icons.GuiIconos;
@@ -2294,23 +2295,23 @@ public class JFormPanelResponsive extends JFormControlResponsive  {
 			return oForm;
 		}		
 		
-//		public JFormLocalForm AddItemLocalForm(String title) throws Exception {
-//			JFormLocalForm oForm = new JFormLocalForm();
-//			oForm.initialize();
-//			oForm.setForm(getForm());
-//			oForm.setTitle(title);
-//			oForm.setIdControl("tf_"+getForm().buildTabName(title));
-//			oForm.SetDisplayName(title);
-//			 BizUsuario.getUsr().getSkin().createGenerator().configureJFormItem(oForm);
-//			getControles().AddControl(oForm);
-//					
-//			if (this instanceof JFormTabPanelResponsive) {
-//				oForm.setTabPane((JFormTabPanelResponsive)this);
-//				oForm.setIdControl(this.getForm().buildTabName(title));
-//				((JFormTabPanelResponsive)this).addTab(oForm.getIdControl(),oForm);
-//			} 
-//			return oForm;
-//		}
+		public JFormLocalForm AddItemLocalForm(String title) throws Exception {
+			JFormLocalForm oForm = new JFormLocalForm();
+			oForm.initialize();
+			oForm.setForm(getForm());
+			oForm.setTitle(title);
+			oForm.setIdControl("tf_"+getForm().buildTabName(title));
+			oForm.SetDisplayName(title);
+			 BizUsuario.getUsr().getSkin().createGenerator().configureJFormItem(oForm);
+			getControles().AddControl(oForm);
+					
+			if (this instanceof JFormTabPanelResponsive) {
+				oForm.setTabPane((JFormTabPanelResponsive)this);
+				oForm.setIdControl(this.getForm().buildTabName(title));
+				((JFormTabPanelResponsive)this).addTab(oForm.getIdControl(),oForm);
+			} 
+			return oForm;
+		}
 
 		public JFormTableBigDataResponsive AddItemTableBigData(int zId) throws Exception {
 			BizAction oAction = getBaseWin().findAction(zId);

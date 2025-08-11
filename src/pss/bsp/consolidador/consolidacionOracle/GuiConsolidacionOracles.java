@@ -7,18 +7,14 @@ import pss.bsp.consolidador.IConciliable;
 import pss.common.regions.company.GuiCompanies;
 import pss.common.security.BizUsuario;
 import pss.core.tools.JDateTools;
-import pss.core.tools.JTools;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActWins;
-import pss.core.winUI.controls.JFormCDate;
 import pss.core.winUI.controls.JFormControl;
-import pss.core.winUI.controls.JFormSwingCombo;
 import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;
-import pss.core.winUI.responsiveControls.JFormCDatetimeResponsive;
 import pss.core.winUI.responsiveControls.JFormComboResponsive;
 import pss.core.winUI.responsiveControls.JFormIntervalCDatetimeResponsive;
 
@@ -61,7 +57,7 @@ public class GuiConsolidacionOracles extends JWins {
 				"Resultados",
 				"status", this.getTiposStatus(), true);
 	//	c.setRefreshForm(true);
-		c.setPreferredWidth(400);
+		//c.setPreferredWidth(400);
 		zFiltros.addCheckResponsive("Solo tickets", "only_tickets");
 		zFiltros.addEditResponsive("Boleto", "d1").setOperator("like");
 

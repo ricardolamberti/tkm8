@@ -1,14 +1,9 @@
 package pss.bsp.consolidador.over;
 
-import pss.bsp.consola.referencia.GuiReferencias;
 import pss.bsp.consolidador.consolidacion.detalle.BizConsolidacion;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
-import pss.core.win.actions.BizAction;
-import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActWins;
 import pss.core.win.totalizer.JTotalizer;
-import pss.core.winUI.controls.JFormSwingCombo;
 import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;
 import pss.core.winUI.responsiveControls.JFormComboResponsive;

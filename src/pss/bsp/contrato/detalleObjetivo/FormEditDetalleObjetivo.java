@@ -38,9 +38,7 @@ public class FormEditDetalleObjetivo extends JBaseForm {
 	   * Constructor de la Clase
 	   */
 	  public FormEditDetalleObjetivo() throws Exception {
-	    try { jbInit(); }
-	    catch (Exception e) { e.printStackTrace(); } 
-	  }
+	   }
 
 	  public GuiDetalleObjetivo getWin() { return (GuiDetalleObjetivo) getBaseWin(); }
 
