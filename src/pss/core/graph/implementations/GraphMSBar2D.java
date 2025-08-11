@@ -21,7 +21,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphMSBar2D extends GraphMatrix {
 
 	public String getSWF() {
-		return "FCF_MSBar2D.swf";
+		return "bar";
 	}
 	
 	public GraphMSBar2D() {

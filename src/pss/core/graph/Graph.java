@@ -2,6 +2,7 @@ package pss.core.graph;
 
 import java.io.Serializable;
 
+import pss.common.regions.company.JCompanyBusiness;
 import pss.common.security.BizUsuario;
 import pss.core.graph.analize.AnalizeDataGraph;
 import pss.core.graph.analize.Categories;
@@ -124,9 +125,44 @@ public abstract class Graph implements Serializable {
 	private boolean hasExtractDataIntegred=true;
 	private int refresh=-1;
 	private int sizeOthers=10;
+	private boolean print=false;
+	
+	public boolean isPrint() {
+		return print;
+	}
+
+
+	public void setPrint(boolean print) {
+		this.print = print;
+	}
+
+	private boolean withDownload=false;
+	private boolean withZoom=false;
 
 	
 	
+	
+	
+	public boolean isWithDownload() {
+		return !isPrint() && withDownload;
+	}
+
+
+	public void setWithDownload(boolean withDownload) {
+		this.withDownload = withDownload;
+	}
+
+
+	public boolean isWithZoom() {
+		return !isPrint() && withZoom;
+	}
+
+
+	public void setWithZoom(boolean withZoom) {
+		this.withZoom = withZoom;
+	}
+
+
 	public int getSizeOthers() {
 		return sizeOthers;
 	}
@@ -349,7 +385,7 @@ public abstract class Graph implements Serializable {
 	
 	public static JMap<String, String> getGraphModelos(String tipo) throws Exception {
 		JMap<String, String> map = JCollectionFactory.createMap();
-		map.addElement("A", "Autom·tico");
+		map.addElement("A", "AutomÔøΩtico");
 		if (tipo.toLowerCase().indexOf("linedy")==-1)
 			map.addElement(ModelGrid.class.getSimpleName(), "Grilla");
 		if (tipo.toLowerCase().indexOf("linedy")!=-1)
@@ -390,7 +426,7 @@ public abstract class Graph implements Serializable {
     } else
     	wins.setPagesize(-1);
     wins.setOffset(-1);
-		BizUsuario.eventInterfaz(this.getClass().getCanonicalName(), "Generando gr·fico", -1, -1, false, null);
+		BizUsuario.eventInterfaz(this.getClass().getCanonicalName(), "Generando gr√°fico", -1, -1, false, null);
 
     wins.readAll();
     wins.firstRecord();
@@ -400,11 +436,11 @@ public abstract class Graph implements Serializable {
     int k=0;
     while (wins.nextRecord()) {
     	JWin win = wins.getRecord();
-  		BizUsuario.eventInterfaz(this.getClass().getCanonicalName(), "Generando gr·fico, analizando fila ", k++, 1000, false, null);
+  		BizUsuario.eventInterfaz(this.getClass().getCanonicalName(), "Generando gr√°fico, analizando fila ", k++, 1000, false, null);
    	  adg.analizeRow(columna,win);
     }
     adg.endAnalize(columna,grs);
-		BizUsuario.eventInterfaz(this.getClass().getCanonicalName(), "Generando gr·fico", 100, 100, false, null);
+		BizUsuario.eventInterfaz(this.getClass().getCanonicalName(), "Generando gr√°fico", 100, 100, false, null);
    
 	}
 	

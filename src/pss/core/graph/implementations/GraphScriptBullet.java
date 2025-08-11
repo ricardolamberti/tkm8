@@ -1,5 +1,9 @@
 package pss.core.graph.implementations;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.TreeMap;
+
 import pss.core.graph.analize.Categories;
 import pss.core.graph.analize.Dataset;
 import pss.core.graph.analize.Ranking;
@@ -13,7 +17,7 @@ import pss.core.tools.collections.JOrderedMap;
 public class GraphScriptBullet  extends GraphMatrix {
 
 	public String getSWF() {
-		return "FCF_Column3D.swf";
+		return "bar";
 	}
 
 	public GraphScriptBullet() {

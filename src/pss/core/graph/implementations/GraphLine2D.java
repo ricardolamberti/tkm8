@@ -20,7 +20,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphLine2D extends GraphVector {
 
 	public String getSWF() {
-		return "FCF_Line.swf";
+		return "line";
 	}
 	
 	public GraphLine2D() {

@@ -1,6 +1,10 @@
 package pss.core.graph.implementations;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+
+import javax.imageio.ImageIO;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -19,7 +23,7 @@ import pss.core.tools.collections.JIterator;
 
 public class GraphBar2D extends GraphVector {
 	public String getSWF() {
-		return "FCF_Bar2D.swf";
+		return "bar";
 	}
 	public GraphBar2D() {
 	}

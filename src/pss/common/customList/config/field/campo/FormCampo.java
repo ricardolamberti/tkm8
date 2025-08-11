@@ -37,7 +37,7 @@ private static final long serialVersionUID = 1226426905817L;
 
   public GuiCampo getWin() { return (GuiCampo) getBaseWin(); }
 
-
+/*
    * Linkeo los campos con la variables del form
    */
   public void InicializarPanel( JWin zWin ) throws Exception {

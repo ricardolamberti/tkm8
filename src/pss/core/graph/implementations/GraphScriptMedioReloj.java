@@ -71,6 +71,23 @@ public class GraphScriptMedioReloj  extends GraphVector {
 			defin+="	middleGauge('span_"+this.hashCode()+"','"+leyenda+"',"+getValor()+",1);\n";
 			decla+="<span id=\"span_"+this.hashCode()+"\"></span>\n";
 		} else {
+
+			if (getMax()==100) {//undefined
+				long max = 0;
+				JIterator<Dataset> ids = getDatasets().getValueIterator();
+				while (ids.hasMoreElements()) {
+					i=1;
+					Dataset ds = ids.nextElement();
+					JIterator<Value> iv = ds.getValues().getValueIterator();
+					while (iv.hasMoreElements()) {
+						Value v = iv.nextElement();
+						long num = ((Double)v.getData()).longValue();
+						if (num>max) max =num;
+				
+					}		
+				}
+				setMax(max);
+			}	
 			JIterator<Dataset> ids = getDatasets().getValueIterator();
 			while (ids.hasMoreElements()) {
 				i=1;

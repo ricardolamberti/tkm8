@@ -32,7 +32,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphXYLine  extends GraphMatrix {
 
 	public String getSWF() {
-		return "FCF_MSLine.swf";
+		return "line";
 	}
 	
 	public GraphXYLine() {
@@ -59,7 +59,7 @@ public class GraphXYLine  extends GraphMatrix {
         double ol = getTickMarkOutsideLength();
         double il = getTickMarkInsideLength();
         int y = (int)(Math.round(cursor-ol));
-        LineMetrics lineMetrics = g2.getFont().getLineMetrics("Ápr", g2.getFontRenderContext());        
+        LineMetrics lineMetrics = g2.getFont().getLineMetrics("ï¿½pr", g2.getFontRenderContext());        
         int h = (int) (lineMetrics.getHeight() + 6);
 
         List<ValueTick> ticks = refreshTicks(g2, state, dataArea, edge);

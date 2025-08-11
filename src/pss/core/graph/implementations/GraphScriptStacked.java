@@ -14,7 +14,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphScriptStacked extends GraphMatrix {
 
 	public String getSWF() {
-		return "FCF_MSArea2D.swf";
+		return "area";
 	}
 
 	public GraphScriptStacked() {

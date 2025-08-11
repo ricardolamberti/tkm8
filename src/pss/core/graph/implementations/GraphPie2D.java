@@ -16,7 +16,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphPie2D extends GraphVector {
 
 	public String getSWF() {
-		return "FCF_Pie2D.swf";
+		return "pie";
 	}
 	
 	public GraphPie2D() {

@@ -1,5 +1,7 @@
 package pss.core.graph.implementations;
 
+import java.util.Vector;
+
 import pss.core.graph.analize.Categories;
 import pss.core.graph.analize.Dataset;
 import pss.core.graph.analize.Value;
@@ -138,7 +140,7 @@ public class GraphScriptBar3D extends   GraphMatrix {
 	@Override
 	public String getSWF() {
 		// TODO Auto-generated method stub
-		return null;
+		return "bar";
 	}
 }
 

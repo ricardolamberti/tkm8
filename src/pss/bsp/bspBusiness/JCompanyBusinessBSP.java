@@ -210,31 +210,32 @@ public class JCompanyBusinessBSP extends JCompanyBusiness {
 			oldStatus = newStatus;
 			return change;
 		}
-		if ((marca.equals("SQLEVENT") || marca.equals("DASHBOARD")) && BizUsuario.getUsr() != null) {
-			BizInterfazNew news = new BizInterfazNew();
-			news.dontThrowException(true);
-			if (news.read(BizUsuario.getUsr().getCompany())) {
-				try {
-					JApplicationSessionManager sessionManager = JWebServer.getInstance().getWebApplication(null).getSessionManager();
-					JSessionController sessions[] = (JSessionController[]) sessionManager.getSessions().values().toArray();
-					for (int i = 0; i < sessions.length; i++) {
-						JSessionController ss = sessions[i];
-						if (!ss.getSession().getUser().GetUsuario().equals(BizUsuario.getUsr().GetUsuario()))
-							continue;
-						BizOnlineUser user = new BizOnlineUser();
-						user.fill(null, ss.getSession());
-						BizUserHistory hist = user.getLastHistory();
-						Date fechaControl = news.getLastupdate();// DASHBOARD
-						if (marca.equals("SQLEVENT"))
-							fechaControl = news.getLastSqlEvent();
-
-						return (hist.getFechaHora().before(fechaControl));
-					}
-				} catch (Exception e) {
-					return false;
-				}
-			}
-		}
+		// RJL esto hay q repensarlo
+//		if ((marca.equals("SQLEVENT") || marca.equals("DASHBOARD")) && BizUsuario.getUsr() != null) {
+//			BizInterfazNew news = new BizInterfazNew();
+//			news.dontThrowException(true);
+//			if (news.read(BizUsuario.getUsr().getCompany())) {
+//				try {
+//					JApplicationSessionManager sessionManager = JWebServer.getInstance().getWebApplication(null).getSessionManager();
+//					JSessionController sessions[] = (JSessionController[]) sessionManager.getSessions().values().toArray();
+//					for (int i = 0; i < sessions.length; i++) {
+//						JSessionController ss = sessions[i];
+//						if (!ss.getSession().getUser().GetUsuario().equals(BizUsuario.getUsr().GetUsuario()))
+//							continue;
+//						BizOnlineUser user = new BizOnlineUser();
+//						user.fill(null, ss.getSession());
+//						BizUserHistory hist = user.getLastHistory();
+//						Date fechaControl = news.getLastupdate();// DASHBOARD
+//						if (marca.equals("SQLEVENT"))
+//							fechaControl = news.getLastSqlEvent();
+//
+//						return (hist.getFechaHora().before(fechaControl));
+//					}
+//				} catch (Exception e) {
+//					return false;
+//				}
+//			}
+//		}
 		return false;
 	}
 

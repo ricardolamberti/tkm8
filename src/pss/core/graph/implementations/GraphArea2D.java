@@ -20,7 +20,7 @@ import pss.core.tools.collections.JMap;
 public class GraphArea2D extends GraphVector {
 
 	public String getSWF() {
-		return "FCF_Area2D.swf";
+		return "area";
 	}
 	
 	public GraphArea2D() {

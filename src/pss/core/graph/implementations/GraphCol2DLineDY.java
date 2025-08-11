@@ -24,7 +24,7 @@ import pss.core.tools.collections.JIterator;
 
 public class GraphCol2DLineDY extends GraphMatrixAndLine {
 	public String getSWF() {
-		return "FCF_MSColumn2DLineDY.swf";
+		return "mixed";
 	}
 	public GraphCol2DLineDY() {
 	}

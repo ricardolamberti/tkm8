@@ -24,7 +24,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphStCol3DLineDY extends GraphMatrix {
 
 	public String getSWF() {
-		return "FCF_StackedColumn3D.swf";
+		return "mixed";
 	}
 	
 	public GraphStCol3DLineDY() {

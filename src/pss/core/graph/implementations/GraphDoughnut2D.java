@@ -13,7 +13,7 @@ import pss.core.tools.collections.JIterator;
 
 public class GraphDoughnut2D extends GraphVector {
 	public String getSWF() {
-		return "FCF_Doughnut2D.swf";
+		return "doughnut";
 	}
 
 	public GraphDoughnut2D() {

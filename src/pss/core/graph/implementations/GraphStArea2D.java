@@ -21,7 +21,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphStArea2D extends GraphMatrix {
 
 	public String getSWF() {
-		return "FCF_StackedArea2D.swf";
+		return "area";
 	}
 	
 	public GraphStArea2D() {

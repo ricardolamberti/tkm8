@@ -2,6 +2,7 @@ package pss.core.graph.implementations;
 
 import java.io.ByteArrayOutputStream;
 
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.CategoryAxis;
@@ -11,6 +12,7 @@ import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.DatasetRenderingOrder;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.BarRenderer3D;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.chart.renderer.category.LineAndShapeRenderer;
@@ -22,7 +24,7 @@ import pss.core.tools.collections.JIterator;
 
 public class GraphCol3DLineDY extends GraphMatrixAndLine {
 	public String getSWF() {
-		return "FCF_MSColumn3DLineDY.swf";
+		return "mixed";
 	}
 
 	public GraphCol3DLineDY() {
@@ -71,6 +73,7 @@ public class GraphCol3DLineDY extends GraphMatrixAndLine {
 		// create the third dataset and renderer...
 		final ValueAxis rangeAxis2 = new NumberAxis(getAtributtes().getElement(GRAPH_ATTR_SYAXISNAME));
 		plot.setRangeAxis(1, rangeAxis2);
+		plot.mapDatasetToRangeAxis(1, 1);  
 
 		// change the rendering order so the primary dataset appears "behind" the
 		// other datasets...

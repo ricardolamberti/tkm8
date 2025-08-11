@@ -20,7 +20,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphMSColumn3D extends GraphMatrix {
 
 	public String getSWF() {
-		return "FCF_MSColumn3D.swf";
+		return "bar";
 	}
 	
 	public GraphMSColumn3D() {

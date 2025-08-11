@@ -21,7 +21,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphMSLine extends GraphMatrix {
 
 	public String getSWF() {
-		return "FCF_MSLine.swf";
+		return "line";
 	}
 	
 	public GraphMSLine() {

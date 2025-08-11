@@ -26,10 +26,9 @@ public class FormPNRConnectedTicket extends JBaseForm {
         AddItemEdit(null, CHAR, REQ, "company").setHide(true);
 
         JFormPanelResponsive row = AddItemRow();
-        row.AddItemEdit("Numeroboleto", CHAR, REQ, "numeroboleto").setSizeColumns(6);
-        row.AddItemEdit("Numeroboletoconectado", CHAR, REQ, "numeroboletoconectado").setSizeColumns(6);
+        row.AddItemEdit("Numero boleto", CHAR, REQ, "numeroboleto").setSizeColumns(6);
+        row.AddItemEdit("Numero boleto conectado", CHAR, REQ, "numeroboletoconectado").setSizeColumns(6);
 
-        AddItemTabPanel().AddItemList(120);
-    }
+     }
 }
 

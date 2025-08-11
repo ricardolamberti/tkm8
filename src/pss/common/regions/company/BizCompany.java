@@ -786,4 +786,12 @@ public class BizCompany extends JMMRecord {
 		return this.findPais(this.getFirstNodo().GetPais());
 	}
 	
+	public String getTicketCompany() throws Exception {
+		return getCustomListCompany();
+	}
+	
+	public String getCustomListCompany() throws Exception {
+		return "'"+getCompany()+"'";
+	}
+	
 }

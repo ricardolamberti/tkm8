@@ -142,6 +142,23 @@ public class GraphScriptReloj extends GraphVector {
 			defin+="	createGauge"+this.hashCode()+"('span_"+this.hashCode()+"','"+getLeyenda()+"', '"+getLeyenda()+"',"+getValor()+");\n";
 			decla+="<span id=\"span_"+this.hashCode()+"\"></span>\n";
 		} else {
+			if (getMax()==100) {//undefined
+				long max = 0;
+				JIterator<Dataset> ids = getDatasets().getValueIterator();
+				while (ids.hasMoreElements()) {
+					i=1;
+					Dataset ds = ids.nextElement();
+					JIterator<Value> iv = ds.getValues().getValueIterator();
+					while (iv.hasMoreElements()) {
+						//if (i>cantW) break;
+						Value v = iv.nextElement();
+						long num = ((Double)v.getData()).longValue();
+						if (num>max) max =num;
+				
+					}		
+				}
+				setMax(max);
+			}
 			JIterator<Dataset> ids = getDatasets().getValueIterator();
 			while (ids.hasMoreElements()) {
 				i=1;
@@ -202,7 +219,7 @@ public class GraphScriptReloj extends GraphVector {
 		
 		s+="	createGauges"+this.hashCode()+"();\n";
 		if (animated)
-			s+="	setInterval(updateGauges"+this.hashCode()+", 5000);\n";
+			s+="	setInterval(updateGauges"+this.hashCode()+", 2000);\n";
 		else
 			s+="	updateGauges"+this.hashCode()+"();\n";
 		s+="</script>\n";

@@ -16,7 +16,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphPie3D extends GraphVector {
 
 	public String getSWF() {
-		return "Pie3D.swf";
+		return "pie";
 	}
 	
 	public GraphPie3D() {

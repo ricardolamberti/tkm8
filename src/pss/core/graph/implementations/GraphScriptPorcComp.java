@@ -15,7 +15,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphScriptPorcComp extends GraphMatrix {
 
 	public String getSWF() {
-		return "FCF_Pie2D.swf";
+		return "pie";
 	}
 
 	public GraphScriptPorcComp() {

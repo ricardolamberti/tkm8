@@ -21,7 +21,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphStCol3D extends GraphMatrix {
 
 	public String getSWF() {
-		return "FCF_StackedColumn3D.swf";
+		return "bar";
 	}
 	
 	public GraphStCol3D() {

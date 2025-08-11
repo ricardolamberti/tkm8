@@ -20,7 +20,7 @@ import pss.core.tools.collections.JMap;
 
 public class GraphFunnel extends GraphVector {
 	public String getSWF() {
-		return "FCF_Funnel.swf";
+		return "bar";
 	}
 	
 	public GraphFunnel() {

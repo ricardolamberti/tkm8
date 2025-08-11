@@ -19,7 +19,7 @@ import pss.core.tools.collections.JIterator;
 
 public class GraphColumn3D extends GraphVector {
 	public String getSWF() {
-		return "FCF_Column3D.swf";
+		return "bar";
 	}
 	
 	public GraphColumn3D() {

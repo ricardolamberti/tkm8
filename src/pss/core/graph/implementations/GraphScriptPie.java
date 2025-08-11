@@ -16,7 +16,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphScriptPie extends GraphMatrix {
 
 	public String getSWF() {
-		return "FCF_Pie2D.swf";
+		return "pie";
 	}
 
 	public GraphScriptPie() {
@@ -50,14 +50,14 @@ public class GraphScriptPie extends GraphMatrix {
 		int sizeW1 = cantW==0?width:(width/cantW)-10;
 		int sizeH1 = cantH==0?height:(height/cantH)-35;
 		int sizeW = sizeW1<sizeH1?sizeW1:sizeH1;
+		String compName = "span_title_"+JTools.encodeString2(this.getTitle().replace(" ", "_"));
 		
-		s+="<div class=\"graph_title\"  id=\"span_title_"+JTools.encodeString2(this.getTitle())+"\" >"+JTools.encodeString2(this.getTitle())+"</div>\n";
-
-		ArrayList<Ranking> valores = new ArrayList<Ranking>();
+		s+="<div class=\"graph_title\"  id=\""+compName+"\" ></div>\n";
 		int j=0;
 		String extraStyle = getCategories().size()>1?"float: left;":"";
 		JIterator<Categories> icat = getCategories().getValueIterator();
 		while (icat.hasMoreElements()||j==0) {
+			ArrayList<Ranking> valores = new ArrayList<Ranking>();
 			j++;
 			String cate="";
 			long code=0;
@@ -73,8 +73,6 @@ public class GraphScriptPie extends GraphMatrix {
 			}
 	//		decla+="<div id=\"span_title_"+code+"\" style=\"height:15px;text-align:center;\">"+(cate.equals(this.getTitle())?"":JTools.encodeString2(cate))+"</div>";
 			String leyenda = (cate.equals(this.getTitle())?"":JTools.encodeString2(cate));
-			decla+="<div style=\""+extraStyle+"\">";
-			decla+="<svg id=\"span_pie_"+code+"\" style=\"width:100%;height:100%;\"></svg></div>";
 			JIterator<Dataset> ids = getDatasets().getValueIterator();
 			while (ids.hasMoreElements()) { 
 				Dataset	 ds = ids.nextElement();
@@ -110,16 +108,22 @@ public class GraphScriptPie extends GraphMatrix {
 				defin+= (i==1?"":",")+"{key:\""+BizUsuario.getMessage("Otros", null)+"\",y:"+acum+",link:\"\"}";
 			defin+="]";
 			
+			decla+="<div style=\""+extraStyle+"\">";
+			if (isWithDownload()) decla+="<a target=\"_blank\"  onclick=\"downloadImage('span_pie_"+code+"')\"><i class=\"fas fa-download\" style=\"font-size: 24px; cursor: pointer;\"></i></a>";
+			if (isWithZoom()) decla+="<a onclick=\"openModalImage('span_pie_"+code+"',"+defin.replace("\"", "'")+")\"><i class=\"fas fa-search\" style=\"font-size: 24px; cursor: pointer;\"></i></a>";
+
+			decla+="<svg id=\"span_pie_"+code+"\" style=\"width:100%;height:100%;\"></svg></div>";
+
 			script+="Pie('span_pie_"+code+"','"+leyenda+"',"+sizeW+","+sizeW+","+defin+");\n";
 			c++;
 			if (c>9) break;//maximo 10;
 		}
-
+	
 		s+=decla;
 		s+="<script type=\"text/javascript\" >\n";
 		s+=script;
 		s+="\n</script>\n";
-		
+
 		return s;
   }
 

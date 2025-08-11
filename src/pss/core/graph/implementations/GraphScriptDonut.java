@@ -15,7 +15,7 @@ import pss.core.tools.collections.JIterator;
 public class GraphScriptDonut extends GraphMatrix {
 
 	public String getSWF() {
-		return "FCF_Doughnut2D.swf";
+		return "doughnut";
 	}
 
 	public GraphScriptDonut() {

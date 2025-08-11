@@ -1,12 +1,13 @@
 package pss.core.graph.model;
 
+import pss.core.tools.GeoPosition;
+
 import pss.core.graph.Column;
 import pss.core.graph.Graph;
 import pss.core.graph.analize.Categories;
 import pss.core.graph.analize.Dataset;
 import pss.core.services.fields.JGeoPosition;
 import pss.core.services.fields.JObject;
-import pss.core.tools.GeoPosition;
 import pss.core.tools.JTools;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
@@ -173,7 +174,7 @@ public abstract class ModelGraph {
 			if (oCol==null) continue;
 			String sColName=oCol.GetCampo();
 			if (sColName.equals("")) continue;
-			JObject<?> oProp=zWin.getRecord().getProp(sColName);
+			JObject<?> oProp=zWin.getRecord().getProp(sColName,false);
 			if (oProp==null) continue;
 			String sPropFormatted=oProp.toFormattedString();
 		  if (sPropFormatted==null) sPropFormatted="";
