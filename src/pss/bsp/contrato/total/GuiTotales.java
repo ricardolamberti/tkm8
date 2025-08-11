@@ -1,16 +1,7 @@
 package pss.bsp.contrato.total;
 
-import pss.bsp.contrato.quevender.BizQueVender;
-import pss.core.graph.Graph;
-import pss.core.graph.implementations.GraphMSLine;
-import pss.core.graph.implementations.GraphScriptPie;
-import pss.core.graph.implementations.GraphScriptSerieTemporal;
-import pss.core.graph.implementations.GraphScriptWorldArc;
-import pss.core.graph.model.ModelGrid;
-import pss.core.graph.model.ModelMatrix;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
-import pss.core.win.totalizer.JTotalizer;
 import pss.core.winUI.lists.JWinList;
 
 public class GuiTotales extends JWins {

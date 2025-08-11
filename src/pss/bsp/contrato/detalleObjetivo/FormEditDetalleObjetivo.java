@@ -15,7 +15,6 @@ import pss.core.win.JControlWin;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.controls.JControlCombo;
-import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.controls.JFormLocalForm;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormCheckResponsive;
@@ -24,7 +23,6 @@ import pss.core.winUI.responsiveControls.JFormPanelResponsive;
 import pss.core.winUI.responsiveControls.JFormRadioResponsive;
 import pss.core.winUI.responsiveControls.JFormTabPanelResponsive;
 import pss.tourism.airports.GuiAirports;
-import pss.tourism.carrier.GuiCarriers;
 
 public class FormEditDetalleObjetivo extends JBaseForm {
 

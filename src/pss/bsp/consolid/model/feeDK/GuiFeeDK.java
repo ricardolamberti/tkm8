@@ -1,11 +1,9 @@
 package  pss.bsp.consolid.model.feeDK;
 
-import pss.bsp.consolid.model.gruposDK.detail.GuiGrupoDKDetails;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiFeeDK extends JWin {

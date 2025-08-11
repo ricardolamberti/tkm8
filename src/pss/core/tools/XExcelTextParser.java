@@ -4,72 +4,81 @@ package pss.core.tools;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.text.SimpleDateFormat;
 import java.util.Iterator;
 
-
+import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class XExcelTextParser {
 
+
 	public String toCSV(InputStream inputFile) {
-		// For storing data into CSV files
-		StringBuffer data = new StringBuffer();
-		try {
+	    // Para almacenar datos en formato CSV
+	    StringBuilder data = new StringBuilder();
+	    try {
+	        // Carga el archivo XLSX en un objeto Workbook
+	        Workbook workbook = new XSSFWorkbook(inputFile);
 
-			// Get the workbook object for XLSX file
-			XSSFWorkbook wBook = new XSSFWorkbook(inputFile);
+	        // Obtiene la primera hoja del libro
+	        Sheet sheet = workbook.getSheetAt(0);
+	        Row row;
+	        Cell cell;
 
-			// Get first sheet from the workbook
-			XSSFSheet sheet = wBook.getSheetAt(0);
-			Row row;
-			Cell cell;
+	        // Itera a través de cada fila de la hoja
+	        Iterator<Row> rowIterator = sheet.iterator();
+	        while (rowIterator.hasNext()) {
+	            row = rowIterator.next();
+	            StringBuilder line = new StringBuilder();
 
-			// Iterate through each rows from first sheet
-			Iterator<Row> rowIterator = sheet.iterator();
-			while (rowIterator.hasNext()) {
-				row = rowIterator.next();
-				StringBuffer line = new StringBuffer();
+	            // Obtiene el número máximo de columnas en la fila
+	            int maxColumns = row.getLastCellNum();
 
-				// For each row, iterate through each columns
-				Iterator<Cell> cellIterator = row.cellIterator();
-				while (cellIterator.hasNext()) {
+	            // Recorre las columnas de la fila
+	            for (int col = 0; col < maxColumns; col++) {
+	                cell = row.getCell(col, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK); // Manejo de celdas vacías
 
-					cell = cellIterator.next();
+	                if (col > 0) {
+	                    line.append(";"); // Agrega el separador antes de cada columna excepto la primera
+	                }
 
-					switch (cell.getCellType()) {
-					case Cell.CELL_TYPE_BOOLEAN:
-						line.append((line.toString().equals("")?"":";")+cell.getBooleanCellValue());
+	                switch (cell.getCellType()) {
+	                    case BOOLEAN:
+	                        line.append(cell.getBooleanCellValue());
+	                        break;
+	                    case NUMERIC:
+	                        if (DateUtil.isCellDateFormatted(cell)) {
+	                            // Si es una fecha, formatea el valor
+	                            line.append(new SimpleDateFormat("dd/MM/yyyy").format(cell.getDateCellValue()));
+	                        } else {
+	                            line.append(cell.getNumericCellValue());
+	                        }
+	                        break;
+	                    case STRING:
+	                        line.append(cell.getStringCellValue());
+	                        break;
+	                    case BLANK:
+	                        // Celda vacía, no se agrega contenido
+	                        break;
+	                    default:
+	                        line.append(" "); // Por defecto, agrega un espacio
+	                }
+	            }
+	            data.append(line.toString()).append("\r\n");
+	        }
 
-						break;
-					case Cell.CELL_TYPE_NUMERIC:
-						line.append((line.toString().equals("")?"":";")+cell.getNumericCellValue());
+	        workbook.close(); // Cierra el Workbook para liberar recursos
 
-						break;
-					case Cell.CELL_TYPE_STRING:
-						line.append((line.toString().equals("")?"":";")+cell.getStringCellValue());
-						break;
-
-					case Cell.CELL_TYPE_BLANK:
-						line.append((line.toString().equals("")?"":";")+ " ");
-						break;
-					default:
-						line.append((line.toString().equals("")?"":";")+ cell );
-
-					}
-				}
-				data.append(line.toString()+"\r\n");
-
-			}
-
-
-		} catch (Exception ioe) {
-			ioe.printStackTrace();
-		}
-		return data.toString();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+	    return data.toString();
 	}
+
 
 	public static void main(String[] args) {
 		try {

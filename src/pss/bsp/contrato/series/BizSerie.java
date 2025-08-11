@@ -4,7 +4,6 @@ import java.util.Calendar;
 
 import pss.core.services.fields.JFloat;
 import pss.core.services.fields.JLong;
-import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JDateTools;

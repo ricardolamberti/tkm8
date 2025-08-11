@@ -4,8 +4,6 @@ import pss.bsp.contrato.detalle.BizDetalle;
 import pss.bsp.contrato.detalle.GuiDetalle;
 import pss.bsp.contrato.detalle.nivel.GuiNiveles;
 import pss.bsp.contrato.detalle.variaciones.GuiVariacionParticulares;
-import pss.bsp.contrato.detalleRutas.FormDetalleRuta;
-import pss.bsp.contrato.detalleRutas.FormEditDetalleRuta;
 import pss.bsp.event.GuiBSPSqlEvent;
 import pss.common.event.sql.GuiSqlEvent;
 import pss.core.services.records.JRecord;

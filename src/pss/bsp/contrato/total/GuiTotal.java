@@ -1,14 +1,10 @@
 package pss.bsp.contrato.total;
 
-import pss.bsp.contrato.quevender.GuiQueVender;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
-import pss.tourism.pnr.GuiBookings;
-import pss.tourism.pnr.GuiPNRTickets;
 
 public class GuiTotal extends JWin {
 

@@ -7,6 +7,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 import pss.bsp.contrato.detalle.nivel.GuiNiveles;
 import pss.bsp.event.GuiBSPSqlEvents;
@@ -21,8 +22,6 @@ import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.controls.JFormTable;
 import pss.core.winUI.forms.JBaseForm;
 import pss.tourism.carrier.GuiCarriers;
-
-import javax.swing.JTextField;
 
 public class FormEditDetalleCopa extends JBaseForm {
 

@@ -4,19 +4,12 @@ import pss.bsp.contrato.detalle.BizDetalle;
 import pss.bsp.contrato.detalle.GuiDetalle;
 import pss.bsp.contrato.detalle.nivel.GuiNiveles;
 import pss.bsp.contrato.detalle.variaciones.GuiVariacionParticulares;
-import pss.bsp.contrato.detalleLatamFamilia.FormDetalleDataminingTriFamilia;
-import pss.bsp.contrato.detalleLatamFamilia.FormEditDetalleDataminingTriFamilia;
 import pss.bsp.contrato.series.calculado.GuiSerieCalculadas;
 import pss.bsp.event.GuiBSPSqlEvent;
 import pss.common.event.sql.GuiSqlEvent;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
-import pss.core.win.actions.BizAction;
-import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActQuery;
-import pss.core.win.submits.JActSubmit;
-import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiDetalleDataminingTri extends GuiDetalle {

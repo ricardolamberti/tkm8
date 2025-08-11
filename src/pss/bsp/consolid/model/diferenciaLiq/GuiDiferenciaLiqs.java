@@ -3,21 +3,18 @@ package pss.bsp.consolid.model.diferenciaLiq;
 import pss.bsp.consola.referencia.GuiReferencias;
 import pss.bsp.consolid.model.liquidacion.header.BizLiqHeader;
 import pss.bsp.consolidador.IConsolidador;
-import pss.bsp.consolidador.consolidacion.detalle.BizConsolidacion;
 import pss.core.services.records.BizVirtual;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.win.JWin;
+import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActSubmit;
 import pss.core.win.submits.JActWins;
-import pss.core.win.totalizer.JTotalizer;
-import pss.core.winUI.controls.JFormSwingCombo;
 import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;
 import pss.core.winUI.responsiveControls.JFormComboResponsive;
-import pss.core.win.JWins;
 
 public class GuiDiferenciaLiqs extends JWins {
 

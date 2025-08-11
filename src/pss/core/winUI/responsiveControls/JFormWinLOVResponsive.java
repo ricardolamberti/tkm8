@@ -708,8 +708,9 @@ private Date getDateTime(String filter) throws Exception {
 	public boolean isMultiple() {
 		return this.bMultiple;
 	}
-	public void setMultiple(boolean bMultiple) {
+	public JFormWinLOVResponsive setMultiple(boolean bMultiple) {
 		this.bMultiple = bMultiple;
+		return this;
 	}
 
 	private boolean bModal=true;

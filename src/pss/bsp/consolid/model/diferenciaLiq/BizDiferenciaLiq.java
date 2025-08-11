@@ -1,7 +1,6 @@
 package pss.bsp.consolid.model.diferenciaLiq;
 
 import pss.bsp.consolidador.IConsolidador;
-import pss.core.services.fields.JFloat;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;

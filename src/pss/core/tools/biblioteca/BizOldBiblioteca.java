@@ -230,10 +230,10 @@ public class BizOldBiblioteca extends JRecord {
 		return fileName;
 	}
 
-	public void setContentFromByteArray(String company, String content,String type) throws Exception {
-		String absfileNameLocal = JPath.PssPathImportExportFilesLocal() + "/" + getFileName(company,this.pTipo.getValue());
+	public void setContentFromByteArray(String company, byte[] content,String type) throws Exception {
+		String absfileNameLocal = JPath.PssPathImportExportFilesLocal() + "/" + getFileName(company,type);
 		
-		JTools.writeStringToFile(content, absfileNameLocal);
+		JTools.writeByteToFile(content, absfileNameLocal);
 		
 		setContentByFilename(company,absfileNameLocal,type);
 		JTools.DeleteFile(absfileNameLocal);

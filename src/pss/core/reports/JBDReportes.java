@@ -2,6 +2,7 @@ package pss.core.reports;
 
 import java.io.OutputStream;
 
+import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 import pss.core.data.interfaces.connections.JBDatos;
@@ -17,7 +18,7 @@ import pss.core.tools.collections.JMap;
 import pss.core.win.JWins;
 import pss.core.winUI.lists.JWinList;
 
-abstract public class JBDReportes extends JRecord {
+abstract public class JBDReportes extends JRecord implements JRDataSource {
 
   private JReport oReport;
   private String sTitle;
@@ -90,7 +91,6 @@ abstract public class JBDReportes extends JRecord {
       configurarControles();
       configurarFormatos();
       configurarSQL();
-      //configPaper(); comentado por MRO 16/10/2008. No le encuentro sentido configurar el papel.
       oReport.SetTitulo(this.getReportTitle());
       oReport.setOutputStream(this.outputStream);
       oReport.SetPath(this.outputFile);
@@ -109,32 +109,6 @@ abstract public class JBDReportes extends JRecord {
     }
   }
 
-/*  public final void WebGenerarReporte( OutputStream out, String zsFormatoReporte ) throws Exception {
-    getReport();
-    verificarRestricciones();
-    validateNullsConstraints();
-    configurarControles();
-    configurarFormatos();
-    configurarSQL();
-    configPaper();
-
-    // Fuerza los símbolos en los formateadores para cuando el JReport los pida para formatear
-//    Locale.setDefault( Locale.ITALY );
-    oReport.generateWebReport( out, zsFormatoReporte );
-  }
-*/
-  private void configPaper() throws Exception{
-    if(oReport.getDefaultPaperSize() == JReport.LETTER){
-      oReport.setPageHeight(27.94);
-      oReport.setPageWidth(21.59);
-    } else if(oReport.getDefaultPaperSize() == JReport.LEGAL){
-      oReport.setPageHeight(35.56);
-      oReport.setPageWidth(21.59);
-    } else {//if(oReport.getDefaultPaperSize() == oReport.A4)
-      oReport.setPageHeight(29.7);
-      oReport.setPageWidth(21.0);
-    }
-  }
 
   public JReport getReport() throws Exception{
     if (this.oReport == null) {

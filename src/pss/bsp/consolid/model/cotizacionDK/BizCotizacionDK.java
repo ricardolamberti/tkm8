@@ -2,14 +2,12 @@ package  pss.bsp.consolid.model.cotizacionDK;
 
 import java.util.Date;
 
-import pss.bsp.consolid.model.gruposDK.detail.BizGrupoDKDetail;
 import pss.common.customList.config.relation.JRelations;
 import pss.core.services.fields.JCurrency;
 import pss.core.services.fields.JDate;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.services.records.JRecords;
 
 public class BizCotizacionDK extends JRecord {
 

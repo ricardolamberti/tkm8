@@ -1,30 +1,15 @@
 package pss.bsp.contrato.detalleDataminingTri;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.border.TitledBorder;
-
 import pss.bsp.contrato.detalleDatamining.BizDetalleDatamining;
 import pss.bsp.event.GuiBSPSqlEvents;
 import pss.common.event.sql.GuiSqlEvents;
 import pss.common.security.BizUsuario;
-import pss.core.ui.components.JPssCalendarEdit;
-import pss.core.ui.components.JPssEdit;
 import pss.core.ui.components.JPssImage;
-import pss.core.ui.components.JPssLabel;
 import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.controls.JFormControl;
-import pss.core.winUI.controls.JFormImage;
 import pss.core.winUI.controls.JFormLista;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormColumnResponsive;
@@ -33,7 +18,6 @@ import pss.core.winUI.responsiveControls.JFormImageCardResponsive;
 import pss.core.winUI.responsiveControls.JFormImageResponsive;
 import pss.core.winUI.responsiveControls.JFormTabPanelResponsive;
 import pss.www.ui.JWebIcon;
-import javax.swing.JLabel;
 
 public class FormDetalleDataminingTri extends JBaseForm {
 

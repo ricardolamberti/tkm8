@@ -3,7 +3,6 @@ package pss.bsp.contrato.detalleObjetivo;
 import pss.bsp.contrato.JAutogenerador;
 import pss.bsp.contrato.detalle.nivel.JTipoNivelNormal;
 import pss.bsp.contrato.detalleDatamining.BizDetalleDatamining;
-import pss.bsp.contrato.logica.JContratoBackendRuta;
 import pss.bsp.contrato.logica.JContratoObjetivo;
 import pss.bsp.event.BizBSPSqlEvent;
 import pss.common.event.sql.BizSqlEvent;

@@ -26,7 +26,6 @@ import pss.core.services.records.JRecord;
 import pss.core.tools.JTools;
 import pss.core.win.JWins;
 import pss.core.winUI.lists.JWinList;
-import pss.tourism.pnr.BizPNRTicket;
 import pss.tourism.pnr.GuiBookings;
 import pss.tourism.pnr.GuiPNRTickets;
 

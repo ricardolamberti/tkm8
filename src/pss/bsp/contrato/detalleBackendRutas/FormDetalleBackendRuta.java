@@ -1,33 +1,12 @@
 package pss.bsp.contrato.detalleBackendRutas;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.border.TitledBorder;
-
 import pss.bsp.contrato.detalleDatamining.BizDetalleDatamining;
-import pss.bsp.contrato.detalleDatamining.GuiDetalleDatamining;
-import pss.bsp.contrato.detalleUpfront.BizDetalleUpfront;
-import pss.bsp.contrato.detalleUpfront.GuiDetalleUpfront;
-import pss.bsp.event.GuiBSPSqlEvents;
-import pss.common.event.sql.GuiSqlEvents;
 import pss.common.security.BizUsuario;
-import pss.core.ui.components.JPssCalendarEdit;
-import pss.core.ui.components.JPssEdit;
 import pss.core.ui.components.JPssImage;
-import pss.core.ui.components.JPssLabel;
 import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
-import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.controls.JFormControl;
-import pss.core.winUI.controls.JFormImage;
 import pss.core.winUI.controls.JFormLista;
 import pss.core.winUI.controls.JFormLocalForm;
 import pss.core.winUI.forms.JBaseForm;

@@ -1,21 +1,13 @@
 package pss.bsp.contrato.detalleBackendDobleRutas;
 
-import java.util.Calendar;
-import java.util.StringTokenizer;
-
 import pss.bsp.contrato.JAutogenerador;
 import pss.bsp.contrato.detalle.nivel.JTipoNivelNormal;
 import pss.bsp.contrato.detalle.nivel.JTipoPremioPorcentajeDelTotal;
 import pss.bsp.contrato.detalleDataminingTri.BizDetalleDataminingTri;
 import pss.bsp.contrato.logica.JContratoBackendDobleRuta;
-import pss.bsp.contrato.logica.JContratoBackendRuta;
-import pss.bsp.contrato.quevender.BizQueVender;
 import pss.bsp.event.BizBSPSqlEvent;
 import pss.common.event.sql.BizSqlEvent;
 import pss.core.tools.JTools;
-import pss.core.tools.collections.JIterator;
-import pss.tourism.pnr.GuiBookings;
-import pss.tourism.pnr.GuiPNRTickets;
 
 public class BizDetalleBackendDobleRuta extends BizDetalleDataminingTri
 {

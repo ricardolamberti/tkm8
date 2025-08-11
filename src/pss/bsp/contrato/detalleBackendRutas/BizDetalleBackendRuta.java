@@ -5,12 +5,9 @@ import pss.bsp.contrato.detalle.nivel.JTipoNivelNormal;
 import pss.bsp.contrato.detalle.nivel.JTipoPremioPorcentajeDelTotal;
 import pss.bsp.contrato.detalleDatamining.BizDetalleDatamining;
 import pss.bsp.contrato.logica.JContratoBackendRuta;
-import pss.bsp.contrato.quevender.BizQueVender;
-import pss.bsp.contrato.rutas.ms.BizMS;
 import pss.bsp.event.BizBSPSqlEvent;
 import pss.common.event.sql.BizSqlEvent;
 import pss.core.tools.JTools;
-import pss.tourism.pnr.GuiPNRTickets;
 
 public class BizDetalleBackendRuta extends BizDetalleDatamining {
 

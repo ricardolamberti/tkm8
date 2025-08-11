@@ -1,10 +1,5 @@
 package pss.bsp.consolid.model.cuf;
 
-import java.util.Date;
-
-import pss.common.regions.divitions.GuiPaisesLista;
-import pss.core.tools.JDateTools;
-import pss.core.win.JControlWin;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.controls.JFormControl;

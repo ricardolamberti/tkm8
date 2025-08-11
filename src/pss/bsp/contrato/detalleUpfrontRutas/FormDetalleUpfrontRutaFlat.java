@@ -1,13 +1,10 @@
 package pss.bsp.contrato.detalleUpfrontRutas;
 
-import pss.bsp.contrato.detalleBackendRutas.GuiDetalleBackendRuta;
 import pss.common.security.BizUsuario;
-import pss.core.ui.components.JPssImage;
 import pss.core.win.JWin;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormColumnResponsive;
 import pss.core.winUI.responsiveControls.JFormEditResponsive;
-import pss.core.winUI.responsiveControls.JFormImageResponsive;
 import pss.core.winUI.responsiveControls.JFormPanelResponsive;
 
 public class FormDetalleUpfrontRutaFlat   extends JBaseForm {

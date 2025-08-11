@@ -49,7 +49,7 @@ public class GuiImpositivos extends JWins {
 				"Resultados conciliacion",
 				"status", this.getTiposStatus(), true);
 		c.setRefreshForm(true);
-		c.setPreferredWidth(400);
+		//c.setPreferredWidth(400);
 		
 	}
 	

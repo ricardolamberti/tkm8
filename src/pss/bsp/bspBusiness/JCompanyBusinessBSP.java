@@ -13,7 +13,6 @@ import pss.bsp.contrato.BizContrato;
 import pss.bsp.contrato.detalle.BizDetalle;
 import pss.bsp.contrato.detalle.prorrateo.header.BizHeaderProrrateo;
 import pss.bsp.event.GuiBSPSqlEvent;
-import pss.bsp.gds.BizInterfazNew;
 import pss.bsp.persona.GuiPersonaBSPs;
 import pss.common.agenda.evento.GuiEventos;
 import pss.common.customList.config.BizCustomListModules;
@@ -41,11 +40,6 @@ import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.www.platform.actions.JWebActionFactory;
-import pss.www.platform.applications.JApplicationSessionManager;
-import pss.www.platform.applications.JSessionController;
-import pss.www.platform.applications.JWebServer;
-import pss.www.platform.users.history.BizUserHistory;
-import pss.www.platform.users.online.BizOnlineUser;
 
 public class JCompanyBusinessBSP extends JCompanyBusiness {
 

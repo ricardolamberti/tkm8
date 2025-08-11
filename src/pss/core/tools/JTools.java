@@ -3486,7 +3486,16 @@ public class JTools {
 
 		return outputText;
 	}
-
+  public static String writeByteToFile(byte[] fileData,String filePath) throws Exception{
+  	JTools.createDirectories("",filePath);
+		FileOutputStream  oOutput = new FileOutputStream(new File(filePath));
+		try {
+			oOutput.write(fileData);
+		} finally {
+			oOutput.close();
+		}
+		return filePath;
+  }
 	public static String writeStringToFile(String fileData, String filePath) throws Exception {
 		JTools.createDirectories("", filePath);
 		FileOutputStream oOutput = new FileOutputStream(new File(filePath));

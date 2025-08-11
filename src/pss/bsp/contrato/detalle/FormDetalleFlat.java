@@ -1,7 +1,6 @@
 package pss.bsp.contrato.detalle;
 
 import pss.bsp.bspBusiness.BizBSPCompany;
-import pss.bsp.contrato.detalleBackendRutas.GuiDetalleBackendRuta;
 import pss.common.security.BizUsuario;
 import pss.core.ui.components.JPssImage;
 import pss.core.win.JWin;

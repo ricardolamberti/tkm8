@@ -1728,11 +1728,31 @@ public abstract class JWins<TWin extends JWin> extends JBaseWin {
 		this.PasarADatos();
 	}
 
-
+	public String getExcelName() throws Exception {
+		return null;
+	}
+	public String getModelExcel() throws Exception {
+		return null;
+	} 
+	public String[] getExcelHeader() throws Exception {
+		return null;
+	}
+	
+	public String[] getExcelFooter() throws Exception {
+		return null;
+	}
+	
 	public String toExcel() throws Exception {
+		
 		JWinsExcel excel = new JWinsExcel();
 		excel.setWins(this);
 		return excel.toExcel();
+	}
+	public byte[] toExcelBytes() throws Exception {
+		
+		JWinsExcel excel = new JWinsExcel();
+		excel.setWins(this);
+		return excel.toExcelBytes();
 	}
 
 	public boolean isExportToDownloadForm() throws Exception {

@@ -6,7 +6,6 @@ import pss.bsp.contrato.detalle.BizDetalle;
 import pss.core.tools.JDateTools;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
-import pss.core.winUI.controls.JFormCDate;
 import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;
 import pss.core.winUI.responsiveControls.JFormIntervalCDatetimeResponsive;
