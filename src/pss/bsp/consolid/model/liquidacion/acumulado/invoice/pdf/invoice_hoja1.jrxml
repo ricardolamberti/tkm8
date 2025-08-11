@@ -1,0 +1,190 @@
+<!-- Created with Jaspersoft Studio version 7.0.1.final using JasperReports Library version 7.0.1-573496633c2b4074e32f433154b543003f7d2498  -->
+<jasperReport name="Blank_A4" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="9b131326-db22-404c-bb7f-df7efeef5be8">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<parameter name="LOGO_INC" class="java.lang.String"/>
+	<parameter name="LBL_PERIODO" class="java.lang.String"/>
+	<parameter name="FECHA_DESDE" class="java.lang.String"/>
+	<parameter name="FECHA_HASTA" class="java.lang.String"/>
+	<parameter name="LBL_DK" class="java.lang.String"/>
+	<parameter name="FECHA_LIQ" class="java.lang.String"/>
+	<parameter name="LBL_DESCRIPCION" class="java.lang.String"/>
+	<parameter name="LBL_INFO" class="java.lang.String"/>
+	<parameter name="LBL_COMISION" forPrompting="false" class="java.lang.String"/>
+	<parameter name="LBL_TOTAL" class="java.lang.String"/>
+	<parameter name="LBL_PAY" class="java.lang.String"/>
+	<parameter name="LBL_TAX" class="java.lang.String"/>
+	<parameter name="LBL_MONEDA" class="java.lang.String"/>
+	<parameter name="LBL_VAT" class="java.lang.String"/>
+	<parameter name="LBL_ADDRESS" class="java.lang.String"/>
+	<parameter name="LBL_ADDRESS_CUST" class="java.lang.String"/>
+	<parameter name="LBL_BILLING" class="java.lang.String"/>
+	<parameter name="LBL_TOTALAMOUNT" class="java.lang.String"/>
+	<parameter name="LBL_TOTALANDTAX" class="java.lang.String"/>
+	<query language="sql"><![CDATA[]]></query>
+	<field name="dk" class="java.lang.String"/>
+	<field name="company" class="java.lang.String"/>
+	<field name="liquidation_id" class="java.lang.Long"/>
+	<field name="linea" class="java.lang.Long"/>
+	<field name="tipo_doc" class="java.lang.String"/>
+	<field name="nro_doc" class="java.lang.String"/>
+	<field name="fecha_doc" class="java.util.Date"/>
+	<field name="nro_boleto" class="java.lang.String"/>
+	<field name="prestador" class="java.lang.String"/>
+	<field name="ruta" class="java.lang.String"/>
+	<field name="pasajero" class="java.lang.String"/>
+	<field name="reserva" class="java.lang.String"/>
+	<field name="tarifa" class="java.lang.Double"/>
+	<field name="iva" class="java.lang.Double"/>
+	<field name="tua" class="java.lang.Double"/>
+	<field name="importe" class="java.lang.Double"/>
+	<field name="saldo" class="java.lang.Double"/>
+	<field name="comision" class="java.lang.Double"/>
+	<field name="porc_comision" class="java.lang.Double"/>
+	<field name="tipo_servicio" class="java.lang.String"/>
+	<field name="origen" class="java.lang.String"/>
+	<field name="clase" class="java.lang.String"/>
+	<field name="clases" class="java.lang.String"/>
+	<field name="lineas" class="java.lang.String"/>
+	<field name="forma_pago" class="java.lang.String"/>
+	<field name="porc_incentivo" class="java.lang.Double"/>
+	<field name="incentivo" class="java.lang.Double"/>
+	<field name="tipo" class="java.lang.String"/>
+	<field name="interface_id" class="java.lang.Long"/>
+	<field name="contado" class="java.lang.Double"/>
+	<field name="tarjeta" class="java.lang.Double"/>
+	<field name="fiscal" class="java.lang.Double"/>
+	<field name="nofiscal" class="java.lang.Double"/>
+	<field name="noDevengado" class="java.lang.Double"/>
+	<background splitType="Stretch"/>
+	<title splitType="Stretch"/>
+	<pageHeader height="467" splitType="Stretch">
+		<element kind="image" uuid="23df2e84-a3b2-4671-b857-70861af83000" x="400" y="0" width="156" height="50">
+			<expression><![CDATA[$P{LOGO_INC}]]></expression>
+		</element>
+		<element kind="textField" uuid="ab69ec78-4ad9-40d8-866f-cf4f3f97d278" x="380" y="150" width="70" height="15" blankWhenNull="true" hTextAlign="Center">
+			<expression><![CDATA[$P{FECHA_DESDE}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="c4ab99f2-14e5-4eef-8601-e83c80bc5c20" x="485" y="150" width="70" height="15" blankWhenNull="true" hTextAlign="Center">
+			<expression><![CDATA[$P{FECHA_HASTA}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<property name="com.jaspersoft.studio.unit.width" value="px"/>
+		</element>
+		<element kind="textField" uuid="85d8f540-2384-4ae6-b6ed-896c6d768dc3" x="330" y="110" width="225" height="16" forecolor="#050505" bold="true" hTextAlign="Right">
+			<expression><![CDATA[$P{FECHA_LIQ}]]></expression>
+		</element>
+		<element kind="textField" uuid="4188e323-b4b2-4964-b116-81d2f598317e" x="415" y="132" width="140" height="14" fontName="Arial" fontSize="12.0" blankWhenNull="true" bold="true" hTextAlign="Center">
+			<expression><![CDATA[$P{LBL_DESCRIPCION}]]></expression>
+		</element>
+		<element kind="staticText" uuid="9a831249-d829-4fd7-9cc6-5f15fcecca26" x="450" y="150" width="35" height="15" hTextAlign="Center">
+			<text><![CDATA[until:]]></text>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="b63ba913-e2db-4695-9f3b-94d9b7351426" x="205" y="200" width="100" height="15" blankWhenNull="true" hTextAlign="Right">
+			<expression><![CDATA[$P{LBL_VAT}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="3198ebb5-eeef-4fc2-af13-4c2031d8b7db" x="215" y="230" width="80" height="13" fontName="Arial" bold="true">
+			<text><![CDATA[value added tax]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="36ad69d0-b33a-4556-a77d-8128b16edceb"/>
+		</element>
+		<element kind="staticText" uuid="936865a4-51ef-4e66-97c0-cc3534a33c93" x="303" y="230" width="37" height="13" fontName="Arial" bold="true" hTextAlign="Right">
+			<text><![CDATA[net]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="78781209-62f2-4725-aab0-05a4f9f62a4c"/>
+		</element>
+		<element kind="staticText" uuid="8e8d75fa-22be-4d57-8c49-450f15d3333e" x="386" y="230" width="94" height="13" fontName="Arial" bold="true">
+			<text><![CDATA[value added tax]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="defb206b-47b7-483d-ac74-ba87b160305b"/>
+		</element>
+		<element kind="staticText" uuid="728a5c2b-a3cb-497d-9d9c-950a8868898c" x="495" y="230" width="51" height="13" fontName="Arial" bold="true" hTextAlign="Right">
+			<text><![CDATA[Gross]]></text>
+			<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="fe3778b9-cd6e-4ec5-b3af-63192e128297"/>
+		</element>
+		<element kind="line" uuid="cc375c04-fdd0-4226-a4b8-189c0b6f164c" x="0" y="229" width="569" height="1" forecolor="#4B963C" backcolor="#4B963C"/>
+		<element kind="line" uuid="9b49c682-262c-432c-b1e0-9f6bc6deb44d" x="0" y="243" width="569" height="1" forecolor="#4B963C" backcolor="#4B963C"/>
+		<element kind="line" uuid="715701e5-13ce-4496-a0ae-0d2441ea23ff" x="0" y="280" width="569" height="1" forecolor="#4B963C" backcolor="#4B963C"/>
+		<element kind="line" uuid="55c68027-36da-413e-995e-5e996bc5d5c0" x="0" y="300" width="569" height="1" forecolor="#4B963C" backcolor="#4B963C"/>
+		<element kind="line" uuid="1a6f1c57-4498-46a6-8d42-bde4448f1b06" x="0" y="320" width="569" height="1" forecolor="#4B963C" backcolor="#4B963C"/>
+		<element kind="line" uuid="e3d8eed7-a19d-482f-8b49-a6ca913451ae" x="0" y="350" width="569" height="1" forecolor="#4B963C" backcolor="#4B963C"/>
+		<element kind="line" uuid="94215c85-1599-42f9-841a-40ac3c531349" x="0" y="380" width="569" height="1" forecolor="#4B963C" backcolor="#4B963C"/>
+		<element kind="line" uuid="2cae82b4-33bd-44fb-b2f1-ab27d26bae67" x="0" y="416" width="569" height="1" forecolor="#4B963C" backcolor="#4B963C"/>
+		<element kind="line" uuid="6cd18c0f-eb53-4a51-8ec1-67fa38907db1" x="0" y="466" width="569" height="1" forecolor="#4B963C" backcolor="#4B963C"/>
+		<element kind="textField" uuid="ff61871f-926d-4a5e-8f4c-7e34178aa734" x="460" y="244" width="95" height="15" linkType="None" linkTarget="Self" blankWhenNull="true" hTextAlign="Right">
+			<expression><![CDATA[$P{LBL_TOTAL}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="66fc4827-140a-46c5-8372-f31310b25ff0" x="460" y="260" width="95" height="15" blankWhenNull="true" hTextAlign="Right">
+			<expression><![CDATA[$P{LBL_TAX}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="b2e956fb-5fbc-4bfe-8a70-5634b5195cf8" x="460" y="320" width="95" height="15" blankWhenNull="true" hTextAlign="Right">
+			<expression><![CDATA[$P{LBL_PAY}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="3cf3742a-2128-47a0-8900-80b3d7d9aff0" x="460" y="335" width="95" height="15" blankWhenNull="true" hTextAlign="Right">
+			<expression><![CDATA[$P{LBL_TOTALAMOUNT}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="b0e2aa99-3d4e-4c20-84b4-84f903907525" x="460" y="360" width="95" height="15" blankWhenNull="true" hTextAlign="Right">
+			<expression><![CDATA[$P{LBL_COMISION}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="25255c11-f2ff-4634-a7f1-ba597741ae5e" x="460" y="402" width="95" height="15" blankWhenNull="true" hTextAlign="Right">
+			<expression><![CDATA[$P{LBL_BILLING}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="staticText" uuid="482a6a33-19dc-4966-a3fd-ce4fa467498b" x="0" y="132" width="350" height="14">
+			<text><![CDATA[Billing BSP- Revenue for IATA-Number:]]></text>
+		</element>
+		<element kind="staticText" uuid="160e1a9f-a8b9-442e-afcd-e676bc618a95" x="0" y="150" width="350" height="14">
+			<text><![CDATA[Billing Period]]></text>
+		</element>
+		<element kind="staticText" uuid="6fa1df15-f7e4-4537-a51d-12932fb23827" x="0" y="180" width="200" height="14">
+			<text><![CDATA[Currency]]></text>
+		</element>
+		<element kind="staticText" uuid="170f3e04-1a44-4f83-af08-d1873408747e" x="0" y="200" width="200" height="14">
+			<text><![CDATA[VAT number Global Ticket Factory GmbH]]></text>
+		</element>
+		<element kind="staticText" uuid="75f4ae9a-e510-4619-bbae-cd728203f5c6" x="0" y="244" width="200" height="14">
+			<text><![CDATA[Revenue of issued Tickets – total]]></text>
+		</element>
+		<element kind="staticText" uuid="57bb3d09-8e28-4c3d-9501-78494f256be1" x="0" y="261" width="200" height="14">
+			<text><![CDATA[Amount of Tax - total]]></text>
+		</element>
+		<element kind="staticText" uuid="0e801ccf-08c5-444f-ac63-2304c6e03769" x="0" y="282" width="200" height="14">
+			<text><![CDATA[Total amount of ticket revenue and tax]]></text>
+		</element>
+		<element kind="staticText" uuid="57b2af60-dd33-4c43-9141-d7bf9cf09c45" x="0" y="320" width="200" height="14">
+			<text><![CDATA[Total payment BSP-CC]]></text>
+		</element>
+		<element kind="staticText" uuid="183ce605-76cc-4766-932a-5a7a325b4ff7" x="0" y="335" width="200" height="14" bold="true">
+			<text><![CDATA[Total Amount]]></text>
+		</element>
+		<element kind="staticText" uuid="9db1a3e1-1be9-4a00-9054-dd926df2989f" x="0" y="360" width="200" height="14">
+			<text><![CDATA[Commission and refund commission]]></text>
+		</element>
+		<element kind="staticText" uuid="ed0fa0ec-3d4d-42d0-8947-e6afedb54b72" x="0" y="400" width="200" height="14">
+			<text><![CDATA[Billing amount]]></text>
+		</element>
+		<element kind="staticText" uuid="35cad926-461a-4e4d-a38c-aecde0b610a5" x="0" y="430" width="200" height="14">
+			<text><![CDATA[Kind regards.]]></text>
+		</element>
+		<element kind="staticText" uuid="80da436a-207f-4564-9eaa-a0ef4a160721" x="0" y="453" width="200" height="14" bold="true">
+			<text><![CDATA[TRAVEL FAN SA DE CV]]></text>
+		</element>
+		<element kind="textField" uuid="e573d7e4-5988-4f17-be2b-8a589d40dc3d" x="461" y="280" width="95" height="15" blankWhenNull="true" hTextAlign="Right">
+			<expression><![CDATA[$P{LBL_TOTALANDTAX}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="ad34802f-4415-4e54-9f70-40605bd7f208" x="0" y="0" width="230" height="90" markup="html" linkTarget="Self">
+			<expression><![CDATA[$P{LBL_ADDRESS_CUST}]]></expression>
+		</element>
+		<element kind="textField" uuid="26b2bb6f-e0dc-415a-8bc3-73708de5eea0" x="330" y="60" width="224" height="50" markup="html" linkTarget="Self">
+			<expression><![CDATA[$P{LBL_ADDRESS}]]></expression>
+		</element>
+		<element kind="textField" uuid="f05fda56-d21a-4691-9e12-adfcb673d21b" x="210" y="180" width="100" height="15" blankWhenNull="true" hTextAlign="Right">
+			<expression><![CDATA[$P{LBL_MONEDA}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+	</pageHeader>
+</jasperReport>

@@ -1,0 +1,530 @@
+package pss.common.regions.multilanguage;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.text.MessageFormat;
+import java.util.List;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
+import pss.common.regions.company.JCompanyBusinessModules;
+import pss.common.security.BizUsuario;
+import pss.core.data.BizPssConfig;
+import pss.core.data.files.JStreamFile;
+import pss.core.services.records.BizVirtual;
+import pss.core.services.records.JRecord;
+import pss.core.services.records.JRecords;
+import pss.core.tools.JTools;
+import pss.core.tools.collections.JCollectionFactory;
+import pss.core.tools.collections.JMap;
+import pss.core.tools.collections.JStringTokenizer;
+
+public class JLanguage {
+
+  // singleton
+  static private JLanguage oLang;
+
+  private JMap<String, JMap<String, JMap<String,String>>>    pLangs      = JCollectionFactory.createOrderedMap();
+  public  static final String  Pss_DEFAULT_LANGUAGE = "ar";
+  private char    ID_DELIMITER='|';
+//  private boolean bCheckLanguage = false;
+  // variables to generate news
+  private static JMap<String, String> pNews;
+  private static JMap<String, String> pBrowserMap = null;
+  private static boolean addUnknown = false;
+  private String overrideId=null;
+
+
+  /**
+	 * @return the overrideId
+	 */
+	public String getOverrideId() {
+		return overrideId;
+	}
+
+	/**
+	 * @param overrideId the overrideId to set
+	 */
+	public  void setOverrideId(String overrideId) {
+		this.overrideId = overrideId;
+	}
+
+	
+	
+  /**
+   * Default constructor.
+   */
+  public JLanguage() {
+      // resolve the news management defined in Pss.ini
+  	try {
+  		initializeBrowserMap();
+	    String sVal = BizPssConfig.getPssConfig().getCachedValue("GENERAL", "GENERATE_TRANSLATION_NEWS", "N");
+	    if (sVal.equalsIgnoreCase("N")) return;
+	    JLanguage.pNews = JCollectionFactory.createOrderedMap();
+	    JLanguage.addUnknown = true;
+  	} catch (Exception ignore) {}
+  }
+  
+  private static void initializeBrowserMap() {
+  	pBrowserMap = JCollectionFactory.createOrderedMap(3);
+  	pBrowserMap.addElement("es", "ar");
+  	pBrowserMap.addElement("en", "us");
+  	pBrowserMap.addElement("pt", "br");
+	}
+  
+  public void setLanguageFromBrowser(String browserLang) {
+  	String lang = pBrowserMap.getElement(browserLang);
+  	if ( lang == null ) lang = "us";
+  	if (BizPssConfig.useBrowserLanguage())
+  		overrideId = lang;
+  }
+  
+  public void removeLanguageFromBrowser() {
+  	overrideId = null;
+  }
+
+
+  /**
+   * A map of language id to translations map.
+   */
+  private JMap<String, JMap<String,String>> getLangs() throws Exception {
+  	String business = BizUsuario.getUsr()==null?BizPssConfig.getPssConfig().getBusinessDefault():BizUsuario.getUsr().getObjCompany().getBusiness();
+  	JMap<String, JMap<String,String>> lang = null;
+  	lang = this.pLangs.getElement(business);
+    if (lang==null) {
+    	JMap<String, JMap<String,String>> l = JCollectionFactory.createOrderedMap();
+  		this.pLangs.addElement(business, l);
+  		lang = l;
+    }
+    return lang;
+  }
+
+  /**
+    *	Singleton-pattern method: getInstance(). During the first call of getInstance(), the languagedocument is parsed.
+    *     This may result in a rather long duration of the first call.
+    *
+    *	@returns LanguageManagerInstance An instance of the languagemanager.
+    */
+  public synchronized static JLanguage getInstance() {
+    if ( oLang == null)
+      oLang = new JLanguage();
+    return oLang;
+  }
+
+
+  public static String getTranslationFor(String zLookupKey) {
+    String sResult = getInstance().getTranslateMsg(zLookupKey);
+    if (sResult==null || sResult.length() < 1) {
+      return zLookupKey;
+    } else {
+      return sResult;
+    }
+  }
+
+  private String getTranslateMsg(String zKey) {
+  try {
+    zKey = zKey.trim();
+    if ( zKey.length() == 0 ) return "";
+    int i = getIndexNoTranslate(zKey);
+    String sNoTranslate = zKey.substring(i);
+    zKey = zKey.substring(0, i);
+
+    String sLang = oLang.getLanguageID();
+    if (sLang.equals("mx"))
+    	sLang="ar";
+    JMap<String,String> oMsgs = oLang.getLangs().getElement(sLang);
+    if ( oMsgs == null || oMsgs.size()==0 ) {
+      try {
+        oLang.initLanguage(sLang);
+      } catch( Throwable e ) {
+        e.printStackTrace();
+      }
+      oMsgs = oLang.getLangs().getElement(sLang);
+    }
+    zKey = zKey.toLowerCase().trim();
+    //String search = JTools.BinToHexString( zKey, zKey.length() ) ;
+    String result = oMsgs.getElement( zKey  );
+    if (result!=null ) {
+    	result = result.trim();
+      if ( JTools.isUpperWord(zKey) ) result=result.toUpperCase();
+      return result += sNoTranslate;
+    }
+    if ( addUnknown ) addToFile(sLang,zKey);
+    return result;
+  } catch ( Exception e ) {
+		System.out.println(e.getStackTrace());
+
+	System.out.println(e.getMessage());
+    return null;
+  }}
+
+  private int getIndexNoTranslate(String zKey) throws Exception {
+    char[] caracters = {'.', ':', '=', ' '};
+    int cantNoTranslate = JTools.countEndChars(zKey, caracters);
+    return zKey.length()-cantNoTranslate;
+  }
+
+  /**
+    *	method: setLanguageID(). Initialize the language ID to look for
+    *     the language messages.
+    *
+    *	@returns void.
+    */
+  private String getLanguageID() throws Exception {
+    String sLanguageID = null;
+    String sID = null;
+    if ( overrideId != null )
+    	sID = overrideId;
+    else
+    	sID = BizUsuario.getCurrentUserLanguage();
+    if ( sID != null && sID.trim().length() > 0) {
+      sLanguageID = sID;
+      return sLanguageID.toLowerCase();
+    } else {
+      try {
+        if (sLanguageID == null || sLanguageID.trim().length() <= 0) {
+          sLanguageID = BizPssConfig.GetDefaultLanguage();
+        }
+        return sLanguageID.toLowerCase();
+      } catch (Exception e) {
+        // in case BizPssConfig.GetDefaultLanguage() fails
+      }
+    }
+    sLanguageID = Pss_DEFAULT_LANGUAGE;
+    return sLanguageID.toLowerCase();
+  }
+
+  /**
+    *	method: loadFile(). load a file into the message IDs and their
+    *     translations.
+    *
+    *	@returns void.
+    */
+  private void loadFile( String zLang, String zFile ) throws Exception {
+  	loadFile(zLang, new FileInputStream(new File(zFile)));
+  }
+  private void loadFile( String zLang, InputStream zFile ) throws Exception {
+    JMap<String, String> pLangMsgs   = JCollectionFactory.createOrderedMap();
+
+//    JStreamFile oStream = new JStreamFile();
+//    oStream.Open(zFile);
+//    
+    InputStream fr = zFile;
+    byte[] buffer = new byte[4096];
+    BufferedReader reader = new BufferedReader(new InputStreamReader(zFile, "ISO-8859-1" ) );
+    
+    String sLine ;
+    int i = 0;
+    while ( (sLine=reader.readLine()) != null ) {
+      JStringTokenizer oTok = JCollectionFactory.createStringTokenizer( sLine, ID_DELIMITER );
+      if ( oTok.countTokens() == 1 && addUnknown) {
+        String sID    = oTok.nextToken();
+        pLangMsgs.addElement(sID.toLowerCase(),sID);
+        continue;
+      }
+      if ( oTok.countTokens() != 2 ) continue;
+      String sID    =  oTok.nextToken();
+      if (sID.startsWith("Inicio de Ses"))
+    	  System.out.println("Encontre");
+      sID    =  sID.toLowerCase().trim();
+      String sMsg   = oTok.nextToken();
+      //sID = JTools.BinToHexString( sID, sID.length() );
+      // sID = replaceNewLine(sID);
+      sMsg = replaceNewLine(sMsg);
+      pLangMsgs.addElement(sID,sMsg);
+    }
+    reader.close();
+
+    // If there is no map for this language, adds a new one
+    if( getLangs().getElement( zLang ) == null ) getLangs().addElement( zLang, JCollectionFactory.<String,String>createOrderedMap( pLangMsgs.size()+1 ) );
+
+    // ADDS! the messages to the language's map
+    getLangs().getElement( zLang ).addElements( pLangMsgs );
+  }
+
+  private String replaceNewLine(String str) {
+    int i = str.indexOf("\\n");
+    if (i == -1) return str;
+
+    StringBuffer buff = new StringBuffer(str.length());
+    while (true) { /*  see (*1) */
+      buff.append(str.substring(0, i));
+      buff.append('\n');
+      buff.append(str.substring(i + 2));
+      str = buff.toString();
+      i = str.indexOf("\\n");
+      // (*1) loop control is here:
+      if (i == -1) {
+        break;
+      } else {
+        buff.setLength(0);
+      }
+    }
+    return str;
+  }
+
+/*
+  private boolean isRealNewLine(  String zLine ) throws Exception {
+    char excludes[] = {'1','2','3','4','5','6','7','8','9','0','[',']','(',')','{','}','<','>','-','=','.',':','/','\\'};
+    int i,j,t=zLine.length();
+    for (i=0;i<t;i++)
+      for (j=0;j<excludes.length;j++)
+        if (zLine.charAt(i)==excludes[j])
+          return false;
+    return true;
+  }
+*/
+  private void addToFile( String zLang, String zLine ) throws Exception {
+    String      sDir  = JLanguage.class.getResource("").getFile()+zLang;
+    if ( zLine.equals("")) return;
+    if (JLanguage.pNews.containsKey(zLine))
+      return;
+//    if (!isRealNewLine(zLine))
+//      return;
+    JLanguage.pNews.addElement(zLine,"");
+    JStreamFile oStream = new JStreamFile();
+    String zFile = sDir + "/news.msg";
+    oStream.CreateNewFile(zFile,true);
+    oStream.Open( zFile );
+    oStream.WriteLn(zLine+"|");
+    oStream.Close();
+  }
+
+
+  /**
+    *	method: initLanguage(). Initialize the language structure.
+    *
+    *	@returns void.
+    */
+  private synchronized void initLanguage(String zLang) throws Exception {
+
+  	URL url =  BizUsuario.getUsr()==null?null:BizUsuario.getUsr().getObjBusiness().getPathMultilanguage(zLang);
+  	if (url==null) url = JCompanyBusinessModules.createBusinessDefault().getPathMultilanguage(zLang);
+  	if (url==null) url=JLanguage.class.getResource(zLang);
+  	if (url==null) return;
+  	String path = url.getPath();
+  	String sDir;
+  	if(path.indexOf(".jar")!=-1) {
+      JarFile jf = new JarFile(path.substring(6,path.indexOf("!")));
+		  List<JarEntry> list =JTools.getJarContent(path.substring(6,path.indexOf("!")), path.substring(path.indexOf("!")+2,path.length()-1));
+		  for ( JarEntry entry:list) {
+		  	if ( entry.isDirectory() ) continue;
+        loadFile( zLang, jf.getInputStream(entry));
+		  }
+		  return;
+		}
+ 
+  	sDir  = url.getPath();
+    File oFile = new File(sDir);
+    File aFile[] = oFile.listFiles() ;
+    if( aFile == null ) {
+    	getLangs().addElement( zLang, JCollectionFactory.<String,String>createOrderedMap() );
+      System.out.println( "There are no msg files for language '" + zLang + "'" );
+      return;
+    }
+
+    for ( int i=0; i < aFile.length ; i++ ) {
+      if ( aFile[i].isDirectory() ) continue;
+      // Cargo el archivo en la memoria
+      loadFile( zLang, sDir+"/"+aFile[i].getName());
+
+    }
+  }
+
+
+  public static String translate( String zMsg ) {
+     return JLanguage.translate( zMsg, (Object[])null );
+  }
+
+  /**
+    *	method: Translate(). Returns the translation of the message
+    *
+    *	@returns String: the message translated.
+    */
+ public static String translateExtendedText( String zMsg ) {
+    JLanguage oLang = JLanguage.getInstance();
+    if ( zMsg == null ) return "";
+    int iLen = zMsg.length();
+    int i;
+    String spaces = "";
+    StringBuffer sResp = new StringBuffer();
+    StringBuffer sAux = new StringBuffer();
+    //StringBuffer sAuxSpaces = new StringBuffer();
+ //   j = 0;
+    for ( i = 0 ; i < iLen ; i++ ) {
+      char c = zMsg.charAt(i);
+      if (!(( c >='A' && c <='Z' ) ||
+            ( c =='Á' || c =='É' || c =='Í' || c =='Ó' || c =='Ú' ) ||
+            ( c =='á' || c =='é' || c =='í' || c =='ó' || c =='ú' ) ||
+            ( c >='a' && c <='z' ) || (c=='ñ') || (c=='?') || (c=='¿') ||
+            (c==' ' && sAux.length()>0)) ) {
+        if ( c=='^' ) { // entre ^ no esta protejido, o desde ^ hasta el final
+          int h=zMsg.substring(i).indexOf('\n');
+          if ( h==-1) {
+            sAux.append(zMsg.substring(i));
+            break;
+          } else {
+            sAux.append(zMsg.substring(i, i+h));
+            i+=h-1;
+            continue;
+          }
+        }
+//        if ( j > 0 ) {
+        if (sAux.length()>0) {
+          sResp.append(oLang.processTranslation( sAux.toString(), null ) );
+          sResp.append( spaces );
+          sResp.append( c );
+ //         j = 0;
+          sAux.delete(0, sAux.length());
+          continue;
+        }
+        else {
+          sResp.append( c );
+          continue;
+        }
+      }
+      spaces=(c==' ')?spaces+' ':"";
+//      j++;
+      if (c!=' ' || spaces.equals(" "))
+        sAux.append(c);
+    }
+
+//    if ( j > 0 ) {
+    if (sAux.length()>0) {
+      sResp.append( oLang.processTranslation( sAux.toString(), null ) );
+    }
+
+    return sResp.toString();
+  }
+
+  public static String translate( String zMsg, Object zParams[] ) {
+  	if ( zMsg == null ) return null;
+    JLanguage oLang = JLanguage.getInstance();
+    return oLang.processTranslation( zMsg, zParams );
+  }
+
+  /**
+    *	method: processTranslation(). Process the translation
+    *
+    *	@returns String: the message translated.
+    */
+  public String processTranslation( String zMsg, Object zParams[] ) {
+    try {
+      String sAns;
+      if ( zMsg.trim().length() == 0 ) return zMsg;
+
+      // Mensaje que ya viene con parametros explicitos
+      if ( zParams != null ) {
+        if ( (sAns = getTranslateMsg(zMsg)) == null ) {
+          //No traducido
+          return zMsg;
+        }
+        MessageFormat oMsg = new MessageFormat( sAns );
+        return oMsg.format( zParams );
+      }
+
+      // Mensaje que hay que truncar
+      int idx = zMsg.indexOf('^');
+      if ( idx!= -1) {
+        String sLookupKey = zMsg.substring(0, idx);
+        if ( (sAns = getTranslateMsg(sLookupKey)) == null ) {
+          //No traducido
+          return sLookupKey + zMsg.substring(idx+1);
+        }
+        return sAns+zMsg.substring(idx+1);
+      }
+
+      // Mensaje que no es necesario parsear, viene sin parametros
+      if ( zMsg.indexOf('{') == -1 ) {
+        if ( (sAns = getTranslateMsg(zMsg)) == null ) {
+          //No traducido
+          return zMsg;
+        }
+        return sAns;
+      }
+
+      // Mensaje que viene con parametros implicitos
+      char cLeftToken = '{';
+      char cRightToken = '}';
+      int iIndex = 0;
+      int iParamCount = 0;
+      while ((iIndex = zMsg.indexOf(cLeftToken, iIndex)) != -1) {
+        iIndex++;
+        if (zMsg.indexOf(cRightToken, iIndex) != -1) {
+          iParamCount++;
+        }
+      }
+      int iCharCount = zMsg.length();
+      Object[] aPars = new Object[iParamCount];
+      char c;
+      String sCurrParamValue = "";
+      boolean bWritingParam = false;
+      int iCurrParam = 0;
+      StringBuffer oKey = new StringBuffer(iCharCount);
+      for (int i = 0; i < iCharCount; i++) {
+        c = zMsg.charAt(i);
+        if (c==cLeftToken) {
+          bWritingParam = true;
+          oKey.append(cLeftToken).append(iCurrParam);
+        } else if (c==cRightToken) {
+          bWritingParam = false;
+          aPars[iCurrParam++] = sCurrParamValue;
+          oKey.append(cRightToken);
+          sCurrParamValue = "";
+        } else if (bWritingParam) {
+          sCurrParamValue += String.valueOf(c);
+        } else {
+          oKey.append(c);
+        }
+      }
+
+
+      String sLookupKey = oKey.toString();
+      sAns = getTranslateMsg(sLookupKey);
+      if (sAns==null) {
+        //No traducido
+        sAns = sLookupKey;
+      }
+      MessageFormat oMsg = new MessageFormat(sAns);
+      return oMsg.format(aPars);
+
+    } catch ( Throwable e ) {
+      return zMsg;
+    }
+
+  }
+
+  /*******************************************************
+   * @description:
+   * @deprecated use {@link #translate(String)}
+   *******************************************************/
+  @Deprecated
+	public static String Translate( String zMsg ) {
+    return translate(zMsg);
+  }
+
+  public static JRecords<BizVirtual> ObtenerIdiomas() throws Exception {
+    JRecords<BizVirtual> oBDs = JRecords.createVirtualBDs();
+    oBDs.addItem(JRecord.virtualBD( "ar", "Español (Argentina)", 1) );
+    oBDs.addItem(JRecord.virtualBD( "cl", "Español (Chile)", 1) );
+    oBDs.addItem(JRecord.virtualBD( "gt", "Español (Guatemala)", 1) );
+    oBDs.addItem(JRecord.virtualBD( "mx", "Español (México)", 1) );
+    oBDs.addItem(JRecord.virtualBD( "br", "Português (Brasil)", 1) );
+    oBDs.addItem(JRecord.virtualBD( "us", "Inglés (USA)", 1) );
+    return oBDs;
+  }
+
+//  public static void main(String[] args) throws Exception {
+//  String s= JLanguage.translate("Hola que tul^Como andas todo bien^que tal^ bien todo bien" );
+//  System.exit(0);
+//
+//  }
+
+
+}
+
+

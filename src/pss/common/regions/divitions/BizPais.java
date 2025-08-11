@@ -1,0 +1,486 @@
+package  pss.common.regions.divitions;
+
+import pss.common.components.BizCompInstalados;
+import pss.common.components.JSetupParameters;
+import pss.common.personalData.BizEstadoCivil;
+import pss.common.personalData.BizTipoDoc;
+import pss.common.regions.clases.JClaseArgentina;
+import pss.common.regions.clases.JClasePais;
+import pss.common.regions.clases.JClaseUsa;
+import pss.common.regions.currency.BizMoneda;
+import pss.common.regions.currency.BizMonedaPais;
+import pss.common.regions.nodes.BizNodo;
+import pss.common.security.BizUsuario;
+import pss.core.services.fields.JString;
+import pss.core.services.records.JRecord;
+import pss.core.services.records.JRecords;
+import pss.core.tools.JExcepcion;
+import pss.core.tools.collections.JCollectionFactory;
+import pss.core.tools.collections.JMap;
+import pss.core.tools.formatters.JRegionalFormatterFactory;
+
+public class BizPais extends JRecord {
+
+	private static BizPaises cachePaises=null; 
+	private static JMap<String, BizProvincia> cacheProvs=null; 
+//	public static final String STATIC_RETAIL_GRUPOFISCAL_EMISION="STATIC_RETAIL_GRUPOFISCAL_EMISION";
+//	public static final String STATIC_RETAIL_GRUPOFISCAL_PROVINCIAL="STATIC_RETAIL_GRUPOFISCAL_PROVINCIAL";
+
+//	private static JMap<String, JMap<String, Object>> objectMap;
+
+//	public static void putObjectMap(String id, Object obj) throws Exception {
+//		putObjectMap(BizUsuario.getUsr().getCountry(), id, obj);
+//	}
+
+//	public static void putObjectMap(String country, String id, Object obj) throws Exception {
+//		if (objectMap==null) objectMap=JCollectionFactory.createMap();
+//		if (!objectMap.containsKey(country)) objectMap.addElement(country, JCollectionFactory.<String, Object> createMap());
+//		JMap<String, Object> countryMap=objectMap.getElement(country);
+//		if (!countryMap.containsKey(id)) countryMap.addElement(id, obj);
+//	}
+
+//	public static Object getObjectMap(String id) throws Exception {
+//		return getObjectMap(BizUsuario.getUsr().getCountry(), id);
+//	}
+
+//	public static Object getObjectMap(String country, String id) throws Exception {
+//		if (objectMap==null) return null;
+//		if (!objectMap.containsKey(country)) return null;
+//		JMap<String, Object> countryMap=objectMap.getElement(country);
+//		if (!countryMap.containsKey(id)) return null;
+//		return countryMap.getElement(id);
+//	}
+	
+	public static final String PAIS_ARG ="AR";
+	public static final String PAIS_USA ="US";
+	public static final String PAIS_URU ="UY";
+	
+
+	// -------------------------------------------------------------------------//
+	// Propiedades de la Clase
+	// -------------------------------------------------------------------------//
+	JString pPais=new JString();
+	JString pDescripcion=new JString(); 
+	//{
+//
+//		@Override
+//		public void preset() throws Exception {
+//			pDescripcion.setValue(getObjPais().GetDescrip());
+//		}
+//	};
+	JString pDivision=new JString();
+	JString pMonedaLocal=new JString();
+	JString pLenguajeDefault=new JString();
+	JString pCiudad=new JString();
+	JString pLocalidad=new JString();
+	JString pUsaTablaLoc=new JString();
+	JString pUsaTablaCiudad=new JString();
+	// JString pCurrencyFormat = new JString();
+	// JString pNumberFormat = new JString();
+	JString pLongTimeFormat=new JString();
+	JString pShortTimeFormat=new JString();
+	JString pLongDateFormat=new JString();
+	JString pShortDateFormat=new JString();
+	JString pGroupingSeparator=new JString();
+	JString pDecimalSeparator=new JString();
+
+	BizMoneda oMonedaLocal;
+	BizMonedaPais oMonedaPaisLocal;
+	BizPaisLista oPais;
+
+	public String GetDivision() throws Exception {
+		return pDivision.getValue();
+	}
+
+	public String GetDescrip() throws Exception {
+		return pDescripcion.getValue();
+	}
+
+	public String GetPais() throws Exception {
+		return pPais.getValue();
+	}
+
+	public String GetCiudad() throws Exception {
+		return pCiudad.getValue();
+	}
+
+	public String GetLocalidad() throws Exception {
+		return pLocalidad.getValue();
+	}
+
+	public String GetMonedaLocal() throws Exception {
+		return pMonedaLocal.getValue();
+	}
+
+	public String getCurrencyFormat() throws Exception {
+		return this.ObtenerMonedaLocal().getCurrencyFormat();
+	}
+
+	public String getUsaTablaCiudad() throws Exception {
+		return pUsaTablaCiudad.getValue();
+	}
+
+	public String getUsaTablaLocalidad() throws Exception {
+		return pUsaTablaLoc.getValue();
+	}
+
+	public String getLongTimeFormat() throws Exception {
+		return pLongTimeFormat.getValue();
+	}
+
+	public String getShortTimeFormat() throws Exception {
+		return pShortTimeFormat.getValue();
+	}
+
+	public String getLongDateFormat() throws Exception {
+		return pLongDateFormat.getValue();
+	}
+
+	public String getShortDateFormat() throws Exception {
+		return pShortDateFormat.getValue();
+	}
+
+	public String getGroupingSeparator() throws Exception {
+		return pGroupingSeparator.getValue();
+	}
+
+	public String getDecimalSeparator() throws Exception {
+		return pDecimalSeparator.getValue();
+	}
+
+	public String getLenguajeDefault() throws Exception {
+		return pLenguajeDefault.getValue();
+	}
+	public void setDescripcion(String value) throws Exception {
+		pDescripcion.setValue(value);
+	}
+	public void setPais(String value) throws Exception {
+		pPais.setValue(value);
+	}
+	public void setCiudad(String value) throws Exception {
+		pCiudad.setValue(value);
+	}
+	public void setLocalidad(String value) throws Exception {
+		pLocalidad.setValue(value);
+	}
+	public void setMonedaLocal(String value) throws Exception {
+		pMonedaLocal.setValue(value);
+	}
+	public void setUsaTablaCiudad(String value) throws Exception {
+		pUsaTablaCiudad.setValue(value);
+	}
+	public void setUsaTablaLocalidad(boolean value) throws Exception {
+		pUsaTablaLoc.setValue(value);
+	}
+	public void setLongTimeFormat(String value) throws Exception {
+		pLongTimeFormat.setValue(value);
+	}
+	public void setShortTimeFormat(String value) throws Exception {
+		pShortTimeFormat.setValue(value);
+	}
+	public void setLongDateFormat(String value) throws Exception {
+		pLongDateFormat.setValue(value);
+	}
+	public void setShortDateFormat(String value) throws Exception {
+		pShortDateFormat.setValue(value);
+	}
+	public void setGroupingSeparator(String value) throws Exception {
+		pGroupingSeparator.setValue(value);
+	}
+	public void setDecimalSeparator(String value) throws Exception {
+		pDecimalSeparator.setValue(value);
+	}
+	public void setLenguajeDefault(String value) throws Exception {
+		pLenguajeDefault.setValue(value);
+	}
+	
+
+	// -------------------------------------------------------------------------//
+	// Constructor de la Clase
+	// -------------------------------------------------------------------------//
+	public BizPais() throws Exception {
+		addItem("pais", pPais);
+		addItem("descripcion", pDescripcion);
+		addItem("usar_tabla_localidad", pUsaTablaLoc);
+		addItem("usar_tabla_ciudad", pUsaTablaCiudad);
+		addItem("division", pDivision);
+		addItem("ciudad", pCiudad);
+		addItem("localidad", pLocalidad);
+		addItem("moneda_local", pMonedaLocal);
+		addItem("short_time_format", pShortTimeFormat);
+		addItem("long_time_format", pLongTimeFormat);
+		addItem("short_date_format", pShortDateFormat);
+		addItem("long_date_format", pLongDateFormat);
+		addItem("grouping_separator", pGroupingSeparator);
+		addItem("decimal_separator", pDecimalSeparator);
+		addItem("lenguaje_default", pLenguajeDefault);
+	}
+
+	@Override
+	public void createFixedProperties() throws Exception {
+		addFixedItem(KEY, "pais", "Código", true, true, 2);
+		addFixedItem(FOREIGN, "descripcion", "Descripción", true, true, 50, 0, null, null, "REG_PAIS");
+		addFixedItem(FIELD, "usar_tabla_localidad", "Usa tabla localidad", true, false, 1);
+		addFixedItem(FIELD, "usar_tabla_ciudad", "Usa tabla ciudad", true, false, 1);
+		addFixedItem(FIELD, "division", "División", true, false, 30, 0, "", "Div1");
+		addFixedItem(FIELD, "ciudad", "Sub División", true, false, 25, 0, "", "Div2");
+		addFixedItem(FIELD, "localidad", "Sub-Sub División", true, false, 25, 0, "", "Div3");
+		addFixedItem(FIELD, "moneda_local", "Moneda Local", true, false, 15);
+		addFixedItem(FIELD, "short_time_format", "Formato corto de hora", true, false, 10);
+		addFixedItem(FIELD, "long_time_format", "Formato largo de hora", true, false, 40);
+		addFixedItem(FIELD, "short_date_format", "Formato corto de fecha", true, false, 10);
+		addFixedItem(FIELD, "long_date_format", "Formato largo de fecha", true, false, 40);
+		addFixedItem(FIELD, "grouping_separator", "Separador de miles", true, false, 1);
+		addFixedItem(FIELD, "decimal_separator", "Separador decimal", true, false, 1);
+		addFixedItem(FIELD, "lenguaje_default", "Lenguaje Default", true, true, 2);
+	}
+
+	// -------------------------------------------------------------------------//
+	// Metodos Estaticos
+	// -------------------------------------------------------------------------//
+
+	public static boolean doesExist(boolean zWantException, String zPais) throws Exception {
+		BizPais oPais=new BizPais();
+		oPais.dontThrowException(true);
+		boolean bEncontro=oPais.Read(zPais);
+		if (!bEncontro||!oPais.GetPais().toUpperCase().equals(zPais.toUpperCase())) {
+			if (zWantException) JExcepcion.SendError("Pais Inexistente");
+			return false;
+		}
+		return true;
+	}
+
+	// -------------------------------------------------------------------------//
+	// Metodos de instancia
+	// -------------------------------------------------------------------------//
+	@Override
+	public String GetTable() {
+		return "reg_pais_config";
+	}
+
+	@Override
+	public void setupConfig(JSetupParameters zParams) throws Exception {
+		zParams.setExportData(zParams.isLevelCountry());
+	}
+
+	@Override
+	public void processInsert() throws Exception {
+		this.insertRecord();
+	}
+
+	public boolean Read(String zPais) throws Exception {
+		addFilter("pais", zPais);
+		return this.read();
+	}
+
+	@Override
+	public void processDelete() throws Exception {
+		if (JRecords.existsComplete(BizNodo.class, "pais", pPais.getValue())) {
+			JExcepcion.SendError("No se puede eliminar un país que está vinculado a una Sucursal ");
+		}
+		if (JRecords.existsComplete("pss.core.Personas.BizDomicilio", "pais", pPais.getValue())) {
+			JExcepcion.SendError("No se puede eliminar esta provincia porque está asociada a un Domicilio.");
+		}
+		if (JRecords.existsComplete("pss.sj.fre.documentos.agencias.ampliatoria.BizAmpliatoria", "pais", pPais.getValue())) {
+			JExcepcion.SendError("No se puede eliminar esta sub-división porque está asociada a una ampliatoria.");
+		}
+		if (JRecords.existsComplete("pss.sj.tramites.tramiteContacto.BizTramiteContacto", "pais", pPais.getValue())) {
+			JExcepcion.SendError("No se puede eliminar esta sub-división porque está asociada a un contacto.");
+		}
+		if (JRecords.existsComplete("pss.sj.fre.documentos.agencias.asientos.parte.BizParte", "pais", pPais.getValue())) {
+			JExcepcion.SendError("No se puede eliminar esta sub-división porque está asociada a una Parte.");
+		}
+		if (JRecords.existsComplete("pss.sj.tramites.formulario.BizFormulario", "pais", pPais.getValue())) {
+			JExcepcion.SendError("No se puede eliminar esta sub-división porque está asociada a una Formulario.");
+		}	
+
+//		ObtenerMonedaPais().processDeleteAll();
+		ObtenerProvincias().processDeleteAll();
+		if (BizCompInstalados.ifInstallCorePersonas()) {
+			ObtenerDocumentTypes().processDeleteAll();
+			ObtenerEstadoCiviles().processDeleteAll();
+		}
+
+		super.processDelete();
+		refreshLoadedDependentData();
+	}
+
+	@Override
+	public void processUpdate() throws Exception {
+		super.processUpdate();
+		refreshLoadedDependentData();
+	}
+
+	private void refreshLoadedDependentData() throws Exception {
+		if (BizUsuario.getUsr().getObjNodo()!=null)
+			BizUsuario.getUsr().getObjNodo().refreshCountry();
+		BizUsuario.getUsr().refreshBirthCountry();
+		JRegionalFormatterFactory.refreshForCountry(GetPais());
+	}
+
+	public JRecords<BizProvincia> ObtenerProvincias() throws Exception {
+		JRecords<BizProvincia> oProvincias=new JRecords<BizProvincia>(BizProvincia.class);
+		oProvincias.addFilter("pais", pPais.getValue());
+		oProvincias.readAll();
+		return oProvincias;
+	}
+
+//	public JRecords<BizMonedaPais> ObtenerMonedaPais() throws Exception {
+//		JRecords<BizMonedaPais> oMonedaPais=new JRecords<BizMonedaPais>(BizMonedaPais.class);
+//		oMonedaPais.addFilter("pais", pPais.getValue());
+//		oMonedaPais.readAll();
+//		return oMonedaPais;
+//	}
+
+	public JRecords<BizTipoDoc> ObtenerDocumentTypes() throws Exception {
+		JRecords<BizTipoDoc> oMonedaPais=new JRecords<BizTipoDoc>(BizTipoDoc.class);
+		oMonedaPais.addFilter("pais", pPais.getValue());
+		oMonedaPais.readAll();
+		return oMonedaPais;
+	}
+
+	public JRecords<BizEstadoCivil> ObtenerEstadoCiviles() throws Exception {
+		JRecords<BizEstadoCivil> oEstadoCiviles=new JRecords<BizEstadoCivil>(BizEstadoCivil.class);
+		oEstadoCiviles.addFilter("id_pais", pPais.getValue());
+		oEstadoCiviles.readAll();
+		return oEstadoCiviles;
+	}
+
+//	public BizMonedaPais ObtenerMonedaPaisLocal() throws Exception {
+//		if (this.oMonedaPaisLocal!=null) return this.oMonedaPaisLocal;
+//		BizMonedaPais newMonedaPaisLocal=new BizMonedaPais();
+//		newMonedaPaisLocal.SetNoExcSelect(true);
+//		if (!newMonedaPaisLocal.Read(pMonedaLocal.getValue(), pPais.getValue())) {
+//			JExcepcion.SendError("No existe Moneda País para la Moneda Local de "+pDescripcion.getValue());
+//		}
+//		return (this.oMonedaPaisLocal=newMonedaPaisLocal);
+//	}
+
+	public BizMoneda ObtenerMonedaLocal() throws Exception {
+		if (this.oMonedaLocal!=null) return this.oMonedaLocal;
+		return this.oMonedaLocal = BizMoneda.obtenerMoneda(this.pMonedaLocal.getValue(), true);
+	}
+
+	public boolean ifUsaTablaCiudad() throws Exception {
+		if (getUsaTablaCiudad().equalsIgnoreCase("S")) return true;
+		else return false;
+	}
+
+	public boolean ifUsaTablaLocalidad() throws Exception {
+		if (getUsaTablaLocalidad().equalsIgnoreCase("S")) return true;
+		else return false;
+	}
+
+	public static String getDescription(String zCountryId) throws Exception {
+		return BizPais.findPais(zCountryId).getDescrPaisLista();
+//		BizPais oPais=new BizPais();
+//		oPais.SetNoExcSelect(true);
+//		if (oPais.Read(zCountryId)) {
+//			return oPais.GetDescrip();
+//		} else {
+//			return "";
+//		}
+	}
+
+	public static String GetDescripcionReporte(String zValor) throws Exception {
+		String sDesc="";
+		sDesc="País: ";
+		if (zValor.equals("")) sDesc+="< Todos >";
+		else {
+			BizPais oPais=new BizPais();
+			oPais.Read(zValor);
+			sDesc+=String.valueOf(zValor)+"-"+oPais.getDescrPaisLista();
+		}
+		return sDesc;
+	}
+
+//	public double convert(double valor, String sMoneda) throws Exception {
+//		BizMonedaPais oMonedaPais=new BizMonedaPais();
+//		oMonedaPais.SetNoExcSelect(true);
+//		if (!oMonedaPais.Read(sMoneda, pPais.getValue())) JExcepcion.SendError("No existe conversion a moneda: "+sMoneda);
+//
+//		return valor*oMonedaPais.GetCoeficiente();
+//	}
+
+	public String getIconFile() throws Exception {
+		return this.getObjPais().GetIcono();
+	}
+	
+	public static synchronized BizPaises getPaises() throws Exception {
+		if (cachePaises!=null) return cachePaises;
+		BizPaises recs=new BizPaises();
+		recs.readAll();
+		recs.toStatic();
+		recs.convertToHash("pais");
+		return (cachePaises=recs);
+	}
+	
+	public static BizPais findPais(String pais) throws Exception {
+		BizPais p = (BizPais)BizPais.getPaises().findInHash(pais);
+//		if (p==null) JExcepcion.SendError("El pais no esta configurado");
+		return p;
+//		if (cachePaises==null) cachePaises=JCollectionFactory.createMap();
+//		BizPais opais = cachePaises.getElement(pais);
+//		if (opais!=null) return opais;
+//		
+//		BizPais r = new BizPais();
+//		r.dontThrowException(true);
+//		if (!r.Read(pais))
+//			JExcepcion.SendError("El pais no esta configurado");
+//		cachePaises.addElement(pais, r);
+//		return r;
+	}
+
+	public BizMonedaPais findMonedaPais(String company, String moneda) throws Exception {
+		return BizMonedaPais.findMonedaPais(company, moneda, this.pPais.getValue(), false);
+	}
+
+	public synchronized BizPaisLista getObjPais() throws Exception {
+		if (oPais!=null) return oPais;
+		oPais=new BizPaisLista();
+		oPais.Read(pPais.getValue());
+		return oPais;
+	}
+	
+//	public static synchronized JMap<String, BizPais> getObjPaises() throws Exception {
+//	}
+
+	public BizProvincia findProvincia(String prov) throws Exception {
+		if (cacheProvs==null) cacheProvs=JCollectionFactory.createMap();
+		BizProvincia oprov = cacheProvs.getElement(this.GetPais()+prov);
+		if (oprov!=null) return oprov;
+		
+		BizProvincia r = new BizProvincia();
+		r.dontThrowException(true);
+		if (!r.Read(this.GetPais(), prov))
+			JExcepcion.SendError("No existe provincia");
+		cacheProvs.addElement(this.GetPais()+prov, r);
+		return r;
+	}
+
+	public String getDescrPaisLista() throws Exception {
+		return this.getObjPais().GetDescrip();
+	}
+	
+	public boolean isArgentina() throws Exception {
+		return this.GetPais().equals(BizPais.PAIS_ARG);
+	}
+	
+	public boolean isUruguay() throws Exception {
+		return this.GetPais().equals(BizPais.PAIS_URU);
+	}
+
+	public boolean isUsa() throws Exception {
+		return this.GetPais().equals(BizPais.PAIS_USA);
+	}
+	
+	private JClasePais clase;
+	public JClasePais getClasePais() throws Exception {
+		if (this.clase!=null) return this.clase;
+		if (this.isArgentina()) return (this.clase=new JClaseArgentina());
+		if (this.isUsa()) return (this.clase=new JClaseUsa());
+		JExcepcion.SendError("Clase Pais Sin configurar");
+		return null;
+	}
+
+}

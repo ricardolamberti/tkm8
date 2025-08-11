@@ -1,0 +1,216 @@
+package pss.bsp.contrato.detalleBackendDobleRutas;
+
+import java.awt.Dimension;
+import java.awt.Rectangle;
+
+import javax.swing.BorderFactory;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.border.TitledBorder;
+
+import pss.bsp.contrato.detalleDatamining.BizDetalleDatamining;
+import pss.bsp.event.GuiBSPSqlEvents;
+import pss.common.event.sql.GuiSqlEvents;
+import pss.common.security.BizUsuario;
+import pss.core.ui.components.JPssCalendarEdit;
+import pss.core.ui.components.JPssEdit;
+import pss.core.ui.components.JPssImage;
+import pss.core.ui.components.JPssLabel;
+import pss.core.win.JBaseWin;
+import pss.core.win.JWin;
+import pss.core.win.JWins;
+import pss.core.winUI.controls.JControlCombo;
+import pss.core.winUI.controls.JFormControl;
+import pss.core.winUI.controls.JFormImage;
+import pss.core.winUI.controls.JFormLista;
+import pss.core.winUI.controls.JFormLocalForm;
+import pss.core.winUI.forms.JBaseForm;
+import pss.core.winUI.responsiveControls.JFormColumnResponsive;
+import pss.core.winUI.responsiveControls.JFormFieldsetResponsive;
+import pss.core.winUI.responsiveControls.JFormImageCardResponsive;
+import pss.core.winUI.responsiveControls.JFormImageResponsive;
+import pss.core.winUI.responsiveControls.JFormPanelResponsive;
+import pss.core.winUI.responsiveControls.JFormTabPanelResponsive;
+import pss.www.ui.JWebIcon;
+import javax.swing.JLabel;
+
+public class FormDetalleBackendDobleRuta extends JBaseForm {
+
+
+private static final long serialVersionUID = 1446860278358L;
+
+/**
+   * Constructor de la Clase
+   */
+  public FormDetalleBackendDobleRuta() throws Exception {
+    try { jbInit(); }
+    catch (Exception e) { e.printStackTrace(); } 
+  }
+
+  public GuiDetalleBackendDobleRuta getWin() { return (GuiDetalleBackendDobleRuta) getBaseWin(); }
+
+  /**
+   * Inicializacion Grafica
+   */
+  protected void jbInit() throws Exception {
+
+
+ 
+  }
+  /**
+   * Linkeo los campos con la variables del form
+   */
+  public void InicializarPanel( JWin zWin ) throws Exception {
+		setAutoRefresh(true, 10000, "DASHBOARD");
+		AddItemEdit( null, CHAR, REQ, "company" ).setHide(true).SetValorDefault(BizUsuario.getUsr().getCompany());
+    AddItemEdit( null, UINT, OPT, "id" ).setHide(true);
+    AddItemEdit( null, UINT, OPT, "linea" ).setHide(true);
+   
+    AddItemEdit( null, CHAR, REQ, "variable" ).setHide(true);
+    AddItemEdit( null, CHAR, REQ, "variable_ganancia").setHide(true);
+    AddItemEdit( null, CHAR, REQ, "variable_aux").setHide(true);
+      
+    JFormControl c=AddItemCheck( null, OPT,"acumulativo").setHide(true).SetValorDefault(false);
+
+    JFormPanelResponsive botonera = AddItemRow();
+    JFormImageCardResponsive ic = null;
+    ic = botonera.AddImageCard("Tickets Objetivo" , JWebIcon.getResponsiveIcon("fa fa-ticket-alt fa-3x"), "Tickets Objetivo", 50);
+    if (ic!=null) ic.setResponsiveClass("panel-green").setSizeColumns(2);
+    ic = botonera.AddImageCard("Tickets B.Comis." , JWebIcon.getResponsiveIcon("fa fa-ticket-alt fa-3x"), "Tickets B.Comis.", 60);
+    if (ic!=null) ic.setResponsiveClass("panel-yellow").setSizeColumns(2);
+    ic = botonera.AddImageCard("Tickets Aux."     , JWebIcon.getResponsiveIcon("fa fa-ticket-alt fa-3x"), "Tickets Aux.", 65);
+    if (ic!=null) ic.setResponsiveClass("panel-primary").setSizeColumns(2);
+//    ic = AddImageCard("Ver ind. Objetivo", JWebIcon.getResponsiveIcon("fa fa-chart-bar fa-3x"), "Ver ind. Objetivo", 10);
+//    if (ic!=null) ic.setResponsiveClass("panel-green").setSizeColumns(2);
+//    ic = AddImageCard("Ver ind. B.Comis.", JWebIcon.getResponsiveIcon("fa fa-chart-bar fa-3x"), "Ver ind. B.Comis.", 15);
+//    if (ic!=null) ic.setResponsiveClass("panel-yellow").setSizeColumns(2);
+//    ic = AddImageCard("Ver ind. Aux."    , JWebIcon.getResponsiveIcon("fa fa-chart-bar fa-3x"), "Ver ind. Aux.", 17);
+//    if (ic!=null) ic.setResponsiveClass("panel-primary").setSizeColumns(2);
+    ic = botonera.AddImageCard("Como se calcula objetvo?"    , JWebIcon.getResponsiveIcon("fa fa-question-circle fa-3x"), "Como se calcula objetvo?", 110);
+    if (ic!=null) ic.setResponsiveClass("panel-green").setSizeColumns(2);
+    ic = botonera.AddImageCard("Como se calcula b.comisionable?"    , JWebIcon.getResponsiveIcon("fa fa-question-circle fa-3x"), "Como se calcula objetvo?", 120);
+    if (ic!=null) ic.setResponsiveClass("panel-yellow").setSizeColumns(2);
+    ic = botonera.AddImageCard("Como se calcula Auxiliar?"    , JWebIcon.getResponsiveIcon("fa fa-question-circle fa-3x"), "Como se calcula objetvo?", 130);
+    if (ic!=null) ic.setResponsiveClass("panel-primary").setSizeColumns(2);
+    ic = botonera.AddImageCard("Extra Info?"    , JWebIcon.getResponsiveIcon("fa fa-info-circle fa-3x"), "Mas información asociada?", 100);
+    if (ic!=null) ic.setResponsiveClass("panel-danger").setSizeColumns(2);
+   	if (getWin().GetcDato().hasConsultaReservaMeta())
+   		botonera.AddInfoCard("Reservas Objetivo", CHAR, "reservas_meta", JWebIcon.getResponsiveIcon("fa fa-bookmark fa-3x"),"Reservas para objetivo", 600).setResponsiveClass("border-left-success shadow ").setSizeColumns(2);
+   	if (getWin().GetcDato().hasConsultaReservaBase())
+   		botonera.AddInfoCard("Reservas B.Comis", CHAR, "reservas_base", JWebIcon.getResponsiveIcon("fa fa-bookmark fa-3x"),"Reservas para B.Comis.", 601).setResponsiveClass("border-left-success shadow ").setSizeColumns(2);
+   	if (getWin().GetcDato().hasConsultaReservaBase())
+   		botonera.AddInfoCard("Reservas Auxiliar", CHAR, "reservas_aux", JWebIcon.getResponsiveIcon("fa fa-bookmark fa-3x"),"Reservas para Auxiliar", 601).setResponsiveClass("border-left-success shadow ").setSizeColumns(2);
+
+    JFormColumnResponsive column1 = AddItemColumn(6);
+    JFormColumnResponsive column2 = AddItemColumn(6);
+
+    JFormFieldsetResponsive panelR=column1.AddItemFieldset("Resultados",12);
+    JFormImageResponsive i=panelR.AddItemImage( "", "imagen2" );
+    i.setSource(JPssImage.SOURCE_SCRIPT);
+
+    panelR.AddItemEdit( "Evaluación al fin del contrato", CHAR, OPT, "conclusion" ).SetReadOnly(true);
+    panelR.AddItemEdit( "Valor del indicador objetivo", FLOAT, OPT, "valor_fcontrato" ).setSizeColumns(6).SetReadOnly(true);
+    panelR.AddItemEdit( "Valor Base comisionable", FLOAT, OPT, "valor_totalcontrato" ).setSizeColumns(6).setVisible(true).SetReadOnly(true);
+    panelR.AddItemEdit( "Nivel alcanzado", CHAR, OPT, "nivel_alcanzado_estimada" ).setSizeColumns(6).SetReadOnly(true);
+    panelR.AddItemEdit( "Ganancia/Comisión", FLOAT, OPT, "ganancia_estimada" ).setSizeColumns(6).SetReadOnly(true);
+    panelR.AddItemEdit( "Valor auxiliar", FLOAT, OPT, "ganancia_auxiliar" ).setSizeColumns(6).SetReadOnly(true);
+
+    JFormTabPanelResponsive tabsI = column2.AddItemTabPanel();
+    JFormLocalForm tab1 = tabsI.AddItemLocalForm("Meta");
+    JFormLocalForm tab2 = tabsI.AddItemLocalForm("Base Auxiliar");
+    JFormLocalForm tab3 = tabsI.AddItemLocalForm("Base Comisionable");
+    JFormPanelResponsive panelG1 = tab1.getRootPanel();
+    JFormPanelResponsive panelG2 = tab2.getRootPanel();
+    JFormPanelResponsive panelG3 = tab3.getRootPanel();
+
+    panelG1.setBackground("#e6e6fa");
+    i=panelG1.AddItemImage("", "imagen1" );
+    i.setHeight(680);
+    i.setSource(JPssImage.SOURCE_SCRIPT);
+    i.setSizeColumns(10);
+    
+    panelG2.setBackground("#e6e6fa");
+    i=panelG2.AddItemImage("", "imagen5" );
+    i.setHeight(680);
+    i.setSource(JPssImage.SOURCE_SCRIPT);
+    i.setSizeColumns(10);
+    
+    panelG3.setBackground("#e6e6fa");
+    i=panelG3.AddItemImage("", "imagen4" );
+    i.setHeight(680);
+    i.setSource(JPssImage.SOURCE_SCRIPT);
+    i.setSizeColumns(10);
+    
+
+    JFormFieldsetResponsive panelI=AddItemFieldset("Contrato",6);
+//  panelI.AddItemEdit( "Descripción", CHAR, OPT, "descripcion" ).SetReadOnly(true);
+  panelI.AddItemEdit( "período", CHAR, OPT, "periodo_detalle" ).setSizeColumns(8).SetReadOnly(true);
+
+  panelI.AddItemCombo( null, CHAR, OPT, "periodo" , JWins.createVirtualWinsFromMap(BizDetalleBackendDobleRuta.getPeriodos())).setHide(true);
+  panelI.AddItemCheck("Extra/Subobjetivo",OPT,"kicker").setSizeColumns(4).SetReadOnly(true);
+
+  panelI.AddItemDateTime( "Fecha desde cálculo", DATE, OPT, "fecha_desde_calculo" ).SetValorDefault(getWin().GetcDato().getObjContrato().getFechaDesde()).setRefreshForm(true);
+    panelI.AddItemDateTime( "Fecha hasta cálculo", DATE, OPT, "fecha_calculo" ).SetValorDefault(getWin().GetcDato().getObjContrato().getFechaHasta()).setRefreshForm(true);
+
+    panelI.AddItemEdit( "FMS global/Pax expected", FLOAT, OPT, "fms_global" ).setSizeColumns(3).SetReadOnly(true);
+    panelI.AddItemEdit( "Target Share gap", FLOAT, OPT, "sharegap_global" ).setSizeColumns(3).SetReadOnly(true);
+    panelI.AddItemEdit( "Valor ref. global", FLOAT, OPT, "valor_global" ).setSizeColumns(3).SetReadOnly(true);
+	  panelI.AddItemEdit( "Reembolso Manual", FLOAT, OPT, "valor_reembolso" ).setSizeColumns(3).SetReadOnly(true);
+	  panelI.AddItemEdit( "Reembolso Auto", FLOAT, OPT, "valor_reembolso_auto_show" ).setSizeColumns(3).SetReadOnly(true);
+	  panelI.AddItemButton("Ver reembolsos",61,false).setSizeColumns(3);
+
+
+
+
+    JFormTabPanelResponsive tabs = AddItemTabPanel();
+    tabs.setSizeColumns(6);
+    
+    JFormLista l= tabs.AddItemList(35);
+    l= tabs.AddItemList(30);
+    l.setToolBar(JBaseWin.TOOLBAR_NONE);
+
+ 
+   }
+  @Override
+  	public void OnPostShow() throws Exception {
+  		checkControls("");
+  		super.OnPostShow();
+  	}
+
+
+  @Override
+  	public void checkControls(String sControlId) throws Exception {
+  		if (sControlId.equals("variable")) {
+  			getWin().GetcDato().clean();
+  		}
+  		if (sControlId.equals("fecha_calculo"))
+  			getWin().GetcDato().calcule(false);
+   		if (sControlId.equals("fecha_desde_calculo"))
+  			getWin().GetcDato().calcule(false);
+  		getControles().BaseToControl(GetModo(), true);	
+
+  		if (getWin().GetccDato().needFMSGLobal()) {
+  			getControles().findControl("fms_global").edit();
+  			getControles().findControl("fms_global").disable();
+  		} else {
+  			getControles().findControl("fms_global").hide();
+  		}
+   		if (getWin().GetccDato().needShareGapGLobal()) {
+  			getControles().findControl("sharegap_global").edit();
+  			getControles().findControl("sharegap_global").disable();
+  		} else {
+  			getControles().findControl("sharegap_global").hide();
+  		}
+   		if (getWin().GetccDato().needValorRefGLobal()) {
+  			getControles().findControl("valor_global").edit();
+  			getControles().findControl("valor_global").disable();
+  		} else {
+  			getControles().findControl("valor_global").hide();
+  		}
+  		super.checkControls(sControlId);
+  	}
+	
+}  //  @jve:decl-index=0:visual-constraint="7,4"

@@ -1,0 +1,213 @@
+package pss.core.ui.graphics;
+
+import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Shape;
+import java.awt.image.ImageFilter;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.ImageIcon;
+
+public class JImageIcon extends ImageIcon {
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  //   STATIC VARIABLES
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  private static final ThreadLocal<Rectangle> SHARED_PAINT_AREA_HOLDER = new ThreadLocal<Rectangle>();
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  //   INSTANCE VARIABLES
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  private int paintMode = PAINT_NORMAL;
+//  private boolean clipMargins = false;
+//  private List<ImageFilter> filters = null;
+//  private Rectangle paintArea = JImageIcon.sharedPaintArea();
+//  private ImageIcon lastScaledInstance;
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  //   STATIC VARIABLES
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  public static final int PAINT_NORMAL = 0;
+  public static final int PAINT_TILED = 1;
+  public static final int PAINT_SCALED = 2;
+
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //
+  //   CONSTRUCTORS
+  //
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//  public JImageIcon(String filename, String description) {
+//    super(filename, description);
+//  }
+  public JImageIcon (String filename) {
+      super(filename);
+  }
+//  public JImageIcon(URL location, String description) {
+//    super(location, description);
+//  }
+  public JImageIcon (URL location) {
+    super(location);
+  }
+//  public JImageIcon(Image image, String description) {
+//    super(image, description);
+//  }
+//  public JImageIcon (Image image) {
+//    super(image);
+//  }
+//  public JImageIcon (byte[] imageData, String description) {
+//    super(imageData, description);
+//  }
+//  public JImageIcon (byte[] imageData) {
+//    super(imageData);
+//  }
+  public JImageIcon() {
+    super();
+  }
+
+  //
+  //  METHODS
+  //
+//  private static Rectangle sharedPaintArea() {
+//    Rectangle result = SHARED_PAINT_AREA_HOLDER.get();
+//    if (result==null) {
+//      result = new Rectangle();
+//      SHARED_PAINT_AREA_HOLDER.set(result);
+//    }
+//    return result;
+//  }
+//  // API
+  public int getPaintMode() {
+    return this.paintMode;
+  }
+  public void setPaintMode(int zPaintMode) {
+    this.paintMode = zPaintMode;
+  }
+//  public boolean isClipMargins() {
+//    return this.clipMargins;
+//  }
+//  public void setClipMargins(boolean zClipMargins) {
+//    this.clipMargins = zClipMargins;
+//  }
+//  public void addFilter(ImageFilter zFilter) {
+//    this.getFilters().add(zFilter);
+//  }
+//  public void addFilters(List<ImageFilter> zFilters) {
+//    this.getFilters().addAll(zFilters);
+//  }
+//  public void removeFilter(ImageFilter zFilter) {
+//    this.getFilters().remove(zFilter);
+//  }
+//  public List<ImageFilter> getFilters() {
+//    if (this.filters==null) {
+//      this.filters = new ArrayList<ImageFilter>();
+//    }
+//    return this.filters;
+//  }
+//  public ImageFilter getFilter(int index) {
+//    return this.filters.get(index);
+//  }
+//  public boolean hasFilters() {
+//    return this.filters != null && !this.filters.isEmpty();
+//  }
+//  public JImageIcon copy() {
+//    JImageIcon result = new JImageIcon(this.getImage());
+//    result.addFilters(this.getFilters());
+//    result.setPaintMode(this.getPaintMode());
+//    return result;
+//  }
+//  public ImageIcon filter(ImageFilter zFilter) {
+//    JImageIcon result = this.copy();
+//    result.addFilter(zFilter);
+//    return result;
+//  }
+//  public ImageIcon filter(List<ImageFilter> zFilters) {
+//    JImageIcon result = this.copy();
+//    result.addFilters(zFilters);
+//    return result;
+//  }
+//  // overridden methods
+//  @Override
+//	public synchronized void paintIcon(Component c, Graphics g, int x, int y) {
+//    Rectangle paintArea = this.getPaintArea(c);
+//    int w = paintArea.width;
+//    int h = paintArea.height;
+//    int imageWidth = this.getIconWidth();
+//    int imageHeight = this.getIconHeight();
+//    boolean isValid = imageWidth > 0 && imageHeight > 0 && w > 0 && h > 0;
+//    if (isValid) {
+//      JImageIcon imageToPaint = this;
+//      if (this.hasFilters()) {
+////        imageToPaint = UITools.imaging().filterImage(this, this.getFilters());
+//      }
+//      switch (this.paintMode) {
+//        case PAINT_NORMAL:
+//          imageToPaint.paintNormal(c, g, x, y, paintArea.x, paintArea.y, w, h);
+//          break;
+//        case PAINT_TILED:
+//          imageToPaint.paintTiled(c, g, paintArea.x, paintArea.y, w, h);
+//          break;
+//        case PAINT_SCALED:
+//          imageToPaint.paintScaled(c, g, paintArea.x, paintArea.y, w, h);
+//          break;
+//      }
+//    }
+//  }
+//  // internal methods
+//  protected Rectangle getPaintArea(Component c) {
+//    int borderLeftMargin = 0;
+//    int borderRightMargin = 0;
+//    int borderTopMargin = 0;
+//    int borderBottomMargin = 0;
+//    if (this.clipMargins) {
+////      Insets insets = UITools.borders().getBorderInsets(c);
+////      borderLeftMargin = insets.left;
+////      borderRightMargin = insets.right;
+////      borderTopMargin = insets.top;
+////      borderBottomMargin = insets.bottom;
+//    }
+//    this.paintArea.x = borderLeftMargin;
+//    this.paintArea.y = borderTopMargin;
+//    this.paintArea.width = c.getWidth() - borderLeftMargin - borderRightMargin;
+//    this.paintArea.height = c.getHeight() - borderTopMargin - borderBottomMargin;
+//    //
+//    return this.paintArea;
+//  }
+//  protected void paintNormal(Component c, Graphics g, int x, int y, int clipX, int clipY, int clipWidth, int clipHeight) {
+//    Shape lastClip = g.getClip();
+//    g.clipRect(clipX, clipY, clipWidth, clipHeight);
+//    super.paintIcon(c, g, x, y);
+//    g.setClip(lastClip);
+//  }
+//  protected void paintScaled(Component c, Graphics g, int x, int y, int width, int height) {
+//    if (lastScaledInstance==null ||
+//          lastScaledInstance.getIconWidth()!=width ||
+//          lastScaledInstance.getIconHeight()!=height) {
+////      lastScaledInstance = UITools.imaging().getScaled(this, width, height);
+//    }
+//    lastScaledInstance.paintIcon(c, g, x, y);
+//  }
+//  protected void paintTiled(Component c, Graphics g, int x, int y, int width, int height) {
+//    int imageWidth = this.getIconWidth();
+//    int imageHeight = this.getIconHeight();
+//    Shape lastClip = g.getClip();
+//    g.clipRect(x, y, width, height);
+//    int yLimit = y + height + imageHeight;
+//    int xLimit = x + width + imageWidth;
+//    for (int i = y; i < yLimit; i = i + imageHeight) {
+//       for (int j = x; j < xLimit; j = j + imageWidth) {
+//        super.paintIcon(c, g, j, i);
+//      }
+//    }
+//    g.setClip(lastClip);
+//  }
+}

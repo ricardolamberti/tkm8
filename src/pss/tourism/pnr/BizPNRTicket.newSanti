@@ -1,0 +1,3326 @@
+package pss.tourism.pnr;
+
+import java.io.File;
+import java.io.FilenameFilter;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Date;
+
+import pss.JPath;
+import pss.bsp.bspBusiness.BizBSPCompany;
+import pss.bsp.config.carrierGroups.detalle.BizCarrierGroupDetail;
+import pss.bsp.consolidador.IConciliable;
+import pss.bsp.market.BizMarket;
+import pss.bsp.market.detalle.BizMarketDetail;
+import pss.bsp.parseo.IFormato;
+import pss.bsp.regions.detalle.BizRegionDetail;
+import pss.common.customList.config.relation.JRelation;
+import pss.common.customList.config.relation.JRelations;
+import pss.common.event.mailing.BizBSPPersona;
+import pss.common.regions.company.BizCompany;
+import pss.common.regions.currency.BizMoneda;
+import pss.common.regions.currency.history.BizMonedaCotizacion;
+import pss.common.regions.divitions.BizPaisLista;
+import pss.core.JAplicacion;
+import pss.core.data.interfaces.connections.JBDatos;
+import pss.core.graph.Graph;
+import pss.core.graph.implementations.GraphScriptWorldArc;
+import pss.core.graph.model.ModelMatrix;
+import pss.core.services.JExec;
+import pss.core.services.fields.JBoolean;
+import pss.core.services.fields.JCurrency;
+import pss.core.services.fields.JDate;
+import pss.core.services.fields.JFloat;
+import pss.core.services.fields.JLong;
+import pss.core.services.fields.JObject;
+import pss.core.services.fields.JString;
+import pss.core.services.records.JRecord;
+import pss.core.services.records.JRecords;
+import pss.core.tools.JDateTools;
+import pss.core.tools.JPair;
+import pss.core.tools.JTools;
+import pss.core.tools.PssLogger;
+import pss.core.tools.collections.JCollectionFactory;
+import pss.core.tools.collections.JIterator;
+import pss.core.tools.collections.JOrderedMap;
+import pss.core.winUI.lists.JWinList;
+import pss.tourism.airports.BizAirport;
+import pss.tourism.carrier.BizCarrier;
+import pss.tourism.interfaceGDS.FileProcessor;
+import pss.tourism.interfaceGDS.amadeus.AmadeusFileProcessor;
+import pss.tourism.interfaceGDS.sabre.SabreFileProcessor;
+import pss.tourism.interfaceGDS.travelport.TravelPortFileProcessor;
+
+import com.f1j.image.tk;
+import com.ibm.icu.util.Calendar;
+import com.ibm.icu.util.StringTokenizer;
+
+public class BizPNRTicket extends JRecord implements IConciliable {
+
+	public static final String TIPO_AEREO = "A";
+	public static final String TIPO_BUS = "B";
+
+	public final static String PAX_TYPE_ADULT = "ADT";
+	public final static String PAX_TYPE_CHILD = "CHD";
+	public final static String PAX_TYPE_INFANT = "INF";
+	public final static String PAX_TYPE_SRC = "SRC";
+	public final static String PAX_TYPE_ITX = "ITX";
+	public final static String PAX_TYPE_NEG = "NEG";
+	public final static String PAX_TYPE_CNN = "CNN";
+	public final static String PAX_TYPE_C01 = "C01";
+	public final static String PAX_TYPE_C02 = "C02";
+	public final static String PAX_TYPE_C03 = "C03";
+	public final static String PAX_TYPE_C04 = "C04";
+	public final static String PAX_TYPE_C05 = "C05";
+	public final static String PAX_TYPE_C06 = "C06";
+	public final static String PAX_TYPE_C07 = "C07";
+	public final static String PAX_TYPE_C08 = "C08";
+	public final static String PAX_TYPE_C09 = "C09";
+	public final static String PAX_TYPE_C10 = "C10";
+	public final static String PAX_TYPE_C11 = "C11";
+
+	private JString pCodigopnr = new JString();
+	private JString pNumeroboleto = new JString();
+	private JBoolean pInternacional = new JBoolean();
+	private JString pInternacionalDescr = new JString();
+	private JBoolean pVoid = new JBoolean();
+	private JBoolean pRefund = new JBoolean();
+	private JBoolean pReemitted = new JBoolean();
+	private JString pOriginalNumeroboleto = new JString();
+	private JLong pRefOriginal = new JLong();
+	private JString pTourCode = new JString();
+
+	private JFloat pHighFare = new JFloat();
+	private JFloat pLowFare = new JFloat();
+	private JBoolean pCorporativo = new JBoolean();
+	private JString pProposito = new JString();
+	private JString pCuenta = new JString();
+	private JString pClaseTarifa = new JString();
+	private JString pAutorizante = new JString();
+	private JString pFareSavings = new JString();
+	private JDate pReserva = new JDate();
+	private JString pCodigoNegocio = new JString();
+	private JString pRegion = new JString();
+	private JString pDepartamento = new JString();
+	private JString pAutorizCC = new JString();
+	private JString pSegCC = new JString();
+	private JString pSolicitante = new JString();
+	private JString pTipoOperacion = new JString();
+	private JBoolean pIsTicket = new JBoolean();
+	private JBoolean pEmision = new JBoolean();
+
+	private JString pCantidadconectados = new JString();
+	private JLong pCantidadSegmentos = new JLong();
+	private JLong pCantidadRoundTrip = new JLong();
+	private JString pNumeropasajero = new JString();
+	private JString pTipoboleto = new JString();
+	// private JFloat pVenta = new JFloat();
+	// private JFloat pTarifaeconomica = new JFloat();
+	// private JFloat pTarifanormal = new JFloat();
+	// private JString pAplicacomparativo = new JString();
+	// private JString pAplicacentro = new JString();
+	// private JString pCentrodecosto = new JString();
+	// private JString pNumeroempleado = new JString();
+	private JString pCodigoaerolinea = new JString();
+	private JString pCodigoaerolineaIntern = new JString();
+	private JString pDescripcion = new JString();
+	private JString pIt = new JString();
+	// private JString pBoletocambio = new JString();
+	private JCurrency pTarifaReal = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pTarifaUsa = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(true);
+			setMoneda("USD");
+		};
+	};
+	private JCurrency pNetoUsa = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(true);
+			setMoneda("USD");
+		};
+	};
+	private JCurrency pNetoYQUsa = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(true);
+			setMoneda("USD");
+		};
+	};
+	private JCurrency pBaseYQUsa = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(true);
+			setMoneda("USD");
+		};
+	};
+	private JCurrency pAhorro = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pImporteover = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pIva = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pYQ = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pImpuestos = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pTotalImpuestos = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pTotalImpuestosFacturaa = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JLong pDiasViajados = new JLong();
+	private JLong pDiasCompras = new JLong();
+	private JLong pDiasPreCompras = new JLong();
+	// private JFloat pIvaover = new JFloat();
+	private JCurrency pImportecedido = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JFloat pPorcentajeover = new JFloat();
+	private JCurrency pNeto = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JBoolean pOversobre = new JBoolean();
+	// private JBoolean pReemision = new JBoolean();
+	// private JString pOffline = new JString();
+	private JString pNombrePasajero = new JString();
+	private JString pTipoPasajero = new JString();
+	private JString pTipoPasajero2 = new JString() {
+		public void preset() throws Exception {
+			pTipoPasajero2.setValue(pTipoPasajero.getValue());
+		};
+	};
+	private JFloat pAditionalFee = new JFloat();
+	private JFloat pExpense = new JFloat();
+	private JFloat pPorcExpense = new JFloat();
+	// private JFloat pIvaExpense = new JFloat();
+	protected JString pClase = new JString();
+	protected JString pTipoClase = new JString();
+	protected JString pCompany = new JString();
+	private JString pPais = new JString();
+	private JString pPaisOrigen = new JString();
+	// private JString pCiudadOrigen = new JString();
+	// private JString pContinenteOrigen = new JString();
+	// private JString pRegionOrigen = new JString();
+	private JString pPaisDestino = new JString();
+	// private JString pCiudadDestino = new JString();
+	// private JString pContinenteDestino = new JString();
+	// private JString pRegionDestino = new JString();
+	// private JGeoPosition pGeoOrigen = new JGeoPosition();
+	// private JGeoPosition pGeoDestino = new JGeoPosition();
+	// protected JString pReferencia=new JString();
+	// protected JBoolean pDevolucion=new JBoolean();
+	// protected JBoolean pAjuste=new JBoolean();
+	// private JBoolean pOverCedidoIvaRetenido = new JBoolean();
+	private JString pImagen1 = new JString() {
+		public void preset() throws Exception {
+			pImagen1.setValue(getImagen1());
+		}
+	};
+	// comision
+	private JCurrency pComisionAmount = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JFloat pComisionPerc = new JFloat();
+
+	// price
+	private JString pCodigoMoneda = new JString();
+	private JString pCodigoBaseMoneda = new JString();
+	private JFloat pTipoCambio = new JFloat();
+	// ufff .las monedas estan al reves
+	private JCurrency pTarifaBase = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoBaseMoneda.isNotNull());
+			setMoneda(pCodigoBaseMoneda.getValue());
+		};
+	};
+	private JCurrency pTarifaBaseConImpuestos = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pTarifaFacturaConImpuestos = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pTarifaFacturaConImpuestosDolares = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(true);
+			setMoneda("USD");
+		};
+	};
+	private JCurrency pTarifaFactura = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pTarifaFacturaDolares = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(true);
+			setMoneda("USD");
+		};
+	};
+	private JCurrency pTarifaBaseFactura = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoBaseMoneda.isNotNull());
+			setMoneda(pCodigoBaseMoneda.getValue());
+		};
+	};
+	private JCurrency pIvaFactura = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pNetoFactura = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pImpuestoFactura = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pComisionFactura = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pTarifa = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JCurrency pTarifaYQ = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+
+	// remarks
+	private JString pCodigoCliente = new JString();
+	private JString pVendedor = new JString();
+	private JString pCentroCostos = new JString();
+	private JString pObservacion = new JString();
+
+	// tarjeta
+	private JCurrency pMontoTarjeta = new JCurrency() {
+		public void preset() throws Exception {
+			setSimbolo(pCodigoMoneda.isNotNull());
+			setMoneda(pCodigoMoneda.getValue());
+		};
+	};
+	private JString pNumeroTarjeta = new JString();
+	private JString pNumeroTarjetaEnmascarada = new JString() {
+		public void preset() throws Exception {
+			pNumeroTarjetaEnmascarada.setValue(getNumeroTarjetaEnmascarada());
+		};
+	};
+	private JString pNetRemit = new JString();
+
+	// pnr data
+	private JString pNroIata = new JString();
+	private JString pOfficeId = new JString();
+	private JString pCityCode = new JString();
+	private JDate pPNRDate = new JDate();
+	private JDate pCreationDate = new JDate();
+	private JDate pCreationDateAir = new JDate();
+	private JString pDirectory = new JString();
+
+	private JString pCustomerId = new JString();
+	private JString pRoute = new JString();
+	private JString pMiniRoute = new JString();
+	private JString pMarket = new JString();
+	private JDate pDepartureDate = new JDate();
+	private JDate pArriveDate = new JDate();
+	private JString pTransactionType = new JString();
+	private JString pTipoPrestacion = new JString();
+
+	// pnr
+	// protected JString pIndicadorVenta = new JString();
+	protected JString pArchivo = new JString();
+	protected JString pVersion = new JString();
+	protected JString pGDS = new JString();
+	protected JString pOrigen = new JString();
+
+	protected JString pAeropuertoOrigen = new JString();
+	protected JString pAeropuertoDestino = new JString();
+	// protected JObjBD pObjAeropuertoOrigen = new JObjBD() {
+	// public void preset() throws Exception {
+	// setValue(getObjAeropuertoOrigen());
+	// };
+	// };
+	// protected JObjBD pObjAeropuertoDestino = new JObjBD() {
+	// public void preset() throws Exception {
+	// setValue(getObjAeropuertoDestino());
+	// };
+	// };
+
+	protected JString pRemarks = new JString();
+
+	public void setCompany(String zValue) {
+		pCompany.setValue(zValue);
+	}
+
+	public String getCompany() throws Exception {
+		return pCompany.getValue();
+	}
+
+	public String getPais() throws Exception {
+		return pPais.getValue();
+	}
+
+	BizBSPCompany objCompany;
+
+	public BizBSPCompany getObjCompany() throws Exception {
+		if (objCompany != null)
+			return objCompany;
+		BizBSPCompany comp = new BizBSPCompany();
+		comp.Read(pCompany.getValue());
+		return comp;
+	}
+
+	// public String getPaisOrigen() throws Exception {
+	// return pPaisOrigen.getValue();
+	// }
+
+	public String getCarrier() throws Exception {
+		return pCodigoaerolinea.getValue();
+	}
+
+	public String getFirstCarrierInternacional() throws Exception {
+		return pCodigoaerolineaIntern.getValue();
+	}
+
+	public void setTipoPrestacion(String zValue) throws Exception {
+		pTipoPrestacion.setValue(zValue);
+	}
+
+	public long getDiasViajados() throws Exception {
+		return pDiasViajados.getValue();
+	}
+
+	public void setDiasViajados(long zValue) throws Exception {
+		pDiasViajados.setValue(zValue);
+	}
+
+	public long getDiasCompras() throws Exception {
+		return pDiasCompras.getValue();
+	}
+
+	public double getFareHigh() throws Exception {
+		return pHighFare.getValue();
+	}
+
+	public void setFareHigh(double zValue) throws Exception {
+		pHighFare.setValue(zValue);
+	}
+
+	public double getFareLow() throws Exception {
+		return pLowFare.getValue();
+	}
+
+	public void setFareLow(double zValue) throws Exception {
+		pLowFare.setValue(zValue);
+	}
+
+	public boolean getCorporativo() throws Exception {
+		return pCorporativo.getValue();
+	}
+
+	public void setCorporativo(boolean zValue) throws Exception {
+		pCorporativo.setValue(zValue);
+	}
+
+	public String getProposito() throws Exception {
+		return pProposito.getValue();
+	}
+
+	public void setProposito(String zValue) throws Exception {
+		pProposito.setValue(zValue);
+	}
+
+	public String getCuenta() throws Exception {
+		return pCuenta.getValue();
+	}
+
+	public void setCuenta(String zValue) throws Exception {
+		pCuenta.setValue(zValue);
+	}
+
+	public String getClaseTarifa() throws Exception {
+		return pClaseTarifa.getValue();
+	}
+
+	public void setClaseTarifa(String zValue) throws Exception {
+		pClaseTarifa.setValue(zValue);
+	}
+
+	public String getAutorizante() throws Exception {
+		return pAutorizante.getValue();
+	}
+
+	public void setAutorizante(String zValue) throws Exception {
+		pAutorizante.setValue(zValue);
+	}
+
+	public String getFareSavings() throws Exception {
+		return pFareSavings.getValue();
+	}
+
+	public void setFareSavings(String zValue) throws Exception {
+		pFareSavings.setValue(zValue);
+	}
+
+	public String getCodigoNegocio() throws Exception {
+		return pCodigoNegocio.getValue();
+	}
+
+	public void setCodigoNegocio(String zValue) throws Exception {
+		pCodigoNegocio.setValue(zValue);
+	}
+
+	public String getRegion() throws Exception {
+		return pRegion.getValue();
+	}
+
+	public void setRegion(String zValue) throws Exception {
+		pRegion.setValue(zValue);
+	}
+
+	public String getDepartamento() throws Exception {
+		return pDepartamento.getValue();
+	}
+
+	public void setDepartamento(String zValue) throws Exception {
+		pDepartamento.setValue(zValue);
+	}
+
+	public void setAutorizationCreditCard(String zValue) throws Exception {
+		pAutorizCC.setValue(zValue);
+	}
+
+	public void setCodSegCreditCard(String zValue) throws Exception {
+		pSegCC.setValue(zValue);
+	}
+
+	public String getSolicitante() throws Exception {
+		return pSolicitante.getValue();
+	}
+
+	public void setSolicitnate(String zValue) throws Exception {
+		pSolicitante.setValue(zValue);
+	}
+
+	public String getTipoOperacion() throws Exception {
+		return pTipoOperacion.getValue();
+	}
+
+	public void setTipoOperacion(String zValue) throws Exception {
+		// if (zValue.equals(""))
+		// zValue=("ETR");
+		pTipoOperacion.setValue(zValue);
+		if (zValue != null)
+			pIsTicket.setValue(zValue.equals("ETR"));
+
+	}
+
+	public Boolean isTicket() throws Exception {
+		return pIsTicket.getValue();
+	}
+
+	public void setIsTicket(Boolean zValue) throws Exception {
+		pIsTicket.setValue(zValue);
+	}
+
+	public Boolean isEmision() throws Exception {
+		return pEmision.getValue();
+	}
+
+	public void setEmision(Boolean zValue) throws Exception {
+		pEmision.setValue(zValue);
+	}
+
+	public Date getReserva() throws Exception {
+		return pReserva.getValue();
+	}
+
+	public void setReserva(Date zValue) throws Exception {
+		pReserva.setValue(zValue);
+	}
+
+	public void setDiasCompras(long zValue) throws Exception {
+		pDiasCompras.setValue(zValue);
+	}
+
+	public void setPreCompras(long zValue) throws Exception {
+		pDiasPreCompras.setValue(zValue);
+	}
+
+	public void setPais(String zValue) throws Exception {
+		pPais.setValue(zValue);
+	}
+
+	public void setClase(String zValue) throws Exception {
+		pClase.setValue(zValue);
+	}
+
+	public void setTipoClase(String zValue) throws Exception {
+		pTipoClase.setValue(zValue);
+	}
+
+	public void setPaisOrigen(String zValue) throws Exception {
+		pPaisOrigen.setValue(zValue);
+	}
+
+	public void setPaisDestino(String zValue) throws Exception {
+		pPaisDestino.setValue(zValue);
+	}
+
+	// public void setCiudadOrigen(String zValue) throws Exception {
+	// pCiudadOrigen.setValue(zValue);
+	// }
+	// public void setCiudadDestino(String zValue) throws Exception {
+	// pCiudadDestino.setValue(zValue);
+	// }
+	// public void setGeoOrigen(GeoPosition zValue) throws Exception {
+	// pGeoOrigen.setValue(zValue);
+	// }
+	// public void setGeoDestino(GeoPosition zValue) throws Exception {
+	// pGeoDestino.setValue(zValue);
+	// }
+	// public void setRegionOrigen(String zValue) throws Exception {
+	// pRegionOrigen.setValue(zValue);
+	// }
+	// public void setRegionDestino(String zValue) throws Exception {
+	// pRegionDestino.setValue(zValue);
+	// }
+	// public void setContinenteOrigen(String zValue) throws Exception {
+	// pContinenteOrigen.setValue(zValue);
+	// }
+	// public void setContinenteDestino(String zValue) throws Exception {
+	// pContinenteDestino.setValue(zValue);
+	// }
+	public String getClase() throws Exception {
+		return pClase.getValue();
+	}
+
+	public String getTipoClase() throws Exception {
+		return pTipoClase.getValue();
+	}
+
+	public String getTipoPrestacion() throws Exception {
+		return pTipoPrestacion.getValue();
+	}
+
+	public void setAeropuertoOrigen(String zValue) throws Exception {
+		pAeropuertoOrigen.setValue(zValue);
+	}
+
+	public void setAeropuertoDestino(String zValue) throws Exception {
+		pAeropuertoDestino.setValue(zValue);
+	}
+
+	public String getAeropuertoOrigen() throws Exception {
+		return pAeropuertoOrigen.getValue();
+	}
+
+	public String getAeropuertoDestino() throws Exception {
+		return pAeropuertoDestino.getValue();
+	}
+
+	// private BizPNR pnr;
+	// private BizPNRPasajero pax;
+	private JRecords<BizPNRTax> taxes;
+	private BizAirport aeropuertoOrigen;
+	private BizAirport aeropuertoDestino;
+	private BizCarrier objCarrier;
+
+	protected JLong pId = new JLong();
+	private JBoolean pMigrated = new JBoolean();
+
+	public long getId() throws Exception {
+		return pId.getValue();
+	}
+
+	public void setId(long val) {
+		pId.setValue(val);
+	}
+
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Getter & Setters methods
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	public void setCodigopnr(String zValue) throws Exception {
+		pCodigopnr.setValue(zValue);
+	}
+
+	public String getCodigopnr() throws Exception {
+		return pCodigopnr.getValue();
+	}
+
+	public String getCodigoMoneda() throws Exception {
+		return pCodigoMoneda.getValue();
+	}
+
+	public String getCodigoBaseMoneda() throws Exception {
+		return pCodigoBaseMoneda.getValue();
+	}
+
+	public void setNumeroboleto(String zValue) throws Exception {
+		pNumeroboleto.setValue(zValue);
+	}
+
+	public String getNumeroboleto() throws Exception {
+		return pNumeroboleto.getValue();
+	}
+
+	public void setOriginalNumeroboleto(String zValue) throws Exception {
+		pOriginalNumeroboleto.setValue(zValue);
+	}
+
+	public String getOriginalNumeroboleto() throws Exception {
+		return pOriginalNumeroboleto.getValue();
+	}
+
+	public String getTourCode() throws Exception {
+		return pTourCode.getValue();
+	}
+
+	public boolean hasTourCode() throws Exception {
+		return !(pTourCode.getValue().equals("") || pTourCode.isNull());
+	}
+
+	public void setRefOriginal(long zValue) throws Exception {
+		pRefOriginal.setValue(zValue);
+	}
+
+	public void setTourCode(String zValue) throws Exception {
+		pTourCode.setValue(zValue);
+	}
+
+	public void setInternacional(boolean zValue) throws Exception {
+		pInternacional.setValue(zValue);
+	}
+
+	public void setInternacionalDescr(String zValue) throws Exception {
+		pInternacionalDescr.setValue(zValue);
+	}
+
+	public boolean isInternacional() throws Exception {
+		return pInternacional.getValue();
+	}
+
+	public void setCantidadconectados(String zValue) throws Exception {
+		pCantidadconectados.setValue(zValue);
+	}
+
+	public long getCantidadconectados() throws Exception {
+		return pCantidadconectados.isNull() ? 0L : Long.parseLong(pCantidadconectados.getValue());
+	}
+
+	public void setBookings(long zValue) throws Exception {
+		pCantidadSegmentos.setValue(zValue);
+	}
+
+	public long getBookings() throws Exception {
+		return pCantidadSegmentos.getValue();
+	}
+
+	public void setCantidadRoundTrip(long zValue) throws Exception {
+		pCantidadRoundTrip.setValue(zValue);
+	}
+
+	public long getCantidadRoundTrip() throws Exception {
+		return pCantidadRoundTrip.getValue();
+	}
+
+	public void setNumeropasajero(String zValue) throws Exception {
+		pNumeropasajero.setValue(zValue);
+	}
+
+	public void setNombrePasajero(String zValue) throws Exception {
+		pNombrePasajero.setValue(zValue);
+	}
+
+	public void setTipoPasajero(String zValue) throws Exception {
+		pTipoPasajero.setValue(zValue);
+	}
+
+	public String getTipoPasajero() throws Exception {
+		return pTipoPasajero.getValue();
+	}
+
+	public String getNumeropasajero() throws Exception {
+		return pNumeropasajero.getValue();
+	}
+
+	public void setTipoboleto(String zValue) throws Exception {
+		pTipoboleto.setValue(zValue);
+	}
+
+	public String getTipoboleto() throws Exception {
+		return pTipoboleto.getValue();
+	}
+
+	public String getNumeroTarjetaEnmascarada() throws Exception {
+		String nro = pNumeroTarjeta.getValue();
+		String mask = nro;
+		if (nro.length() > 8) {
+			mask = nro.substring(0, 4);
+			for (int j = 0; j < nro.length() - 8; j++)
+				mask += "X";
+			mask += nro.substring(nro.length() - 4);
+		}
+		return mask;
+	}
+
+	// public void setVenta(String zValue) throws Exception {
+	// pVenta.setValue(zValue); }
+	// public double getVenta() throws Exception { return pVenta.getValue();}
+	// public void setTarifaeconomica(String zValue) throws Exception {
+	// pTarifaeconomica.setValue(zValue); }
+	// public double getTarifaeconomica() throws Exception { return
+	// pTarifaeconomica.getValue(); }
+	// public void setTarifanormal(String zValue) throws Exception {
+	// pTarifanormal.setValue(zValue); }
+	// public double getTarifanormal() throws Exception { return
+	// pTarifanormal.getValue(); }
+	// public void setAplicacomparativo(String zValue) throws Exception {
+	// pAplicacomparativo.setValue(zValue); }
+	// public String getAplicacomparativo() throws Exception { return
+	// pAplicacomparativo.getValue(); }
+	// public void setAplicacentro(String zValue) throws Exception {
+	// pAplicacentro.setValue(zValue); }
+	// public String getAplicacentro() throws Exception { return
+	// pAplicacentro.getValue(); }
+	// public void setNumeroempleado(String zValue) throws Exception {
+	// pNumeroempleado.setValue(zValue); }
+	// public String getNumeroempleado() throws Exception { return
+	// pNumeroempleado.getValue(); }
+	public void setCodigoaerolinea(String zValue) throws Exception {
+		pCodigoaerolinea.setValue(zValue);
+	}
+
+	public void setFirstCarrierInternacional(String zValue) throws Exception {
+		pCodigoaerolineaIntern.setValue(zValue);
+	}
+
+	public void setDescripcion(String zValue) throws Exception {
+		pDescripcion.setValue(zValue);
+	}
+
+	public String getDescripcion() throws Exception {
+		return pDescripcion.getValue();
+	}
+
+	public void setIt(String zValue) throws Exception {
+		pIt.setValue(zValue);
+	}
+
+	public String getIt() throws Exception {
+		return pIt.getValue();
+	}
+
+	// public void setBoletocambio(String zValue) throws Exception {
+	// pBoletocambio.setValue(zValue); }
+	// public String getBoletocambio() throws Exception { return
+	// pBoletocambio.getValue(); }
+	public void setIva(double zValue) throws Exception {
+		pIva.setValue(zValue);
+	}
+
+	public void setYQ(double zValue) throws Exception {
+		pYQ.setValue(zValue);
+	}
+
+	public void setImpuestos(double zValue) throws Exception {
+		pImpuestos.setValue(zValue);
+	}
+
+	public void setImpuestosTotal(double zValue) throws Exception {
+		pTotalImpuestos.setValue(zValue);
+	}
+
+	public void setImpuestosTotalFactura(double zValue) throws Exception {
+		pTotalImpuestosFacturaa.setValue(zValue);
+	}
+
+	public void setImporteover(String zValue) throws Exception {
+		pImporteover.setValue(zValue);
+	}
+
+	public void setTarifaReal(double zValue) throws Exception {
+		pTarifaReal.setValue(zValue);
+		setAhorro();
+	}
+
+	public void setTarifaUsa(double zValue) throws Exception {
+		pTarifaUsa.setValue(zValue);
+	}
+
+	public void setTarifaNetoUsa(double zValue) throws Exception {
+		pNetoUsa.setValue(zValue);
+	}
+
+	public void setTarifaNetoYQUsa(double zValue) throws Exception {
+		pNetoYQUsa.setValue(zValue);
+	}
+
+	public void setTarifaBaseYQUsa(double zValue) throws Exception {
+		pBaseYQUsa.setValue(zValue);
+	}
+
+	// public void setIvaover(double zValue) throws Exception {
+	// pIvaover.setValue(zValue); }
+	public void setImporteCedido(String zValue) throws Exception {
+		pImportecedido.setValue(zValue);
+	}
+
+	public void setExpense(double zValue) throws Exception {
+		pExpense.setValue(zValue);
+	}
+
+	public void setPorcExpense(double zValue) throws Exception {
+		pPorcExpense.setValue(zValue);
+	}
+
+	// public void setIvaExpense(double zValue) throws Exception {
+	// pIvaExpense.setValue(zValue); }
+	// public void setReferencia(String zValue) throws Exception {
+	// pReferencia.setValue(zValue); }
+	// public void setDevolucion(boolean zValue)
+	// {this.pDevolucion.setValue(zValue); }
+	// public void setAjuste(boolean zValue) {this.pAjuste.setValue(zValue); }
+	// public void setReemision(boolean zValue)
+	// {this.pReemision.setValue(zValue);
+	// }
+	// public boolean isReemision() throws Exception { return
+	// pReemision.getValue(); }
+	// public boolean isAjuste() throws Exception { return pAjuste.getValue(); }
+	//
+	// public String getReferencia() throws Exception { return
+	// pReferencia.getValue(); }
+	public double getIva() throws Exception {
+		return pIva.getValue();
+	}
+
+	public double getYQ() throws Exception {
+		return pYQ.getValue();
+	}
+
+	public double getImpuestos() throws Exception {
+		return pImpuestos.getValue();
+	}
+
+	public double getImporteover() throws Exception {
+		return pImporteover.getValue();
+	}
+
+	// public double getIvaover() throws Exception { return pIvaover.getValue();
+	// }
+	// public boolean hasIvaover() throws Exception { return
+	// pIvaover.isNotNull();
+	// }
+	public double getImportecedido() throws Exception {
+		return pImportecedido.getValue();
+	}
+
+	public void setPorcentajeover(double zValue) throws Exception {
+		pPorcentajeover.setValue(zValue);
+	}
+
+	public double getPorcentajeover() throws Exception {
+		return pPorcentajeover.getValue();
+	}
+
+	public void setNeto(double zValue) throws Exception {
+		pNeto.setValue(zValue);
+	}
+
+	public double getNeto() throws Exception {
+		return pNeto.getValue();
+	}
+
+	public void setOversobre(boolean zValue) throws Exception {
+		pOversobre.setValue(zValue);
+	}
+
+	// public void setOffline(String zValue) throws Exception {
+	// pOffline.setValue(zValue); }
+	// public double getOffline() throws Exception { return pOffline.getValue();
+	// }
+	public String getLineaAerea() throws Exception {
+		return pCodigoaerolinea.getValue();
+	}
+
+	public void setRefund(boolean value) throws Exception {
+		pRefund.setValue(value);
+	}
+
+	public void setVoid(boolean value) throws Exception {
+		pVoid.setValue(value);
+	}
+
+	public void setReemitted(boolean value) throws Exception {
+		pReemitted.setValue(value);
+	}
+
+	public void setAdicionalFee(String value) throws Exception {
+		pAditionalFee.setValue(value);
+	}
+
+	public double getAditionalFee() throws Exception {
+		return pAditionalFee.getValue();
+	}
+
+	public boolean isReemited() throws Exception {
+		return pReemitted.getValue();
+	}
+
+	public boolean isVoided() throws Exception {
+		return pVoid.getValue();
+	}
+
+	public boolean isRefunded() throws Exception {
+		return pRefund.getValue();
+	}
+
+	// public boolean isOverCedidoIvaRetenido() throws Exception {return
+	// pOverCedidoIvaRetenido.getValue(); }
+	// public void setOverCedidoIvaRetenido(boolean zValue) throws Exception {
+	// pOverCedidoIvaRetenido.setValue(zValue); }
+	// public boolean isDevolucion() throws Exception {return
+	// pDevolucion.getValue(); }
+
+	public boolean getOversobre() throws Exception {
+		return pOversobre.getValue();
+	}
+
+	public void setAhorro() throws Exception {
+		if (pHighFare.isNotNull() && pLowFare.isNotNull()) {
+			pAhorro.setValue(pHighFare.getValue() - pLowFare.getValue());
+			return;
+		}
+
+		if (pTarifaReal.isNull() || pTarifaReal.getValue() == 0)
+			return;
+		pAhorro.setValue(pTarifaReal.getValue() - pTarifa.getValue());
+
+	}
+
+	public void setComisionAmount(double zValue) {
+		pComisionAmount.setValue(zValue);
+	}
+
+	public void setComisionPerc(double zValue) {
+		pComisionPerc.setValue(zValue);
+	}
+
+	public double getComisionPerc() throws Exception {
+		return pComisionPerc.getValue();
+	}
+
+	public void setMontoTarjeta(double value) throws Exception {
+		this.pMontoTarjeta.setValue(value);
+	}
+
+	public double getMontoTarjeta() throws Exception {
+		return this.pMontoTarjeta.getValue();
+	}
+
+	public void setNetRemit(String value) throws Exception {
+		this.pNetRemit.setValue(value);
+	}
+
+	public String getNetRemit() throws Exception {
+		return this.pNetRemit.getValue();
+	}
+
+	public void setNumeroTarjeta(String value) throws Exception {
+		this.pNumeroTarjeta.setValue(value);
+	}
+
+	public void setCodigoMoneda(String value) throws Exception {
+		this.pCodigoMoneda.setValue(value);
+	}
+
+	public void setCodigoBaseMoneda(String value) throws Exception {
+		this.pCodigoBaseMoneda.setValue(value);
+	}
+
+	public void setTipoCambio(double value) throws Exception {
+		this.pTipoCambio.setValue(value);
+	}
+
+	public void setTarifaBase(double value) throws Exception {
+		this.pTarifaBase.setValue(value);
+	}
+
+	public void setTarifaBaseConImpuestos(double value) throws Exception {
+		this.pTarifaBaseConImpuestos.setValue(value);
+	}
+
+	public void setTarifa(double value) throws Exception {
+		this.pTarifa.setValue(value);
+		setAhorro();
+	}
+
+	public double getTarifaFactura() throws Exception {
+		return this.pTarifaFactura.getValue();
+	}
+
+	public double getTarifaUsa() throws Exception {
+		return this.pTarifaUsa.getValue();
+	}
+
+	public double getTarifaNetoYQUsa() throws Exception {
+		return this.pNetoYQUsa.getValue();
+	}
+
+	public double getTarifaBaseYQUsa() throws Exception {
+		return this.pBaseYQUsa.getValue();
+	}
+
+	public double getTarifaNetoUsa() throws Exception {
+		return this.pNetoUsa.getValue();
+	}
+
+	public void setTarifaFactura(double value) throws Exception {
+		this.pTarifaFactura.setValue(value);
+	}
+
+	public double getTarifaBaseFactura() throws Exception {
+		return this.pTarifaBaseFactura.getValue();
+	}
+
+	public void setTarifaBaseFactura(double value) throws Exception {
+		this.pTarifaBaseFactura.setValue(value);
+	}
+
+	public double getIvaFactura() throws Exception {
+		return this.pIvaFactura.getValue();
+	}
+
+	public void setIvaFactura(double value) throws Exception {
+		this.pIvaFactura.setValue(value);
+	}
+
+	public double getNetoFactura() throws Exception {
+		return this.pNetoFactura.getValue();
+	}
+
+	public void setNetoFactura(double value) throws Exception {
+		this.pNetoFactura.setValue(value);
+	}
+
+	public double getImpuestoFactura() throws Exception {
+		return this.pImpuestoFactura.getValue();
+	}
+
+	public void setImpuestoFactura(double value) throws Exception {
+		this.pImpuestoFactura.setValue(value);
+	}
+
+	public double getTarifaTotalFactura() throws Exception {
+		return this.pTarifaFacturaConImpuestos.getValue();
+	}
+
+	public void setTarifaTotalFacturaDolares(double value) throws Exception {
+		this.pTarifaFacturaConImpuestosDolares.setValue(value);
+	}
+
+	public double getTarifaTotalFacturaDolares() throws Exception {
+		return this.pTarifaFacturaConImpuestosDolares.getValue();
+	}
+
+	public void setTarifaFacturaDolares(double value) throws Exception {
+		this.pTarifaFacturaDolares.setValue(value);
+	}
+
+	public double getTarifaFacturaDolares() throws Exception {
+		return this.pTarifaFacturaDolares.getValue();
+	}
+
+	public void setTarifaTotalFactura(double value) throws Exception {
+		this.pTarifaFacturaConImpuestos.setValue(value);
+	}
+
+	public double getComisionFactura() throws Exception {
+		return this.pComisionFactura.getValue();
+	}
+
+	public void setComisionFactura(double value) throws Exception {
+		this.pComisionFactura.setValue(value);
+	}
+
+	public double getTarifa() throws Exception {
+		return this.pTarifa.getValue();
+	}
+
+	public void setTarifaYQ(double value) throws Exception {
+		this.pTarifaYQ.setValue(value);
+	}
+
+	public double getTarifaYQ() throws Exception {
+		return this.pTarifaYQ.getValue();
+	}
+
+	public double getTarifaBaseConImpuestos() throws Exception {
+		return this.pTarifaBaseConImpuestos.getValue();
+	}
+
+	public double getTarifaBase() throws Exception {
+		return this.pTarifaBase.getValue();
+	}
+
+	public double getComisionAmount() throws Exception {
+		return this.pComisionAmount.getValue();
+	}
+
+	public void setCodigoCliente(String value) throws Exception {
+		this.pCodigoCliente.setValue(value);
+	}
+
+	public String getCodigoCliente() throws Exception {
+		return this.pCodigoCliente.getValue();
+	}
+
+	public void setVendedor(String value) throws Exception {
+		this.pVendedor.setValue(value);
+	}
+
+	public void setCentroCostos(String value) throws Exception {
+		this.pCentroCostos.setValue(value);
+	}
+
+	public void setObservacion(String value) throws Exception {
+		this.pObservacion.setValue(value);
+	}
+
+	public void setNroIata(String value) throws Exception {
+		this.pNroIata.setValue(value);
+	}
+
+	public void setOfficeId(String value) throws Exception {
+		this.pOfficeId.setValue(value);
+	}
+
+	public void setCityCode(String value) throws Exception {
+		this.pCityCode.setValue(value);
+	}
+
+	public void setCreationDate(Date value) throws Exception {
+		this.pCreationDate.setValue(value);
+	}
+
+	public boolean isNullCreationDate() throws Exception {
+		return this.pCreationDate.isNull();
+	}
+
+	public void setPNRDate(Date value) throws Exception {
+		this.pPNRDate.setValue(value);
+	}
+
+	public void setCreationDateAir(Date value) throws Exception {
+		this.pCreationDateAir.setValue(value);
+	}
+
+	public void setDirectory(String value) throws Exception {
+		this.pDirectory.setValue(value);
+	}
+
+	public void setCustomerId(String value) throws Exception {
+		this.pCustomerId.setValue(value);
+	}
+
+	public String getCustomerId() throws Exception {
+		return this.pCustomerId.getValue();
+	}
+
+	public boolean isNullCustomerId() throws Exception {
+		return this.pCustomerId.isNull();
+	}
+
+	public void setRoute(String value) throws Exception {
+		this.pRoute.setValue(value);
+		if (value != null && value.length() > 3)
+			this.pMiniRoute.setValue(pAeropuertoOrigen.getValue() + "/" + pAeropuertoDestino.getValue());
+	}
+
+	public void setMiniRoute(String value) throws Exception {
+		this.pMiniRoute.setValue(value);
+	}
+
+	public void setMarket(String value) throws Exception {
+		this.pMarket.setValue(value);
+	}
+
+	public String getMarket() throws Exception {
+		return this.pMarket.getValue();
+	}
+
+	public void setDepartureDate(Date value) throws Exception {
+		this.pDepartureDate.setValue(value);
+	}
+
+	public void setArriveDate(Date value) throws Exception {
+		this.pArriveDate.setValue(value);
+	}
+
+	public Date getCreationDate() throws Exception {
+		return this.pCreationDate.getValue();
+	}
+
+	public Date getPNRDate() throws Exception {
+		return this.pPNRDate.getValue();
+	}
+
+	public String getDirectory() throws Exception {
+		return this.pDirectory.getValue();
+	}
+
+	public String getArchivo() throws Exception {
+		return this.pArchivo.getValue();
+	}
+
+	public Date getDepartureDate() throws Exception {
+		return this.pDepartureDate.getValue();
+	}
+
+	public Date getArriveDate() throws Exception {
+		return this.pArriveDate.getValue();
+	}
+
+	public void setTransactionType(String value) throws Exception {
+		this.pTransactionType.setValue(value);
+	}
+
+	// public void setIndicadorVenta(String value) throws Exception {
+	// this.pIndicadorVenta.setValue(value);
+	// }
+	public void setArchivo(String value) throws Exception {
+		this.pArchivo.setValue(value);
+	}
+
+	public void setVersion(String value) throws Exception {
+		this.pVersion.setValue(value);
+	}
+
+	public void setGDS(String value) throws Exception {
+		this.pGDS.setValue(value);
+	}
+
+	public void setOrigen(String value) throws Exception {
+		this.pOrigen.setValue(value);
+	}
+
+	public void setRemarks(String value) throws Exception {
+		this.pRemarks.setValue(value);
+	}
+
+	public double getTipoCambio() throws Exception {
+		return this.pTipoCambio.getValue();
+	}
+
+	public String getOrigen() throws Exception {
+		return this.pOrigen.getValue();
+	}
+
+	/**
+	 * Constructor de la Clase
+	 */
+	public BizPNRTicket() throws Exception {
+		// this.SetTipoArticulo(BizArticulo.ART_PNR);
+	}
+
+	public void createProperties() throws Exception {
+		this.addItem("interface_id", pId);
+		this.addItem("company", pCompany);
+		this.addItem("CodigoPNR", pCodigopnr);
+		this.addItem("NumeroBoleto", pNumeroboleto);
+		this.addItem("Internacional", pInternacional);
+		this.addItem("Internacional_descr", pInternacionalDescr);
+		this.addItem("cant_segmentos", pCantidadSegmentos);
+		this.addItem("cant_roundtrip", pCantidadRoundTrip);
+		this.addItem("CantidadConectados", pCantidadconectados);
+		this.addItem("pre_dias_compra", pDiasPreCompras);
+		this.addItem("dias_compra", pDiasCompras);
+		this.addItem("dias_viajados", pDiasViajados);
+		this.addItem("NumeroPasajero", pNumeropasajero);
+		this.addItem("nombre_pasajero", pNombrePasajero);
+		this.addItem("tipo_pasajero", pTipoPasajero);
+		this.addItem("tipo_pasajero2", pTipoPasajero2);
+		this.addItem("TipoBoleto", pTipoboleto);
+		// this.addItem( "Venta", pVenta );
+		// this.addItem( "TarifaEconomica", pTarifaeconomica );
+		// this.addItem( "TarifaNormal", pTarifanormal );
+		// this.addItem( "AplicaComparativo", pAplicacomparativo );
+		// this.addItem( "AplicaCentro", pAplicacentro );
+		// this.addItem( "NumeroEmpleado", pNumeroempleado );
+		this.addItem("CodigoAerolinea", pCodigoaerolinea);
+		this.addItem("codigo_aerolinea_intern", pCodigoaerolineaIntern);
+		this.addItem("descripcion", pDescripcion);
+		this.addItem("it", pIt);
+		this.addItem("imagen1", pImagen1);
+		// this.addItem( "boletocambio", pBoletocambio );
+		this.addItem("importeover", pImporteover);
+		this.addItem("tarifa_real", pTarifaReal);
+		this.addItem("tarifa_usa", pTarifaUsa);
+		this.addItem("neto_usa", pNetoUsa);
+		this.addItem("netoyq_usa", pNetoYQUsa);
+		this.addItem("baseyq_usa", pBaseYQUsa);
+		this.addItem("ahorro", pAhorro);
+		// this.addItem( "ivaover", pIvaover );
+		this.addItem("importecedido", pImportecedido);
+		this.addItem("porcentajeover", pPorcentajeover);
+		this.addItem("neto", pNeto);
+		this.addItem("oversobre", pOversobre);
+		// this.addItem( "off_line", pOffline );
+		this.addItem("additional_fee", pAditionalFee);
+		this.addItem("expense", pExpense);
+		this.addItem("porc_expense", pPorcExpense);
+		this.addItem("clase", pClase);
+		this.addItem("tipo_clase", pTipoClase);
+		this.addItem("refund", pRefund);
+		this.addItem("void", pVoid);
+		this.addItem("reemitted", pReemitted);
+		this.addItem("boleto_original", pOriginalNumeroboleto);
+		this.addItem("tour_code", pTourCode);
+		this.addItem("ref_original", pRefOriginal);
+		this.addItem("order_str", pOrder);
+		this.addItem("impuestos", pImpuestos);
+		this.addItem("impuestos_total", pTotalImpuestos);
+		this.addItem("impuestos_total_factura", pTotalImpuestosFacturaa);
+		this.addItem("iva", pIva);
+		this.addItem("yq", pYQ);
+		// this.addItem("referencia", pReferencia);
+		// this.addItem("over_cedido_iva_retenido", pOverCedidoIvaRetenido);
+		// this.addItem("devolucion", pDevolucion);
+		// this.addItem("reemision", pReemision);
+		// this.addItem("ajuste", pAjuste);
+
+		this.addItem("highfare", pHighFare);
+		this.addItem("lowfare", pLowFare);
+		this.addItem("corporativo", pCorporativo);
+		this.addItem("proposito", pProposito);
+		this.addItem("cuenta", pCuenta);
+		this.addItem("clase_tarifa", pClaseTarifa);
+		this.addItem("autorizante", pAutorizante);
+		this.addItem("fare_savings", pFareSavings);
+		this.addItem("codigo_negocio", pCodigoNegocio);
+		this.addItem("region", pRegion);
+		this.addItem("departamento", pDepartamento);
+		this.addItem("autoriz_cc", pAutorizCC);
+		this.addItem("seg_cc", pSegCC);
+		this.addItem("solicitante", pSolicitante);
+		this.addItem("tipo_operacion", pTipoOperacion);
+		this.addItem("is_ticket", pIsTicket);
+		this.addItem("is_emision", pEmision);
+		this.addItem("reserva", pReserva);
+
+		this.addItem("tipo_prestacion", pTipoPrestacion);
+		this.addItem("comision_amount", pComisionAmount);
+		this.addItem("comision_perc", pComisionPerc);
+		this.addItem("codigo_moneda", pCodigoMoneda);
+		this.addItem("codigo_base_moneda", pCodigoBaseMoneda);
+		this.addItem("tipo_cambio", pTipoCambio);
+		this.addItem("tarifa_base", pTarifaBase);
+		this.addItem("tarifa_base_contax", pTarifaBaseConImpuestos);
+		this.addItem("tarifa", pTarifa);
+		this.addItem("tarifa_yq", pTarifaYQ);
+
+		this.addItem("iva_factura", pIvaFactura);
+		this.addItem("neto_factura", pNetoFactura);
+		this.addItem("tarifa_base_factura", pTarifaBaseFactura);
+		this.addItem("tarifa_factura", pTarifaFactura);
+		this.addItem("tarifa_factura_total", pTarifaFacturaConImpuestos);
+		this.addItem("tarifa_factura_usa", pTarifaFacturaDolares);
+		this.addItem("tarifa_factura_total_usa", pTarifaFacturaConImpuestosDolares);
+		this.addItem("impuesto_factura", pImpuestoFactura);
+		this.addItem("comision_factura", pComisionFactura);
+
+		this.addItem("codigo_cliente", pCodigoCliente);
+		this.addItem("vendedor", pVendedor);
+		this.addItem("centro_costos", pCentroCostos);
+		this.addItem("observacion", pObservacion);
+		this.addItem("monto_tarjeta", pMontoTarjeta);
+		this.addItem("numero_tarjeta", pNumeroTarjeta);
+		this.addItem("numero_tarjeta_mask", pNumeroTarjetaEnmascarada);
+
+		this.addItem("nro_iata", pNroIata);
+		this.addItem("office_id", pOfficeId);
+		this.addItem("city_code", pCityCode);
+		this.addItem("directory", pDirectory);
+		this.addItem("pnr_date", pPNRDate);
+		this.addItem("creation_date", pCreationDate);
+		this.addItem("creation_date_date", pCreationDateAir);
+		this.addItem("customer_id", pCustomerId);
+		this.addItem("route", pRoute);
+		this.addItem("mini_route", pMiniRoute);
+		this.addItem("market", pMarket);
+		this.addItem("transaction_type", pTransactionType);
+		this.addItem("tipo_prestacion", pTipoPrestacion);
+		this.addItem("net_remit", pNetRemit);
+
+		// this.addItem("indicador_venta", pIndicadorVenta);
+		this.addItem("archivo", pArchivo);
+		this.addItem("gds", pGDS);
+		this.addItem("origen", pOrigen);
+
+		this.addItem("pais", pPais);
+
+		this.addItem("departure_date", pDepartureDate);
+		this.addItem("arrive_date", pArriveDate);
+
+		this.addItem("aeropuerto_origen", pAeropuertoOrigen);
+		this.addItem("aeropuerto_destino", pAeropuertoDestino);
+		// this.addItem("ciudad_origen", pCiudadOrigen);
+		// this.addItem("ciudad_destino", pCiudadDestino);
+		this.addItem("pais_origen", pPaisOrigen);
+		this.addItem("pais_destino", pPaisDestino);
+		// this.addItem("region_origen", pRegionOrigen);
+		// this.addItem("region_destino", pRegionDestino);
+		// this.addItem("continente_origen", pContinenteOrigen);
+		// this.addItem("continente_destino", pContinenteDestino);
+		// this.addItem("geo_origen", pGeoOrigen);
+		// this.addItem("geo_destino", pGeoDestino);
+		// this.addItem("obj_aeropuerto_origen", pObjAeropuertoOrigen);
+		// this.addItem("obj_aeropuerto_destino", pObjAeropuertoDestino);
+		this.addItem("remarks", pRemarks);
+		this.addItem("migrated", pMigrated);
+	}
+
+	JString pOrder = new JString();
+
+	/**
+	 * Adds the fixed object properties
+	 */
+	@Override
+	public void createFixedProperties() throws Exception {
+		this.addFixedItem(KEY, "interface_id", "Id Interfaz", false, false, 18);
+		this.addFixedItem(FIELD, "company", "empresa", true, false, 15);
+		this.addFixedItem(FIELD, "CodigoPNR", "PNR", true, true, 10);
+		this.addFixedItem(FIELD, "NumeroBoleto", "Boleto", true, true, 50);
+
+		this.addFixedItem(FIELD, "CodigoAerolinea", "Aerolínea Cod.", true, true, 2);
+		this.addFixedItem(FIELD, "codigo_aerolinea_intern", "Primer Aerolínea Internac.", true, true, 2);
+		this.addFixedItem(FIELD, "Internacional", "Internacional", true, true, 1);
+		this.addFixedItem(FIELD, "internacional_descr", "Domestic/International", true, true, 100);
+		this.addFixedItem(FIELD, "route", "Ruta", true, false, 300);
+		this.addFixedItem(FIELD, "mini_route", "Origen/Destino", true, false, 300);
+		this.addFixedItem(FIELD, "market", "Mercados", true, false, 1000);
+
+		this.addFixedItem(FIELD, "pre_dias_compra", "Anticipacion pre-compra", true, true, 18);
+		this.addFixedItem(FIELD, "dias_compra", "Anticipacion compra", true, true, 18);
+		this.addFixedItem(FIELD, "dias_viajados", "Días viajados", true, true, 18);
+		this.addFixedItem(FIELD, "cant_segmentos", "Cantidad bookings", true, true, 18);
+		this.addFixedItem(FIELD, "cant_roundtrip", "Cantidad roundtrip", true, true, 18);
+		this.addFixedItem(FIELD, "CantidadConectados", "Cantidad conectados", true, true, 5);
+		this.addFixedItem(FIELD, "NumeroPasajero", "Número Pasajero", true, true, 3);
+		this.addFixedItem(FIELD, "tipo_pasajero", "Tipo Pasajero", true, true, 3);
+		this.addFixedItem(VIRTUAL, "tipo_pasajero2", "Tipo Pasajero", true, true, 3);
+		this.addFixedItem(FIELD, "nombre_pasajero", "Nombre Pasajero", true, false, 150);
+		this.addFixedItem(FIELD, "TipoBoleto", "Tipo boleto", true, true, 1);
+		this.addFixedItem(FIELD, "migrated", "Tipo boleto", true, false, 1);
+		// this.addFixedItem( FIELD, "Venta", "Venta", true, true, 50 );
+		// this.addFixedItem( FIELD, "TarifaEconomica", "Tarifa economica",
+		// true,
+		// true, 18,4 );
+		// this.addFixedItem( FIELD, "TarifaNormal", "Tarifa normal", true,
+		// true,
+		// 18, 4 );
+		// this.addFixedItem( FIELD, "AplicaComparativo", "Aplica comparativo",
+		// true, true, 1 );
+		// this.addFixedItem( FIELD, "AplicaCentro", "Aplica centro", true,
+		// true, 1
+		// );
+		// this.addFixedItem( FIELD, "NumeroEmpleado", "Numero empleado", true,
+		// true, 5 );
+
+		this.addFixedItem(FIELD, "highfare", "Tarifa alta", true, false, 18, 2);
+		this.addFixedItem(FIELD, "lowfare", "Tarifa baja", true, false, 18, 2);
+		this.addFixedItem(FIELD, "corporativo", "Corporativo", true, false, 1);
+		this.addFixedItem(FIELD, "proposito", "Proposito del viaje", true, false, 300);
+		this.addFixedItem(FIELD, "cuenta", "Cuenta", true, false, 300);
+		this.addFixedItem(FIELD, "clase_tarifa", "Clase tarifa", true, false, 300);
+		this.addFixedItem(FIELD, "autorizante", "Autorizante", true, false, 300);
+		this.addFixedItem(FIELD, "fare_savings", "Codigo ahorro", true, false, 300);
+		this.addFixedItem(FIELD, "codigo_negocio", "Codigo negocio", true, false, 300);
+		this.addFixedItem(FIELD, "region", "Region", true, false, 300);
+		this.addFixedItem(FIELD, "solicitante", "Solicitante", true, false, 300);
+		this.addFixedItem(FIELD, "tipo_operacion", "Tipo Operacion", true, false, 300);
+		this.addFixedItem(FIELD, "is_ticket", "Es ticket", true, false, 300);
+		this.addFixedItem(FIELD, "is_emision", "Es Emision", true, false, 1);
+		this.addFixedItem(FIELD, "departamento", "Departamento", true, false, 300);
+		this.addFixedItem(FIELD, "autoriz_cc", "Aut.Tarjeta", true, false, 300);
+		this.addFixedItem(FIELD, "seg_cc", "Cod.Seg.Tarj", true, false, 300);
+		this.addFixedItem(FIELD, "reserva", "Fecha reserva", true, false, 300);
+
+		this.addFixedItem(FIELD, "codigo_moneda", "Moneda", true, false, 3);
+		this.addFixedItem(FIELD, "codigo_base_moneda", "Moneda Base", true, false, 3);
+		this.addFixedItem(FIELD, "tarifa_base", "Tarifa Mon.Base.", true, false, 18, 4);
+		this.addFixedItem(FIELD, "tarifa_base_contax", "Total Boleto", true, false, 18, 4);
+		this.addFixedItem(FIELD, "tarifa", "Tarifa", true, false, 18, 4);
+		this.addFixedItem(FIELD, "tarifa_yq", "Tarifa con YQ", true, false, 18, 4);
+		this.addFixedItem(FIELD, "neto", "Neto", true, false, 18, 4);
+
+		this.addFixedItem(FIELD, "iva_factura", "Iva facturado", true, false, 18, 4);
+		this.addFixedItem(FIELD, "neto_factura", "Neto facturado", true, false, 18, 4);
+		this.addFixedItem(FIELD, "tarifa_factura", "Tarifa facturada", true, false, 18, 4);
+		this.addFixedItem(FIELD, "tarifa_factura_total", "Tarifa  facturada total ", true, false, 18, 4);
+		this.addFixedItem(FIELD, "tarifa_base_factura", "Tarifa facturada Mon.Base.", true, false, 18, 4);
+		this.addFixedItem(FIELD, "tarifa_factura_total_usa", "Tarifa  facturada total dolares", true, false, 18, 4);
+		this.addFixedItem(FIELD, "tarifa_factura_usa", "Tarifa facturada dolares.", true, false, 18, 4);
+		this.addFixedItem(FIELD, "impuesto_factura", "Impuestos facturado", true, false, 18, 4);
+		this.addFixedItem(FIELD, "comision_factura", "Comision facturada", true, false, 18, 4);
+
+		this.addFixedItem(FIELD, "descripcion", "Descripción", true, true, 50);
+		this.addFixedItem(FIELD, "it", "It", true, true, 50);
+		// this.addFixedItem( FIELD, "boletocambio", "Boleto cambio", true,
+		// true, 50
+		// );
+		this.addFixedItem(FIELD, "importeover", "Over", true, true, 18, 4);
+		this.addFixedItem(FIELD, "tarifa_real", "Tarifa original", true, true, 18, 4);
+		this.addFixedItem(FIELD, "tarifa_usa", "Tarifa dolares", true, true, 18, 4);
+		this.addFixedItem(FIELD, "neto_usa", "Neto dolares", true, true, 18, 4);
+		this.addFixedItem(FIELD, "netoyq_usa", "Neto YQ dolares", true, true, 18, 4);
+		this.addFixedItem(FIELD, "baseyq_usa", "Tarifa YQ dolares", true, true, 18, 4);
+		this.addFixedItem(FIELD, "ahorro", "Ahorro", true, true, 18, 4);
+		// this.addFixedItem( FIELD, "ivaover", "Iva Over", true, true, 7,2 );
+		this.addFixedItem(FIELD, "importecedido", "Over Cedido", true, true, 18, 4);
+		this.addFixedItem(FIELD, "iva", "Iva", true, true, 18, 4);
+		this.addFixedItem(FIELD, "yq", "YQ", true, true, 18, 4);
+		this.addFixedItem(FIELD, "impuestos", "Impuestos", true, true, 18, 4);
+		this.addFixedItem(FIELD, "impuestos_total", "Impuestos total", true, true, 18, 4);
+		this.addFixedItem(FIELD, "impuestos_total_factura", "Impuestos total factura ", true, true, 18, 4);
+		this.addFixedItem(FIELD, "porcentajeover", "Porcentaje over", true, true, 7, 2);
+		this.addFixedItem(FIELD, "oversobre", "Oversobre", true, true, 1);
+		// this.addFixedItem( FIELD, "off_line", "Offline", true, true, 1 );
+		this.addFixedItem(FIELD, "additional_fee", "Fee", true, false, 18, 4);
+		this.addFixedItem(FIELD, "void", "Anulado?", true, true, 1);
+		this.addFixedItem(FIELD, "refund", "Devuelto?", true, true, 1);
+		this.addFixedItem(FIELD, "reemitted", "Reemitido?", true, true, 1);
+		this.addFixedItem(FIELD, "boleto_original", "Numero boleto original", true, true, 50);
+		this.addFixedItem(FIELD, "tour_code", "Tour code", true, true, 50);
+		this.addFixedItem(FIELD, "ref_original", "referencia boleto original", true, true, 18, 0);
+		this.addFixedItem(FIELD, "expense", "Expense", true, false, 18, 4);
+		this.addFixedItem(FIELD, "porc_expense", "Porc Expense", true, false, 7, 2);
+		// this.addFixedItem( FIELD, "iva_expense", "Iva Expense", true, false,
+		// 7,2
+		// );
+		this.addFixedItem(FIELD, "tipo_prestacion", "Tipo Prestacion", true, false, 1);
+		this.addFixedItem(FIELD, "net_remit", "Net remit", true, false, 500);
+		this.addFixedItem(VIRTUAL, "order_str", "Orden", true, false, 10);
+		// this.addFixedItem( FIELD, "referencia", "Referencia", true, false,
+		// 50);
+		// this.addFixedItem( FIELD, "over_cedido_iva_retenido", "Over Cedido
+		// Iva
+		// Retenido", true, false, 1);
+		// this.addFixedItem( FIELD, "devolucion", "Devolución", true, false,
+		// 1);
+		// this.addFixedItem( FIELD, "reemision", "Reemisión", true, false, 1);
+		// this.addFixedItem( FIELD, "ajuste", "Ajuste", true, false, 1);
+		this.addFixedItem(FIELD, "comision_amount", "Comision", true, false, 18, 4);
+		this.addFixedItem(FIELD, "comision_perc", "Comision %", true, false, 7, 2);
+		this.addFixedItem(FIELD, "tipo_cambio", "Tipo de cambio", true, false, 7, 2);
+		this.addFixedItem(FIELD, "codigo_cliente", "Codigo Cliente", true, false, 20);
+		this.addFixedItem(FIELD, "vendedor", "Vendedor", true, false, 20);
+		this.addFixedItem(FIELD, "centro_costos", "Centro Costos", true, false, 20);
+		this.addFixedItem(FIELD, "observacion", "Observación", true, false, 100);
+		this.addFixedItem(FIELD, "monto_tarjeta", "Monto Tarjeta", true, false, 18, 4);
+		this.addFixedItem(FIELD, "numero_tarjeta", "Número Tarjeta", true, false, 30).setHide(true);
+		this.addFixedItem(VIRTUAL, "numero_tarjeta_mask", "Número Tarjeta", true, false, 30);
+
+		this.addFixedItem(FIELD, "nro_iata", "Número IATA", true, false, 30);
+		this.addFixedItem(FIELD, "office_id", "Office ID", true, false, 30);
+		this.addFixedItem(FIELD, "city_code", "City Code", true, false, 30);
+		this.addFixedItem(FIELD, "customer_id", "Cliente", true, false, 18);
+		this.addFixedItem(FIELD, "transaction_type", "Tx Type", true, false, 5);
+		this.addFixedItem(FIELD, "clase", "clase", true, false, 20);
+		this.addFixedItem(FIELD, "tipo_clase", "Tipo clase", true, false, 20);
+
+		// this.addFixedItem( FIELD, "indicador_venta", "Indicador Venta", true,
+		// false, 10);
+		this.addFixedItem(FIELD, "archivo", "Archivo", true, false, 4000);
+		this.addFixedItem(FIELD, "gds", "GDS", true, false, 10);
+		this.addFixedItem(FIELD, "origen", "Origen", true, false, 10);
+		this.addFixedItem(FIELD, "pais", "Pais", true, true, 10);
+
+		this.addFixedItem(FIELD, "directory", "Directorio", true, false, 400);
+		this.addFixedItem(FIELD, "pnr_date", "Fecha PNR", true, false, 10);
+		this.addFixedItem(FIELD, "creation_date", "Fecha Emisión", true, false, 10);
+		this.addFixedItem(FIELD, "creation_date_date", "Fecha Ult.Actualiz.", true, false, 10);
+		this.addFixedItem(FIELD, "departure_date", "Fecha Salida", true, false, 10);
+		this.addFixedItem(FIELD, "arrive_date", "Fecha Llegada", true, false, 10);
+
+		this.addFixedItem(FIELD, "aeropuerto_origen", "Aeropuerto Origen", true, false, 10);
+		this.addFixedItem(FIELD, "aeropuerto_destino", "Aeropuerto Destino", true, false, 10);
+		this.addFixedItem(FIELD, "pais_origen", "Pais Origen", true, true, 200);
+		this.addFixedItem(FIELD, "pais_destino", "Pais Destino", true, false, 100);
+		// this.addFixedItem( FIELD, "ciudad_origen", "Ciudad Origen", true,
+		// false,
+		// 100);
+		// this.addFixedItem( FIELD, "ciudad_destino", "Ciudad Destino", true,
+		// false, 100);
+		// this.addFixedItem( FIELD, "region_origen", "Region Origen", true,
+		// false,
+		// 100);
+		// this.addFixedItem( FIELD, "region_destino", "Region Destino", true,
+		// false, 100);
+		// this.addFixedItem( FIELD, "continente_origen", "Continente Origen",
+		// true,
+		// false, 100);
+		// this.addFixedItem( FIELD, "continente_destino", "Continente Destino",
+		// true, false, 100);
+		// this.addFixedItem( FIELD, "geo_origen", "Geo Origen", true, false,
+		// 50);
+		// this.addFixedItem( FIELD, "geo_destino", "Geo Destino", true, false,
+		// 50);
+
+		// JProperty p;
+		// p = this.addFixedItem( RECORD, "obj_aeropuerto_origen", "Aeropuerto
+		// Origen", true, false, 10);
+		// p.setClase(BizAirport.class);
+		// p.setDependiente("aeropuerto_origen");
+		// p = this.addFixedItem( RECORD, "obj_aeropuerto_destino", "Aeropuerto
+		// Destino", true, false, 10);
+		// p.setClase(BizAirport.class);
+		// p.setDependiente("aeropuerto_destino");
+		this.addFixedItem(VIRTUAL, "imagen1", "imagen1", true, false, 64);
+
+		this.addFixedItem(FIELD, "remarks", "Remarks", true, false, 2000);
+	}
+
+	public String getImagen1() throws Exception {
+		GuiPNRSegmentoAereos w = new GuiPNRSegmentoAereos();
+
+		w.setRecords(getSegments());
+		JWinList wl = new JWinList(w);
+		w.AddColumnasDefault(wl);
+		Graph gr = new GraphScriptWorldArc();
+		gr.setTitle("Boleto Nº " + getNumeroboleto());
+		gr.addAtributtes(Graph.GRAPH_ATTR_ROTATENAMES, "1");
+		gr.addAtributtes(Graph.GRAPH_ATTR_DECIMALPRECISON, "2");
+		gr.addAtributtes(Graph.GRAPH_ATTR_NUMBERPREFIX, "");
+		gr.addAtributtes(Graph.GRAPH_ATTR_EXPORTENABLED, "1");
+		gr.addAtributtes(Graph.GRAPH_ATTR_XAXISNAME, "Anual");
+
+		gr.addAtributtes(Graph.GRAPH_ATTR_YAXISNAME, getDescripcion());
+		gr.setTitle(getDescripcion());
+		ModelMatrix mg = new ModelMatrix();
+
+		mg.addColumn("Despegue", "geop_despegue", ModelMatrix.GRAPH_FUNCTION_CATEGORIE);
+		mg.addColumn("Arrivo", "geop_arrivo", ModelMatrix.GRAPH_FUNCTION_DATASET);
+		mg.addColumn("duracionvuelo", ModelMatrix.GRAPH_FUNCTION_VALUE);
+		gr.setModel(mg);
+
+		wl.addGrafico(gr);
+		w.ConfigurarFiltrosLista(wl);
+
+		Graph g = wl.getGrafico(1);
+		if (g != null) {
+			g.localFill(wl, null, null);
+			g.setRefresh(1);
+			return g.getImage(301, 307).replace("script:", "");
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the table name
+	 */
+	@Override
+	public String GetTable() {
+		return "TUR_PNR_BOLETO";
+	}
+
+	// public boolean isIgnoreForeignFields() {
+	// return true;
+	// }
+
+	public void attachRelationMap(JRelations rels) throws Exception {
+		rels.setSourceWinsClass("pss.tourism.pnr.GuiPNRTickets");
+
+		JRelation rel;
+		rel = rels.addRelationForce(10, "restriccion usuario");
+		rel.addFilter(" (TUR_PNR_BOLETO.company= 'COMPANY_CUSTOMLIST') ");
+
+		JRelation r;
+		r = rels.addRelationParent(21, "Aerolinea", BizCarrier.class, "CodigoAerolinea", "carrier");
+		// r.setTypeJoin(JRelations.JOIN_LEFT);
+		r.addJoin("TUR_PNR_BOLETO.codigoaerolinea", "carrier.carrier");
+		r.setAlias("carrier");
+		r = rels.addRelationParent(22, "Aerolinea Internacional", BizCarrier.class, "codigo_aerolinea_intern", "carrier");
+		// r.setTypeJoin(JRelations.JOIN_LEFT);
+		r.addJoin("TUR_PNR_BOLETO.codigo_aerolinea_intern", "firstcarrier.carrier");
+		r.setAlias("firstcarrier");
+
+		r = rels.addRelationParent(30, "Aeropuerto Origen", BizAirport.class, "aeropuerto_origen", "code");
+		r.addJoin("TUR_PNR_BOLETO.aeropuerto_origen", "ae_origen.code");
+		// r.setTypeJoin(JRelations.JOIN_LEFT);
+		r.setAlias("ae_origen");
+
+		r = rels.addRelationParent(32, "Aeropuerto Destino", BizAirport.class, "aeropuerto_destino", "code");
+		r.addJoin("TUR_PNR_BOLETO.aeropuerto_destino", "ae_destino.code");
+		// r.setTypeJoin(JRelations.JOIN_LEFT);
+		r.setAlias("ae_destino");
+
+		r = rels.addRelationParent(90, "Cliente", BizBSPPersona.class, "customer_id", "codigo");
+		r.addJoin("TUR_PNR_BOLETO.customer_id", "cliente.codigo");
+		r.addJoin("TUR_PNR_BOLETO.company", "cliente.company");
+		r.addFilter("cliente.tipo='CLIENTE'");
+		// r.setTypeJoin(JRelations.JOIN_LEFT);
+		r.setAlias("cliente");
+
+		r = rels.addRelationParent(91, "Vendedor", BizBSPPersona.class, "vendedor", "codigo");
+		r.addJoin("TUR_PNR_BOLETO.vendedor", "vendedor.codigo");
+		r.addJoin("TUR_PNR_BOLETO.company", "vendedor.company");
+		r.addFilter("vendedor.tipo='" + BizBSPPersona.VENDEDOR + "'");
+		// r.setTypeJoin(JRelations.JOIN_LEFT);
+		r.setAlias("vendedor");
+		r = rels.addRelationParent(92, "Sucursal", BizBSPPersona.class, "office_id", "codigo");
+		r.addJoin("TUR_PNR_BOLETO.office_id", "sucursal.codigo");
+		r.addJoin("TUR_PNR_BOLETO.company", "sucursal.company");
+		r.addFilter("sucursal.tipo='" + BizBSPPersona.SUCURSAL + "'");
+		// r.setTypeJoin(JRelations.JOIN_LEFT);
+		r.setAlias("sucursal");
+		r = rels.addRelationParent(93, "Centro Costo", BizBSPPersona.class, "centro_costos", "codigo");
+		r.addJoin("TUR_PNR_BOLETO.centro_costos", "ccosto.codigo");
+		r.addJoin("TUR_PNR_BOLETO.company", "ccosto.company");
+		r.addFilter("ccosto.tipo='" + BizBSPPersona.CCOSTO + "'");
+		// r.setTypeJoin(JRelations.JOIN_LEFT);
+		r.setAlias("ccosto");
+		r = rels.addRelationParent(94, "IATA", BizBSPPersona.class, "nro_iata", "codigo");
+		r.addJoin("TUR_PNR_BOLETO.nro_iata", "iata.codigo");
+		r.addJoin("TUR_PNR_BOLETO.company", "iata.company");
+		r.addFilter("iata.tipo='" + BizBSPPersona.IATA + "'");
+		// r.setTypeJoin(JRelations.JOIN_LEFT);
+		r.setAlias("iata");
+
+		r = rels.addRelationChild(1, "Impuestos", BizPNRTax.class);
+		r.addJoin("TUR_PNR_BOLETO.interface_id", "tax.interface_id");
+		r.setAlias("tax");
+		r = rels.addRelationChild(2, "Segmentos", BizPNRSegmentoAereo.class);
+		r.addJoin("TUR_PNR_BOLETO.interface_id", "segment.interface_id");
+		r.setTypeJoin(JRelations.JOIN_ONE);
+		r.setAlias("segment");
+		r = rels.addRelationChild(4, "Todos los Segmentos", BizPNRSegmentoAereo.class);
+		r.addJoin("TUR_PNR_BOLETO.interface_id", "segmentos.interface_id");
+		r.setAlias("segmentos");
+		r = rels.addRelationChild(3, "Precios", BizPNRFare.class);
+		r.addJoin("TUR_PNR_BOLETO.interface_id", "precios.interface_id");
+		r.setTypeJoin(JRelations.JOIN_ONE);
+		r.setAlias("precios");
+
+		r = rels.addRelationParent(38, "Mis Regiones boleto", BizRegionDetail.class, "pais_destino", "pais");
+		r.addJoin("TUR_PNR_BOLETO.pais_destino", "BSP_REGION_DETAIL.pais");
+		r.addJoin("TUR_PNR_BOLETO.company", "BSP_REGION_DETAIL.company");
+		// r.setTypeJoin(JRelations.JOIN_LEFT);
+
+		r = rels.addRelationChild(70, "Grupo Carriers", BizCarrierGroupDetail.class);
+		r.setTypeJoin(JRelations.JOIN_LEFT);
+		r.addJoin("TUR_PNR_BOLETO.company", "cgb_detail.company");
+		r.addJoin("TUR_PNR_BOLETO.codigoaerolinea", "cgb_detail.carrier");
+		r.setAlias("cgb_detail");
+
+		rels.addGeoPostions("aeropuerto_origen", new JPair(new JLong(30), new JString("geo_position")));
+		rels.addGeoPostions("aeropuerto_destino", new JPair(new JLong(32), new JString("geo_position")));
+
+		rels.hideField("interface_id");
+		rels.hideField("company");
+		rels.hideField("internacional");
+		rels.hideField("codigo_cliente");
+		rels.hideField("tipo_pasajero2");
+		// rels.hideField("centro_costos");
+		rels.hideField("codigo_base_moneda");
+		rels.hideField("additional_fee");
+		// rels.hideField("void");
+		rels.hideField("expense");
+		rels.hideField("porc_expense");
+		rels.hideField("importecedido");
+		rels.hideField("porcentajeover");
+		rels.hideField("oversobre");
+		rels.hideField("archivo");
+		rels.hideField("origen");
+		rels.hideField("it");
+		rels.hideField("creation_date_date");
+		rels.hideField("CantidadConectados");
+		rels.hideField("numero_tarjeta");
+
+		// rels.hideField("tarifa_base");
+		// rels.hideField("remarks");
+		// rels.hideField("observacion");
+		rels.hideField("descripcion");
+		rels.hideField("order_str");
+		// rels.hideField("customer_id");
+		// rels.hideField("transaction_type");
+		rels.hideField("pais");
+		// rels.hideField("aeropuerto_origen");
+		// rels.hideField("aeropuerto_destino");
+
+		rels.addFolderGroup("Boleto", null);
+		rels.addFolderGroup("Aerolínea", null);
+		rels.addFolderGroup("Tarifa", null);
+		rels.addFolderGroup("Pasajero", null);
+		rels.addFolderGroup("Comisiones", null);
+		rels.addFolderGroup("Aeropuerto Origen", null);
+		rels.addFolderGroup("Aeropuerto Destino", null);
+		rels.addFolderGroup("Tarjeta", null);
+		rels.addFolderGroup("Impuestos", null);
+		rels.addFolderGroup("Seg.vuelos", null);
+		rels.addFolderGroup("Todos los Seg.vuelos", null);
+		rels.addFolderGroup("Origen", "Seg.vuelos");
+		rels.addFolderGroup("Destino", "Seg.vuelos");
+		rels.addFolderGroup("Seg.Origen", "Todos los Seg.vuelos");
+		rels.addFolderGroup("Seg.Destino", "Todos los Seg.vuelos");
+		rels.addFolderGroup("Seg.precios", null);
+		rels.addFolderGroup("Origen Precio", "Seg.precios");
+		rels.addFolderGroup("Destino Precio", "Seg.precios");
+		rels.addFolderGroup("Remarks", null);
+		rels.addFolderGroup("Vendedor", "Remarks");
+		rels.addFolderGroup("C.Costo", "Remarks");
+		rels.addFolderGroup("Sucursal", "Boleto");
+		rels.addFolderGroup("IATA", "Boleto");
+		rels.addFolderGroup("Cliente", "Boleto");
+
+		String s = "4";// ,"7_10"};
+
+		rels.addFieldGroup(s, "highfare", "*", "Remarks");
+		rels.addFieldGroup(s, "lowfare", "*", "Remarks");
+		rels.addFieldGroup(s, "corporativo", "*", "Remarks");
+		rels.addFieldGroup(s, "proposito", "*", "Remarks");
+		rels.addFieldGroup(s, "cuenta", "*", "Remarks");
+		rels.addFieldGroup(s, "clase_tarifa", "*", "Remarks");
+		rels.addFieldGroup(s, "autorizante", "*", "Remarks");
+		rels.addFieldGroup(s, "fare_savings", "*", "Remarks");
+		rels.addFieldGroup(s, "codigo_negocio", "*", "Remarks");
+		rels.addFieldGroup(s, "region", "*", "Remarks");
+		rels.addFieldGroup(s, "departamento", "*", "Remarks");
+		rels.addFieldGroup(s, "autoriz_cc", "*", "Remarks");
+		rels.addFieldGroup(s, "seg_cc", "*", "Remarks");
+		rels.addFieldGroup(s, "solicitante", "*", "Remarks");
+		rels.addFieldGroup(s, "reserva", "*", "Remarks");
+		rels.addFieldGroup(s, "centro_costos", "*", "C.Costo");
+
+		rels.addFieldGroup(s, "creation_date", "*", "Boleto");
+		rels.addFieldGroup(s, "departure_date", "*", "Boleto");
+		rels.addFieldGroup(s, "arrive_date", "*", "Boleto");
+
+		rels.addFieldGroup(s, "NumeroBoleto", "*", "Boleto");
+		rels.addFieldGroup(s, "CodigoPNR", "*", "Boleto");
+		rels.addFieldGroup(s, "nro_iata", "*", "IATA");
+		rels.addFieldGroup(s, "pre_dias_compra", "*", "Boleto");
+		rels.addFieldGroup(s, "dias_compra", "*", "Boleto");
+		rels.addFieldGroup(s, "dias_viajados", "*", "Boleto");
+		rels.addFieldGroup(s, "route", "*", "Boleto");
+		rels.addFieldGroup(s, "mini_route", "*", "Boleto");
+		rels.addFieldGroup(s, "vendedor", "*", "Vendedor");
+		rels.addFieldGroup(s, "observacion", "*", "Boleto");
+		rels.addFieldGroup(s, "gds", "*", "Boleto");
+		rels.addFieldGroup(s, "tipo_prestacion", "*", "Boleto");
+		rels.addFieldGroup(s, "office_id", "*", "Sucursal");
+		rels.addFieldGroup(s, "cliente", "*", "Cliente");
+		rels.addFieldGroup(s, "city_code", "*", "Boleto");
+		rels.addFieldGroup(s, "tipo_cambio", "*", "Boleto");
+		rels.addFieldGroup(s, "customer_id", "*", "Cliente");
+		rels.addFieldGroup(s, "TipoBoleto", "*", "Boleto");
+		rels.addFieldGroup(s, "codigo_aerolinea_intern", "*", "Boleto");
+		rels.addFieldGroup(s, "tour_code", "*", "Boleto");
+		rels.addFieldGroup(s, "net_remit", "*", "Boleto");
+		rels.addFieldGroup(s, "cant_segmentos", "*", "Boleto");
+		rels.addFieldGroup(s, "cant_roundtrip", "*", "Boleto");
+
+		rels.addFieldGroup(s + "_90", "*", "*", "");
+		rels.addFieldGroup(s + "_90", "descripcion", "*", "Cliente");
+		rels.addFieldGroup(s + "_90", "mail", "*", "Cliente");
+
+		rels.addFieldGroup(s + "_91", "*", "*", "");
+		rels.addFieldGroup(s + "_91", "descripcion", "*", "Vendedor");
+		rels.addFieldGroup(s + "_91", "mail", "*", "Vendedor");
+
+		rels.addFieldGroup(s + "_92", "*", "*", "");
+		rels.addFieldGroup(s + "_92", "descripcion", "*", "Sucursal");
+		rels.addFieldGroup(s + "_92", "mail", "*", "Sucursal");
+
+		rels.addFieldGroup(s + "_93", "*", "*", "");
+		rels.addFieldGroup(s + "_93", "descripcion", "*", "C.Costo");
+		rels.addFieldGroup(s + "_93", "mail", "*", "C.Costo");
+
+		rels.addFieldGroup(s + "_94", "*", "*", "");
+		rels.addFieldGroup(s + "_94", "descripcion", "*", "IATA");
+		rels.addFieldGroup(s + "_94", "mail", "*", "IATA");
+
+		rels.addFieldGroup(s + "_21", "*", "*", "Aerolínea");
+		rels.addFieldGroup(s + "_21", "carrier", "*", "");
+		rels.addFieldGroup(s + "_22", "*", "*", "");
+		rels.addFieldGroup(s + "_70", "*", "*", "");
+		rels.addFieldGroup(s + "_70_70", "*", "*", "");
+		rels.addFieldGroup(s, "CodigoAerolinea", "*", "Aerolínea");
+		rels.addFieldGroup(s + "_70", "id_group", "*", "Aerolínea");
+		rels.addFieldGroup(s + "_70_70", "descripcion", "*", "Aerolínea");
+
+		rels.addFieldGroup(s, "codigo_moneda", "*", "Tarifa");
+		rels.addFieldGroup(s, "codigo_base_moneda", "*", "Tarifa");
+		rels.addFieldGroup(s, "tarifa", "*", "Tarifa");
+		rels.addFieldGroup(s, "tarifa_yq", "*", "Tarifa");
+		rels.addFieldGroup(s, "tarifa_base_contax", "*", "Tarifa");
+		rels.addFieldGroup(s, "tarifa_base", "*", "Tarifa");
+		rels.addFieldGroup(s, "tarifa_real", "*", "Tarifa");
+		rels.addFieldGroup(s, "tarifa_usa", "*", "Tarifa");
+		rels.addFieldGroup(s, "neto_usa", "*", "Tarifa");
+		rels.addFieldGroup(s, "impuestos", "*", "Tarifa");
+		rels.addFieldGroup(s, "neto", "*", "Tarifa");
+		rels.addFieldGroup(s, "iva", "*", "Tarifa");
+		rels.addFieldGroup(s, "tarifa_factura", "*", "Tarifa");
+		rels.addFieldGroup(s, "impuesto_factura", "*", "Tarifa");
+		rels.addFieldGroup(s, "neto_factura", "*", "Tarifa");
+		rels.addFieldGroup(s, "iva_factura", "*", "Tarifa");
+		rels.addFieldGroup(s, "tarifa_base_factura", "*", "Tarifa");
+		rels.addFieldGroup(s, "tarifa_factura_total", "*", "Tarifa");
+		rels.addFieldGroup(s, "tarifa_factura_total_usa", "*", "Tarifa");
+		rels.addFieldGroup(s, "tarifa_factura_usa", "*", "Tarifa");
+		rels.addFieldGroup(s, "netoyq_usa", "*", "Tarifa");
+		rels.addFieldGroup(s, "baseyq_usa", "*", "Tarifa");
+		rels.addFieldGroup(s, "ahorro", "*", "Tarifa");
+
+		rels.addFieldGroup(s, "nombre_pasajero", "*", "Pasajero");
+		rels.addFieldGroup(s, "NumeroPasajero", "*", "Pasajero");
+		rels.addFieldGroup(s, "tipo_pasajero", "*", "Pasajero");
+
+		rels.addFieldGroup(s, "comision_amount", "*", "Comisiones");
+		rels.addFieldGroup(s, "comision_perc", "*", "Comisiones");
+		rels.addFieldGroup(s, "importeover", "*", "Comisiones");
+		rels.addFieldGroup(s, "comision_factura", "*", "Comisiones");
+
+		rels.addFieldGroup(s + "_30", "*", "*", "Aeropuerto Origen");
+		rels.addFieldGroup(s + "_30", "geo_position", "*", "");
+		rels.addFieldGroup(s + "_30_80", "*", "*", "");
+		rels.addFieldGroup(s + "_30_80_70", "*", "*", "");
+		rels.addFieldGroup(s + "_32_80", "*", "*", "");
+		rels.addFieldGroup(s + "_32_80_70", "*", "*", "");
+		rels.addFieldGroup(s + "_30_60", "*", "*", "");
+		rels.addFieldGroup(s + "_30_60", "descripcion", "*", "Aeropuerto Origen");
+		rels.addFieldGroup(s + "_30_60", "continente", "*", "Aeropuerto Origen");
+		rels.addFieldGroup(s + "_30_60", "region", "*", "Aeropuerto Origen");
+		rels.addFieldGroup(s, "aeropuerto_origen", "*", "Aeropuerto Origen");
+
+		rels.addFieldGroup(s + "_32", "*", "*", "Aeropuerto Destino");
+		rels.addFieldGroup(s + "_32", "geo_position", "*", "");
+		rels.addFieldGroup(s + "_32_60", "*", "*", "");
+		rels.addFieldGroup(s + "_32_60", "descripcion", "*", "Aeropuerto Destino");
+		rels.addFieldGroup(s + "_32_60", "continente", "*", "Aeropuerto Destino");
+		rels.addFieldGroup(s + "_32_60", "region", "*", "Aeropuerto Destino");
+		rels.addFieldGroup(s, "aeropuerto_destino", "*", "Aeropuerto Destino");
+
+		rels.addFieldGroup(s, "monto_tarjeta", "*", "Tarjeta");
+		rels.addFieldGroup(s, "numero_tarjeta_mask", "*", "Tarjeta");
+
+		rels.addFieldGroup(s + "_1", "*", "*", "Impuestos");
+		rels.addFieldGroup(s, "impuestos_total", "*", "Impuestos");
+		rels.addFieldGroup(s, "impuestos_total_factura", "*", "Impuestos");
+		rels.addFieldGroup(s, "yq", "*", "Impuestos");
+
+		rels.addFieldGroup(s + "_2", "*", "*", "Seg.vuelos");
+		rels.addFieldGroup(s + "_4", "*", "*", "Todos los Seg.vuelos");
+
+		rels.addFieldGroup(s + "_2", "Despegue", "*", "Origen");
+		rels.addFieldGroup(s + "_2", "FechaDespegue", "*", "Origen");
+		rels.addFieldGroup(s + "_2", "HoraDespegue", "*", "Origen");
+		rels.addFieldGroup(s + "_2_51", "*", "*", "Origen");
+		rels.addFieldGroup(s + "_2_51", "geo_position", "*", "");
+		rels.addFieldGroup(s + "_2_51_60", "*", "*", "");
+		rels.addFieldGroup(s + "_2_51_60", "descripcion", "*", "Origen");
+		rels.addFieldGroup(s + "_2_51_60", "continente", "*", "Origen");
+		rels.addFieldGroup(s + "_2_51_60", "region", "*", "Origen");
+
+		rels.addFieldGroup(s + "_2_70", "*", "*", "");
+		rels.addFieldGroup(s + "_2_21", "*", "*", "");
+		rels.addFieldGroup(s + "_2_70_70", "*", "*", "");
+		rels.addFieldGroup(s + "_2", "carrier", "*", "Seg.vuelos");
+		rels.addFieldGroup(s + "_2_70", "id_group", "*", "Seg.vuelos");
+		rels.addFieldGroup(s + "_2_70_70", "descripcion", "*", "Seg.vuelos");
+
+		rels.addFieldGroup(s + "_2_51_80", "*", "*", "");
+		rels.addFieldGroup(s + "_2_51_80_70", "*", "*", "");
+		rels.addFieldGroup(s + "_2_51_80", "id_group", "*", "Origen");
+		rels.addFieldGroup(s + "_2_51_80_70", "descripcion", "*", "Origen");
+
+		rels.addFieldGroup(s + "_2_52_80", "*", "*", "");
+		rels.addFieldGroup(s + "_2_52_80_70", "*", "*", "");
+		rels.addFieldGroup(s + "_2_52_80", "id_group", "*", "Destino");
+		rels.addFieldGroup(s + "_2_52_80_70", "descripcion", "*", "Destino");
+
+		rels.addFieldGroup(s + "_2", "Arrivo", "*", "Destino");
+		rels.addFieldGroup(s + "_2", "FechaArrivo", "*", "Destino");
+		rels.addFieldGroup(s + "_2", "HoraArrivo", "*", "Destino");
+		rels.addFieldGroup(s + "_2_52", "*", "*", "Destino");
+		rels.addFieldGroup(s + "_2_52", "geo_position", "*", "");
+		rels.addFieldGroup(s + "_2_52_60", "*", "*", "");
+		rels.addFieldGroup(s + "_2_52_60", "descripcion", "*", "Destino");
+		rels.addFieldGroup(s + "_2_52_60", "continente", "*", "Destino");
+		rels.addFieldGroup(s + "_2_52_60", "region", "*", "Destino");
+
+		rels.addFieldGroup(s + "_3", "*", "*", "Seg.precios");
+		rels.addFieldGroup(s + "_3_70", "*", "*", "");
+		rels.addFieldGroup(s + "_3_70_70", "*", "*", "");
+		rels.addFieldGroup(s + "_3_70", "id_group", "*", "Seg.precios");
+		rels.addFieldGroup(s + "_3_70_70", "descripcion", "*", "Seg.precios");
+
+		rels.addFieldGroup(s + "_3_51_60", "*", "*", "");
+		rels.addFieldGroup(s + "_3_51_80", "*", "*", "");
+		rels.addFieldGroup(s + "_3_51_80_70", "*", "*", "");
+		rels.addFieldGroup(s + "_3_52_60", "*", "*", "");
+		rels.addFieldGroup(s + "_3_52_80", "*", "*", "");
+		rels.addFieldGroup(s + "_3_52_80_70", "*", "*", "");
+		rels.addFieldGroup(s + "_3_52", "geo_position", "*", "");
+
+		rels.addFieldGroup(s + "_3", "Despegue", "*", "Origen Precio");
+		rels.addFieldGroup(s + "_3", "FechaDespegue", "*", "Origen Precio");
+		rels.addFieldGroup(s + "_3", "HoraDespegue", "*", "Origen Precio");
+		rels.addFieldGroup(s + "_3_51", "*", "*", "Origen Precio");
+		rels.addFieldGroup(s + "_3_51", "geo_position", "*", "");
+		rels.addFieldGroup(s + "_3_51_60", "descripcion", "*", "Origen Precio");
+		rels.addFieldGroup(s + "_3_51_60", "continente", "*", "Origen Precio");
+		rels.addFieldGroup(s + "_3_51_60", "region", "*", "Origen Precio");
+		rels.addFieldGroup(s + "_3_51_80", "id_group", "*", "Origen Precio");
+		rels.addFieldGroup(s + "_3_51_80_70", "descripcion", "*", "Origen Precio");
+
+		rels.addFieldGroup(s + "_3", "Arrivo", "*", "Destino Precio");
+		rels.addFieldGroup(s + "_3", "FechaArrivo", "*", "Destino Precio");
+		rels.addFieldGroup(s + "_3", "HoraArrivo", "*", "Destino Precio");
+		rels.addFieldGroup(s + "_3", "carrier", "*", "Destino Precio");
+		rels.addFieldGroup(s + "_3_52", "*", "*", "Destino Precio");
+		rels.addFieldGroup(s + "_3_52_60", "descripcion", "*", "Destino Precio");
+		rels.addFieldGroup(s + "_3_52_60", "continente", "*", "Destino Precio");
+		rels.addFieldGroup(s + "_3_52_60", "region", "*", "Destino Precio");
+		rels.addFieldGroup(s + "_3_52_80", "id_group", "*", "Destino Precio");
+		rels.addFieldGroup(s + "_3_52_80_70", "descripcion", "*", "Destino Precio");
+
+		rels.addFieldGroup(s + "_38", "*", "*", "");
+		rels.addFieldGroup(s + "_38_49", "*", "*", "");
+		rels.addFieldGroup(s + "_38_49", "descripcion", "*", "Aeropuerto Destino");// region
+		rels.addFieldGroup(s + "_2_54_49", "*", "*", "");
+		rels.addFieldGroup(s + "_2_54", "*", "*", "");
+		rels.addFieldGroup(s + "_2_54_49", "descripcion", "*", "Destino");// region
+		rels.addFieldGroup(s + "_3_54_49", "*", "*", "");
+		rels.addFieldGroup(s + "_3_54", "*", "*", "");
+		rels.addFieldGroup(s + "_3_54_49", "descripcion", "*", "Destino Precio");// region
+
+		rels.addFieldGroup(s + "_4", "Despegue", "*", "Seg.Origen");
+		rels.addFieldGroup(s + "_4", "FechaDespegue", "*", "Seg.Origen");
+		rels.addFieldGroup(s + "_4", "HoraDespegue", "*", "Seg.Origen");
+		rels.addFieldGroup(s + "_4_51", "*", "*", "Seg.Origen");
+		rels.addFieldGroup(s + "_4_51", "geo_position", "*", "");
+		rels.addFieldGroup(s + "_4_51_60", "*", "*", "");
+		rels.addFieldGroup(s + "_4_51_60", "descripcion", "*", "Seg.Origen");
+		rels.addFieldGroup(s + "_4_51_60", "continente", "*", "Seg.Origen");
+		rels.addFieldGroup(s + "_4_51_60", "region", "*", "Seg.Origen");
+
+		rels.addFieldGroup(s + "_4_70", "*", "*", "");
+		rels.addFieldGroup(s + "_4_21", "*", "*", "");
+		rels.addFieldGroup(s + "_4_70_70", "*", "*", "");
+		rels.addFieldGroup(s + "_4", "carrier", "*", "Todos los Seg.vuelos");
+		rels.addFieldGroup(s + "_4_70", "id_group", "*", "Todos los Seg.vuelos");
+		rels.addFieldGroup(s + "_4_70_70", "descripcion", "*", "Todos los Seg.vuelos");
+
+		rels.addFieldGroup(s + "_4_51_80", "*", "*", "");
+		rels.addFieldGroup(s + "_4_51_80_70", "*", "*", "");
+		rels.addFieldGroup(s + "_4_51_80", "id_group", "*", "Seg.Origen");
+		rels.addFieldGroup(s + "_4_51_80_70", "descripcion", "*", "Seg.Origen");
+
+		rels.addFieldGroup(s + "_4_52_80", "*", "*", "");
+		rels.addFieldGroup(s + "_4_52_80_70", "*", "*", "");
+		rels.addFieldGroup(s + "_4_52_80", "id_group", "*", "Seg.Destino");
+		rels.addFieldGroup(s + "_4_52_80_70", "descripcion", "*", "Seg.Destino");
+
+		rels.addFieldGroup(s + "_4", "Arrivo", "*", "Seg.Destino");
+		rels.addFieldGroup(s + "_4", "FechaArrivo", "*", "Seg.Destino");
+		rels.addFieldGroup(s + "_4", "HoraArrivo", "*", "Seg.Destino");
+		rels.addFieldGroup(s + "_4_52", "*", "*", "Seg.Destino");
+		rels.addFieldGroup(s + "_4_52", "geo_position", "*", "");
+		rels.addFieldGroup(s + "_4_52_60", "*", "*", "");
+		rels.addFieldGroup(s + "_4_52_60", "descripcion", "*", "Seg.Destino");
+		rels.addFieldGroup(s + "_4_52_60", "continente", "*", "Seg.Destino");
+		rels.addFieldGroup(s + "_4_52_60", "region", "*", "Seg.Destino");
+
+		rels.addCamposMailing(BizBSPPersona.CLIENTE, "customer_id", BizPNRTicket.class.getName(), "0", "=");
+		rels.addCamposMailing(BizBSPPersona.SUCURSAL, "office_id", BizPNRTicket.class.getName(), "0", "=");
+		rels.addCamposMailing(BizBSPPersona.IATA, "nro_iata", BizPNRTicket.class.getName(), "0", "=");
+		rels.addCamposMailing(BizBSPPersona.VENDEDOR, "vendedor", BizPNRTicket.class.getName(), "0", "=");
+		rels.addCamposMailing(BizBSPPersona.CCOSTO, "centro_costos", BizPNRTicket.class.getName(), "0", "=");
+	}
+
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Functionality methods
+	// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	/**
+	 * Default Read() method
+	 */
+	public boolean Read(String company, String zCodigopnr, String zNumeroboleto) throws Exception {
+		addFilter("company", company);
+		addFilter("CodigoPNR", zCodigopnr);
+		addFilter("NumeroBoleto", zNumeroboleto);
+		return read();
+	}
+
+	public boolean Read(String company, Date pnrCreationDate, String zNumeroboleto) throws Exception {
+		addFilter("company", company);
+		addFilter("creation_date", pnrCreationDate);
+		addFilter("NumeroBoleto", zNumeroboleto);
+		return read();
+	}
+
+	public boolean read(String id, String zNumeroboleto) throws Exception {
+		this.clearFilters();
+		addFilter("interface_id", id);
+		addFilter("NumeroBoleto", zNumeroboleto);
+		return read();
+	}
+
+	public boolean ReadByBoleto(String company, String zNumeroboleto) throws Exception {
+		addFilter("company", company);
+		addFilter("NumeroBoleto", zNumeroboleto);
+		return read();
+	}
+
+	// public BizArticleAir getObjArticleAir() throws Exception {
+	// BizCarrier carrier = new BizCarrier();
+	// carrier.SetNoExcSelect(true);
+	// if (!carrier.Read(pCodigoaerolinea.getValue()))
+	// JExcepcion.SendError("El prestador no es un Carrier conocido:^
+	// "+pCodigoaerolinea.getValue());
+	// return carrier.getObjArticle(true);
+	// }
+
+	// public BizPNRPasajero getObjPax() throws Exception {
+	// if (this.pax!=null) return this.pax;
+	// BizPNRPasajero pax = new BizPNRPasajero();
+	// pax.dontThrowException(true);
+	// if (!pax.Read(getCompany(), getCodigopnr(), getNumeropasajero()))
+	// return null;
+	// return (this.pax=pax);
+	// }
+
+	// public BizPNR getObjPNR() throws Exception {
+	// if (this.pnr!=null) return this.pnr;
+	// BizPNR r = new BizPNR();
+	// r.Read(getCompany(),this.getCodigopnr());
+	// return (this.pnr=r);
+	// }
+
+	public void execReprocesar() throws Exception {
+		JExec oExec = new JExec(this, "reprocesar") {
+
+			@Override
+			public void Do() throws Exception {
+				reprocesar();
+			}
+		};
+		oExec.execute();
+	}
+
+	public void execProcessFileInternal(final String filename) throws Exception {
+		JExec oExec = new JExec(this, "processFileInternal") {
+
+			@Override
+			public void Do() throws Exception {
+				processFileInternal(filename);
+			}
+		};
+		oExec.execute();
+	}
+
+	public void processFileInternal(String filename) throws Exception {
+
+		FileProcessor fp = null;
+		if (pGDS.equals("SABRE"))
+			fp = new SabreFileProcessor();
+		else if (pGDS.equals("AMADEUS"))
+			fp = new AmadeusFileProcessor();
+		else if (pGDS.equals("TRAVELPORT"))
+			fp = new TravelPortFileProcessor();
+		else
+			throw new Exception("GDS desconocido");
+		fp.processFileInternal(new File(filename));
+	}
+
+	// public void reprocesar() throws Exception {
+	// boolean first=true;
+	//
+	// JRecords<BizPNRFile> files = getArchivos();
+	// JIterator<BizPNRFile> it = files.getStaticIterator();
+	// while (it.hasMoreElements()) {
+	// BizPNRFile file = it.nextElement();
+	// String origen = JPath.PssPathInputProcessed() + "/" + file.getDirectory()
+	// + "/" + file.getArchivo();
+	//
+	// if (first) { // existe por lo menos un archivo, antes de borrarlo
+	// deletePNR(getCodigopnr());
+	// first=false;
+	// }
+	// processFileInternal(origen);
+	//
+	//
+	// }
+	//
+	// if (first) { // no hay archivos, (ambiente de desarrollo ?)
+	// this.processAnalizeSegments(this.getSegments());
+	// this.update();
+	//
+	// }
+	// }
+	public void reprocesar() throws Exception {
+		boolean first = true;
+
+		JRecords<BizPNRFile> files = getArchivos();
+		JIterator<BizPNRFile> it = files.getStaticIterator();
+		while (it.hasMoreElements()) {
+			BizPNRFile file = it.nextElement();
+			String origen = JPath.PssPathInputProcessed() + "/" + file.getDirectory() + "/" + file.getArchivo();
+
+			if (first) { // existe por lo menos un archivo, antes de borrarlo
+				deletePNR(getCodigopnr());
+				first = false;
+			}
+			processFileInternal(origen);
+
+		}
+
+		if (first) { // no hay archivos, (ambiente de desarrollo ?)
+			this.processAnalizeSegments(this.getSegments());
+			this.update();
+
+		}
+	}
+
+	protected void deletePNR(String pnr) throws Exception {
+		JRecords<BizPNRTicket> pnrs = new JRecords<BizPNRTicket>(BizPNRTicket.class);
+		pnrs.addFilter("company", this.getCompany());
+		pnrs.addFilter("CodigoPNR", pnr);
+		pnrs.processDeleteAll();
+	}
+
+	public void execSaveCotizacion() throws Exception {
+		JExec oExec = new JExec(this, "saveCotizacion") {
+
+			@Override
+			public void Do() throws Exception {
+				saveCotizacion();
+			}
+		};
+		oExec.execute();
+	}
+
+	public void processAnalizeSegments(JRecords<BizPNRSegmentoAereo> segmentos) throws Exception {
+		new AuxiliarClaseCalculoSegmentos().processAnalizeSegmentsInterno(segmentos);
+	}
+
+	public void saveCotizacion() throws Exception {
+		String cm = getCompany();
+		String ms = getCodigoBaseMoneda();
+		String mt = getCodigoMoneda();
+		Double cotiz = getTipoCambio();
+		Date fecha = getCreationDate();
+		// this.getCodigopnr()
+		if (ms.equals(mt))
+			return;
+		if (cotiz == 0)
+			return;
+
+		if (cotiz < 1)
+			return;
+		BizMonedaCotizacion cot = new BizMonedaCotizacion();
+		cot.setCompany(cm);
+		cot.setMonedaSource(ms);
+		cot.setMonedaTarget(mt);
+		cot.setCotizCompra(cotiz);
+		cot.setCotizVenta(cotiz);
+		cot.setCotizContab(cotiz);
+		cot.setFechaHora(fecha);
+		cot.setPais(getObjCompany().getCountry());
+		cot.processInsertSimple();
+	}
+
+	public JRecords<BizPNRFile> getArchivosOld() throws Exception {
+		String directory = getDirectory();
+		String filename = getArchivo();
+
+		JRecords<BizPNRFile> files = new JRecords<BizPNRFile>(BizPNRFile.class);
+		int pos = filename.lastIndexOf(".");
+
+		files.setStatic(true);
+		files.clearStaticItems();
+
+		FilenameFilter textFilter = new FilenameFilter() {
+			String patron;
+
+			public FilenameFilter setPatron(String patron) {
+				this.patron = patron.toLowerCase();
+				return this;
+			}
+
+			public boolean accept(File dir, String name) {
+				String lowercaseName = name.toLowerCase();
+				if (lowercaseName.startsWith(patron)) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		}.setPatron(filename.substring(0, pos - 2));
+
+		File dir = new File(JPath.PssPathInputProcessed() + "/" + directory);
+		File fnames[] = dir.listFiles(textFilter);
+
+		// String[] names = dir.list(textFilter);
+
+		if (fnames == null)
+			return files;
+
+		fnames = sortFilesByName(fnames);
+
+		for (int i = 0; i < fnames.length; i++) {
+
+			String fname = fnames[i].getName();
+			BizPNRFilename f = new BizPNRFilename();
+			f.setPNR(getCodigopnr());
+			f.setCompany(getCompany());
+			f.setArchivo(fname);
+			f.setDirectory(getDirectory());
+			f.setGDS(this.pGDS.getValue());
+			// f.setOrder(new Date().getTime());
+			f.setDate(new Date());
+			try {
+				f.insert();
+			} catch (Exception eee) {
+				PssLogger.logDebug(eee);
+			}
+
+			f.setDescripcion("Archivo version " + fname.substring(pos - 2, pos));
+
+		}
+		return files;
+	}
+
+	public static void main(String[] args) {
+		try {
+			BizPNRTicket tkt = new BizPNRTicket();
+			tkt.migrate();
+		} catch (Exception ee) {
+
+		}
+	}
+
+	private void migrate() {
+		try {
+			JAplicacion.openSession();
+			JAplicacion.GetApp().openApp("ticket_migration", "process", true);
+			JBDatos.GetBases().beginTransaction();
+
+			JRecords<BizCompany> cpys = new JRecords<BizCompany>(BizCompany.class);
+			cpys.addOrderBy("company");
+			cpys.toStatic();
+
+			while (cpys.nextRecord()) {
+				BizCompany cpy = cpys.getRecord();
+
+				while (true) {
+
+					JRecords<BizPNRTicket> tkts = new JRecords<BizPNRTicket>(BizPNRTicket.class);
+					tkts.addFilter("company", cpy.getCompany());
+					tkts.addFilter("gds", "SABRE");
+					tkts.addFixedFilter("migrated is null");
+					tkts.addOrderBy("codigopnr");
+					tkts.setTop(1000);
+					tkts.toStatic();
+
+					String pnr = "";
+					boolean hasRecords = false;
+					while (tkts.nextRecord()) {
+						hasRecords = true;
+						BizPNRTicket tkt = tkts.getRecord();
+						tkt.pMigrated.setValue(true);
+						tkt.update();
+
+						if (pnr.equals(tkt.getCodigopnr())) {
+							continue;
+						}
+
+						pnr = tkt.getCodigopnr();
+						tkt.getArchivosOld();
+
+					}
+
+					JBDatos.GetBases().commit();
+					JBDatos.GetBases().beginTransaction();
+
+					if (hasRecords == false)
+						break;
+
+				}
+
+			}
+			JAplicacion.GetApp().closeApp();
+			JAplicacion.closeSession();
+
+		} catch (Exception e2) {
+		}
+
+	}
+
+	public JRecords<BizPNRFile> getArchivos() throws Exception {
+
+		JRecords<BizPNRFile> files = new JRecords<BizPNRFile>(BizPNRFile.class);
+		files.setStatic(true);
+		files.clearStaticItems();
+
+		JRecords<BizPNRFilename> fs = new JRecords<BizPNRFilename>(BizPNRFilename.class);
+		fs.addFilter("company", this.getCompany());
+		fs.addFilter("pnr", this.getCodigopnr());
+		fs.addOrderBy("arrive_order");
+		fs.toStatic();
+
+		while (fs.nextRecord()) {
+			BizPNRFilename file = fs.getRecord();
+
+			BizPNRFile f = new BizPNRFile();
+			f.setPNR(file.getPNR());
+			f.setCompany(file.getCompany());
+			f.setArchivo(file.getArchivo());
+			f.setDirectory(file.getDirectory());
+			int pos = file.getArchivo().lastIndexOf(".");
+
+			f.setDescripcion("Archivo version " + file.getArchivo().substring(pos - 2, pos));
+
+			files.getStaticItems().addElement(f);
+		}
+		return files;
+	}
+
+	public File[] sortFilesByName(File[] fList) {
+		try {
+			Arrays.sort(fList, new Comparator<File>() {
+				public int compare(File file1, File file2) {
+					return Integer.valueOf(file1.getName().compareTo(file2.getName()));
+				}
+			});
+		} catch (Exception ee) {
+			System.out.println(ee.getMessage());
+		}
+		return fList;
+	}
+
+	public File[] sortFilesByLastModDate(File[] fList) {
+		try {
+			Arrays.sort(fList, new Comparator<File>() {
+				public int compare(File file1, File file2) {
+					return Long.valueOf(file1.lastModified()).compareTo(file2.lastModified());
+				}
+			});
+		} catch (Exception ee) {
+			System.out.println(ee.getMessage());
+		}
+		return fList;
+	}
+
+	public JRecords<BizPNRTax> getObjTaxes() throws Exception {
+		if (this.taxes != null)
+			return this.taxes;
+		return (this.taxes = this.getTaxes());
+
+	}
+
+	public static void processReprocessAllTicket(String company) throws Exception {
+		JRecords<BizPNRTicket> tickets = new JRecords<BizPNRTicket>(BizPNRTicket.class);
+		tickets.addFilter("company", company);
+		tickets.readAll();
+		while (tickets.nextRecord()) {
+			BizPNRTicket ticket = tickets.getRecord();
+			ticket.processAnalizeSegments(ticket.getSegments());
+			ticket.update();
+		}
+	}
+
+	@Override
+	public void processDelete() throws Exception {
+		JRecords<BizPNRSegmentoAereo> segs = new JRecords<BizPNRSegmentoAereo>(BizPNRSegmentoAereo.class);
+		segs.addFilter("company", getCompany());
+		segs.addFilter("interface_id", getId());
+		segs.delete();
+		JRecords<BizPNRTax> taxs = new JRecords<BizPNRTax>(BizPNRTax.class);
+		taxs.addFilter("company", getCompany());
+		taxs.addFilter("interface_id", getId());
+		taxs.delete();
+		JRecords<BizPNRFare> fare = new JRecords<BizPNRFare>(BizPNRFare.class);
+		fare.addFilter("company", getCompany());
+		fare.addFilter("interface_id", getId());
+		fare.delete();
+		super.processDelete();
+	}
+
+	/*
+	 * public static void processReprocessAllTicket(String company) throws
+	 * Exception { JRecords<BizPNRTicket> tickets = new
+	 * JRecords<BizPNRTicket>(BizPNRTicket.class); tickets.addFilter("company",
+	 * company); tickets.readAll(); String bookings=""; String origen=""; String
+	 * destino=""; String checkpais = null; boolean international=false; while
+	 * (tickets.nextRecord()) { BizPNRTicket ticket = tickets.getRecord(); String
+	 * clase = null; String tipoclase = null; long clasePrioridad = 0;
+	 * JRecords<BizPNRSegmentoAereo> segs = ticket.getSegments(); long
+	 * cantSegments=0; segs.readAll(); while (segs.nextRecord()) {
+	 * BizPNRSegmentoAereo seg = segs.getRecord(); if (origen.equals(""))
+	 * origen=seg.getDespegue(); destino=seg.getArrivo(); seg.processCalculate();
+	 * seg.update(); if (!seg.getConnectionIndicator().equals
+	 * (BizPNRSegmentoAereo.SEGMENTO_CONNECTION)) { bookings=(bookings.equals("")
+	 * ?"":",")+"TKM_"+origen.toUpperCase()+destino.toUpperCase(); cantSegments++;
+	 * origen=""; } if (seg.getObjAeropuertoArrivo().getObjCountry()==null)
+	 * continue; if (checkpais==null)
+	 * checkpais=seg.getObjAeropuertoDespegue().getObjCountry().GetPais(); if
+	 * (!checkpais
+	 * .equals(seg.getObjAeropuertoArrivo().getObjCountry().GetPais()))
+	 * international=true;
+	 * 
+	 * if (clase != null) { if (clasePrioridad < seg.getPrioridad()) { clase =
+	 * seg.getClase(); tipoclase = seg.getTipoClase(); clasePrioridad =
+	 * seg.getPrioridad(); } } else { clase = seg.getClase(); tipoclase =
+	 * seg.getTipoClase(); clasePrioridad = seg.getPrioridad(); }
+	 * 
+	 * } fillMercado(ruta, rutaPais,bookings);
+	 * 
+	 * ticket.setBookings(cantSegments==0?1:cantSegments);
+	 * ticket.setInternacional(international);
+	 * ticket.setInternacionalDescr(international ? "International" : "Domestic");
+	 * ticket.setDiasCompras(JDateTools.getDaysBetween(ticket.getCreationDate(),
+	 * ticket.getDepartureDate()));
+	 * ticket.setDiasViajados(JDateTools.getDaysBetween
+	 * (ticket.getDepartureDate(), ticket.getArriveDate()));
+	 * ticket.setClase(clase); ticket.setTipoClase(tipoclase);
+	 * 
+	 * ticket.update(); } }
+	 */
+
+	public JRecords<BizPNRTax> getTaxes() throws Exception {
+		JRecords<BizPNRTax> detalles = new JRecords<BizPNRTax>(BizPNRTax.class);
+		detalles.addFilter("interface_id", getId());
+		detalles.readAll();
+		detalles.toStatic();
+		return detalles;
+	}
+
+	public JRecords<BizPNRSegmentoAereo> getSegments() throws Exception {
+		JRecords<BizPNRSegmentoAereo> detalles = new JRecords<BizPNRSegmentoAereo>(BizPNRSegmentoAereo.class);
+		detalles.addFilter("interface_id", getId());
+		detalles.addOrderBy("CodigoSegmento", "ASC");
+		detalles.toStatic();
+		return detalles;
+	}
+
+	public JRecords<BizPNRFare> getSegmentsFare() throws Exception {
+		JRecords<BizPNRFare> detalles = new JRecords<BizPNRFare>(BizPNRFare.class);
+		detalles.addFilter("interface_id", getId());
+		detalles.addOrderBy("secuencia", "ASC");
+		detalles.readAll();
+		detalles.toStatic();
+		return detalles;
+	}
+
+	public String getRecordName() throws Exception {
+		return "Boletos";
+	}
+
+	public BizAirport getObjAeropuertoOrigen() throws Exception {
+		if (this.aeropuertoOrigen != null)
+			return this.aeropuertoOrigen;
+		BizAirport a = new BizAirport();
+		a.dontThrowException(true);
+		if (!a.Read(this.pAeropuertoOrigen.getValue()))
+			return null;
+		return (this.aeropuertoOrigen = a);
+	}
+
+	BizPNRTicket objReemitted;
+
+	public BizPNRTicket getObjReemitted() throws Exception {
+		if (pRefOriginal.isNull())
+			return null;
+		if (this.objReemitted != null)
+			return this.objReemitted;
+		BizPNRTicket a = new BizPNRTicket();
+		a.dontThrowException(true);
+		if (!a.read("" + this.pRefOriginal.getValue(), this.pOriginalNumeroboleto.getValue()))
+			return null;
+		return (this.objReemitted = a);
+	}
+
+	public BizCarrier getObjCarrier() throws Exception {
+		if (this.objCarrier != null)
+			return this.objCarrier;
+		BizCarrier a = new BizCarrier();
+		a.dontThrowException(true);
+		if (!a.Read(this.pCodigoaerolinea.getValue()))
+			return null;
+		return (this.objCarrier = a);
+	}
+
+	public BizAirport getObjAeropuertoDestino() throws Exception {
+		if (this.aeropuertoDestino != null)
+			return this.aeropuertoDestino;
+		BizAirport a = new BizAirport();
+		a.dontThrowException(true);
+		if (!a.Read(this.pAeropuertoDestino.getValue()))
+			return null;
+		return (this.aeropuertoDestino = a);
+	}
+
+	public BizMoneda getObjMoneda() throws Exception {
+		BizMoneda a = new BizMoneda();
+		a.Read(this.pCodigoMoneda.getValue());
+		return a;
+	}
+
+	public Date getDateValue(String field) throws Exception {
+		if (field.equals(IConciliable.FECHA))
+			return pVoid.getValue() ? null : pCreationDate.getValue();
+		return null;
+	}
+
+	public Long getLongValue(String field) throws Exception {
+		if (field.equals(IConciliable.ID_AEROLINEA))
+			return getObjCarrier() == null || getObjCarrier().getCodIata().equals("") ? null : Long.parseLong(getObjCarrier().getCodIata());
+		return null;
+	}
+
+	public Double getDoubleValue(String field) throws Exception {
+		if (field.equals(IConciliable.COMISION))
+			return pComisionFactura.getValue();
+		if (field.equals(IConciliable.COMISION_OVER))
+			return pImporteover.getValue();
+		if (field.equals(IConciliable.COMISION_PORC))
+			return pComisionPerc.getValue();
+		if (field.equals(IConciliable.COMISION_INV))
+			return -pComisionFactura.getValue();
+		if (field.equals(IConciliable.COMISION_OVER_INV))
+			return -pImporteover.getValue();
+		if (field.equals(IConciliable.IMP_SOBRE_COMISION_INV))
+			return null;
+		if (field.equals(IConciliable.TOTAL))
+			return pTarifaFacturaConImpuestos.getValue();
+		if (field.equals(IConciliable.TOTALAPAGAR))
+			return null;
+		if (field.equals(IConciliable.BASE_IMPONIBLE))
+			return null;
+		if (field.equals(IConciliable.CONTADO))
+			return null;
+		if (field.equals(IConciliable.IMP_SOBRE_COMISION))
+			return null;
+		if (field.equals(IConciliable.IMPUESTO_1))
+			return null;
+		if (field.equals(IConciliable.IMPUESTO_2))
+			return null;
+		if (field.equals(IConciliable.IMPUESTO_ACUM))
+			return JTools.rd(pTarifaFacturaConImpuestos.getValue() - pTarifaFactura.getValue(), 2);
+		if (field.equals(IConciliable.TARIFA))
+			return pTarifaFactura.getValue();
+		if (field.equals(IConciliable.TARJETA))
+			return null;
+		if (field.equals(IConciliable.TARJETA_BRUTO))
+			return pMontoTarjeta.getValue();
+		if (field.equals(IConciliable.CONTADO_BRUTO))
+			return JTools.rd(pTarifaFacturaConImpuestos.getValue() - pMontoTarjeta.getValue(), 2);
+		if (field.equals(IConciliable.NETO))
+			return null;
+		if (field.equals(IConciliable.COMISION_ACUM))
+			return null;
+		// if (field.equals(IConciliable.COMISION_ACUM_INV)) return null;
+		if (field.equals(IConciliable.TARIFA_SIN_COMISION))
+			return null;
+		return null;
+	}
+
+	public String getStringValue(String field) throws Exception {
+		if (field.equals(IConciliable.BOLETOS))
+			return pNumeroboleto.getValue();
+		if (field.equals(IConciliable.AEROLINEA_BOLETOS))
+			return null;
+		if (field.equals(IConciliable.BOLETOS_LARGO))
+			return null;
+		if (field.equals(IConciliable.AEROLINEA))
+			return null;// getObjCarrier()==null?null:getObjCarrier().getDescription().toUpperCase();
+		if (field.equals(IConciliable.NUMERO_TARJETA))
+			return null;// pNumeroTarjeta.getValue();
+		if (field.equals(IConciliable.OBSERVACION))
+			return null;
+		if (field.equals(IConciliable.OPERACION))
+			return null;
+		if (field.equals(IConciliable.TIPO_RUTA))
+			return null;
+		if (field.equals(IConciliable.TIPO_TARJETA))
+			return null;
+		// if (field.equals(IConciliable.FECHA)) return
+		// pDepartureDate.getValue().toLocaleString();
+		// if (field.equals(IConciliable.COMISION)) return new
+		// Double(pComisionAmount.getValue()).toString();
+		// if (field.equals(IConciliable.COMISION_OVER)) return new
+		// Double(pImporteover.getValue()).toString();
+		// if (field.equals(IConciliable.COMISION_PORC)) return new Double(
+		// pComisionPerc.getValue()).toString();
+		// if (field.equals(IConciliable.TOTAL)) return new
+		// Double(pTarifa.getValue()).toString();
+		// if (field.equals(IConciliable.BASE_IMPONIBLE)) return new
+		// Double(pTarifaBase.getValue()).toString();
+		// if (field.equals(IConciliable.CONTADO)) return null;
+		// if (field.equals(IConciliable.IMP_SOBRE_COMISION)) return null;
+		// if (field.equals(IConciliable.IMPUESTO_1)) return null;
+		// if (field.equals(IConciliable.IMPUESTO_2)) return null;
+		// if (field.equals(IConciliable.IMPUESTO_ACUM)) return null;
+		// if (field.equals(IConciliable.TARIFA)) return new
+		// Double(pTarifa.getValue()).toString();
+		// if (field.equals(IConciliable.TARJETA)) return null;
+		// if (field.equals(IConciliable.COMISION_INV)) return null;
+		// if (field.equals(IConciliable.COMISION_OVER_INV)) return null;
+		// if (field.equals(IConciliable.IMP_SOBRE_COMISION_INV)) return null;
+		// if (field.equals(IConciliable.TARJETA_BRUTO)) return null;
+		// if (field.equals(IConciliable.CONTADO_BRUTO)) return null;
+		// if (field.equals(IConciliable.NETO)) return new
+		// Double(pNeto.getValue()).toString();
+		// if (field.equals(IConciliable.COMISION_ACUM)) return null;
+		// if (field.equals(IConciliable.COMISION_ACUM_INV)) return null;
+		// if (field.equals(IConciliable.TARIFA_SIN_COMISION)) return new
+		// Double(pTarifaBase.getValue()).toString();
+		return null;
+	}
+
+	@Override
+	public void setFormato(IFormato formato) {
+
+	}
+
+	public void extractPersonas() throws Exception {
+		if (pCustomerId.isNotNull())
+			BizBSPPersona.addPersona(BizBSPPersona.CLIENTE, getCompany(), pCustomerId.getValue());
+		if (pOfficeId.isNotNull())
+			BizBSPPersona.addPersona(BizBSPPersona.SUCURSAL, getCompany(), pOfficeId.getValue());
+		if (pCentroCostos.isNotNull())
+			BizBSPPersona.addPersona(BizBSPPersona.CCOSTO, getCompany(), pCentroCostos.getValue());
+		if (pVendedor.isNotNull())
+			BizBSPPersona.addPersona(BizBSPPersona.VENDEDOR, getCompany(), pVendedor.getValue());
+		if (pNroIata.isNotNull())
+			BizBSPPersona.addPersona(BizBSPPersona.IATA, getCompany(), pNroIata.getValue());
+	}
+
+	public void assignFareFrom(BizPNRTicket t) {
+
+	}
+
+	class AuxiliarClaseCalculoSegmentos {
+		long maxTiempo = 0;
+		String airportInicio = null;
+		String airportFin = null;
+		BizPNRSegmentoAereo segmentoMaximo = null;
+		BizPNRSegmentoAereo ant = null;
+		boolean paradaLarga = false;
+		long cantSegmentos = 0;
+		long cantSegmentoIR = 0;
+		boolean international = false;
+		boolean roundTrip = false;
+		boolean hayInfoConexiones = true;
+		String ruta = "";
+		String rutaPais = "";
+		String antAep = null;
+		String antAepPais = null;
+		String bookings = "";
+		String segments = "";
+		Date fechaSalida = null;
+		JIterator<BizPNRSegmentoAereo> iter;
+		boolean yendo = true;
+		BizPNRSegmentoAereo lastSeg = null;
+		String clase = null;
+		String tipoclase = null;
+		String origen = "";
+		String destino = "";
+		String checkpais = null;
+		String firstCarrier = null;
+		JRecords<BizPNRSegmentoAereo> segmentos;
+
+		public void processAnalizeSegmentsInterno(JRecords<BizPNRSegmentoAereo> zsegmentos) throws Exception {
+			segmentos = zsegmentos;
+			if (segmentos == null) {
+				segmentos = new JRecords<BizPNRSegmentoAereo>(BizPNRSegmentoAereo.class);
+				segmentos.addFilter("company", getCompany());
+				segmentos.addFilter("interface_id", getId());
+				segmentos.toStatic();
+				segmentos.firstRecord();
+			}
+			segmentos.Ordenar("codigosegmento");
+			calculeMaxSegmento();
+			if (airportInicio == null) {
+				setInternacionalDescr(international ? "International" : "Domestic");
+				return;
+			}
+			if (airportInicio.equals(airportFin))
+				roundTrip = true;
+			armarRuta();
+			calculosVarios();
+			setRoute(ruta);
+			setImpuestosTotal(getImpuestos() + getIva());
+			setImpuestosTotalFactura(getImpuestoFactura() + getIvaFactura());
+
+			fillMercado(ruta, rutaPais, bookings, segments);
+			setBookings(cantSegmentos == 0 ? 1 : cantSegmentos);
+			setCantidadRoundTrip(/* cantSegmentoIR */roundTrip ? 2 : 1);
+			setTipoOperacion(getTipoOperacion());
+			setClase(clase);
+			setTipoClase(tipoclase);
+			setFirstCarrierInternacional(firstCarrier);
+			setDepartureDate(fechaSalida);
+			if (JDateTools.getDaysBetween(getDepartureDate(), getCreationDate()) > 10) {// hay
+				// un
+				// margen
+				// porque
+				// enconte
+				// boletos
+				// confechas
+				// de
+				// salida
+				// unos
+				// dias
+				// posteriores
+				// a
+				// la
+				// de
+				// despegue
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(getCreationDate());
+				cal.add(Calendar.YEAR, -1);
+				setCreationDate(cal.getTime());
+			}
+			if (pInternacional.isNull())
+				setInternacional(international);
+			setInternacionalDescr(international ? "International" : "Domestic");
+			setDiasCompras(getDepartureDate() == null ? 0 : JDateTools.getDaysBetween(getCreationDate(), getDepartureDate()));
+			if (getReserva() != null)
+				setPreCompras(getDepartureDate() == null ? 0 : JDateTools.getDaysBetween(getReserva(), getCreationDate()));
+			setDiasCompras(getDepartureDate() == null ? 0 : JDateTools.getDaysBetween(getCreationDate(), getDepartureDate()));
+			setDiasViajados(getArriveDate() == null || getDepartureDate() == null ? 0 : JDateTools.getDaysBetween(getDepartureDate(), getArriveDate()));
+		}
+
+		public void calculosVarios() throws Exception {
+			JOrderedMap<Long, JPair> books = JCollectionFactory.createOrderedMap();
+			long nivel = 0;
+
+			setAeropuertoOrigen(segmentos.getFirstRecord().getDespegue());
+			JIterator<BizPNRSegmentoAereo> iterS = segmentos.getStaticIterator();
+			while (iterS.hasMoreElements()) {
+				BizPNRSegmentoAereo s = iterS.nextElement();
+				s.processCalculate();
+				s.processUpdateOrInsertWithCheck();
+				origen = s.getDespegue();
+				destino = s.getArrivo();
+				segments += (segments.equals("") ? "" : ",") + "SEG-" + origen + destino;
+				if (s.getObjAeropuertoArrivo().getObjCountry() != null) {
+					if (checkpais == null)
+						checkpais = s.getObjAeropuertoDespegue().getObjCountry().GetPais();
+					String pais = BizBSPCompany.getObjBSPCompany(getCompany()).getPais();
+					String pa = s.getObjAeropuertoArrivo().getObjCountry().GetPais();
+					if (checkpais.equals("1"))
+						checkpais = "AR";
+					if (pais.equals("1"))
+						pais = "AR";
+					if (pa.equals("1"))
+						pa = "AR";
+
+					if (pais != null && !pais.equals(pa))
+						international = true;
+					if (pais != null && checkpais != null && !pais.equals(checkpais))
+						international = true;
+					if (checkpais != null && !checkpais.equals(pa))
+						international = true;
+
+					if (firstCarrier == null && international) {
+						firstCarrier = s.getCarrier();
+					}
+					if (fechaSalida == null) {
+						fechaSalida = s.getFechaDespegue();
+					}
+
+				}
+				if (s.isTipoFin()) {
+					setAeropuertoDestino(s.getArrivo());
+					setArriveDate(s.getFechaArrivo());
+				}
+				if (!origen.equals(""))
+					origen = s.getDespegue();
+				if (!s.getConnectionIndicator().equals(BizPNRSegmentoAereo.SEGMENTO_CONNECTION)) {
+					cantSegmentos++;
+					nivel++;
+					books.addElement(nivel, new JPair(origen, destino));
+				} else {
+					JPair pair = books.getElement(nivel);
+					if (pair != null)
+						pair.setSecondObject(destino);
+
+				}
+
+				long clasePrioridad = 0;
+				if (clase != null) {
+					if (clasePrioridad < s.getPrioridad()) {
+						clase = s.getClase();
+						tipoclase = s.getTipoClase();
+						clasePrioridad = s.getPrioridad();
+					}
+				} else {
+					clase = s.getClase();
+					tipoclase = s.getTipoClase();
+					clasePrioridad = s.getPrioridad();
+				}
+
+			}
+
+			JIterator<JPair> it = books.getValueIterator();
+			while (it.hasMoreElements()) {
+				JPair p = it.nextElement();
+				if (bookings.indexOf("BOK-" + ((String) p.secondObject()).toUpperCase() + ((String) p.firstObject()).toUpperCase()) == -1)
+					bookings += (bookings.equals("") ? "" : ",") + "BOK-" + ((String) p.firstObject()).toUpperCase() + ((String) p.secondObject()).toUpperCase();
+			}
+			BizAirport airportOr = getObjAeropuertoOrigen();
+			BizPaisLista paisOr = airportOr != null ? airportOr.getObjCountry() : null;
+			BizAirport airportDst = getObjAeropuertoDestino();
+			BizPaisLista paisDst = airportDst != null ? airportDst.getObjCountry() : null;
+
+			String countryCompany = getObjCompany().getCountry();
+			if (paisOr != null && paisDst != null) {
+				if (paisDst.GetPais().equals(countryCompany) && !paisOr.GetPais().equals(countryCompany)) {
+					setPaisDestino(paisOr.GetPais());
+					setPaisOrigen(paisDst.GetPais());
+				} else {
+					setPaisDestino(paisDst.GetPais());
+					setPaisOrigen(paisOr.GetPais());
+				}
+
+			}
+
+		}
+
+		public void armarRuta() throws Exception {
+			iter = segmentos.getStaticIterator();
+			while (iter.hasMoreElements()) {
+				BizPNRSegmentoAereo seg = iter.nextElement();
+				lastSeg = seg;
+				boolean isConnection = seg.getConnectionIndicator().equals(BizPNRSegmentoAereo.SEGMENTO_CONNECTION);
+				boolean isStop = seg.getConnectionIndicator().equals(BizPNRSegmentoAereo.SEGMENTO_STOP);
+
+				if (hayInfoConexiones && isStop) {
+					ruta += antAep + "|";
+					rutaPais += antAepPais + "|";
+					if ((segmentoMaximo != null && seg.getCodigoSegmento() == segmentoMaximo.getCodigoSegmento())) {
+						seg.setTipoSegmento(BizPNRSegmentoAereo.SEGMENTO_DESTINO);
+						yendo = false;
+					}
+					antAep = null;
+					antAepPais = null;
+				}
+
+				if (antAep != null && antAep.equals(seg.getDespegue()))
+					ruta += (isConnection ? antAep.toLowerCase() : antAep) + "(" + seg.getCarrier() + ")";
+				else
+					ruta += (ruta.equals("") || ruta.endsWith("|") ? "" : "|") + seg.getDespegue() + "(" + seg.getCarrier() + ")";
+
+				if (antAep != null && antAep.equals(seg.getDespegue()))
+					rutaPais += (isConnection ? antAepPais.toLowerCase() : antAepPais) + "(" + seg.getCarrier() + ")";
+				else
+					rutaPais += (rutaPais.equals("") || rutaPais.endsWith("|") ? "" : "|") + "@" + seg.getObjAeropuertoDespegue().getCountry() + "(" + seg.getCarrier() + ")";
+
+				if (!hayInfoConexiones && (segmentoMaximo != null && seg.getCodigoSegmento() == segmentoMaximo.getCodigoSegmento())) {
+					ruta += seg.getArrivo() + "|";
+					rutaPais += "@" + seg.getObjAeropuertoArrivo().getCountry() + "|";
+					if ((segmentoMaximo != null && seg.getCodigoSegmento() == segmentoMaximo.getCodigoSegmento())) {
+						seg.setTipoSegmento(BizPNRSegmentoAereo.SEGMENTO_DESTINO);
+						yendo = false;
+					}
+					antAep = null;
+					antAepPais = null;
+					cantSegmentoIR++;
+					continue;
+				}
+				seg.setTipoSegmento(yendo ? BizPNRSegmentoAereo.SEGMENTO_IDA : BizPNRSegmentoAereo.SEGMENTO_RETORNO);
+				antAep = seg.getArrivo();
+				antAepPais = "@" + seg.getObjAeropuertoArrivo().getCountry();
+				if (yendo)
+					cantSegmentoIR++;
+
+			}
+
+			if (antAep != null) {
+				ruta += antAep;
+				rutaPais += antAepPais;
+			}
+			if (lastSeg.getTipoSegmento().equals(BizPNRSegmentoAereo.SEGMENTO_IDA))
+				lastSeg.setTipoSegmento(BizPNRSegmentoAereo.SEGMENTO_DESTINO);
+
+		}
+
+		public void calculeMaxSegmento() throws Exception {
+			iter = segmentos.getStaticIterator();
+			while (iter.hasMoreElements()) {
+				BizPNRSegmentoAereo seg = iter.nextElement();
+				if (airportInicio == null)
+					airportInicio = seg.getDespegue();
+				airportFin = seg.getArrivo();
+				boolean isConnection = seg.getConnectionIndicator().equals(BizPNRSegmentoAereo.SEGMENTO_CONNECTION);
+
+				if (seg.getConnectionIndicator().equals(""))
+					hayInfoConexiones = false;
+
+				if (ant != null && ant.getFechaArrivo() != null && seg.getFechaDespegue() != null && !isConnection) {
+					Calendar arrivo = Calendar.getInstance();
+					arrivo.setTime(ant.getFechaArrivo());
+					arrivo.set(Calendar.HOUR_OF_DAY, new Integer(ant.getHoraArrivo().substring(0, ant.getHoraArrivo().indexOf(":"))));
+					arrivo.set(Calendar.MINUTE, new Integer(ant.getHoraArrivo().substring(ant.getHoraArrivo().indexOf(":") + 1)));
+					Calendar despegue = Calendar.getInstance();
+					despegue.setTime(seg.getFechaDespegue());
+					if (seg.getHoraDespegue().equals(""))
+						continue;
+					despegue.set(Calendar.HOUR_OF_DAY, new Integer(seg.getHoraDespegue().substring(0, seg.getHoraDespegue().indexOf(":"))));
+					despegue.set(Calendar.MINUTE, new Integer(seg.getHoraDespegue().substring(seg.getHoraDespegue().indexOf(":") + 1)));
+					long tiempo = despegue.getTime().getTime() - arrivo.getTime().getTime();
+					if (maxTiempo == 0 || tiempo > maxTiempo) {
+						maxTiempo = tiempo;
+
+						segmentoMaximo = ant;
+						paradaLarga = maxTiempo > 1000 * 60 * 60 * 24;// mas de
+						// un
+						// dia
+					}
+
+				}
+				ant = seg;
+
+			}
+		}
+
+		public boolean fillOneMercadoRuta(String subpatron, String tramoRuta, String tramoRutaPais) throws Exception {
+			boolean perteneceMercado = false;
+			int pos = subpatron.indexOf("-");
+			int pos2 = subpatron.indexOf("/");
+			if (pos == -1 && pos2 == -1) { // solo aeropuerto
+				if (tramoRuta.indexOf(subpatron) != -1) {
+					perteneceMercado = true;
+					return perteneceMercado;
+				}
+
+			} else { // grupo de aeropuertos
+				pos = 0;
+				int posAux = 0;
+				int posAux2 = 0;
+				int nodo = 0;
+				boolean cumple = true;
+				int despl2 = 0;
+				StringTokenizer tokDs = new StringTokenizer(subpatron, "-");
+				while (tokDs.hasMoreTokens()) {
+					String airport = tokDs.nextToken();
+					boolean find = false;
+					nodo++;
+					int nodo2 = 0;
+					if (posAux == -1) {
+						cumple = false;
+						break;
+					}
+					if (tramoRuta.length() < pos)
+						break;
+					pos = posAux;
+					despl2 = pos;
+					StringTokenizer tokNs = new StringTokenizer(tramoRuta.substring(pos), "()");
+					while (tokNs.hasMoreTokens() && !find) {
+						String airportNodo = tokNs.nextToken();
+						if (airportNodo.length() == 2) {
+							despl2 += airportNodo.length() + 2;
+							continue;
+						}
+						nodo2++;
+
+						String airportNodoPais = tramoRutaPais.substring(despl2, despl2 + airportNodo.length());
+						// EZE(AA)LHR| EZE(AA)GRU(AA)LHR|
+						if ((airport.startsWith("|[") || (airport.startsWith("["))) && (airport.endsWith("]") || airport.endsWith("]|"))) {
+							StringTokenizer tokDOps = new StringTokenizer(airport.substring(1, airport.length() - 1), ";[]");
+							boolean findOp = false;
+							boolean first = true;
+							while (tokDOps.hasMoreTokens() && !find) {
+								String airportD = tokDOps.nextToken();
+								if (airport.endsWith("|"))
+									// if (!tokDOps.hasMoreTokens() &&
+									// airport.endsWith("|"))
+									airportD += "|";
+								if (first && airport.startsWith("|"))
+									// if (airport.startsWith("|"))
+									airportD = "|" + airportD;
+								first = false;
+								if (airportD.startsWith("@")) {
+									posAux2 = airportNodoPais.indexOf(airportD);
+									if (posAux2 != -1) {
+										find = true;
+									}
+								} else {
+									posAux2 = airportNodo.indexOf(airportD);
+									if (posAux2 != -1) {
+										findOp = true;
+										break;
+									}
+								}
+							}
+							if (findOp) {
+								find = true;
+							}
+						} else if (airport.startsWith("*")) {
+
+							posAux2 += 3;
+							find = true;
+						} else if (airport.startsWith("@")) {
+							posAux2 = airportNodoPais.indexOf(airport);
+							if (posAux2 != -1) {
+								find = true;
+							}
+						} else {
+							posAux2 = airportNodo.indexOf(airport);
+							if (posAux2 != -1) {
+								find = true;
+							}
+						}
+						if (find)
+							posAux = tramoRuta.indexOf(")", despl2 + posAux2) + 1;
+
+						despl2 += airportNodo.length();
+					}
+					if (!find)
+						cumple = false;
+				}
+
+				if (cumple) {
+					PssLogger.logDebug("Patron" + subpatron + " match " + tramoRuta + " " + tramoRutaPais);
+					perteneceMercado = true;
+					return perteneceMercado;
+				}
+			}
+			return perteneceMercado;
+		}
+
+		public boolean fillOneMercado(String patron, String ruta, String rutaPais) throws Exception {
+			boolean perteneceMercado = false;
+			StringTokenizer toks = new StringTokenizer(patron, ",");
+			while (toks.hasMoreTokens() && !perteneceMercado) {
+				String tok = toks.nextToken();
+
+				int tramo = 0;
+				StringTokenizer tokRutas = new StringTokenizer(ruta, "|");
+				while (tokRutas.hasMoreTokens() && !perteneceMercado) {
+					String tramoRuta = tokRutas.nextToken();
+					String tramoRutaPais = null;
+					int tramoPais = 0;
+					StringTokenizer tokRutaPais = new StringTokenizer(rutaPais, "|");
+					while (tokRutaPais.hasMoreTokens()) {
+						tramoRutaPais = tokRutaPais.nextToken();
+						if (tramo == tramoPais) {
+							break;
+						}
+						tramoPais++;
+					}
+
+					tramo++;
+					tramoRuta = "|" + tramoRuta + "|";
+					tramoRutaPais = "|" + tramoRutaPais + "|";
+					perteneceMercado = fillOneMercadoRuta(tok, tramoRuta, tramoRutaPais);
+				}
+
+			}
+			return perteneceMercado;
+		}
+
+		public void fillMercado(String ruta, String rutaPais, String bookings, String segments) throws Exception {
+
+			PssLogger.logDebug(getCodigopnr());
+			if (getCodigopnr().equals("UCYXNK"))
+				PssLogger.logDebug("debug");
+			boolean perteneceMercado = false;
+			String market = "";
+			JRecords<BizMarket> markets = new JRecords<BizMarket>(BizMarket.class);
+			markets.addFilter("company", getCompany());
+			JIterator<BizMarket> it = markets.getStaticIterator();
+			while (it.hasMoreElements()) { // mercados
+				BizMarket mkt = it.nextElement();
+				JIterator<BizMarketDetail> itD = mkt.getDetails().getStaticIterator();
+				while (itD.hasMoreElements()) {// detalles de mercado
+					BizMarketDetail mktD = itD.nextElement();
+
+					perteneceMercado = fillOneMercado(JTools.replace(mktD.getRuta(), "\n", ""), ruta, rutaPais);
+					// ruta
+
+					if (perteneceMercado) {
+						market += (market.equals("") ? "" : ",") + mkt.getDescripcion();
+						break;
+					}
+				}
+
+				perteneceMercado = false;
+
+			}
+			if (!bookings.equals(""))
+				market += (market.equals("") ? "" : ",") + bookings;
+			if (!segments.equals(""))
+				market += (market.equals("") ? "" : ",") + segments;
+			if (!pMiniRoute.getValue().equals(""))
+				market += (market.equals("") ? "" : ",") + "TKM-" + JTools.replace(pMiniRoute.getValue(), "/", "");
+			setMarket(market);
+		}
+
+	}
+
+}

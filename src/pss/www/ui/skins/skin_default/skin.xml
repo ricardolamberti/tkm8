@@ -1,0 +1,1702 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<skin>
+<styles>
+
+  <!-- Fixed page regions stereotypes -->
+
+  <style id="application_bar" height="56">
+    <background>
+      <color value="transparent" />
+    </background>
+  </style>
+  
+
+  <style id="top_bar">
+    <padding right="20"/>
+    <foreground>
+      <content_layout halignment="right"/>
+      <color value="#FFFFFF" />
+      <font name="Tahoma" weight="bold" size="36" />
+    </foreground>
+    <background>
+      <image file="images/menu.background.gif" paint_mode="tiled" />
+    </background>
+  </style>
+
+  <style id="end_bar">
+    <background>
+      <image file="images/astor.background.gif" paint_mode="tiled" />
+    </background>
+  </style>
+	  
+  <style id="logo_bar" position="absolute" x="0" y="0" >
+	   <background>
+	      <image file="images/logo.background.gif" />
+	    </background>
+  </style>
+
+  <style id="split">
+  	<overflow type="hidden"/>
+    <background>
+      <color value="transparent" />
+    </background>
+  </style>
+  <style id="split_panel">
+  	<overflow type="auto"/>
+    <background>
+      <color value="transparent" />
+    </background>
+  </style>
+  
+  <style id="win_root_pane">
+  	<overflow type="hidden"/>
+    <background>
+      <color value="transparent" />
+    </background>
+  </style>  
+
+  <style id="logo">
+   <padding left="8"/>
+     <background>
+      <image file="images/menu.background.logo.jpg" paint_mode="tiled" />
+    </background>
+  </style>
+
+  <style id="lupa"  width="78" height="33" >
+    <foreground>
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+    </foreground>
+    <background>
+      <image file="images/lupa.gif" paint_mode="tiled"/>
+    </background>
+  </style>
+
+  <style id="calculator" position="absolute" width="300" height="230"  z="18">
+    <overflow type="visible"/>
+    <display type="block"/>
+    <foreground>
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+    </foreground>
+    <background>
+      <color value="transparent" />
+    </background>
+  </style>
+  
+  <style id="window_formlov_title" width="871" height="22">
+    <foreground>
+      <color value="#000000" />
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+    </foreground>
+    <background>
+      <image file="images/formlov.title.gif" paint_mode="tiled"/>
+    </background>
+
+  </style>  
+  <style id="window_formlov_close" width="31" height="22">
+    <overflow type="visible"/>
+    <display type="block"/>
+    <foreground>
+      <color value="#000000" />
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+    </foreground>
+    <background>
+      <image file="images/formlov.close.gif" paint_mode="tiled"/>
+    </background>
+
+  </style>
+      
+  <style id="window_formlov"   width="905" height="383">
+    <foreground>
+      <color value="#000000" />
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+    </foreground>
+    <background>
+      <image file="images/formlov.background.gif" paint_mode="tiled"/>
+    </background>
+
+  </style>
+    
+  <style id="list_box"  z="16">
+    <padding left="0" />
+    <margin left="0" />
+   <foreground>
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+    </foreground>
+      <background>
+      <color value="#F4F2D9" />
+    </background>
+  </style>
+      
+  <style id="formLovOptions">
+    <padding left="0" />
+    <margin left="0" />
+   </style>
+  
+  <style id="help"  z="20">
+    <padding left="0" />
+    <margin left="0" />
+    <foreground>
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+    </foreground>
+    <background>
+      <image file="images/help.background.gif" />
+    </background>
+  </style>
+  		<style id="expand_bar" >
+			<cursor predefined="pointer" />
+			<background>
+				<color value="#AAAAAA" />
+			</background>
+			<foreground>
+				<font name="Tahoma" style="normal" weight="bold" size="11" />
+				<font id="over" name="Tahoma" style="normal" weight="bold" size="11" />
+				<content_layout halignment="center" text_position="center"  />
+			</foreground>
+
+		</style>
+
+		<style id="urgent_message" position="absolute"  x="0" b="29" width="300" height="100" z="150">
+			<padding left="0" />
+			<margin left="0" />
+			<filter alpha="80" />
+			<foreground>
+				<font name="Verdana" style="normal" weight="normal" size="12" />
+			</foreground>
+			<background>
+				<image file="images/alert.png" />
+			</background>
+		</style>
+
+		<style id="urgent_close"   >
+			<overflow type="visible" />
+			<cursor predefined="pointer" />
+			<background>
+		       <image file="images/urg_button.png" paint_mode="no-repeat" />
+			</background>
+		</style>
+
+  <style id="help_embedded"  z="20">
+    <padding left="0" />
+    <margin left="0" />
+    <foreground>
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+    </foreground>
+    <background>
+       <image file="images/help_button.png" paint_mode="no-repeat"/>
+    </background>
+  </style>
+   <style id="help_embedded" action="active">
+    <background>
+       <image file="images/help_button_press.png" paint_mode="no-repeat"/>
+    </background>
+   </style>
+   <style id="help_embedded" action="focus">
+    <background>
+       <image file="images/help_button_press.png" paint_mode="no-repeat"/>
+    </background>
+   </style>
+ 
+  <style id="help_box" width="200" height="100"  z="150">
+    <padding left="0" />
+    <margin left="0" />
+    <filter alpha="80" />
+    <foreground>
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+    </foreground>
+    <background>
+      <image file="images/helpbox.step.background.gif" />
+    </background>
+  </style> 
+   
+  <style id="publicity"   z="100">
+   <border type="solid" thickness="1">
+      <color value="#000000"/>
+    </border>
+    <padding left="0" />
+    <margin left="0" />
+    <background>
+      <color value="transparent" />
+    </background>
+  </style>
+    
+  <style id="help_box_warning" width="200" height="100"  z="150">
+    <padding left="0" />
+    <margin left="0" />
+    <filter alpha="80" />
+    <foreground>
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+    </foreground>
+    <background>
+      <image file="images/helpbox.warning.background.gif" />
+    </background>
+  </style>  
+    
+  <style id="menu_bar" position="absolute" x="225" y="11" width="530" height="44">
+    <!--border type="solid" thickness="1">
+      <color value="#000000"/>
+    </border-->
+    <padding left="0" />
+    <margin left="0" />
+    <foreground>
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+    </foreground>
+    <background>
+      <image file="images/menu.bar.background.gif" paint_mode="tiled" />
+      <!-- color value="tranparent" OJO! si se pone tranparente el menu deja de andar en explorer/-->
+    </background>
+  </style>
+
+ <style id="gmap" >
+    <border type="solid" thickness="1">
+      <color value="#000000"/>
+    </border>
+    <foreground>
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+    </foreground>
+    <background>
+    	<color value="tranparent"/>
+    </background>
+  </style>
+
+ <style id="gmap-required" >
+    <border type="solid" thickness="1">
+      <color value="#F4F2D9"/>
+    </border>
+    <foreground>
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+    </foreground>
+    <background>
+    	<color value="tranparent"/>
+    </background>
+  </style>
+    
+    <style id="context_menu" position="absolute" width="100" height="200">
+    <padding left="1"/>
+    <border type="solid" thickness="1">
+      <color value="#000000"/>
+    </border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+    </foreground>
+    <background>
+      <color value="#FFFFFF" />
+    </background>
+  </style>
+  
+  <style id="popup_menu" width="220">
+    <padding left="1"/>
+    <border type="solid" thickness="1">
+      <color value="#000000"/>
+    </border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+    </foreground>
+    <background>
+      <color value="#FFFFFF" />
+    </background>
+  </style>
+  <style id="menu_bar_item" width="80" heigth="56">
+    <padding left="1"   />
+    <foreground>
+      <content_layout halignment="center"  text_position="bottom" text_icon_gap="0"/>
+      <color id="unselected" value="#FFFFFF" />
+      <color id="selected" value="#DDDDDD" />
+    </foreground>
+    <background>
+      <color id="unselected" value="transparent" />
+      <color id="selected" value="transparent" />
+    </background>
+  </style>
+  <style id="popup_menu_item">
+    <padding left="1"/>
+    <foreground>
+      <content_layout halignment="left" valignment="center" text_position="right" text_icon_gap="5"/>
+      <color id="unselected" value="#003E60" />
+      <color id="selected" value="#FFFFFF" />
+    </foreground>
+    <background>
+      <color id="unselected" value="#FFFFFF" />
+      <color id="selected" value="#0066CC" />
+    </background>
+  </style>
+
+
+  <style id="tree_area" >
+    <border type="none"/>
+    <foreground>
+    </foreground>
+    <background>
+      <image file="images/tree.bar.background.jpg"  scrollable="false"/>
+    </background>
+    <scroll_bar>
+      <color id="face" value="#003E60" />
+      <color id="track" value="#A2B6C3" />
+      <color id="arrow" value="#FFFFFF" />
+      <color id="highlight" value="#005081" />
+      <color id="3dlight" value="#005081" />
+      <color id="shadow" value="#002441" />
+      <color id="darkshadow" value="#002441" />
+    </scroll_bar>
+  </style>
+
+  <style id="tree" >
+    <padding left="3" top="3" right="3" bottom="3" />
+    <foreground>
+      <color id="selection" value="#003E60"/>
+    </foreground>
+    <background>
+      <color id="selection" value="#FFFFFF"/>
+    </background>
+
+    <style id="tree_folder_node">
+      <cursor predefined="pointer"/>
+      <foreground>
+	    <content_layout halignment="left" text_position="left" text_icon_gap="10" />
+        <color value="#000000" />
+        <color id="over" value="#000000" />
+        <font name="Tahoma" weight="normal" size="11" decoration="none" />
+        <font id="over" name="Tahoma" weight="normal" size="11" decoration="underline" />
+      </foreground>
+    </style>
+    <style id="tree_leave_node">
+      <cursor predefined="pointer"/>
+      <foreground>
+        <color value="#FFFFFF" />
+        <color id="over" value="#FFFFFF" />
+        <font name="Tahoma" weight="normal" size="11" decoration="none" />
+        <font id="over" name="Tahoma" weight="normal" size="11" decoration="underline" />
+      </foreground>
+    </style>x
+
+  </style>
+ <style id="view_title" >
+    <foreground>
+      <content_layout halignment="center" />
+      <font name="Verdana" weight="bold" size="14" />
+      <color value="#000000" />
+    </foreground>
+    <background>
+      <image file="images/newtitle.gif"/>
+    </background>
+  </style>
+
+  <style id="view_area_and_title">
+    <foreground>
+      <color value="#000000" />
+    </foreground>
+    <background>
+      <image file="images/login.gif" paint_mode="tiled"/>
+    </background>
+
+  </style>
+
+
+  <style id="view_area" pheight="100" pwidth="100">
+    <foreground>
+      <color value="#000000" />
+    </foreground>
+    <background>
+      <color value="transparent" />
+    </background>
+    <scroll_bar>
+      <color id="face" value="#003E60" />
+      <color id="track" value="#A2B6C3" />
+      <color id="arrow" value="#FFFFFF" />
+      <color id="highlight" value="#005081" />
+      <color id="3dlight" value="#005081" />
+      <color id="shadow" value="#002441" />
+      <color id="darkshadow" value="#002441" />
+    </scroll_bar>
+  </style>
+
+ 
+
+  <style id="graph_bg"  pheight="100" pwidth="100">
+    <overflow type="scroll"/>
+    <foreground>
+      <color value="#000000" />
+    </foreground>
+    <background>
+      <image file="images/login.gif" paint_mode="tiled"/>
+    </background>
+
+  </style>
+  <style id="waiting_pane" pwidth="100" pheight="100">
+    <foreground>
+      <content_layout halignment="center" text_position="center" text_icon_gap="15" />
+      <color value="#00000F" />
+      <font name="Verdana" style="normal" weight="bold" size="14" />
+    </foreground>
+    <background>
+      <image file="images/newtitle.waiting.gif"/>
+    </background>
+  </style>
+
+
+
+
+  <!-- style id="view_title" height="23">
+    <overflow type="visible"/>
+    <cursor predefined="pointer"/>
+     <foreground>
+      <content_layout halignment="center" />
+      <font name="Verdana" weight="bold" size="14" />
+      <color value="#000000" />
+    </foreground>
+    <background>
+	  <image file="images/title.right.background.gif" paint_mode="no-repeat top right"/>
+    </background>
+    <margin right="6"/>
+    <padding right="152"/>
+    <display type="block"/>
+    <float type="left"/>
+  </style>
+
+  <style id="view_title" height="23" inner="span">
+    <foreground>
+      <content_layout halignment="center" />
+      <font name="Verdana" weight="bold" size="14" />
+      <color value="#000000" />
+    </foreground>
+    <background>
+	  <image file="images/title.left.background.gif" paint_mode="no-repeat top left"/>
+    </background>
+    <display type="block"/>
+    <padding left="20" top="2" right="5" bottom="5"/>
+  </style-->
+
+  <style id="view_title_form_lov" width="846">
+    <foreground>
+      <content_layout halignment="center" />
+      <font name="Verdana" weight="bold" size="14" />
+      <color value="#000000" />
+    </foreground>
+    <background>
+      <color value="transparent" />
+    </background>
+  </style>
+
+
+  <style id="info_bar">
+    <border>
+      <border id="top" type="solid" thickness="2">
+        <color value="#2672CA"/>
+      </border>
+    </border>
+    <background>
+      <!--  color value="#454E8F" /-->
+      <color value="#474747" />
+    </background>
+  </style>
+
+  <style id="manufacturer_info">
+    <padding left="0"/>
+    <foreground>
+      <content_layout halignment="left" />
+    </foreground>
+  </style>
+
+  <style id="version_info">
+    <padding right="20"/>
+    <foreground>
+      <content_layout halignment="right" />
+      <font name="Tahoma" size="11" style="normal" />
+      <color value="#FFFFFF" />
+    </foreground>
+  </style>
+
+
+  <!-- Navigation bar stereotypes -->
+  <style id="navigation_bar"  width="400" height="20">
+    <padding left="25" right="2" top="0" bottom="0"/>
+    <background>
+      <image file="images/navbar.background.gif" paint_mode="tiled"/>
+    </background>
+    <foreground>
+    </foreground>
+  </style>
+		
+		<style id="navigation_bar_label" width="150" height="19">
+			<padding left="0" right="0" top="1" bottom="0" />
+			<background>
+				<color value="transparent" />
+			</background>
+			<foreground>
+				<content_layout halignment="left" />
+				<font name="Tahoma" size="11" style="normal" />
+				<color value="#FFFFFF" />
+			</foreground>
+		</style> 
+		
+  <style id="navigation_bar_patron">
+    <background>
+      <image file="images/navbar.patron.gif" paint_mode="tiled"/>
+    </background>
+    <foreground>
+    </foreground>
+  </style>
+  
+   
+  <style id="navigation_bar_link" width="24" height="19">
+    <padding left="0" right="0" top="1" bottom="0"/>
+    <cursor predefined="pointer"/>
+    <background>
+      <color value="transparent" />
+      <color id="over" value="#003E60" />
+    </background>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="bold" size="11" />
+      <font id="over" name="Tahoma" style="normal" weight="bold" size="11" />
+      <content_layout halignment="center" text_position="left" text_icon_gap="3"/>
+    </foreground>
+  </style>
+
+
+
+
+  <!-- Pss view components stereotypes -->
+  <style id="canvas">
+    <padding left="5" top="0" right="0" bottom="0"/>
+    <background>
+      <color value="transparent"/>
+    </background>
+  </style>
+
+
+  <style id="winform_bar" width="155">
+    <!--border type="outset" thickness="2"><color value="#999999"/></border-->
+    <!--padding left="2" top="3" right="0" bottom="0"/-->
+    <background>
+      <!--color value="#FFFFFF"/-->
+      <color value="transparent"/>
+    </background>
+  </style>
+
+  <style id="winform_bar_link" width="155" height="32">
+    <cursor predefined="pointer"/>
+    <padding left="4" top="6" right="0" bottom="0"/>
+    <foreground>
+      <color value="#000000" />
+      <color id="over" value="#000000" />
+      <font name="Tahoma" style="normal" weight="normal" size="11" decoration="none" />
+      <font id="over" name="Tahoma" style="normal" weight="normal" size="11" decoration="underline"/>
+      <content_layout halignment="middle" text_icon_gap="14"/>
+    </foreground>
+			<background>
+				<image file="images/action.all.gif" paint_mode="no-repeat" />
+				<image variant="f1" file="images/action.1.gif" paint_mode="no-repeat" />
+				<image variant="f2" file="images/action.2.gif" paint_mode="no-repeat" />
+				<image variant="f3" file="images/action.3.gif" paint_mode="no-repeat" />
+				<image variant="f4" file="images/action.4.gif" paint_mode="no-repeat" />
+				<image variant="f5" file="images/action.5.gif" paint_mode="no-repeat" />
+				<image variant="f6" file="images/action.6.gif" paint_mode="no-repeat" />
+				<image variant="f7" file="images/action.7.gif" paint_mode="no-repeat" />
+				<image variant="f8" file="images/action.8.gif" paint_mode="no-repeat" />
+				<image variant="f9" file="images/action.9.gif" paint_mode="no-repeat" />
+				<image variant="f10" file="images/action.10.gif" paint_mode="no-repeat" />
+				<image variant="f11" file="images/action.11.gif" paint_mode="no-repeat" />
+				<image variant="f12" file="images/action.12.gif" paint_mode="no-repeat" />
+			</background>
+	  </style>
+  <style id="winform_bar_link_i1" width="155" height="32">
+    <cursor predefined="pointer"/>
+    <padding left="4" top="6" right="0" bottom="0"/>
+    <foreground>
+      <color value="#000000" />
+      <color id="over" value="#000000" />
+      <font name="Tahoma" style="normal" weight="bold" size="11" decoration="none" />
+      <font id="over" name="Tahoma" style="normal" weight="bold" size="11" decoration="underline"/>
+      <content_layout halignment="middle" text_icon_gap="14"/>
+    </foreground>
+			<background>
+				<image file="images/action.all.gif" paint_mode="no-repeat" />
+				<image variant="f1" file="images/action.1.gif" paint_mode="no-repeat" />
+				<image variant="f2" file="images/action.2.gif" paint_mode="no-repeat" />
+				<image variant="f3" file="images/action.3.gif" paint_mode="no-repeat" />
+				<image variant="f4" file="images/action.4.gif" paint_mode="no-repeat" />
+				<image variant="f5" file="images/action.5.gif" paint_mode="no-repeat" />
+				<image variant="f6" file="images/action.6.gif" paint_mode="no-repeat" />
+				<image variant="f7" file="images/action.7.gif" paint_mode="no-repeat" />
+				<image variant="f8" file="images/action.8.gif" paint_mode="no-repeat" />
+				<image variant="f9" file="images/action.9.gif" paint_mode="no-repeat" />
+				<image variant="f10" file="images/action.10.gif" paint_mode="no-repeat" />
+				<image variant="f11" file="images/action.11.gif" paint_mode="no-repeat" />
+				<image variant="f12" file="images/action.12.gif" paint_mode="no-repeat" />
+			</background>
+	  </style>
+   
+  <style id="winform_bar_link" width="155" height="32" action="active">
+    <background>
+       <image file="images/action.press.gif" paint_mode="no-repeat"/>
+    </background>
+  </style>
+  <style id="winform_bar_link" width="155" height="32" action="focus">
+    <background>
+       <image file="images/action.press.gif" paint_mode="no-repeat"/>
+    </background>
+  </style>
+ 
+
+  <style id="win_form_error">
+    <border type="outset" thickness="2"><color value="#2D5B28"/></border>
+    <padding left="1" top="1" right="1" bottom="1"/>
+    <background>
+      <color value="#FFFFFF" />
+    </background>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#FF0000" />
+    </foreground>
+  </style>
+
+  <style id="win_form_border">
+    <border>
+       <border id="right" type="outset" thickness="1"><color value="#0063BE"/></border>
+       <border id="left" type="outset" thickness="1"><color value="#0063BE"/></border>
+       <border id="top" type="outset" thickness="1"><color value="#0063BE"/></border>
+	   <border id="bottom" type="outset" thickness="1"><color value="#0063BE"/></border>
+    </border>
+    <background>
+      <image file="images/form.border.gif" paint_mode="tiled"/>
+    </background>
+  </style>
+
+  <style id="win_list_border">
+    <border>
+       <border id="right" type="outset" thickness="1"><color value="#0063BE"/></border>
+       <border id="left" type="outset" thickness="1"><color value="#0063BE"/></border>
+       <border id="top" type="outset" thickness="1"><color value="#0063BE"/></border>
+	   <border id="bottom" type="outset" thickness="1"><color value="#0063BE"/></border>
+    </border>
+    <!-- padding left="13" top="13" right="13" bottom="13"/-->
+    <background>
+      <image file="images/form.border.gif" paint_mode="tiled"/>
+    </background>
+  </style>
+
+  <style id="win_list_border_embedded">
+    <border>
+       <border id="right" type="outset" thickness="1"><color value="#0063BE"/></border>
+       <border id="left" type="outset" thickness="1"><color value="#0063BE"/></border>
+       <border id="top" type="outset" thickness="1"><color value="#0063BE"/></border>
+	   <border id="bottom" type="outset" thickness="1"><color value="#0063BE"/></border>
+    </border>
+    <background>
+      <image file="images/form.border.gif" paint_mode="tiled"/>
+    </background>
+  </style>
+
+  <style id="win_form">
+    <border>
+       <border id="right" type="outset" thickness="1"><color value="#9D9D9D"/></border>
+       <border id="left" type="outset" thickness="1"><color value="#9D9D9D"/></border>
+       <border id="top" type="outset" thickness="1"><color value="#9D9D9D"/></border>
+	   <border id="bottom" type="outset" thickness="1"><color value="#9D9D9D"/></border>
+    </border>
+    <!--padding left="4" top="4" right="4" bottom="4"/-->
+    <background>
+      <color value="#E2E2E2" />
+      <!--image file="images/form.background.gif" paint_mode="tiled"/-->
+      <!--color value="transparent" /-->
+    </background>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#003E60" />
+    </foreground>
+  </style>
+
+  <style id="win_form_embedded">
+    <overflow type="auto"/>
+    <background>
+      <color value="transparent"/>
+    </background>
+  </style>
+
+  <style id="winlist_bar" width="155">
+    <!--border type="outset" thickness="1"><color value="#555555"/></border-->
+    <!-- padding left="2" top="3" right="0" bottom="0"/-->
+    <background>
+      <!--color value="#FFFFFF"/-->
+      <color value="transparent"/>
+    </background>
+  </style>
+
+  <style id="winlist_bar_link" width="155" height="32">
+    <!--border>
+      <border type="outset" thickness="2"><color value="#558FB5"/></border>
+    </border-->
+    <cursor predefined="pointer"/>
+     <padding left="4" top="6" right="0" bottom="0"/>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <font id="over" name="Tahoma" style="normal" weight="bold" size="11" decoration="underline" />
+      <content_layout halignment="middle" text_icon_gap="14"/>
+    </foreground>
+    <background>
+       <image file="images/action.all.gif" paint_mode="no-repeat"/>
+    </background>
+  </style>
+  <style id="winlist_bar_link" width="155" height="32" action="active">
+    <background>
+       <image file="images/action.press.gif" paint_mode="no-repeat"/>
+    </background>
+  </style>
+  <style id="winlist_bar_link" width="155" height="32" action="focus">
+    <background>
+       <image file="images/action.press.gif" paint_mode="no-repeat"/>
+    </background>
+  </style>
+
+  <style id="winlist_bar_win_link" width="155" height="32">
+    <!--border>
+      <border type="outset" thickness="2"><color value="#558FB5"/></border>
+    </border-->
+    <cursor predefined="pointer"/>
+     <padding left="4" top="6" right="0" bottom="0"/>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <font id="over" name="Tahoma" style="normal" weight="bold" size="11" decoration="underline" />
+      <content_layout halignment="middle" text_icon_gap="14"/>
+    </foreground>
+    <background>
+       <image file="images/action.wins.gif" paint_mode="no-repeat"/>
+    </background>
+  </style>
+
+  <style id="winlist_bar_win_link" width="155" height="32" action="active">
+    <background>
+       <image file="images/action.wins.press.gif" paint_mode="no-repeat"/>
+    </background>
+  </style>
+  <style id="winlist_bar_win_link" width="155" height="32" action="focus">
+    <background>
+       <image file="images/action.wins.press.gif" paint_mode="no-repeat"/>
+    </background>
+  </style>
+  
+  <style id="winlist_bar_embedded" height="30">
+    <border>
+       <border id="bottom" type="outset" thickness="1"><color value="#AEACAD"/></border>
+    </border>
+    <!-- padding left="3" top="2" right="0" bottom="2"/-->
+    <background>
+      <color value="#FFFFFF"/>
+    </background>
+  </style>
+
+  <style id="winlist_bar_link_embedded" width="26" height="24">
+    <!--border type="outset" thickness="1"><color value="#558FB5"/></border-->
+    <cursor predefined="pointer"/>
+    <padding left="0" top="3" right="0" bottom="0"/>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="bold" size="11" />
+      <font id="over" name="Tahoma" style="normal" weight="bold" size="11" />
+      <content_layout halignment="center"/>
+    </foreground>
+    <background>
+      <!--color value="#FFFFFF"/-->
+      <color value="transparent"/>
+    </background>
+  </style>
+
+  <style id="win_list_filters" height="3">
+    <border>
+       <border id="right" type="outset" thickness="1"><color value="#9D9D9D"/></border>
+       <border id="left" type="outset" thickness="1"><color value="#9D9D9D"/></border>
+       <border id="top" type="outset" thickness="1"><color value="#9D9D9D"/></border>
+    </border>
+    <!-- padding left="3" top="3" right="0" bottom="4"/-->
+    <foreground>
+      <color value="003E60"/>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+    </foreground>
+    <background>
+     <color value="#E2E2E2"/>
+     </background>
+  </style>
+
+  <style id="win_list_filters_item" height="30">
+    <padding left="0" top="2" right="0" bottom="2"/>
+    <foreground>
+      <color value="003E60"/>
+    </foreground>
+    <background>
+      <color value="transparent"/>
+    </background>
+  </style>
+
+  <style id="win_list_filters_label" >
+    <foreground>
+      <font name="Tahoma" style="italic" weight="normal" size="11" />
+      <color value="#000000" />
+    </foreground>
+  </style>
+    
+  <style id="win_list">
+    <border>
+       <border id="right" type="outset" thickness="1"><color value="#AEACAD"/></border>
+       <border id="left" type="outset" thickness="1"><color value="#AEACAD"/></border>
+	   <border id="bottom" type="outset" thickness="1"><color value="#AEACAD"/></border>
+    </border>
+     <background>
+          <image file="images/list.background.gif" paint_mode="tiled"/>
+      <!--  color value="#FFFFFF"/-->
+    </background>
+    <!-- padding left="3" top="3" right="0" bottom="4"/-->
+    <scroll_bar>
+      <color id="face" value="#003E60" />
+      <color id="track" value="#A2B6C3" />
+      <color id="arrow" value="#FFFFFF" />
+      <color id="highlight" value="#005081" />
+      <color id="3dlight" value="#005081" />
+      <color id="shadow" value="#002441" />
+      <color id="darkshadow" value="#002441" />
+    </scroll_bar>
+  </style>
+
+  <style id="win_list_bg_header" width="5">
+    <overflow type="visible"/>
+    <background>
+          <image file="images/list.header.sombra.gif" paint_mode="vtiled"/>
+    </background>
+  </style>
+
+  <style id="win_list_background" width="5">
+    <background>
+          <image file="images/list.background.sombra.gif" paint_mode="vtiled"/>
+    </background>
+  </style>
+
+  <style id="win_list_table">
+    <!-- padding left="0" top="3" right="0" bottom="0"/-->
+    <border type="solid" thickness="1">
+      <color value="#003E60" />
+      <border id="right" type="none"/>
+    </border>
+    <foreground>
+      <color value="#003E60"/>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+    </foreground>
+    <background>
+      <color value="transparent"/>
+    </background>
+
+    <style id="win_list_table_header" height="20">
+        <overflow type="visible"/>
+    
+      <style id="win_list_table_header_cell" height="20">
+        <padding left="4" right="4" />
+        <border>
+          <border id="right" type="solid" thickness="1"><color value="#79A4D7"/></border>
+          <border id="bottom" type="solid" thickness="1"><color value="#79A4D7"/></border>
+        </border>
+        <foreground>
+          <content_layout word_wrap="true" />
+          <color value="#FFFFFF"/>
+          <font name="Verdana" style="normal" weight="bold" size="11" />
+        </foreground>
+        <background>
+          <!--color value="#0066CC" /-->
+          <image file="images/list.cell.header.gif" paint_mode="htiled"/>
+        </background>
+      </style>
+    </style>
+
+    <style id="win_list_table_row_impar" height="20">
+        <overflow type="visible"/>
+      <foreground>
+        <color value="#003E60"/>
+        <font name="Tahoma" style="normal" weight="normal" size="11" />
+      </foreground>
+      <background>
+        <color value="#FFFFFF"/>
+      </background>
+      <style id="win_list_table_row_cell" height="20">
+        <padding left="4" right="4" />
+        <border>
+          <border id="right" type="solid" thickness="1"><color value="#555555"/></border>
+          <border id="bottom" type="solid" thickness="1"><color value="#CCCCCC"/></border>
+        </border>
+        <!-- background>
+          <color value="transparent"/>
+        </background-->
+        <foreground>
+          <font name="Tahoma" style="normal" weight="normal" size="11" />
+          <color value="#000000"/>
+          <content_layout word_wrap="false" />
+        </foreground>
+      </style>
+      <style id="win_list_table_row_marked_cell" height="20">
+        <padding left="4" right="4" />
+        <border>
+          <border id="right" type="solid" thickness="1"><color value="#555555"/></border>
+          <border id="bottom" type="solid" thickness="1"><color value="#929292"/></border>
+        </border>
+        <foreground>
+          <color value="#FFFFFF"/>
+          <font name="Tahoma" style="normal" weight="normal" size="11" />
+          <content_layout word_wrap="false" />
+        </foreground>
+        <background>
+          <color value="#225F82"/>
+        </background>
+      </style>
+    </style>
+
+    <style id="win_list_table_row" height="20">
+        <overflow type="visible"/>
+      <foreground>
+        <color value="#003E60"/>
+        <font name="Tahoma" style="normal" weight="normal" size="11" />
+      </foreground>
+      <background>
+        <color value="#EEEEEE"/>
+      </background>
+      
+      <style id="win_list_table_row_cell" height="20">
+        <padding left="4" right="4" />
+        <border>
+          <border id="right" type="solid" thickness="1"><color value="#555555"/></border>
+          <border id="bottom" type="solid" thickness="1"><color value="#CCCCCC"/></border>
+        </border>
+        <!-- background>
+          <color value="transparent"/>
+        </background-->
+        <foreground>
+          <font name="Tahoma" style="normal" weight="normal" size="11" />
+          <color value="#000000"/>
+          <content_layout word_wrap="false" />
+        </foreground>
+      </style>
+      
+      <style id="win_list_table_row_marked_cell" height="20">
+        <padding left="4" right="4" />
+        <border>
+          <border id="right" type="solid" thickness="1"><color value="#555555"/></border>
+          <border id="bottom" type="solid" thickness="1"><color value="#929292"/></border>
+        </border>
+        <foreground>
+          <color value="#FFFFFF"/>
+          <font name="Tahoma" style="normal" weight="normal" size="11" />
+          <content_layout word_wrap="false" />
+        </foreground>
+        <background>
+          <color value="#225F82"/>
+        </background>
+      </style>
+    </style>
+
+  </style>
+
+  <style id="win_list_navigation_bar" height="20">
+    <padding left="1" top="0" right="4" bottom="0"/>
+   <border>
+       <border id="top" type="outset" thickness="1"><color value="#AEACAD"/></border>
+    </border>
+      <foreground>
+      <color value="#003E60"/>
+    </foreground>
+         <background>
+          <image file="images/list.cell.footer.gif" paint_mode="htiled"/>
+        </background>
+     </style>
+
+  <style id="win_list_navigation_bar_link" width="17" height="17">
+    <cursor predefined="pointer"/>
+    <padding left="0" top="0" right="0" bottom="0"/>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="bold" size="11" />
+      <font id="over" name="Tahoma" style="normal" weight="bold" size="11" />
+      <color value="#003E60" />
+      <color id="over" value="#003E60" />
+      <content_layout halignment="center"/>
+    </foreground>
+    <background>
+      <color value="transparent"/>
+    </background>
+  </style>
+
+
+  <style id="win_list_navigation_bar_label">
+    <padding left="0" top="3" right="20" bottom="0"/>
+    <foreground>
+      <font name="Verdana" style="normal" weight="normal" size="9" />
+      <color value="#FFFFFF" />
+      <content_layout halignment="right" text_position="right" text_icon_gap="4"/>
+    </foreground>
+  </style>
+
+
+
+  <!-- Generic view components stereotypes -->
+
+  <style id="label" height="20">
+    <foreground>
+      <font name="Verdana" style="normal" weight="bold" size="11" letter-spacing="-1"/>
+      <content_layout halignment="left" text_position="right" text_icon_gap="4"/>
+      <color value="#000000" />
+    </foreground>
+    <padding top="3"/>
+  </style>
+
+  <style id="text_field" height="22">
+    <content_layout valignment="middle" />
+    <cursor predefined="default"/>
+    <border type="solid" thickness="1"><color value="#C6C5C9"/></border>
+<!--    <border id="top" thickness="2"><color value="#336F93"/></border>
+    <border id="left" thickness="2"><color value="#336F93"/></border>
+    <border id="right" thickness="2"><color value="#001C40"/></border>
+    <border id="bottom" thickness="2"><color value="#C6C5C9"/></border>
+    -->
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#000000" />
+       <icon file="images/widgets/calculator.gif"/>
+    </foreground>
+    <background>
+      <color value="#E2E2E2" />
+      <!--image file="images/list.cell.par.normal.gif" paint_mode="htiled"/-->
+      <!-- color value="transparent" /-->
+    </background>
+    <padding top="2" left="3"/>
+  </style>
+		<style id="text_label" >
+			<content_layout valignment="middle" />
+			<cursor predefined="default" />
+			<border type="solid" thickness="1">
+				<color value="transparent" />
+			</border>
+			<foreground>
+				<font name="Tahoma" style="normal" weight="normal" size="12" />
+				<color value="#000000" />
+			</foreground>
+			<background>
+				<color value="transparent" />
+ 			</background>
+			<padding top="2" left="3" />
+		</style>
+
+  <style id="text_field-edit-required" height="22">
+    <content_layout valignment="middle" />
+    <cursor predefined="text"/>
+    <!--border type="solid" thickness="1"><color value="#003E60"/></border-->
+    <border id="top" thickness="2"><color value="#336F93"/></border>
+    <border id="left" thickness="2"><color value="#336F93"/></border>
+    <border id="right" thickness="2"><color value="#001C40"/></border>
+    <border id="bottom" thickness="2"><color value="#001C40"/></border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#000000" />
+      <icon file="images/widgets/datechooser.gif"/>
+    </foreground>
+    <background>
+      <color value="#F4F2D9" />
+    </background>
+    <padding top="2" left="3"/>
+  </style>
+
+  <style id="text_field-edit" height="22">
+    <content_layout valignment="middle" />
+    <cursor predefined="text"/>
+    <!--border type="solid" thickness="1"><color value="#003E60"/></border-->
+    <border id="top" thickness="2"><color value="#336F93"/></border>
+    <border id="left" thickness="2"><color value="#336F93"/></border>
+    <border id="right" thickness="2"><color value="#001C40"/></border>
+    <border id="bottom" thickness="2"><color value="#001C40"/></border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#000000" />
+      <icon file="images/widgets/datechooser.gif"/>
+    </foreground>
+    <background>
+      <color value="#FFFFFF" />
+    </background>
+    <padding top="2" left="3"/>
+  </style>
+  <style id="color_field" height="22">
+    <content_layout valignment="middle" />
+    <cursor predefined="default"/>
+    <border type="solid" thickness="1"><color value="#C6C5C9"/></border>
+<!--    <border id="top" thickness="2"><color value="#336F93"/></border>
+    <border id="left" thickness="2"><color value="#336F93"/></border>
+    <border id="right" thickness="2"><color value="#001C40"/></border>
+    <border id="bottom" thickness="2"><color value="#C6C5C9"/></border>
+    -->
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#000000" />
+       <icon file="images/widgets/calculator.gif"/>
+    </foreground>
+    <background>
+      <color value="#E2E2E2" />
+      <!--image file="images/list.cell.par.normal.gif" paint_mode="htiled"/-->
+      <!-- color value="transparent" /-->
+    </background>
+    <padding top="2" left="3"/>
+  </style>
+
+
+  <style id="color_field-edit-required" height="22">
+    <content_layout valignment="middle" />
+    <cursor predefined="text"/>
+    <!--border type="solid" thickness="1"><color value="#003E60"/></border-->
+    <border id="top" thickness="2"><color value="#336F93"/></border>
+    <border id="left" thickness="2"><color value="#336F93"/></border>
+    <border id="right" thickness="2"><color value="#001C40"/></border>
+    <border id="bottom" thickness="2"><color value="#001C40"/></border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#000000" />
+      <icon file="images/widgets/datechooser.gif"/>
+    </foreground>
+    <background>
+      <color value="#F4F2D9" />
+    </background>
+    <padding top="2" left="3"/>
+  </style>
+
+  <style id="color_field-edit" height="22">
+    <content_layout valignment="middle" />
+    <cursor predefined="text"/>
+    <!--border type="solid" thickness="1"><color value="#003E60"/></border-->
+    <border id="top" thickness="2"><color value="#336F93"/></border>
+    <border id="left" thickness="2"><color value="#336F93"/></border>
+    <border id="right" thickness="2"><color value="#001C40"/></border>
+    <border id="bottom" thickness="2"><color value="#001C40"/></border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#000000" />
+      <icon file="images/widgets/datechooser.gif"/>
+    </foreground>
+    <background>
+      <color value="#FFFFFF" />
+    </background>
+    <padding top="2" left="3"/>
+  </style>
+
+  <style id="form_lov_button" height="23">
+    <cursor predefined="pointer"/>
+    <border type="solid">
+      <border id="top" thickness="2"><color value="#336F93"/></border>
+      <border id="left" thickness="2"><color value="#336F93"/></border>
+      <border id="right" thickness="2"><color value="#001C40"/></border>
+      <border id="bottom" thickness="2"><color value="#001C40"/></border>
+    </border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="bold" size="11" />
+      <font id="over" name="Tahoma" style="normal" weight="bold" size="11" />
+      <color value="#000000" />
+      <color id="over" value="#CCCCCC" />
+      <content_layout halignment="center"/>
+    </foreground>
+    <background>
+      <color value="#006083"/>
+    </background>
+  </style>
+
+
+ 
+ <style id="form_lov_button_clear" height="23" >
+    </style>
+
+   <style id="form_lov_button_clear" height="23"   action="active">
+   </style>
+
+  <style id="form_lov_button_clear" height="23"  inner="span">
+    <cursor predefined="pointer"/>
+    <background>
+	  <image file="images/formlov.clear.gif"  paint_mode="no-repeat top right"/>
+    </background>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="bold" size="11" decoration="none"/>
+      <font id="over" name="Tahoma" style="normal" weight="bold" size="11" />
+      <color value="#FFFFFF" />
+      <color id="over" value="#FFFFFF" />
+      <content_layout halignment="center"/>
+    </foreground>
+    <padding right="23"/>
+    <display type="block"/>
+    <float type="left"/>
+  </style>
+
+  <style id="form_lov_button_clear" height="23" inner="span" action="active">
+     <cursor predefined="pointer"/>
+    <padding right="22"/>
+    <display type="block"/>
+    <float type="left"/>
+ </style>
+  
+ <style id="form_lov_button_open" height="23" >
+  </style>
+
+   <style id="form_lov_button_open" height="23"   action="active">
+   </style>
+   
+  <style id="form_lov_button_open" height="23" inner="span" >
+    <cursor predefined="pointer"/>
+    <background>
+	  <image file="images/formlov.edit.gif" paint_mode="no-repeat top right"/>
+    </background>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="bold" size="11" decoration="none"/>
+      <font id="over" name="Tahoma" style="normal" weight="bold" size="11" />
+      <color value="#FFFFFF" />
+      <color id="over" value="#FFFFFF" />
+      <content_layout halignment="center"/>
+    </foreground>
+    <padding right="23"/>
+    <display type="block"/>
+    <float type="left"/>
+  </style>
+
+  <style id="form_lov_button_open" height="23"  inner="span" action="active">
+    <cursor predefined="pointer"/>
+
+      <padding right="22"/>
+    <display type="block"/>
+    <float type="left"/>
+   </style>
+
+  <style id="datetime_chooser-edit-required" width="100" height="22" >
+    <content_layout valignment="middle" />
+    <cursor predefined="text"/>
+    <border type="solid" thickness="1"><color value="#003E60"/></border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#003E60" />
+      <icon file="images/widgets/datetimechooser.gif"/>
+    </foreground>
+    <background>
+      <color value="#F4F2D9" />
+    </background>
+  </style>
+
+  <style id="datetime_chooser-edit" width="100" height="22" >
+    <content_layout valignment="middle" />
+    <cursor predefined="text"/>
+    <border type="solid" thickness="1"><color value="#003E60"/></border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#003E60" />
+      <icon file="images/widgets/datetimechooser.gif"/>
+    </foreground>
+    <background>
+      <color value="#E2E2E2" />
+    </background>
+  </style>
+
+  <style id="datetime_chooser" width="100" height="22" >
+    <content_layout valignment="middle" />
+    <cursor predefined="text"/>
+    <border type="solid" thickness="1"><color value="#003E60"/></border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#003E60" />
+      <icon file="images/widgets/datetimechooser.gif"/>
+    </foreground>
+    <background>
+      <color value="#FFFFFF" />
+    </background>
+  </style>
+
+  <style id="date_chooser-edit-required" width="100" height="22" >
+    <content_layout valignment="middle" />
+    <cursor predefined="text"/>
+    <border type="solid" thickness="1"><color value="#003E60"/></border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#003E60" />
+      <icon file="images/widgets/datechooser.gif"/>
+    </foreground>
+    <background>
+      <color value="#F4F2D9" />
+    </background>
+  </style>
+
+  <style id="date_chooser-edit" width="100" height="22" >
+    <content_layout valignment="middle" />
+    <cursor predefined="text"/>
+    <border type="solid" thickness="1"><color value="#003E60"/></border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#003E60" />
+      <icon file="images/widgets/datechooser.gif"/>
+    </foreground>
+    <background>
+      <color value="#E2E2E2" />
+    </background>
+  </style>
+
+  <style id="date_chooser" width="100" height="22" >
+    <content_layout valignment="middle" />
+    <cursor predefined="text"/>
+    <border type="solid" thickness="1"><color value="#003E60"/></border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#003E60" />
+      <icon file="images/widgets/datechooser.gif"/>
+    </foreground>
+    <background>
+      <color value="#FFFFFF" />
+    </background>
+  </style>
+
+  <style id="text_area">
+	<overflow type="auto"/>
+    <content_layout valignment="middle" />
+    <cursor predefined="default"/>
+    <border type="solid" thickness="1"><color value="#C6C5C9"/></border>
+    <!--
+    <border id="top" thickness="2"><color value="#336F93"/></border>
+    <border id="left" thickness="2"><color value="#336F93"/></border>
+    <border id="right" thickness="2"><color value="#001C40"/></border>
+    <border id="bottom" thickness="2"><color value="#001C40"/></border>
+    -->
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#336F93" />
+    </foreground>
+    <background>
+      <color value="#E2E2E2" />
+    </background>
+  </style>
+
+  <style id="text_area-edit-required">
+	<overflow type="auto"/>
+    <content_layout valignment="middle" />
+    <cursor predefined="text"/>
+    <border id="top" thickness="2"><color value="#336F93"/></border>
+    <border id="left" thickness="2"><color value="#336F93"/></border>
+    <border id="right" thickness="2"><color value="#001C40"/></border>
+    <border id="bottom" thickness="2"><color value="#001C40"/></border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#003E60" />
+    </foreground>
+    <background>
+      <color value="#F4F2D9" />
+    </background>
+  </style>
+
+  <style id="text_area-edit">
+	<overflow type="auto"/>
+    <content_layout valignment="middle" />
+    <cursor predefined="text"/>
+    <border id="top" thickness="2"><color value="#336F93"/></border>
+    <border id="left" thickness="2"><color value="#336F93"/></border>
+    <border id="right" thickness="2"><color value="#001C40"/></border>
+    <border id="bottom" thickness="2"><color value="#001C40"/></border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#003E60" />
+    </foreground>
+    <background>
+      <color value="#FFFFFF" />
+    </background>
+  </style>
+  
+  
+   <style id="check_box">
+    <cursor predefined="pointer"/>
+    <foreground>
+      <font name="Tahoma" style="italic" weight="normal" size="11" />
+      <color value="#000000"/>
+    </foreground>
+  </style>
+  
+   <style id="check_box-edit">
+    <cursor predefined="pointer"/>
+    <foreground>
+      <font name="Tahoma" style="italic" weight="normal" size="11" />
+      <color value="#000000"/>
+    </foreground>
+  </style>
+  
+  <style id="check_box-edit-required">
+    <cursor predefined="pointer"/>
+    <foreground>
+      <font name="Tahoma" style="italic" weight="normal" size="11" />
+      <color value="#000000"/>
+    </foreground>
+  </style>
+
+
+  <style id="combo_box" height="40" width="100">
+    <cursor predefined="pointer"/>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#000000" />
+    </foreground>
+    <background>
+      <color value="#E2E2E2" />
+    </background>
+  </style>
+
+  <style id="combo_box-edit" height="40" width="100">
+    <cursor predefined="pointer"/>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#000000" />
+    </foreground>
+    <background>
+      <color value="#FFFFFF" />
+    </background>
+  </style>
+
+  <style id="combo_box-edit-required" height="40" width="100">
+    <cursor predefined="pointer"/>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#000000" />
+    </foreground>
+    <background>
+      <color value="#F4F2D9" />
+    </background>
+  </style>
+
+
+  <style id="radio_button_set-required" z="10">
+    <cursor predefined="pointer"/>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#000000" />
+    </foreground>
+    <background>
+    </background>
+  </style>
+  
+  <style id="radio_button_set"  z="10">
+    <cursor predefined="pointer"/>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#000000" />
+    </foreground>
+    <background>
+    </background>
+  </style>
+
+  <style id="view">
+    <background>
+      <!--color value="#003E60" /-->
+      <color value="#FFFFFF" />
+    </background>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#003E60" />
+    </foreground>
+  </style>
+
+  <style id="form">
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#003E60" />
+    </foreground>
+  </style>
+  
+  <style id="message_panel">
+    <foreground>
+      <font name="Verdana" weight="900" style="normal" size="10" />
+      <color value="#000000" />
+    </foreground>
+    <background>
+      <image file="images/titled.error.panel.gif" paint_mode="tiled"/>
+    </background>
+  </style>
+  
+  <style id="titled_panel_psw">
+   <padding left="6" top="6" right="0" bottom="0"/>
+    <foreground>
+      <font name="Verdana" weight="900" style="normal" size="10" />
+      <color value="#000000" />
+    </foreground>
+    <background>
+      <image file="images/titled.psw.panel.gif" paint_mode="tiled"/>
+    </background>
+  </style>
+
+  <style id="titled_panel">
+   <padding left="6" top="6" right="0" bottom="0"/>
+    <foreground>
+      <font name="Verdana" weight="900" style="normal" size="10" />
+      <color value="#000000" />
+    </foreground>
+    <background>
+      <image file="images/titled.panel.gif" paint_mode="tiled"/>
+    </background>
+  </style>
+  
+  <style id="titled_panel_label" height="20">
+<!--    <padding left="4" top="2" right="4" bottom="2"/>
+    <background>
+      <color value="#003E60" />
+    </background>-->
+    <foreground>
+      <font name="Verdana" style="normal" weight="900" size="11" />
+      <color value="#FFFFFF" />
+      <content_layout halignment="left" text_position="right" text_icon_gap="5"/>
+    </foreground>
+  </style>
+
+
+  <style id="link" height="24">
+    <cursor predefined="pointer"/>
+    <padding left="4" top="4" right="4" bottom="4"/>
+    <border type="solid">
+      <border id="top" thickness="2"><color value="#336F93"/></border>
+      <border id="left" thickness="2"><color value="#336F93"/></border>
+      <border id="right" thickness="2"><color value="#001C40"/></border>
+      <border id="bottom" thickness="2"><color value="#001C40"/></border>
+    </border>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="bold" size="11" />
+      <font id="over" name="Tahoma" style="normal" weight="bold" size="13" />
+      <color value="#FFFFFF" />
+      <color id="over" value="#FFFFFF" />
+      <content_layout halignment="center"/>
+    </foreground>
+    <background>
+      <color value="#006083"/>
+    </background>
+  </style>
+
+  <style id="hotspot">
+    <cursor predefined="pointer"/>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="bold" size="11" />
+      <color value="#CCCCCC" />
+    </foreground>
+  </style>
+	
+
+  <style id="web_button" height="25">
+    <overflow type="visible"/>
+    <cursor predefined="pointer"/>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="bold" size="11" decoration="none"/>
+      <font id="over" name="Tahoma" style="normal" weight="bold" size="11" />
+      <color value="#FFFFFF" />
+      <color id="over" value="#FFFFFF" />
+      <content_layout halignment="center"/>
+    </foreground>
+    <background>
+	  <image file="images/button.right.gif" paint_mode="no-repeat top right"/>
+    </background>
+    <margin right="6"/>
+    <padding right="13"/>
+    <display type="block"/>
+    <float type="left"/>
+  </style>
+
+   <style id="web_button" height="25" action="active">
+    <!-- background>
+	  <image file="images/button.right.gif" paint_mode="no-repeat bottom right"/>
+    </background-->
+   </style>
+
+  <style id="web_button" height="25" inner="span">
+    <cursor predefined="pointer"/>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="bold" size="11" />
+      <font id="over" name="Tahoma" style="normal" weight="bold" size="11" />
+      <color value="#FFFFFF" />
+      <color id="over" value="#FFFFFF" />
+      <content_layout halignment="center"/>
+    </foreground>
+    <background>
+	  <image file="images/button.left.gif" paint_mode="no-repeat top left"/>
+    </background>
+    <display type="block"/>
+     <padding left="20" top="2" right="5" bottom="5"/>
+  </style>
+
+  <style id="web_button" height="25" inner="span" action="active">
+   <!-- background>
+	  <image file="images/button.left.gif" paint_mode="no-repeat bottom left"/>
+    </background-->
+    <padding left="20" top="5" right="5" bottom="5"/>
+  </style>
+
+
+  <style id="notebook" tab_height="30">
+  </style>
+
+  <style id="notebook_tab_area" height="30" width="30">
+  </style>
+
+  <style id="notebook_page_area" >
+    <!-- padding left="0" top="0" right="0" bottom="0"/-->
+    <border type="outset" thickness="1"><color value="#000000" /></border>
+    <!--border type="solid">
+      <border id="top" thickness="1" type="none" />
+      <border id="left" thickness="2"><color value="#FFFFFF"/></border>
+      <border id="right" thickness="2"><color value="#FFFFFF"/></border>
+      <border id="bottom" thickness="2"><color value="#FFFFFF"/></border>
+    </border-->
+    <foreground>
+      <color value="#CCCCCC"/>
+    </foreground>
+
+  </style>
+
+
+  <style id="notebook_tab" height="32" width="150">
+    <padding left="0" top="6" right="0" bottom="0"/>
+    <cursor predefined="pointer"/>
+    
+    <!--border type="solid" thickness="2">
+      <border id="bottom" type="none" />
+      <border id="top" thickness="2"><color value="#001C40"/></border>
+      <border id="left" thickness="2"><color value="#001C40"/></border>
+      <border id="right" thickness="2"><color value="#001C40"/></border>
+    </border-->
+    <!--border id="selected" type="solid" thickness="2">
+      <border id="bottom" type="none" />
+      <border id="top" thickness="2"><color value="#336F93"/></border>
+      <border id="left" thickness="2"><color value="#336F93"/></border>
+      <border id="right" thickness="2"><color value="#001C40"/></border>
+    </border-->
+    <background>
+      <!--color value="#225F82" /-->
+      <!--color id="selected" value="#003E60" /-->
+	  <image file="images/tab_off.gif" paint_mode="no-repeat"/>
+	  <image id="selected" file="images/tab_on.gif"  paint_mode="no-repeat"/>
+    </background>
+    <foreground>
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <font id="selected" name="Tahoma" style="normal" weight="normal" size="11" />
+      <color value="#000000" />
+      <color id="selected" value="#FFFFFF" />
+      <color id="over" value="#DDDDDD" />
+      <font name="Tahoma" style="normal" weight="normal" size="11" />
+      <content_layout word_wrap="true" halignment="center" valignment="center" text_position="right" text_icon_gap="3"/>
+    </foreground>
+  </style>
+
+<!-- CONTROL PANEL SKIN -->
+
+  <style id="control_panel_link">
+    <cursor predefined="pointer"/>
+    <foreground>
+      <font name="Tahoma" weight="bold" style="normal" size="11" />
+      <font id="over" name="Tahoma" weight="bold" style="normal" size="11" />
+      <color value="#003E60" />
+      <color id="over" value="#003E60" />
+      <content_layout halignment="left" text_position="right" text_icon_gap="4"/>
+    </foreground>
+  </style>
+  
+  <style id="titled_border">
+    <border type="groove" thickness="2"><color value="grey"/></border>
+    <foreground>
+      <font name="Tahoma" weight="bold" style="italic" size="11" />
+      <color value="#000000" />
+    </foreground>
+    <!--border type="groove" thickness="2"><color value="grey" /></border-->
+  </style>
+  
+
+
+</styles>
+
+</skin>

@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Licensed to the Apache Software Foundation (ASF) under one or more
+  - contributor license agreements.  See the NOTICE file distributed with
+  - this work for additional information regarding copyright ownership.
+  - The ASF licenses this file to You under the Apache License, Version 2.0
+  - (the "License"); you may not use this file except in compliance with
+  - the License.  You may obtain a copy of the License at
+  -
+  -     http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -
+  - $Id: core.xml 131 2007-10-01 00:32:35Z vgritsenko $
+  -->
+  
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:servlet="http://cocoon.apache.org/schema/servlet"
+       xmlns:util="http://www.springframework.org/schema/util"
+ 	   xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:configurator="http://cocoon.apache.org/schema/configurator"
+       xmlns:avalon="http://cocoon.apache.org/schema/avalon"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+                           http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-2.0.xsd
+                           http://cocoon.apache.org/schema/configurator http://cocoon.apache.org/schema/configurator/cocoon-configurator-1.0.1.xsd
+                           http://cocoon.apache.org/schema/avalon http://cocoon.apache.org/schema/avalon/cocoon-avalon-1.0.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+						   http://cocoon.apache.org/schema/servlet http://cocoon.apache.org/schema/servlet/cocoon-servlet-1.0.xsd">
+  <!-- Activate Cocoon Spring Configurator -->
+  <configurator:settings/>
+
+  <!-- Configure Log4j -->
+  <bean name="org.apache.cocoon.spring.configurator.log4j"
+        class="org.apache.cocoon.spring.configurator.log4j.Log4JConfigurator"
+        scope="singleton">
+    <property name="settings" ref="org.apache.cocoon.configuration.Settings"/>
+    <property name="resource" value="/WEB-INF/cocoon/log4j.xml"/>
+  </bean> 
+
+  <!-- Activate Avalon Bridge -->
+  <avalon:bridge location="/WEB-INF/cocoon.xconf"/>
+
+  <!-- ========================== XML ========================== -->
+
+  <!--
+    - Entity resolution catalogs
+    -->
+  <bean name="org.xml.sax.EntityResolver"
+        class="org.apache.cocoon.core.xml.impl.DefaultEntityResolver"
+        init-method="init" scope="singleton">
+    <property name="verbosity" value="2"/>
+  </bean>
+
+  <!--
+    - DOM XML Parser
+    -
+    - Configuration parameters:
+    - - validate (boolean, default = false): should the parser validate
+    -     parsed documents?
+    -     Note: XML validation is only being used for the documentation build.
+    -     (If you are going to use it elsewhere, then do so with caution.)
+    -     You really should have validated all of your XML documents already,
+    -     according to their proper DTD or schema. Do not expect Cocoon
+    -     to do it.
+    - - documentBuilderFactory (string, optional) : the name of the
+    -     DocumentBuilderFactory implementation to be used (similar to
+    -     sax-parser-factory for DOM).
+    - - resolver
+    -     An optional entity resolver.
+    -->
+  <bean name="org.apache.cocoon.core.xml.DOMParser"
+        class="org.apache.cocoon.core.xml.impl.JaxpDOMParser" scope="singleton">
+    <property name="validate" value="false"/>
+  </bean>
+
+  <!--
+    - SAX XML Parser
+    -
+    - Configuration parameters:
+    - - validate (boolean, default = false): should the parser validate
+    -     parsed documents?
+    -     Note: XML validation is only being used for the documentation build.
+    -     (If you are going to use it elsewhere, then do so with caution.)
+    -     You really should have validated all of your XML documents already,
+    -     according to their proper DTD or schema. Do not expect Cocoon
+    -     to do it.
+    - - nsPrefixes (boolean, default = false) : do we want
+    -     namespaces declarations also as 'xmlns:' attributes?
+    -     Note : setting this to true confuses some XSL processors
+    -     (e.g. Saxon).
+    - - stopOnWarning (boolean, default = true) : should the parser
+    -     stop parsing if a warning occurs ?
+    - - stopOnRecoverableError (boolean, default = true) : should the
+    -     parser stop parsing if a recoverable error occurs ?
+    - - saxParserFactory (string, optional) : the name of the
+    -     SAXParserFactory implementation class to be used instead of using
+    -     the standard JAXP mechanism (SAXParserFactory.newInstance()). This
+    -     allows to choose unambiguously the JAXP implementation to be used
+    -     when several of them are available in the classpath.
+    - - dropDtdComments : should comment() events from DTD's be dropped?
+    -     Note: Since this implementation does not support the DeclHandler
+    -     interface anyway, it is quite useless to only have the comments
+    -     from DTD. And the comment events from the internal DTD subset
+    -     would appear in the serialized output again.
+    - - resolver
+    -     An optional entity resolver.
+    -->
+  <bean name="org.apache.cocoon.core.xml.SAXParser"
+        class="org.apache.cocoon.core.xml.impl.JaxpSAXParser" scope="singleton">
+    <property name="validate" value="false"/>
+    <property name="dropDtdComments" value="true"/>
+  </bean>
+
+  <!--
+    - Compatibility Components
+    -->
+
+  <bean name="org.apache.excalibur.xml.EntityResolver"
+        class="org.apache.cocoon.core.xml.avalon.DefaultResolver" scope="singleton">
+    <property name="resolver" ref="org.xml.sax.EntityResolver"/>
+  </bean>
+
+  <bean name="org.apache.excalibur.xml.dom.DOMParser"
+        class="org.apache.cocoon.core.xml.avalon.DefaultDOMParser" scope="singleton">
+    <property name="parser" ref="org.apache.cocoon.core.xml.DOMParser"/>
+  </bean>
+
+  <bean name="org.apache.excalibur.xml.sax.SAXParser"
+        class="org.apache.cocoon.core.xml.avalon.DefaultSAXParser" scope="singleton">
+    <property name="parser" ref="org.apache.cocoon.core.xml.SAXParser"/>
+  </bean>
+
+  <!-- ========================= Store ========================= -->
+
+  <!--
+    - Store Janitor: the store garbage collector and memory usage controller.
+    -
+    - WARNING: Be careful with the heapsize and freememory parameters.
+    -           Wrong values can cause high cpu usage.
+    -
+    - Example configuration:
+    - Jvm settings:
+    -    -Xmx200000000
+    - store-janitor settings:
+    -    <parameter name="freememory" value="5000000"/>
+    -    <parameter name="heapsize" value="196000000"/>
+    -
+    - It is recommended to have heapsize equal to -Xmx, especially on Sun's
+    - JVM which are unable to shrink its heap once it grows above minimum.
+    - Freememory should be greater than amount of memory necessary for normal
+    - application operation.
+    - BUT: The heap size of the memory of the JVM is a little bit less than
+    -      the value you specify for -Xmx, so you have to set the heapsize
+    -      for the store janitor to a value which is lower (2% less seems
+    -      to be a working value).
+    -->
+  <bean name="org.apache.excalibur.store.StoreJanitor"
+        class="org.apache.cocoon.components.store.impl.CocoonStoreJanitor"
+        init-method="init" destroy-method="destroy">
+
+    <!--
+      - How much free memory shall be available in the jvm?
+      - If not specified, defaults to 1Mb.
+      -->
+    <property name="freeMemory" value="${org.apache.cocoon.store.janitor.freememory}"/>
+    <!--
+      - How much memory at max jvm can consume?
+      - The default max heapsize for Sun's JVM is (almost) 64Mb,
+      - can be increased by specifying -Xmx command line parameter.
+      - If not specified, defaults to 66600000 bytes.
+      -->
+    <property name="heapSize" value="${org.apache.cocoon.store.janitor.heapsize}"/>
+    <!--
+      - How often shall the cleanup thread check memory?
+      - If not specified, defaults to 10 seconds.
+      -->
+    <property name="cleanupThreadInterval" value="10"/>
+    <!--
+      - Experimental adaptive algorithm for cleanup interval
+    <property name="adaptiveThreadInterval" value="true"/>
+      -->
+    <!--
+      - What percent of the store elements shall be dropped on low memory?
+      - If not specified, defaults to 10%
+      -->
+    <property name="percentToFree" value="10"/>
+    <!--
+      - Shall garbage collector be invoked on low memory?
+      - If not specified, defaults to false.
+      -->
+    <property name="invokeGC" value="false"/>
+    <!--
+      - Algorithm describing how to clean caches in low memory situations.
+      -   round-robin: The registered caches are cycled through,
+      -                and each time there is a low memory situation one
+      -                of the registered caches has objects freed from it.
+      -   all-stores:  All registered stores have objects removed from
+      -                them each time there is a low memory situation.
+      - If not specified, defaults to 'round-robin'.
+      -->
+    <property name="freeingAlgorithm" value="round-robin"/>
+    <!--
+      - Name of the thread pool to use.
+      - If not specified, defaults to 'daemon'.
+      -->
+    <property name="threadPool" value="daemon"/>
+
+    <!--
+      - What should be the priority of the cleanup thread?
+      - This property is used only by older implementation of the janitor.
+      - New implementation uses centrally configured thread pool (see
+      - thread-pools element below).
+    <property name="threadPriority" value="5"/>
+      -->
+        
+    <property name="runnableManager" ref="org.apache.cocoon.thread.RunnableManager"/>
+  </bean>
+
+  <!--
+    - Transient Store: holds objects that don't have to survive shutdown
+    -
+    - Common configuration parameters:
+    - maxobjects: Indicates how many objects will be held in the cache.
+    -    When the number of maxobjects has been reached. The last object
+    -    in the cache will be thrown out.
+    -->
+  <bean name="org.apache.excalibur.store.Store/TransientStore"
+        class="org.apache.cocoon.components.store.impl.DefaultTransientStore"
+        init-method="init" destroy-method="destroy">
+
+    <property name="maxObjects" value="${org.apache.cocoon.store.transient.maxobjects}"/>
+    <property name="storeJanitor" ref="org.apache.excalibur.store.StoreJanitor"/>
+  </bean>
+
+  <!--
+    - Store: generic store. The default implementation is an in-memory store
+    - backed by a disk store (based on EHCache). This forms a two-stage
+    - cache composed of a fast in-memory MRU front-end and a persistent
+    - back-end which stores the less-used objects.
+    -
+    - Common configuration parameters:
+    - maxobjects: Indicates how many objects will be held in the cache.
+    -    When the number of maxobjects has been reached. The last object
+    -    in the cache will be thrown out.
+    -->
+  <bean name="org.apache.excalibur.store.Store"
+        class="org.apache.cocoon.components.store.impl.DefaultTransientStore"
+        init-method="init" destroy-method="destroy">
+  
+    <property name="maxObjects" value="${org.apache.cocoon.store.maxobjects}"/>
+    <property name="storeJanitor" ref="org.apache.excalibur.store.StoreJanitor"/>
+  </bean>
+
+
+  <!-- ====================== Expressions ====================== -->
+
+  <bean name="org.mozilla.javascript.Scriptable/rootScope" 
+        class="org.apache.cocoon.el.impl.helpers.RhinoScopeFactory"
+        factory-method="createRhinoScope">
+  </bean>
+
+  <bean name="org.apache.cocoon.el.ExpressionCompiler/jxpath"
+        class="org.apache.cocoon.el.impl.jxpath.JXPathCompiler"/>
+  
+  <bean name="org.apache.cocoon.el.ExpressionCompiler/jexl"
+        class="org.apache.cocoon.el.impl.jexl.JexlCompiler"/>
+
+  <bean name="org.apache.cocoon.el.ExpressionCompiler/js" 
+        class="org.apache.cocoon.el.impl.javascript.JavaScriptCompiler">
+    <property name="rootScope" ref="org.mozilla.javascript.Scriptable/rootScope"/>
+  </bean>
+
+  <!--
+    - JXPath is our default language so second bean is defined
+    - FIXME: I think that it would be better to use alias for bean defined above, see:
+    - http://thread.gmane.org/gmane.text.xml.cocoon.devel/73907
+    -->
+  <bean name="org.apache.cocoon.el.ExpressionCompiler/default"
+        class="org.apache.cocoon.el.impl.jxpath.JXPathCompiler"/>
+
+  <bean id="org.apache.cocoon.el.ExpressionFactory"
+        class="org.apache.cocoon.el.impl.DefaultExpressionFactory">
+    <property name="expressionCompilers">
+      <configurator:bean-map type="org.apache.cocoon.el.ExpressionCompiler"/>
+    </property>
+  </bean>
+
+  <bean id="org.apache.cocoon.template.expression.AbstractStringTemplateParser" 
+        class="org.apache.cocoon.template.expression.AbstractStringTemplateParser"
+        abstract="true">
+    <property name="expressionFactory" ref="org.apache.cocoon.el.ExpressionFactory"/>
+  </bean>
+
+  <bean name="org.apache.cocoon.el.parsing.StringTemplateParser/legacy"
+        class="org.apache.cocoon.el.impl.parsing.LegacyStringTemplateParser"
+        parent="org.apache.cocoon.template.expression.AbstractStringTemplateParser"/>
+
+  <bean name="org.apache.cocoon.el.parsing.StringTemplateParser/default" 
+        class="org.apache.cocoon.template.expression.DefaultStringTemplateParser"
+        parent="org.apache.cocoon.template.expression.AbstractStringTemplateParser"/>
+
+  <!-- =================== Object Model ===================== -->
+
+  <!-- ObjectModelEntry provider for 'Packages' -->
+  <bean name="org.apache.cocoon.el.objectmodel.ObjectModelProvider/Packages"
+        class="org.apache.cocoon.el.impl.objectmodel.PackagesEntryObjectModelProvider">
+    <property name="rootScope" ref="org.mozilla.javascript.Scriptable/rootScope"/>
+  </bean>
+  
+  <!-- ObjectModelEntry provider for 'java' -->
+  <bean name="org.apache.cocoon.el.objectmodel.ObjectModelProvider/java"
+        class="org.apache.cocoon.el.impl.objectmodel.JavaEntryObjectModelProvider">
+    <property name="rootScope" ref="org.mozilla.javascript.Scriptable/rootScope"/>
+  </bean>
+
+  <!-- ObjectModelEntry provider for 'cocoon' -->
+  <bean name="org.apache.cocoon.el.objectmodel.ObjectModelProvider/cocoon"
+        class="org.apache.cocoon.objectmodel.impl.CocoonEntryObjectModelProvider">
+    <property name="settings" ref="org.apache.cocoon.configuration.Settings"/>
+    <property name="processInfoProvider" ref="org.apache.cocoon.processing.ProcessInfoProvider"/>
+  </bean>
+
+  <!--
+    - Default implementation of ObjectModel interface. This bean definition,
+    - is a template actually because it has abstract attribute set to "true".
+    - It enables Object Model to be defined as scoped bean elsewhere.
+    -->
+  <bean name="org.apache.cocoon.el.objectmodel.ObjectModel.template"
+        class="org.apache.cocoon.el.impl.objectmodel.ObjectModelImpl"
+        abstract="true">
+    <property name="initialEntries">
+      <configurator:bean-map type="org.apache.cocoon.el.objectmodel.ObjectModelProvider"/>
+    </property>
+  </bean>
+
+  <!--
+    - Default implementation of ObjectModel interface in pipelineComponent scope.
+    -->
+  <bean name="org.apache.cocoon.el.objectmodel.ObjectModel" 
+        parent="org.apache.cocoon.el.objectmodel.ObjectModel.template"
+        scope="request">
+    <aop:scoped-proxy proxy-target-class="false"/>
+  </bean>
+
+  <!-- ======================== Pipeline ======================= -->
+
+  <!--
+    - This is the Cocoon cache. This component is responsible for storing
+    - and retrieving cached responses. It can be used to monitor the cache
+    - or the investigate which responses are cached etc.
+    -
+    - The cache uses the store to save its values.
+    -->
+  <bean name="org.apache.cocoon.caching.Cache" class="org.apache.cocoon.caching.impl.CacheImpl">
+    <property name="store" ref="org.apache.excalibur.store.Store"/>
+  </bean>
+
+
+  <!-- ======================== Sitemap ======================== -->
+
+  <bean name="org.apache.cocoon.el.parsing.StringTemplateParser/legacySitemap"
+        class="org.apache.cocoon.components.treeprocessor.variables.LegacySitemapStringTemplateParser"
+        parent="org.apache.cocoon.template.expression.AbstractStringTemplateParser">
+    <property name="serviceManager" ref="org.apache.avalon.framework.service.ServiceManager"/>
+  </bean>
+
+  <bean name="org.apache.cocoon.components.treeprocessor.variables.StringTemplateParserVariableResolver"
+        class="org.apache.cocoon.components.treeprocessor.variables.StringTemplateParserVariableResolver"
+        scope="prototype">
+    <property name="stringTemplateParser"
+              ref="org.apache.cocoon.el.parsing.StringTemplateParser/legacySitemap"/>
+    <property name="objectModel" ref="org.apache.cocoon.el.objectmodel.ObjectModel"/>
+  </bean>
+
+  <!-- ========================= System ======================== -->
+
+  <bean name="org.apache.cocoon.processing.ProcessInfoProvider"
+        class="org.apache.cocoon.processing.impl.ProcessInfoProviderImpl">
+    <property name="servletContext" ref="javax.servlet.ServletContext"/>
+  </bean>
+
+  <!--
+    - Runnable manager
+    -
+    - This component manages commands (Runnables) executed in background using
+    - preconfigured pools of worker threads
+    -->
+  <bean name="org.apache.cocoon.thread.RunnableManager"
+        class="org.apache.cocoon.thread.impl.DefaultRunnableManager"
+        scope="singleton" destroy-method="destroy">
+    <!--
+      - This is the default configuration of the runnable-manager. More
+      - indepth information can be found at
+      - http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/PooledExecutor.html
+      - The following elements can be used:
+      -
+      - threadPools:       container element for thread-pool elements.
+      -->
+    <property name="workerThreadPools">
+      <configurator:bean-map type="org.apache.cocoon.thread.ThreadPool" strip-prefix="true"/>
+    </property>
+  </bean>
+  
+  <!--
+    - This is the default thread pool. It's best suited for short
+    - running background tasks.
+    -->
+  <bean name="org.apache.cocoon.thread.ThreadPool/default"
+        class="org.apache.cocoon.thread.impl.DefaultThreadPool"
+        scope="singleton">
+    <!--
+      - More indepth information can be found at
+      - http://gee.cs.oswego.edu/dl/classes/EDU/oswego/cs/dl/util/concurrent/PooledExecutor.html
+      - The following elements can be used:
+      -->
+    <!-- required name of the pool -->
+    <property name="name" value="default" />
+    <!--
+      - optional priority all threads of the pool will have (the ThreadFactory will be 
+      - set to this priority).The possible values  are:
+      -    MIN:  corresponds to Thread#MIN_PRIORITY
+      -    NORM: corresponds to Thread#NORM_PRIORITY (default)
+      -    MAX:  corresponds to Thread#MAX_PRIORITY
+      -->
+    <property name="poolPriority" value="NORM" />
+    <!--
+      - whether newly created Threads should run in daemon mode or not. Default to false.
+      -->
+    <property name="daemon" value="false" />
+    <!-- 
+      - optional size of a queue to hold Runnables if the pool is full. Possible values are:
+      -    less than 0:    unbounded (default)
+      -    equal to 0:     no queue at all
+      -    greater than 0: size of the queue
+      -->
+    <property name="queueSize" value="-1" />
+    <!--
+      - optional maximum number of threads in the pool. Defaults to 5.
+      - NOTE: if a queue is specified (queue-sie != 0)
+      -       this value will be ignored.
+      -->
+    <property name="maxPoolSize" value="5" />
+    <!--
+      - optional minimum number of threads in the pool. Defaults to 5.
+      - NOTE: if a queue has been specified (queue-sie != 0)
+      -       this value will be used as the maximum of thread running concurrently.
+      -->
+    <property name="minPoolSize" value="5" />
+    <!--
+      - The time in ms an idle thread should keep alive before it might get garbage collected.
+      - This defaults to 60000 ms.
+      -->
+    <property name="keepAliveTime" value="60000" />
+    <!--
+      - The policy to be used if all resources (thread in the pool and 
+      - slots in the queue) are exhausted.
+      - Possible values are:
+      -    ABORT:         Throw a RuntimeException
+      -    DISCARD:       Throw away the current request and return.
+      -    DISCARDOLDEST: Throw away the oldest request and return.
+      -    RUN (default): The thread making the execute request runs the task itself.
+      -                   This policy helps guard against lockup.
+      -    WAIT:          Wait until a thread becomes available. This policy should, in
+      -                   general, not be used if the minimum number of threads is zero,
+      -                   in which case a thread may never become available. 
+      -->
+    <property name="blockPolicy" value="ABORT" />
+    <!--
+      - Terminate thread pool after processing all Runnables currently in queue. Any 
+      - Runnable entered after this point will be discarded. A shut down pool cannot 
+      - be restarted. This also means that a pool will need keep-alive-time-ms to 
+      - terminate. The default value not to shutdown graceful. 
+      -->
+    <property name="shutdownGraceful" value="false" />
+    <!--
+      - The time in ms to wait before issuing an immediate shutdown after a graceful shutdown
+      - has been requested. 
+      -->
+    <property name="shutdownWaitTimeMs" value="-1" />
+    <!--
+      - specifies the fully qualified class name of an org.apache.cocoon.thread.ThreadFactory
+      - implementation. It is responsible to create Thread classes.
+      -->
+    <property name="factory" ref="defaultThreadFactory"/>
+  </bean>
+
+  <!--
+    - This thread pool should be used for daemons (permanently running
+    - threads).
+    -->
+  <bean name="org.apache.cocoon.thread.ThreadPool/daemon"
+        class="org.apache.cocoon.thread.impl.DefaultThreadPool"
+        scope="singleton">
+    <property name="name" value="daemon"/>
+    <property name="poolPriority" value="NORM"/>
+    <property name="daemon" value="true"/>
+    <property name="queueSize" value="0"/>
+    <property name="maxPoolSize" value="-1"/>
+    <property name="minPoolSize" value="1"/>
+    <property name="keepAliveTime" value="60000"/>
+    <property name="blockPolicy" value="ABORT"/>
+    <property name="shutdownGraceful" value="false"/>
+    <property name="shutdownWaitTimeMs" value="-1"/>
+    <property name="factory" ref="defaultThreadFactory"/>
+  </bean>
+  
+
+  <bean id="defaultThreadFactory"
+        class="org.apache.cocoon.thread.impl.DefaultThreadFactory"
+        scope="prototype"/>
+
+
+</beans>

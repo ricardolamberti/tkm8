@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome</title>
+</head>
+<body>
+
+  <!-- Formulario oculto que se enviará como POST -->
+  <form id="postForm" method="POST">
+    <!-- Los campos ocultos se generan automáticamente en el script -->
+  </form>
+
+  <script type="text/javascript">
+    // Obtener la URL actual de la página
+    const currentUrl = new URL(window.location.href);
+    localStorage.setItem('originalParams', currentUrl.search);
+
+    // Extraer el 'PREFIX' entre la primera y la segunda barra
+    const pathnameParts = currentUrl.pathname.split('/');
+    const prefix = pathnameParts.length > 2 ? pathnameParts[1] : ''; // Asumiendo que la parte deseada está en el índice 1
+
+    // Establecer el atributo 'action' del formulario, incluyendo el PREFIX y 'do-respaction'
+    const form = document.getElementById('postForm');
+    form.action = `/${prefix}/do-respaction`;
+
+    // Obtener los parámetros de la URL (GET)
+    const urlParams = new URLSearchParams(currentUrl.search);
+
+    // Iterar sobre los parámetros y agregarlos como campos ocultos al formulario
+    urlParams.forEach((value, key) => {
+      const hiddenField = document.createElement('input');
+      hiddenField.type = 'hidden';
+      hiddenField.name = key;
+      hiddenField.value = value;
+      form.appendChild(hiddenField);
+    });
+
+    // Enviar el formulario automáticamente
+    form.submit();
+
+    // Después de enviar el formulario, redirigir al usuario a una URL "segura" con GET
+    form.addEventListener('submit', function() {
+      // Redirige a la misma página sin parámetros
+      window.location.href = currentUrl.origin + currentUrl.pathname;
+    });
+  </script>
+
+</body>
+</html>

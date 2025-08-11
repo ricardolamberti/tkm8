@@ -1,0 +1,40 @@
+package pss.common.event2.telegram;
+
+import pss.core.win.JWin;
+import pss.core.winUI.lists.JWinList;
+import pss.core.win.JWins;
+
+public class GuiTelegramUserChannels extends JWins {
+
+
+
+  /**
+   * Constructor de la Clase
+   */
+  public GuiTelegramUserChannels() throws Exception {
+  }
+
+
+  public int     GetNroIcono() throws Exception  { return 10047; } 
+  public String  GetTitle()    throws Exception  { return "Canales de Telegram"; }
+  public Class<? extends JWin>  GetClassWin()                   { return GuiTelegramUserChannel.class; }
+  /**
+   * Mapeo las acciones con las operaciones
+   */
+  public void createActionMap() throws Exception {
+    addActionNew( 1, "Nuevo Registro" );
+  }
+
+
+
+  /**
+   * Configuro las columnas que quiero mostrar en la grilla
+   */
+  public void ConfigurarColumnasLista(JWinList zLista) throws Exception {
+    	zLista.AddIcono("");
+    	zLista.AddColumnaLista("USERID");
+    	zLista.AddColumnaLista("CHANNEL_ID");
+    	zLista.AddColumnaLista("REGISTERED");
+  }
+
+}
