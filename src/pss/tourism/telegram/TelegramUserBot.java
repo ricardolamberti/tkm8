@@ -22,10 +22,14 @@ import pss.tourism.telegram.event.BizTelegramEvent;
 
 public class TelegramUserBot extends TelegramBotManager {
 
-	public static final int EVT_TICKET_ROBOT_OFFLINE = 3;
-	public static final int EVT_TICKET_NO_TICKETS = 4;
+        public static final int EVT_TICKET_ROBOT_OFFLINE = 3;
+        public static final int EVT_TICKET_NO_TICKETS = 4;
 
-	public static final String TOKEN = "7811283387:AAHCnq5DEf_akPpN1VYYhCIEGj-Dj5f3FFw";
+        /**
+         * Telegram bot token for user notifications. The value must be supplied via the
+         * {@code TELEGRAM_USER_BOT_TOKEN} environment variable.
+         */
+        public static final String TOKEN = System.getenv("TELEGRAM_USER_BOT_TOKEN");
 
 	public TelegramUserBot() throws Exception {
 	}

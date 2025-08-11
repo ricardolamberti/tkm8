@@ -24,9 +24,14 @@ import pss.tourism.interfaceGDS.log.BizInterfaceLog;
 import pss.tourism.pnr.BizPNRTicket;
 
 public class Manager {
-	public static final String TOKEN = "356653274:AAHb4WLaZRJJcp0RGPw-5a1lQmV0Yb-LwjM";
+        /**
+         * Telegram bot token. It should be provided via the environment variable
+         * {@code TELEGRAM_BOT_TOKEN} to avoid committing sensitive credentials to the
+         * repository.
+         */
+        public static final String TOKEN = System.getenv("TELEGRAM_BOT_TOKEN");
 
-	//
+        //
 	public static void main(String[] args) {
 		Manager.process(null);
 	}
