@@ -26,7 +26,10 @@ import pss.core.tools.WinServiceTools;
 
 public class TelegramBotManager {
 
-	private static String TELEGRAM_BOT_DEV = "933876754:AAEMnUKsNK9F4mEH19wS9il1uvXY414UEA8";
+        private static String TELEGRAM_BOT_DEV = "933876754:AAEMnUKsNK9F4mEH19wS9il1uvXY414UEA8";
+        private static final String TELEGRAM_BOT_ID_ENV = System.getenv("TELEGRAM_BOT_ID") != null
+                        ? System.getenv("TELEGRAM_BOT_ID")
+                        : "";
 
 	public TelegramBotManager() throws Exception {
 	}
@@ -87,7 +90,7 @@ public class TelegramBotManager {
 				try {
 					TelegramBotManager mng = new TelegramBotManager();
 					mailSuffix = BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_MAIL_SUFFIX", mailSuffix);
-					bot = new TelegramBot(BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_BOT_ID", "1222057292:AAGbW-ggwiBhxnvMH7Uu8LsIEpx2BLyQKkQ"));
+                                        bot = new TelegramBot(BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_BOT_ID", TELEGRAM_BOT_ID_ENV));
 					mng.processTelegramDevMessages();
 				} catch (Exception eee) {
 
@@ -120,7 +123,7 @@ public class TelegramBotManager {
 		System.out.println("Telegrams messages");
 		TelegramBotManager mng = new TelegramBotManager();
 		mng.setDefaultConfigFromIni();
-		mng.setBot(new TelegramBot(BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_BOT_ID", "1222057292:AAGbW-ggwiBhxnvMH7Uu8LsIEpx2BLyQKkQ")));
+                mng.setBot(new TelegramBot(BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_BOT_ID", TELEGRAM_BOT_ID_ENV)));
 		mng.processBotMessages();
 	}
 
@@ -149,7 +152,7 @@ public class TelegramBotManager {
 	}
 
 	public void sendTelegramMessage(String chatId, String msg) throws Exception {
-		bot = new TelegramBot(BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_BOT_ID", "1222057292:AAGbW-ggwiBhxnvMH7Uu8LsIEpx2BLyQKkQ"));
+                bot = new TelegramBot(BizPssConfig.getPssConfig().getCachedStrictValue("GENERAL", "TELEGRAM_BOT_ID", TELEGRAM_BOT_ID_ENV));
 		bot.execute(new SendMessage(chatId, msg));
 	}
 
