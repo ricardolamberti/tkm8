@@ -91,100 +91,30 @@ public class FormEditDetalleCopaWS extends JBaseForm {
 	   * Inicializacion Grafica
 	   */
 	  protected void jbInit() throws Exception {
-	    lvariable2 = new JPssLabel();
-	    lvariable2.setBounds(new Rectangle(12, 57, 80, 23));
-	    lvariable2.setText("Descripcion");
-	    lvalor2 = new JPssLabel();
-	    lvalor2.setText("Periodicidad");
-	    lvalor2.setBounds(new Rectangle(122, 13, 94, 22));
-	    setLayout(null);
-	    setSize(new Dimension(556, 328));
-
-
-
-	   // getJPanel().add(valor , null);
-
-
-	    lvariable.setText("Aerolinea");
-	    lvariable.setBounds(new Rectangle(10, 7, 77, 23)); 
-	    variable.setBounds(new Rectangle(90, 6, 202, 23)); 
-	    add(lvariable, null);
-	    add(variable , null);
-
-
-//	    getJPanel().add(lvalor1, null);
-//	    getJPanel().add(getJComboBox(), null);
-//	    getJPanel().add(lvalor2, null);
-//	    this.add(getJPanel(), null);
-	    this.add(getValorActual(), null);
-	    this.add(getValorObjetivo(), null);
-	    this.add(getJTable(), null);
-	    this.add(getValorActual1(), null);
-	    this.add(getJCheckBox1(), null);
-	    this.add(lvariable2, null);
-	    this.add(getJDescr(), null);
-	    
-	    
-	    pssLabel_1 = new JPssLabel();
-	    pssLabel_1.setText("Tour code excluidos");
-	    pssLabel_1.setBounds(new Rectangle(10, 33, 77, 22));
-	    pssLabel_1.setBounds(11, 82, 112, 22);
-	    add(pssLabel_1);
-	    
-	    pssEdit = new JPssEdit();
-	    pssEdit.setBounds(new Rectangle(90, 33, 100, 22));
-	    pssEdit.setBounds(115, 82, 429, 22);
-	    add(pssEdit);
-	    
-	    pssLabel_2 = new JPssLabel();
-	    pssLabel_2.setText("Clases excluidas");
-	    pssLabel_2.setBounds(new Rectangle(10, 33, 77, 22));
-	    pssLabel_2.setBounds(11, 107, 112, 22);
-	    add(pssLabel_2);
-	    
-	    pssEdit_1 = new JPssEdit();
-	    pssEdit_1.setBounds(new Rectangle(90, 33, 100, 22));
-	    pssEdit_1.setBounds(115, 106, 429, 22);
-	    add(pssEdit_1);
-	    
-
-	    
-	    pssEdit_2 = new JPssEdit();
-	    pssEdit_2.setBounds(new Rectangle(90, 33, 100, 22));
-	    pssEdit_2.setBounds(114, 132, 429, 22);
-	    add(pssEdit_2);
-	    chckbxNewCheckBox.setText("Ticket");
-	    
-	    chckbxNewCheckBox.setBounds(444, 7, 97, 23);
-	    add(chckbxNewCheckBox);
-	 
-//	    getJPanel().setBorder(BorderFactory.createEtchedBorder());
-
-	 
-	  }
+  }
 	  /**
 	   * Linkeo los campos con la variables del form
 	   */
 	  public void InicializarPanel( JWin zWin ) throws Exception {
-	    AddItem( company, CHAR, REQ, "company" ).SetValorDefault(BizUsuario.getUsr().getCompany());
-	    AddItem( id, UINT, OPT, "id" );
-	    AddItem( linea, UINT, OPT, "linea" );
-	    JFormControl c = AddItem( variable, CHAR, REQ, "id_aerolinea" , new JControlCombo() {
+	    AddItemEdit("company", CHAR, REQ, "company").SetValorDefault(BizUsuario.getUsr().getCompany());
+	    AddItemEdit("id", UINT, OPT, "id");
+	    AddItemEdit("linea", UINT, OPT, "linea");
+	    JFormControl c = AddItemCombo("id_aerolinea", CHAR, REQ, "id_aerolinea", new JControlCombo() {
 	    	@Override
 	    	public JWins getRecords(boolean one) throws Exception {
 	    		return getAerolineas(one);
 	    	}
 	    });
 	    c.setPlaceHolder("Aerolinea del contrato");
-	    AddItem( getJCheckBox1(),OPT, "kicker" );
+	    AddItemCheck("kicker", OPT, "kicker");
 	    JFormTable t=AddItem( getJTable(), "niveles", GuiNiveles.class);
 	    t.setKeepHeight(true);
 	    t.setKeepWidth(true);
-	    AddItem( getEvalua(), CHAR, OPT, "conclusion" ).SetReadOnly(true);
-	    AddItem( getJDescr(), CHAR, OPT, "descripcion" );
-	    AddItem( pssEdit, CHAR, OPT, "tourcode_excluded" );
-	    AddItem( pssEdit_1, CHAR, OPT, "class_excluded" );
-	    AddItem( chckbxNewCheckBox, CHAR,OPT,"pax", "S", "N").SetDisplayName("Tickets");;
+	    AddItemEdit("conclusion", CHAR, OPT, "conclusion").SetReadOnly(true);
+	    AddItemEdit("descripcion", CHAR, OPT, "descripcion");
+	    AddItemEdit("tourcode_excluded", CHAR, OPT, "tourcode_excluded");
+	    AddItemEdit("class_excluded", CHAR, OPT, "class_excluded");
+	    AddItemCheck("Tickets", CHAR, OPT, "pax", "S", "N");
 	  }
 	  @Override
 	  	public void OnPostShow() throws Exception {

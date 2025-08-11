@@ -90,97 +90,15 @@ public class FormEditDetalle extends JBaseForm {
 	   * Inicializacion Grafica
 	   */
 	  protected void jbInit() throws Exception {
-	    lvariable2 = new JPssLabel();
-	    lvariable2.setBounds(new Rectangle(14, 57, 112, 23));
-	    lvariable2.setText("Descripcion");
-	    lvalor31 = new JPssLabel();
-	    lvalor31.setBounds(new Rectangle(553, 32, 41, 23));
-	    lvalor31.setText("Valor");
-	    lvariable1 = new JPssLabel();
-	    lvariable1.setBounds(new Rectangle(14, 32, 112, 23));
-	    lvariable1.setText("Indicador ganancia");
-	    lvalor3 = new JPssLabel();
-	    lvalor3.setBounds(new Rectangle(553, 6, 41, 22));
-	    lvalor3.setText("Valor");
-	    lvalor2 = new JPssLabel();
-	    lvalor2.setText("Periodicidad");
-	    lvalor2.setBounds(new Rectangle(122, 13, 94, 22));
-	    setLayout(null);
-	    setSize(new Dimension(1006, 328));
-
-
-
-	   // getJPanel().add(valor , null);
-
-
-	    lvariable.setText("Indicador");
-	    lvariable.setBounds(new Rectangle(14, 6, 112, 23)); 
-	    variable.setBounds(new Rectangle(125, 6, 424, 23)); 
-	    add(lvariable, null);
-	    add(variable , null);
-
-
-//	    getJPanel().add(lvalor1, null);
-//	    getJPanel().add(getJComboBox(), null);
-//	    getJPanel().add(lvalor2, null);
-//	    this.add(getJPanel(), null);
-	    this.add(lvalor3, null);
-	    this.add(getValorActual(), null);
-	    this.add(getJTable(), null);
-	    this.add(lvariable1, null);
-	    this.add(getVariableGanancia(), null);
-	    this.add(lvalor31, null);
-	    this.add(getValorActual1(), null);
-	    this.add(getJCheckBox1(), null);
-	    this.add(lvariable2, null);
-	    this.add(getJDescr(), null);
-	    
-	    JPssLabel pssLabel = new JPssLabel();
-	    pssLabel.setText("FMS global");
-	    pssLabel.setBounds(new Rectangle(14, 57, 112, 23));
-	    pssLabel.setBounds(725, 6, 112, 23);
-	    add(pssLabel);
-	    
-	    FMSGlobal.setBounds(new Rectangle(597, 32, 100, 23));
-	    FMSGlobal.setBounds(818, 6, 100, 23);
-	    add(FMSGlobal);
-	    
-	    JPssLabel ShareGapGLobal = new JPssLabel();
-	    ShareGapGLobal.setText("Target Share gap");
-	    ShareGapGLobal.setBounds(new Rectangle(14, 57, 112, 23));
-	    ShareGapGLobal.setBounds(725, 32, 94, 23);
-	    add(ShareGapGLobal);
-	    
-	    pssSharegapglobal.setBounds(new Rectangle(597, 32, 100, 23));
-	    pssSharegapglobal.setBounds(818, 32, 100, 23);
-	    add(pssSharegapglobal);
-	    
-	    JPssLabel pssLabel_1 = new JPssLabel();
-	    pssLabel_1.setText("Valor ref. global");
-	    pssLabel_1.setBounds(new Rectangle(14, 57, 112, 23));
-	    pssLabel_1.setBounds(725, 57, 94, 23);
-	    add(pssLabel_1);
-	    
-	    pssValorRegGlobal.setBounds(new Rectangle(597, 32, 100, 23));
-	    pssValorRegGlobal.setBounds(818, 57, 100, 23);
-	    add(pssValorRegGlobal);
-
-	    pssValorReembolso.setBounds(new Rectangle(818, 83, 100, 23));
-	    add(pssValorReembolso);
-	    add(getPslblReembolso());
-
-//	    getJPanel().setBorder(BorderFactory.createEtchedBorder());
-
-	 
-	  }
+  }
 	  /**
 	   * Linkeo los campos con la variables del form
 	   */
 	  public void InicializarPanel( JWin zWin ) throws Exception {
-	    AddItem( company, CHAR, REQ, "company" ).SetValorDefault(BizUsuario.getUsr().getCompany());
-	    AddItem( id, UINT, OPT, "id" );
-	    AddItem( linea, UINT, OPT, "linea" );
-	    JFormControl c = AddItem( variable, CHAR, REQ, "variable" , new JControlCombo() {
+    AddItemEdit("company", CHAR, REQ, "company").SetValorDefault(BizUsuario.getUsr().getCompany());
+    AddItemEdit("id", UINT, OPT, "id");
+    AddItemEdit("linea", UINT, OPT, "linea");
+    JFormControl c = AddItemCombo("variable", CHAR, REQ, "variable", new JControlCombo() {
 	    	@Override
 	    	public JWins getRecords(boolean one) throws Exception {
 	    		return getIndicador(one);
@@ -188,7 +106,7 @@ public class FormEditDetalle extends JBaseForm {
 	    });
 	    c.setRefreshForm(true);
 	    c.setPlaceHolder("Indicador para determinar si se alcanza objetivo");
-	    c=AddItem( variableGanancia, CHAR, OPT, "variable_ganancia" , new JControlCombo() {
+    c=AddItemCombo("variable_ganancia", CHAR, OPT, "variable_ganancia", new JControlCombo() {
 	    	@Override
 	    	public JWins getRecords(boolean one) throws Exception {
 	    		return getIndicadorGanancia(one);
@@ -196,23 +114,23 @@ public class FormEditDetalle extends JBaseForm {
 	    });
 	    c.setRefreshForm(true);
 	    c.setPlaceHolder("Indicador para determinar el premio");
-	    AddItem( getJCheckBox1(),OPT, "kicker" );
-	    c=AddItem( getJCheckBox(), OPT,"acumulativo");
+    AddItemCheck("kicker", OPT, "kicker");
+    c=AddItemCheck("acumulativo", OPT, "acumulativo");
 	    c.SetValorDefault(false);
 //	    c.setRefreshForm(true);
 //	    AddItem( getJComboBox(), CHAR, OPT, "periodo" , JWins.createVirtualWinsFromMap(BizDetalle.getPeriodos()));
-	    JFormTable t=AddItem( getJTable(), "niveles", GuiNiveles.class);
-	    t.setKeepHeight(true);
-	    t.setKeepWidth(true);
-	    AddItem( getValorActual(), UFLOAT, OPT, "valor_fcontrato" ).SetReadOnly(true);
-	    AddItem( getValorActual1(), UFLOAT, OPT, "valor_totalcontrato" ).SetReadOnly(true);
+    JFormTable t=AddItem( getJTable(), "niveles", GuiNiveles.class);
+    t.setKeepHeight(true);
+    t.setKeepWidth(true);
+    AddItemEdit("valor_fcontrato", UFLOAT, OPT, "valor_fcontrato").SetReadOnly(true);
+    AddItemEdit("valor_totalcontrato", UFLOAT, OPT, "valor_totalcontrato").SetReadOnly(true);
 //	    AddItem( getValorObjetivo(), UFLOAT, OPT, "valor_objetivo" ).setVisible(false);
-	    AddItem( getEvalua(), CHAR, OPT, "conclusion" ).SetReadOnly(true);
-	    AddItem( getJDescr(), CHAR, OPT, "descripcion" );
-	    AddItem( FMSGlobal, FLOAT, OPT, "fms_global" );
-	    AddItem( pssSharegapglobal, FLOAT, OPT, "sharegap_global" );
-	    AddItem( pssValorRegGlobal, FLOAT, OPT, "valor_global" );
-	    AddItem( pssValorReembolso, FLOAT, OPT, "valor_reembolso" );
+    AddItemEdit("conclusion", CHAR, OPT, "conclusion").SetReadOnly(true);
+    AddItemEdit("descripcion", CHAR, OPT, "descripcion");
+    AddItemEdit("fms_global", FLOAT, OPT, "fms_global");
+    AddItemEdit("sharegap_global", FLOAT, OPT, "sharegap_global");
+    AddItemEdit("valor_global", FLOAT, OPT, "valor_global");
+    AddItemEdit("valor_reembolso", FLOAT, OPT, "valor_reembolso");
 		   
 	  }
 	  @Override

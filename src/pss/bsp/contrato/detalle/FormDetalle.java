@@ -57,7 +57,6 @@ private JPanel jPanel = null;
 
 private JTabbedPane jTabbedPane = null;
 
-private JPanel jPanel1 = null;
 
 private JPssLabel lvalor1 = null;
 
@@ -111,84 +110,42 @@ private JPssLabel lvariable11 = null;
    * Inicializacion Grafica
    */
   protected void jbInit() throws Exception {
-    lvariable11 = new JPssLabel();
-    lvariable11.setBounds(new Rectangle(4, 63, 110, 22));
-    lvariable11.setText("Descripcion");
-    lvariable1 = new JPssLabel();
-    lvariable1.setBounds(new Rectangle(4, 35, 110, 25));
-    lvariable1.setText("Indicador ganancia");
-    lvalor2 = new JPssLabel();
-    lvalor2.setText("Periodicidad");
-    lvalor2.setBounds(new Rectangle(122, 14, 94, 22));
-    setLayout(null);
-    setSize(new Dimension(996, 665));
-
-
-
-   // getJPanel().add(valor , null);
-
-
-    lvariable.setText( "Indicador" );
-    lvariable.setBounds(new Rectangle(4, 8, 110, 22)); 
-    variable.setBounds(new Rectangle(117, 8, 318, 22)); 
-    add(lvariable, null);
-    add(variable , null);
-
-
-    this.add(getJTextArea(), null);
-    this.add(getJTextArea1(), null);
-//    getJPanel().add(getJCheckBox(), null);
-//    getJPanel().add(getJComboBox(), null);
-//    getJPanel().add(lvalor2, null);
-//    this.add(getJPanel(), null);
-    this.add(getJTabbedPane(), null);
-    this.add(getJPanel1(), null);
-    this.add(getVariable1(), null);
-    this.add(lvariable1, null);
-    this.add(getJCheckBox1(), null);
-    this.add(getJDescr(), null);
-    this.add(lvariable11, null);
- 
-//    getJPanel().setBorder(new TitledBorder(BorderFactory.createEtchedBorder(),"Acumulaci�n"));
-    getJPanel1().setBorder(new TitledBorder(BorderFactory.createEtchedBorder(),"Resultados"));
-
- 
   }
   /**
    * Linkeo los campos con la variables del form
    */
   public void InicializarPanel( JWin zWin ) throws Exception {
 		setAutoRefresh(true, 10000, "DASHBOARD");
-		AddItem( company, CHAR, REQ, "company" ).SetValorDefault(BizUsuario.getUsr().getCompany());
-    AddItem( id, UINT, OPT, "id" );
-    AddItem( linea, UINT, OPT, "linea" );
-    AddItem( variable, CHAR, REQ, "variable" , new JControlCombo() {
+		AddItemEdit("company", CHAR, REQ, "company").SetValorDefault(BizUsuario.getUsr().getCompany());
+    AddItemEdit("id", UINT, OPT, "id");
+    AddItemEdit("linea", UINT, OPT, "linea");
+    AddItemCombo("variable", CHAR, REQ, "variable", new JControlCombo() {
     	@Override
     	public JWins getRecords(boolean one) throws Exception {
     		return getIndicador(one);
     	}
     }).setRefreshForm(true);
-    AddItem( variable1, CHAR, REQ, "variable_ganancia" , new JControlCombo() {
+    AddItemCombo("variable_ganancia", CHAR, REQ, "variable_ganancia", new JControlCombo() {
     	@Override
     	public JWins getRecords(boolean one) throws Exception {
     		return getIndicadorGanancia(one);
     	}
     }).setRefreshForm(true);
     
-    JFormControl c=AddItem( getJCheckBox(), OPT,"acumulativo");
+    JFormControl c=AddItemCheck("acumulativo", OPT, "acumulativo");
     c.SetValorDefault(false);
 //    c.setRefreshForm(true);
-    AddItem( getJComboBox(), CHAR, OPT, "periodo" , JWins.createVirtualWinsFromMap(BizDetalle.getPeriodos()));
+    AddItemCombo("periodo", CHAR, OPT, "periodo", JWins.createVirtualWinsFromMap(BizDetalle.getPeriodos()));
 //    AddItem( getValorActual(), FLOAT, OPT, "valor_actual" ).SetReadOnly(true);
-    AddItem( getValorActualFC(), FLOAT, OPT, "valor_fcontrato" ).SetReadOnly(true);
+    AddItemEdit("valor_fcontrato", FLOAT, OPT, "valor_fcontrato").SetReadOnly(true);
 //    AddItem( getValorObjetivo(), FLOAT, OPT, "valor_total" ).setVisible(true);
-    AddItem( getValorObjetivoFC(), FLOAT, OPT, "valor_totalcontrato" ).setVisible(true);
-    AddItem( getEvalua(), CHAR, OPT, "conclusion" ).SetReadOnly(true);
-    AddItem( getJDescr(), CHAR, OPT, "descripcion" ).SetReadOnly(true);
+    AddItemEdit("valor_totalcontrato", FLOAT, OPT, "valor_totalcontrato").setVisible(true);
+    AddItemEdit("conclusion", CHAR, OPT, "conclusion").SetReadOnly(true);
+    AddItemEdit("descripcion", CHAR, OPT, "descripcion").SetReadOnly(true);
 //    AddItem( getNivel1(), CHAR, OPT, "nivel_alcanzado" ).SetReadOnly(true);
 //    AddItem( getEvalua1(), FLOAT, OPT, "ganancia" ).SetReadOnly(true);
-    AddItem( getNivel2(), CHAR, OPT, "nivel_alcanzado_estimada" ).SetReadOnly(true);
-    AddItem( getEvalua2(), FLOAT, OPT, "ganancia_estimada" ).SetReadOnly(true);
+    AddItemEdit("nivel_alcanzado_estimada", CHAR, OPT, "nivel_alcanzado_estimada").SetReadOnly(true);
+    AddItemEdit("ganancia_estimada", FLOAT, OPT, "ganancia_estimada").SetReadOnly(true);
     JFormImage i=AddItem( getJTextArea(), "imagen1" );
     i.setSource(JPssImage.SOURCE_SCRIPT);
 
@@ -198,7 +155,7 @@ private JPssLabel lvariable11 = null;
 	  i.setKeepHeight(true);
 	  i.setKeepWidth(true);
 
-    AddItem(getJCheckBox1(),OPT,"kicker");
+    AddItemCheck("kicker", OPT, "kicker");
     JFormLista l=AddItem(getJTabbedPane(),35);
 //    l.setKeepHeight(false);
     l.setKeepWidth(false);
@@ -328,44 +285,6 @@ private JPssLabel lvariable11 = null;
 		return jTabbedPane;
 	}
 
-	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel1() {
-		if (jPanel1 == null) {
-			lvalor1113 = new JPssLabel();
-			lvalor1113.setBounds(new Rectangle(182, 60, 61, 20));
-			lvalor1113.setText("Ind.Gan");
-			lvalor11111 = new JPssLabel();
-			lvalor11111.setBounds(new Rectangle(318, 60, 35, 20));
-			lvalor11111.setText("Nivel");
-			lvalor112 = new JPssLabel();
-			lvalor112.setBounds(new Rectangle(8, 60, 113, 20));
-			lvalor112.setText("Al fin del contrato:");
-			lvalor12 = new JPssLabel();
-			lvalor12.setText("Ganancia");
-			lvalor12.setBounds(new Rectangle(405, 60, 63, 20));
-			lvalor1 = new JPssLabel();
-			lvalor1.setText("Evaluación");
-			lvalor1.setBounds(new Rectangle(7, 13, 72, 20));
-			jPanel1 = new JPanel();
-			jPanel1.setLayout(null);
-			jPanel1.setBounds(new Rectangle(438, 9, 552, 87));
-			jPanel1.add(lvalor12, null);
-			jPanel1.add(getEvalua2(), null);
-			jPanel1.add(lvalor112, null);
-			jPanel1.add(getNivel2(), null);
-			jPanel1.add(lvalor11111, null);
-			jPanel1.add(getValorObjetivoFC(), null);
-			jPanel1.add(getValorActualFC(), null);
-			jPanel1.add(lvalor1113, null);
-			jPanel1.add(getEvalua(), null);
-			jPanel1.add(lvalor1, null);
-		}
-		return jPanel1;
-	}
 
 	/**
 	 * This method initializes evalua	
