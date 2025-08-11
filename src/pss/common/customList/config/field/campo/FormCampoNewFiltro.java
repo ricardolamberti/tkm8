@@ -1,12 +1,5 @@
 package  pss.common.customList.config.field.campo;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JTextField;
 import javax.swing.JTree;
 
 import pss.common.customList.config.dynamic.GuiDynamics;
@@ -20,9 +13,6 @@ import pss.common.security.BizUsuario;
 import pss.core.services.fields.JObject;
 import pss.core.tools.JDateTools;
 import pss.core.tools.JTools;
-import pss.core.ui.components.JPssColorPicker;
-import pss.core.ui.components.JPssEdit;
-import pss.core.ui.components.JPssLabel;
 import pss.core.ui.components.JPssLabelFormLov;
 import pss.core.win.GuiVirtuals;
 import pss.core.win.JControlWin;

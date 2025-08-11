@@ -1,24 +1,8 @@
 package pss.common.customList.config.field.campo;
 
-import javax.swing.JTree;
-
-import pss.common.customList.config.dynamic.GuiDynamics;
-import pss.common.customList.config.field.BizField;
-import pss.common.customList.config.field.funciones.BizFuncion;
-import pss.common.customList.config.field.operadores.BizOperador;
-import pss.common.customList.config.field.operadores.GuiOperadores;
-import pss.common.customList.config.relation.BizCampoGallery;
-import pss.common.customList.config.relation.GuiCamposGallery;
-import pss.core.services.fields.JObject;
-import pss.core.tools.JDateTools;
-import pss.core.tools.JTools;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
-import pss.core.win.JControlWin;
 import pss.core.win.JWin;
-import pss.core.win.JWins;
-import pss.core.winUI.controls.JControlCombo;
-import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.forms.JBaseForm;
 
 public class FormCampoStadistic   extends JBaseForm {

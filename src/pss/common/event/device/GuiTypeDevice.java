@@ -4,6 +4,7 @@ import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
+import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiTypeDevice extends JWin {

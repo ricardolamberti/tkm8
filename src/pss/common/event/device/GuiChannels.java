@@ -2,6 +2,9 @@ package pss.common.event.device;
 
 import pss.core.win.JWin;
 import pss.core.win.JWins;
+import pss.core.win.actions.BizAction;
+import pss.core.win.submits.JAct;
+import pss.core.win.submits.JActNew;
 
 public class GuiChannels  extends JWins {
 

@@ -29,7 +29,7 @@ public class GuiModuloEvent extends GuiModulo {
 
 	@Override
 	public void createActionMap() throws Exception {
-		addAction(10, "Histórico", null, 5074, true, false, true, "Group");
+		addAction(10, "HistÃ³rico", null, 5074, true, false, true, "Group");
 		this.addAction(20, "Servidores de Mail", null, 63, true, false);
 		this.addAction(30, "Casillas de Mails", null, 63, true, false);
 		addAction(40, "Canales", null, 10006, true, false, true, "Group");

@@ -22,13 +22,7 @@ import pss.tourism.telegram.event.BizTelegramEvent;
 
 public class TelegramUserBot extends TelegramBotManager {
 
-<<<<<<< HEAD
-	public static final int EVT_TICKET_ROBOT_OFFLINE = 3;
-	public static final int EVT_TICKET_NO_TICKETS = 4;
-
-	public static final String TOKEN = "7811283387:AAHCnq5DEf_akPpN1VYYhCIEGj-Dj5f3FFw";
-=======
-        public static final int EVT_TICKET_ROBOT_OFFLINE = 3;
+      public static final int EVT_TICKET_ROBOT_OFFLINE = 3;
         public static final int EVT_TICKET_NO_TICKETS = 4;
 
         /**
@@ -36,7 +30,6 @@ public class TelegramUserBot extends TelegramBotManager {
          * {@code TELEGRAM_USER_BOT_TOKEN} environment variable.
          */
         public static final String TOKEN = System.getenv("TELEGRAM_USER_BOT_TOKEN");
->>>>>>> 286f4515ae39b68b8ae41e6a8ec84fad00379da4
 
 	public TelegramUserBot() throws Exception {
 	}

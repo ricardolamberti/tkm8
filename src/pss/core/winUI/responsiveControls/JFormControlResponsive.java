@@ -46,6 +46,7 @@ public class JFormControlResponsive extends JFormControl {
 	boolean onlyExpanded;
 	boolean onlyCollapsed;
 
+	String align;
 
 	JScript script;
 	private Insets oPadding;
@@ -390,6 +391,14 @@ public class JFormControlResponsive extends JFormControl {
 	}
 
 
+	public String getAlign() throws Exception {
+	  return align;
+	}
+
+	public JFormControlResponsive setAlign(String align) {
+		this.align = align;
+		return this;
+	}
 	public String getColumnClass() throws Exception {
 		String cls = "";
 		if (complexColumnClass!=null) 
@@ -405,8 +414,8 @@ public class JFormControlResponsive extends JFormControl {
  			cls += " "+offsetClass+" ";
  		else if (offsetPos!=0) 
 			cls+=" col-sm-offset-"+offsetPos;
-// 		if (align!=null) 
-//			cls+=" "+align;
+ 		if (align!=null) 
+			cls+=" "+align;
  		return cls;
 	}
 

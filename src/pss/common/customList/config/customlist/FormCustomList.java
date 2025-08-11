@@ -1,7 +1,6 @@
 package pss.common.customList.config.customlist;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
 import pss.common.customList.config.field.campo.GuiCampos;
 import pss.common.security.BizUsuario;
@@ -12,9 +11,9 @@ import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormCheckResponsive;
 import pss.core.winUI.responsiveControls.JFormColumnResponsive;
+import pss.core.winUI.responsiveControls.JFormFieldsetResponsive;
 import pss.core.winUI.responsiveControls.JFormImageCardResponsive;
 import pss.core.winUI.responsiveControls.JFormPanelResponsive;
-import pss.core.winUI.responsiveControls.JFormRadioResponsive;
 import pss.www.ui.JWebIcon;
 
 public class FormCustomList extends JBaseForm {
@@ -26,30 +25,18 @@ private static final long serialVersionUID = 1226426806993L;
    * Constructor de la Clase
    */
   public FormCustomList() throws Exception {
-    try { jbInit(); }
-    catch (Exception e) { e.printStackTrace(); } 
   }
 
   public GuiCustomList getWin() { return (GuiCustomList) getBaseWin(); }
 
-  /**
-   * Inicializacion Grafica
-   */
-  protected void jbInit() throws Exception {
-    this.setSize(new Dimension(1160, 603));
-    this.setLayout(null);
+      JFormFieldsetResponsive conf =null;
+    JFormImageCardResponsive ic1 =null;
+    JFormFieldsetResponsive ia =null;
+    JFormFieldsetResponsive selTipo =null;
+    JFormImageCardResponsive ic2 =null;
+    JFormImageCardResponsive ic3 =null;
+    JFormImageCardResponsive ic4 =null;
 
-    
-  }
-  
-  JFormPanelResponsive conf;
-  JFormPanelResponsive cm;
-  JFormPanelResponsive selTipo;
-  JFormPanelResponsive ia;
-  JFormImageCardResponsive ic1 = null;
-  JFormImageCardResponsive ic2 = null;
-  JFormImageCardResponsive ic3 = null;
-  JFormImageCardResponsive ic4 = null;
   /**
    * Linkeo los campos con la variables del form
    */
@@ -59,8 +46,9 @@ private static final long serialVersionUID = 1226426806993L;
     AddItemEdit( null, CHAR, REQ, "record_owner" ).setVisible(false);
     AddItemEdit( null, CHAR, OPT, "invisible" ).setVisible(false);
 
+
     if (isAlta()) {
-      conf=AddItemFieldset("Configuración");
+      conf =AddItemFieldset("Configuración");
       
       conf.AddItemEdit( "Descripción", CHAR, REQ, "description" ).setSizeColumns(3).SetValorDefault("Reporte");
       conf.AddItemCombo( "Origen datos", CHAR, REQ, "rel_id", new JControlCombo() {

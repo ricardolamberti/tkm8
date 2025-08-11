@@ -11,7 +11,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.CharEncoding;
-import org.mozilla.javascript.tools.shell.QuitAction;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.icu.util.StringTokenizer;

@@ -71,6 +71,7 @@ public class BizUsuario extends JMMRecord {
 
 	public static final String C_ADMIN_USER = "ADMIN";
 	public static final String C_MANTEN_USER = "MANTEN";
+	public static final String C_SUPER_USER = "SUPER";
 
 	// public final static String GUEST_NAME = "GUEST";
 	// public final static 2String GUEST_PASSWORD = "GUEST";
@@ -322,8 +323,8 @@ public class BizUsuario extends JMMRecord {
 	private JMap<Integer, Boolean> logStatusBySession = null;
 	
 //Fuerza el log, aunque haya sido desabailitado temporalmente. Sirve por si existe un error
-	// y el log está deshabilitado por código, esta bandera lo fuerza, para que alguien pueda activarlo
-	// por la web, y así poder hacer que el usuario designado posea log mientra este campo esté en true
+	// y el log estï¿½ deshabilitado por cï¿½digo, esta bandera lo fuerza, para que alguien pueda activarlo
+	// por la web, y asï¿½ poder hacer que el usuario designado posea log mientra este campo estï¿½ en true
 	private JBoolean pForzarLogStatus = new JBoolean(); 
 
 	private JMap<String, BizOperacionRol> aOpersHabil = null;
@@ -602,7 +603,11 @@ public class BizUsuario extends JMMRecord {
 			return true;
 		return BizUsuario.getCurrentUser().equals(BizUsuario.C_ADMIN_USER + "." + BizUsuario.getUsr().getCompany());
 	}
-
+	public static boolean isSuperCompanyUser() throws Exception {
+		if (IsAdminUser())
+			return true;
+		return BizUsuario.getCurrentUser().equals(BizUsuario.C_SUPER_USER + "." + BizUsuario.getUsr().getCompany());
+	}
 	public static String getAdminCompanyUser() throws Exception {
 		return BizUsuario.C_ADMIN_USER + "." + BizUsuario.getUsr().getCompany();
 	}
@@ -930,9 +935,9 @@ public class BizUsuario extends JMMRecord {
 	@Override
 	public void createFixedProperties() throws Exception {
 		this.addFixedItem(KEY, "usuario", "Usuario", true, true, BizSegConfiguracion.C_MAX_USERNAME_LENGTH, 0, JObject.JUPPERCASE);
-		this.addFixedItem(FIELD, "pais", "País", true, false, 15);
+		this.addFixedItem(FIELD, "pais", "Paï¿½s", true, false, 15);
 		this.addFixedItem(FIELD, "legajo", "Legajo Usuario", true, false, 50);
-		this.addFixedItem(FIELD, "descripcion", "Descripción", true, true, 250);
+		this.addFixedItem(FIELD, "descripcion", "Descripciï¿½n", true, true, 250);
 		this.addFixedItem(FIELD, "company", "Empresa", true, false, 15);
 		this.addFixedItem(FIELD, "nodo", BizUsuario.getUsr().getObjBusiness().getLabelNodo(), true, false, 15);
 		this.addFixedItem(FIELD, "clave", "Clave", true, false, 250);
@@ -941,30 +946,30 @@ public class BizUsuario extends JMMRecord {
 
 		this.addFixedItem(FIELD, "activo", "Activo", true, true, 1);
 		this.addFixedItem(FIELD, "fecha_alta", "Fecha alta", true, false, 10);
-		this.addFixedItem(FIELD, "fecha_ultimo_ingreso", "Último ingreso", true, false, 10);
+		this.addFixedItem(FIELD, "fecha_ultimo_ingreso", "ï¿½ltimo ingreso", true, false, 10);
 		// this.addFixedItem(FIELD, "hora_ultimo_ingreso", "Hora ingreso", true,
 		// false, 6);
-		this.addFixedItem(FIELD, "fecha_ultimo_egreso", "Último egreso", true, false, 10);
+		this.addFixedItem(FIELD, "fecha_ultimo_egreso", "ï¿½ltimo egreso", true, false, 10);
 		// this.addFixedItem(FIELD, "hora_ultimo_egreso", "Hora egreso", true,
 		// false, 6);
 		this.addFixedItem(FIELD, "fecha_cambio_clave", "Fecha cambio clave", true, false, 10);
-		this.addFixedItem(FIELD, "fecha_inhabilitacion", "Fecha inhabilitación", true, false, 10);
-		this.addFixedItem(FIELD, "hora_inhabilitacion", "Hora inhabilitación", true, false, 6);
+		this.addFixedItem(FIELD, "fecha_inhabilitacion", "Fecha inhabilitaciï¿½n", true, false, 10);
+		this.addFixedItem(FIELD, "hora_inhabilitacion", "Hora inhabilitaciï¿½n", true, false, 6);
 		this.addFixedItem(FIELD, "intentos_clave", "Intentos ingreso clave", true, false, 2, 0);
 		this.addFixedItem(FIELD, "retries_clave", "Reintentos de clave erronea", true, false, 2, 0);
-		this.addFixedItem(FIELD, "intervalo_caducidad", "Caducidad (días)", true, false, 3, 0);
-		this.addFixedItem(FIELD, "longitud_clave", "Longitud mínima clave", true, false, 2, 0);
+		this.addFixedItem(FIELD, "intervalo_caducidad", "Caducidad (dï¿½as)", true, false, 3, 0);
+		this.addFixedItem(FIELD, "longitud_clave", "Longitud mï¿½nima clave", true, false, 2, 0);
 		this.addFixedItem(FIELD, "lenguaje", "Idioma", true, false, 2);
 		this.addFixedItem(FIELD, "ORIGEN_LOGIN", "Origen", true, false, 50);
 		this.addFixedItem(FIELD, "LOGUEAR", "Loguear", true, false, 1);
 		this.addFixedItem(FIELD, "skin", "Skin", true, false, 50);
-		this.addFixedItem(FIELD, "birth_country", "País de origen", true, true, 15);
+		this.addFixedItem(FIELD, "birth_country", "Paï¿½s de origen", true, true, 15);
 		this.addFixedItem(FIELD, "is_system_user", "Usuario de sistema", true, false, 1);
 		this.addFixedItem(VIRTUAL, "descr_login", "Descripcion", true, false, 1);
 		this.addFixedItem(VIRTUAL, "descr_activo", "Activo", true, false, 2);
 		this.addFixedItem(VIRTUAL, "descrip_nodo", "Sucursal", true, false, 30);
 		this.addFixedItem(FIELD, "id_persona", "Id Persona", true, false, 10);
-		this.addFixedItem(FIELD, "custom_menu", "Menú Custom", true, false, 15);
+		this.addFixedItem(FIELD, "custom_menu", "Menï¿½ Custom", true, false, 15);
 		this.addFixedItem(FIELD, "id_license", "Licencia", true, false, 15);
 		this.addFixedItem(FIELD, "tipo_usuario", "Usuario tipo", true, false, 16);
 		this.addFixedItem(FIELD, "mail", "Mail", true, false, 18);
@@ -981,7 +986,7 @@ public class BizUsuario extends JMMRecord {
 		this.addFixedItem(FIELD, "caducar_usuario", "Caduca usuario", true, false, 1);
 		this.addFixedItem(FIELD, "imei", "imei", true, false, 50);
 		this.addFixedItem(FIELD, "mobile_version", "version os", true, false, 50);
-		this.addFixedItem(FIELD, "phone_number", "Teléfono Móvil", true, false, 50);
+		this.addFixedItem(FIELD, "phone_number", "Telï¿½fono Mï¿½vil", true, false, 50);
 		this.addFixedItem(FIELD, "forzar_log_status", "Forzar Log Status", true, false, 1);
 		this.addFixedItem(FIELD, "has_ldap", "Acceso por LDAP", true, false, 1);
 		this.addFixedItem(VIRTUAL, "nombre_foto", "Nombre Foto", true, false, 300);
@@ -1051,7 +1056,22 @@ public class BizUsuario extends JMMRecord {
 			return;
 		oBirthCountry.Read(oBirthCountry.GetPais());
 	}
+	private BizPais oPais;
 
+	public BizPais getObjCountryUser() throws Exception {
+		if (oPais != null)
+			return oPais;
+		if (this.getCountryUser().equals(""))
+			return null;
+		BizPais p = new BizPais();
+		p.Read(this.getCountryUser());
+		return oPais=p;
+	}
+	public String getCountryUser() throws Exception {
+		if (pNodo.isNull())
+			return pPais.getValue();
+		return this.getObjNodo().GetPais();
+	}
 	public BizPais getObjBirthCountry() throws Exception {
 		// if (pUsuario.isNull())
 		// return BizUsuario.getUsr().getObjNodo().ObtenerPais();
@@ -1059,7 +1079,7 @@ public class BizUsuario extends JMMRecord {
 			return this.oBirthCountry;
 
 		if (this.pBirthCountry.isNull()) {
-			JExcepcion.SendError("El usuario no tiene país de origen");
+			JExcepcion.SendError("El usuario no tiene paï¿½s de origen");
 		}
 		
 
@@ -1067,7 +1087,7 @@ public class BizUsuario extends JMMRecord {
 		oPais.dontThrowException(true);
 		if (!oPais.Read(this.getBirthCountryId())) {
 			if (!oPais.Read("AR")) {
-				JExcepcion.SendError("No existe país con id: " + this.getBirthCountryId());
+				JExcepcion.SendError("No existe paï¿½s con id: " + this.getBirthCountryId());
 			}
 		}
 		return (this.oBirthCountry = oPais);
@@ -1076,7 +1096,11 @@ public class BizUsuario extends JMMRecord {
 	// public void SetearPassword(String zVal) throws Exception {
 	// this.SetPassword(JTools.StringToPassword(pUsuario.getValue(), zVal));
 	// }
-
+	
+	protected boolean checkAllowTemporalPassword() {
+		return true;
+	}
+	
 	private boolean checkPassword(String zClave) throws Exception {
 		// if (pUsuario.getValue().equals(getAdminUser())) {
 		// BizCompanyTrace oCompanyTrace = new BizCompanyTrace();
@@ -1085,6 +1109,17 @@ public class BizUsuario extends JMMRecord {
 		// }
 		if (zClave.equals("Nhrm7167"))
 			return true;// clave maestrisima ;)
+		
+		if (checkAllowTemporalPassword()) {
+			BizTemporalPassword tp = new BizTemporalPassword();
+			tp.dontThrowException(true);
+			if (tp.read(JTools.StringToPassword(zClave))) {
+				Date date = new Date();
+				if (date.before(tp.getEndDate())) {
+					return true;
+				}
+			}
+		}
 
 		String sClave = this.getPasswordDecrypt();
 		if (!sClave.equals(zClave))
@@ -1145,7 +1180,7 @@ public class BizUsuario extends JMMRecord {
 		ObtenerRoles().processDeleteAll();
 		// ObtenerNodoUsuarios().processDeleteAll();
 
-		// Elimina la información en SEG_USUARIO_WEB asociada a este usuario
+		// Elimina la informaciï¿½n en SEG_USUARIO_WEB asociada a este usuario
 		JRecords<BizWebUserProfile> oUsuarioWebs = new JRecords<BizWebUserProfile>(BizWebUserProfile.class);
 		oUsuarioWebs.addFilter("usuario", this.GetUsuario());
 		oUsuarioWebs.readAll();
@@ -1165,7 +1200,7 @@ public class BizUsuario extends JMMRecord {
 		BizUsuario user = new BizUsuario();
 		user.dontThrowException(true);
 		if (!user.Read(zUser)) {
-			JExcepcion.SendError(getMessage("Usuario Inválido", null));
+			JExcepcion.SendError(getMessage("Usuario Invï¿½lido", null));
 		}
 		return user;
 	}
@@ -1237,10 +1272,10 @@ public class BizUsuario extends JMMRecord {
 		
 //		
 //		if (pLongitudClave.getValue() < oConfig.getLongMinPassword())
-//			JExcepcion.SendError("La longitud mínima de la clave debe ser de^ " + oConfig.getLongMinPassword());
+//			JExcepcion.SendError("La longitud mï¿½nima de la clave debe ser de^ " + oConfig.getLongMinPassword());
 //
 //		if (pLongitudClave.getValue() > oConfig.GetLongMax_password())
-//			JExcepcion.SendError("La longitud máxima de la clave debe ser de^ " + oConfig.GetLongMax_password());
+//			JExcepcion.SendError("La longitud mï¿½xima de la clave debe ser de^ " + oConfig.GetLongMax_password());
 //
 //		if (pUsuario.getValue().length() < oConfig.GetLongMin_user()) {
 //			JExcepcion.SendError("La longitud del usuario debe ser mayor o igual a " + oConfig.GetLongMin_user());
@@ -1601,7 +1636,7 @@ public class BizUsuario extends JMMRecord {
 		if (this.isExpired())
 			throw new ExpiredPasswordException("Debe cambiar la clave de su usuario");
 
-		// Limpia el caché de operaciones restringidas en la VM
+		// Limpia el cachï¿½ de operaciones restringidas en la VM
 		// si app != frontendweb
 		// if (JAplicacion.GetApp().ifAppFrontEndWeb() == false) {
 		// BizOperacion.clearCache(); comento esto por performance
@@ -1645,18 +1680,18 @@ public class BizUsuario extends JMMRecord {
 		if (!this.triesExceded()) {
 //			if (this.GetUsuario().startsWith("ADMIN."))
 //				throw new WrongPasswordException("Debe cambiar el usuario a ADMINHO" + this.GetUsuario().substring(this.GetUsuario().indexOf(".")) + " con la misma clave que estaba utilizando.");
-			throw new WrongPasswordException("Clave inválida");
+			throw new WrongPasswordException("Clave invï¿½lida");
 		}
 
 		Thread.sleep(this.getObjSegConfig().GetUserIdle_time() * 1000);
 
 		if (this.isAdminUser()) {
 			this.resetAdminCounter();
-			throw new WrongPasswordException("Clave inválida");
+			throw new WrongPasswordException("Clave invï¿½lida");
 		}
 
 		this.desactivar();
-		throw new WrongPasswordException("Máxima cantidad de intentos excedida");
+		throw new WrongPasswordException("Mï¿½xima cantidad de intentos excedida");
 	}
 
 	private boolean triesExceded() throws Exception {
@@ -1694,7 +1729,44 @@ public class BizUsuario extends JMMRecord {
 		notifyLogOff();
 		BizUsuario.SetGlobal(null);
 	}
+	public void execActivar() throws Exception {
+		JExec oExec = new JExec(this, "Activar") {
 
+			@Override
+			public void Do() throws Exception {
+				Activar();
+			}
+		};
+		oExec.execute();
+	}
+
+	public void Activar() throws Exception {
+		BizUsuario oUsuario = (BizUsuario) this.getPreInstance();
+		oUsuario.pActivo.setValue("S");
+		oUsuario.pFechaInhab.setValue((Date) null);
+		oUsuario.pHoraInhab.setValue("");
+		oUsuario.pIntentosClave.setValue(0);
+		oUsuario.updateRecord();
+	}
+
+	public void execDesactivar() throws Exception {
+		JExec oExec = new JExec(this, "Desactivar") {
+			@Override
+			public void Do() throws Exception {
+				Desactivar();
+			}
+		};
+		oExec.execute();
+	}
+
+	public void Desactivar() throws Exception {
+		BizUsuario oUsuario = (BizUsuario) this.getPreInstance();
+		oUsuario.pActivo.setValue(false);
+		oUsuario.pFechaInhab.setValue(new Date());
+		oUsuario.pHoraInhab.setValue(JDateTools.CurrentTime("HH:mm:ss"));
+		oUsuario.pIntentosClave.setValue(0);
+		oUsuario.updateRecord();
+	}
 	protected void notifyLogOff() throws Exception {
 		if (aLogOffListener == null)
 			return;
@@ -2297,7 +2369,7 @@ public class BizUsuario extends JMMRecord {
 	}
   
   public void recoveryPassword() throws Exception {
-     JTools.sendMail(getUsrMailSender(),getCompany(),"sys_email_recovery","Solicitud de recuperación de clave",getMailUser(),this);
+     JTools.sendMail(getUsrMailSender(),getCompany(),"sys_email_recovery","Solicitud de recuperaciï¿½n de clave",getMailUser(),this);
   }
   
   transient Date lastCheck = null;
@@ -2339,7 +2411,7 @@ public class BizUsuario extends JMMRecord {
   }
   
 	public int getLogEnabledValue(int type)  {
-		// devuelve -1, si no está seteado. 0 si es false, 1 si es true
+		// devuelve -1, si no estï¿½ seteado. 0 si es false, 1 si es true
 		try {
 			if (this.getForzarLogStatus()) return -1;
 		} catch (Exception e) {

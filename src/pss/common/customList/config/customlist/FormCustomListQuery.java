@@ -1,7 +1,5 @@
 package pss.common.customList.config.customlist;
 
-import java.awt.Dimension;
-
 import pss.core.win.JWin;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormImageCardResponsive;
@@ -17,21 +15,11 @@ private static final long serialVersionUID = 1226426806993L;
    * Constructor de la Clase
    */
   public FormCustomListQuery() throws Exception {
-    try { jbInit(); }
-    catch (Exception e) { e.printStackTrace(); } 
-  }
+ }
 
   public GuiCustomList getWin() { return (GuiCustomList) getBaseWin(); }
 
-  /**
-   * Inicializacion Grafica
-   */
-  protected void jbInit() throws Exception {
-    this.setSize(new Dimension(1160, 603));
-    this.setLayout(null);
-
-    
-  }
+ 
   /**
    * Linkeo los campos con la variables del form
    */

@@ -130,7 +130,9 @@ public class JRecord extends JBaseRecord implements Comparable<Object>,JPurgeInt
 	}
 	
 	 
-	  
+	 public boolean canViewField(String field) throws Exception {
+		 return true;
+	 }
 
 	public void cloneTable(Class<?> table, String oldCompany, String newcompany)
 			throws Exception {
@@ -308,6 +310,9 @@ public class JRecord extends JBaseRecord implements Comparable<Object>,JPurgeInt
 		}
 		if (rSet==null) return;
 		try {
+			if (!canViewField(field)) {
+				obj.setNull();		
+			}
 			if (sObjectType.equals(JObject.JSTRING)) {
 				obj.setValue(rSet.CampoAsStr(field));
 			}

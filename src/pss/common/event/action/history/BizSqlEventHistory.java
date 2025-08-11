@@ -27,6 +27,7 @@ public class BizSqlEventHistory extends JRecord {
   private JString pCompany = new JString();
   private JString pMensajeId = new JString();
   private JString pFundamento = new JString();
+  private JString pMensajeUsuario = new JString();
   private JString pQRcode = new JString();
   private JString pDestinatario = new JString();
   private JString pAccion = new JString();
@@ -71,6 +72,8 @@ public class BizSqlEventHistory extends JRecord {
   public String getQR() throws Exception {     return pQRcode.getValue();  }
   public void setFundamento(String zValue) throws Exception {    pFundamento.setValue(zValue);  }
   public String getFundamento() throws Exception {     return pFundamento.getValue();  }
+  public void setMensajeUsuario(String zValue) throws Exception {    pMensajeUsuario.setValue(zValue);  }
+  public String getMensajeUsuario() throws Exception {     return pMensajeUsuario.getValue();  }
   public void setMensaje(String zValue) throws Exception {    pMensajeContenido.setValue(zValue);  }
   public String getMensaje() throws Exception { 
   	if (pMensajeContenido.getValue().startsWith("%"))
@@ -126,6 +129,7 @@ public class BizSqlEventHistory extends JRecord {
     this.addItem( "fecha", pFecha );
     this.addItem( "fecha_envio", pFechaEnvio );
     this.addItem( "fundamento", pFundamento );
+    this.addItem( "mensaje_usuario", pMensajeUsuario );
     this.addItem( "mensaje", pMensajeId );
     this.addItem( "mensaje_contenido", pMensajeContenido );
     this.addItem( "destinatario", pDestinatario );
@@ -153,6 +157,7 @@ public class BizSqlEventHistory extends JRecord {
     this.addFixedItem( FIELD, "fecha", "Fecha", true, true, 18 );
     this.addFixedItem( FIELD, "mensaje", "Mensaje", true, true, 4000 );
     this.addFixedItem( FIELD, "fundamento", "Fundamento", true, true, 4000 );
+    this.addFixedItem( FIELD, "mensaje_usuario", "Mensaje Usuario", true, false, 4000 );
     this.addFixedItem( FIELD, "destinatario", "Destinatario", true, true, 250 );
     this.addFixedItem( FIELD, "accion", "Accion", true, true, 50 );
     this.addFixedItem( FIELD, "remitido", "remitido", true, false, 1);

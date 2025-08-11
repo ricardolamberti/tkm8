@@ -4,6 +4,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.SimpleTimeZone;
 
 import pss.common.security.BizUsuario;
@@ -13,24 +15,125 @@ public class JDateTools {
 
 	public static String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
 	public static String DEFAULT_HOUR_FORMAT = "HH:mm:ss";
-	
+
 	public static Date MaxDate() throws Exception {
 		return StringToDate("29991230", "yyyymmdd");
 	}
 
-
 	public static Date MinDate() throws Exception {
 		return StringToDate("19000101", "yyyymmdd");
 	}
-	//extrae el date si es un datetime
+
+	// extrae el date si es un datetime
 	public static String YYYYMMDDToDefault(String s) throws Exception {
-		String fecha=s;
-		if (fecha.indexOf(" ")!=-1) fecha =s.substring(0,s.indexOf(" "));
+		String fecha = s;
+		if (fecha.indexOf(" ") != -1)
+			fecha = s.substring(0, s.indexOf(" "));
 		Date d = StringToDate(fecha, "yyyy-MM-dd");
 		return DateToString(d);
 	}
+	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
 
-	
+	public static Date getInicioPeriodo(String periodo) throws Exception {
+		Date fechaPeriodo = sdf.parse(periodo.substring(0, 8));
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(fechaPeriodo);
+
+		int mes = cal.get(Calendar.MONTH) + 1;
+		int anio = cal.get(Calendar.YEAR);
+
+		if (mes == 1 && cal.get(Calendar.DAY_OF_MONTH) == 1) { // enero
+			cal.set(anio, Calendar.JANUARY, 1);
+		} else if (mes == 12 && cal.get(Calendar.DAY_OF_MONTH) == 24) { // diciembre
+			cal.set(anio, Calendar.NOVEMBER, 24);
+		} else {
+			// resto: 24 del mes anterior
+			if (mes == 1) {
+				cal.set(anio - 1, Calendar.DECEMBER, 24);
+			} else {
+				cal.set(anio, mes - 2, 24); // mes - 2 porque es 0-based
+			}
+		}
+
+		return cal.getTime();
+	}
+
+	public static Date getFinPeriodo(String periodo) throws Exception {
+		Date fechaPeriodo = sdf.parse(periodo.substring(0, 8));
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(fechaPeriodo);
+
+		int mes = cal.get(Calendar.MONTH) + 1;
+		int anio = cal.get(Calendar.YEAR);
+
+		if (mes == 1 && cal.get(Calendar.DAY_OF_MONTH) == 1) { // enero
+			cal.set(anio, Calendar.JANUARY, 21);
+		} else if (mes == 12 && cal.get(Calendar.DAY_OF_MONTH) == 24) { // diciembre
+			cal.set(anio, Calendar.DECEMBER, 31);
+		} else {
+			// resto: 23 del mes actual
+			cal.set(anio, mes - 1, 23); // mes - 1 porque es 0-based
+		}
+
+		return cal.getTime();
+	}
+
+	public static String buildPeriod(Date fechaDate) {
+		if (fechaDate == null)
+			return null;
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(fechaDate);
+
+		int anio = cal.get(Calendar.YEAR);
+		int mes = cal.get(Calendar.MONTH) + 1; // Calendar.MONTH es 0-based
+		int dia = cal.get(Calendar.DAY_OF_MONTH);
+
+		Calendar periodo = Calendar.getInstance();
+
+		// Caso especial: diciembre (24 nov al 31 dic)
+		Calendar nov24 = Calendar.getInstance();
+		nov24.set(anio, Calendar.NOVEMBER, 24, 0, 0, 0);
+		nov24.set(Calendar.MILLISECOND, 0);
+
+		if (mes == 12 && !cal.before(nov24)) {
+			periodo.set(anio, Calendar.DECEMBER, 24);
+		}
+
+		// Caso especial: enero (1 al 21)
+		else if (mes == 1 && dia <= 21) {
+			periodo.set(anio, Calendar.JANUARY, 1);
+		}
+
+		// 1 al 8
+		else if (dia >= 1 && dia <= 8) {
+			periodo.set(anio, mes - 1, 1);
+		}
+
+		// 9 al 15
+		else if (dia >= 9 && dia <= 15) {
+			periodo.set(anio, mes - 1, 9);
+		}
+
+		// 16 al 23
+		else if (dia >= 16 && dia <= 23) {
+			periodo.set(anio, mes - 1, 16);
+		}
+
+		// 24 al fin de mes â†’ usar 24 del mes anterior
+		else {
+			if (mes == 1) {
+				periodo.set(anio - 1, Calendar.DECEMBER, 24);
+			} else {
+				periodo.set(anio, mes - 1, 24); // mes - 2 porque Calendar.MONTH es 0-based
+			}
+		}
+
+		// Formateo final
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+		return sdf.format(periodo.getTime()) + "W";
+	}
+
 	Date oDate;
 
 	public JDateTools() {
@@ -48,41 +151,40 @@ public class JDateTools {
 		oDate = d;
 	}
 
-  public static char validateSeparator(String zPattern) {
-    int count = zPattern.length();
-    char cLastFoundSep = 0x00;
-    for (int i = 0; i < count; i++) {
-      char c = zPattern.charAt(i);
-      if (c != 'd' && c != 'M' && c != 'y') {
-        if (cLastFoundSep==0x00) {
-          cLastFoundSep = c;
-        } else if (cLastFoundSep!=c) {
-          return '/'; // two different separators !!!!
-        }
-      }
-    }
-    return cLastFoundSep;
-  }
+	public static char validateSeparator(String zPattern) {
+		int count = zPattern.length();
+		char cLastFoundSep = 0x00;
+		for (int i = 0; i < count; i++) {
+			char c = zPattern.charAt(i);
+			if (c != 'd' && c != 'M' && c != 'y') {
+				if (cLastFoundSep == 0x00) {
+					cLastFoundSep = c;
+				} else if (cLastFoundSep != c) {
+					return '/'; // two different separators !!!!
+				}
+			}
+		}
+		return cLastFoundSep;
+	}
 
-  
 	// --------------------------------------------------------------------------
 	// //
 	// Convierto una fecha a un string
 	// --------------------------------------------------------------------------
 	// //
 	public static String DateToString(Date zVal) {
-		if (zVal==null) return "";
+		if (zVal == null)
+			return "";
 		return DateToString(zVal, JDateTools.DEFAULT_DATE_FORMAT);
 	}
-	
+
 	public static String DateToString(Date zVal, String zFormat) {
-		if (zVal==null) return "";
+		if (zVal == null)
+			return "";
 		SimpleDateFormat simple = new SimpleDateFormat();
 		simple.applyPattern(zFormat);
 		return simple.format(zVal);
 	}
-
-
 
 	public static String CurrentDateTime() throws Exception {
 		return CurrentDate(DEFAULT_DATE_FORMAT + " " + DEFAULT_HOUR_FORMAT);
@@ -103,29 +205,40 @@ public class JDateTools {
 	}
 
 	public static boolean between(Date date, Date dateStart, Date dateEnd) throws Exception {
-		if (date == null || dateStart == null || dateEnd == null) return false;
+		if (date == null || dateStart == null || dateEnd == null)
+			return false;
 		return (dateEqualOrAfter(date, dateStart) && dateEqualOrBefore(date, dateEnd));
 	}
 
 	public static boolean dateEqualOrAfter(Date date, Date date2) throws Exception {
-		if (date==null && date2==null) return true;
-		if (date!=null && date2==null) return false;
-		if (date==null && date2!=null) return true;
-		if (JDateTools.equalsDate(date,date2))	return true;
+		if (date == null && date2 == null)
+			return true;
+		if (date != null && date2 == null)
+			return false;
+		if (date == null && date2 != null)
+			return true;
+		if (JDateTools.equalsDate(date, date2))
+			return true;
 		return (date.after(date2));
 
 	}
+
 	public static boolean betweenHours(Date date, JHour hourStart, JHour hourEnd) throws Exception {
-		if (date == null || hourStart == null || hourEnd == null) return false;
+		if (date == null || hourStart == null || hourEnd == null)
+			return false;
 		JHour ahora = JHour.toJHour(date);
 		return (ahora.after(hourStart) && ahora.before(hourEnd));
 	}
 
 	public static boolean dateEqualOrBefore(Date date, Date date2) throws Exception {
-		if (date==null && date2==null) return true;
-		if (date!=null && date2==null) return true;
-		if (date==null && date2!=null) return false;
-		if (JDateTools.equalsDate(date,date2))	return true;
+		if (date == null && date2 == null)
+			return true;
+		if (date != null && date2 == null)
+			return true;
+		if (date == null && date2 != null)
+			return false;
+		if (JDateTools.equalsDate(date, date2))
+			return true;
 		return (date.before(date2));
 	}
 
@@ -150,9 +263,11 @@ public class JDateTools {
 		Date value = JDateTools.set(this.getValue(), zCalendarField, zValue);
 		this.setValue(value);
 	}
+
 	static public Date getDateStartDay(Date zValue) throws Exception {
-		if (zValue==null) return null;
-		GregorianCalendar c =new GregorianCalendar();
+		if (zValue == null)
+			return null;
+		GregorianCalendar c = new GregorianCalendar();
 		c.setTime(zValue);
 		c.set(Calendar.HOUR_OF_DAY, 0);
 		c.set(Calendar.MINUTE, 0);
@@ -160,10 +275,11 @@ public class JDateTools {
 		c.set(Calendar.MILLISECOND, 0);
 		return c.getTime();
 	}
-	
+
 	static public Date getDateEndDay(Date zValue) throws Exception {
-		if (zValue==null) return null;
-		GregorianCalendar c =new GregorianCalendar();
+		if (zValue == null)
+			return null;
+		GregorianCalendar c = new GregorianCalendar();
 		c.setTime(zValue);
 		c.set(Calendar.HOUR_OF_DAY, 23);
 		c.set(Calendar.MINUTE, 59);
@@ -171,11 +287,13 @@ public class JDateTools {
 		c.set(Calendar.MILLISECOND, 999);
 		return c.getTime();
 	}
+
 	static public long getAnioActual() throws Exception {
-		GregorianCalendar c =new GregorianCalendar();
+		GregorianCalendar c = new GregorianCalendar();
 		c.setTime(new Date());
 		return c.get(Calendar.YEAR);
 	}
+
 	// --------------------------------------------------------------------------
 	// //
 	// Convierto una fecha a un string
@@ -189,6 +307,17 @@ public class JDateTools {
 		return TimeToString(new Date(), zFmt);
 	}
 
+	public static String ensureTimePresent(String dateStr, String format) {
+		// Verificar si el formato incluye hora
+		if (format.contains("HH:mm:ss") && !dateStr.matches(".*\\d{2}:\\d{2}:\\d{2}$")) {
+			return dateStr + " 00:00:00"; // Completar con horas, minutos y segundos
+		} else if (format.contains("HH:mm") && !dateStr.matches(".*\\d{2}:\\d{2}$")) {
+			return dateStr + " 00:00"; // Completar con horas y minutos
+		}
+		dateStr = dateStr.replace("24:00", "00:00");
+		return dateStr; // Retornar sin cambios si no falta informaciÃ³n
+	}
+
 	// --------------------------------------------------------------------------
 	// //
 	// Convierte un string a una fecha
@@ -197,62 +326,69 @@ public class JDateTools {
 	public static Date StringToDate(String zVal) throws Exception {
 		return StringToDate(zVal, DEFAULT_DATE_FORMAT);
 	}
+
 	public static Date StringToDateTime(String zVal) throws Exception {
-	  if ( zVal.trim().length() == 10 ) // Vino solo la fecha
-	    return StringToDate(zVal);
-		return StringToDate(zVal, DEFAULT_DATE_FORMAT+" "+DEFAULT_HOUR_FORMAT);
+		if (zVal.trim().length() == 10) // Vino solo la fecha
+			return StringToDate(zVal);
+		return StringToDate(zVal, DEFAULT_DATE_FORMAT + " " + DEFAULT_HOUR_FORMAT);
 	}
 
 	public static Date StringToDateNonExec(String zVal, String zFormat) throws Exception {
 		try {
-			return StringToDate(zVal,zFormat);
+			return StringToDate(zVal, zFormat);
 		} catch (Exception e) {
 			return null;
 		}
 	}
+
 	public static Date StringToDate(String zVal, String zFormat) throws Exception {
-		if (zVal==null) return null;
-		if (zVal.equals("")) return null;
-		if ( zFormat.indexOf('/') >=0  )
+		if (zVal == null)
+			return null;
+		if (zVal.equals(""))
+			return null;
+		if (zFormat.indexOf('/') >= 0)
 			zFormat = zFormat.replace('/', '-');
-		if ( zFormat.indexOf(',') >=0  )
+		if (zFormat.indexOf(',') >= 0)
 			zFormat = zFormat.replace(',', ' ');
-		if ( zVal.indexOf('/')>=0 )
+		if (zVal.indexOf('/') >= 0)
 			zVal = zVal.replace('/', '-');
-		
+
 		SimpleDateFormat oSimple = new SimpleDateFormat();
 		oSimple.applyPattern(zFormat);
 		oSimple.setLenient(false);
 		try {
 			return oSimple.parse(zVal);
 		} catch (Exception E) {
-			if (zVal.endsWith("0229")&&zVal.length()==8) {
-				//error bisiesto
-				return oSimple.parse(JTools.replace(zVal, "0229" , "0228"));
+			if (zVal.endsWith("0229") && zVal.length() == 8) {
+				// error bisiesto
+				return oSimple.parse(JTools.replace(zVal, "0229", "0228"));
 			}
-			Object zParams[] =  new String[]{zVal,zFormat};
-			JExcepcion.SendError(BizUsuario.getMessage("Fecha inválida", zParams));
+			Object zParams[] = new String[] { zVal, zFormat };
+			JExcepcion.SendError(BizUsuario.getMessage("Fecha invï¿½lida", zParams));
 		}
 		return null;
 	}
+
 	public static Date StringToTime(String zVal, String zFormat) throws Exception {
-		if (zVal==null) return null;
-		if (zVal.equals("")) return null;
-		if ( zFormat.indexOf('/') >=0  )
+		if (zVal == null)
+			return null;
+		if (zVal.equals(""))
+			return null;
+		if (zFormat.indexOf('/') >= 0)
 			zFormat = zFormat.replace('/', '-');
-		if ( zFormat.indexOf(',') >=0  )
+		if (zFormat.indexOf(',') >= 0)
 			zFormat = zFormat.replace(',', ' ');
-		if ( zVal.indexOf('/')>=0 )
+		if (zVal.indexOf('/') >= 0)
 			zVal = zVal.replace('/', '-');
-		
+
 		SimpleDateFormat oSimple = new SimpleDateFormat();
 		oSimple.applyPattern(zFormat);
 		oSimple.setLenient(false);
 		try {
 			return oSimple.parse(zVal);
 		} catch (Exception E) {
-			Object zParams[] =  new String[]{zVal,zFormat};
-			JExcepcion.SendError(BizUsuario.getMessage("Hora inválida", zParams));
+			Object zParams[] = new String[] { zVal, zFormat };
+			JExcepcion.SendError(BizUsuario.getMessage("Hora invï¿½lida", zParams));
 		}
 		return null;
 	}
@@ -278,11 +414,12 @@ public class JDateTools {
 	// //
 	public static boolean CheckDatetime(String zVal) throws Exception {
 		int sep = zVal.indexOf(' ');
-		if (sep == -1) 
+		if (sep == -1)
 			return CheckDate(zVal);
-		return CheckDate(zVal.substring(0,sep)) && CheckHour(zVal.substring(sep+1));
+		return CheckDate(zVal.substring(0, sep)) && CheckHour(zVal.substring(sep + 1));
 	}
-	public static boolean CheckDatetime(String zVal,boolean exception) throws Exception {
+
+	public static boolean CheckDatetime(String zVal, boolean exception) throws Exception {
 		try {
 			return CheckDatetime(zVal);
 		} catch (Exception e) {
@@ -291,7 +428,7 @@ public class JDateTools {
 		}
 		return false;
 	}
-	
+
 	public static boolean CheckDate(String zVal) throws Exception {
 		boolean bRc;
 
@@ -312,18 +449,21 @@ public class JDateTools {
 		return bRc;
 
 	}
-	
+
 	public static boolean CheckHour(String zHour) {
 		Integer iAux;
 		try {
-			iAux=new Integer(zHour.substring(0, 2));
-			if (iAux.intValue()<0||iAux.intValue()>23) return false;
+			iAux = new Integer(zHour.substring(0, 2));
+			if (iAux.intValue() < 0 || iAux.intValue() > 23)
+				return false;
 
-			iAux=new Integer(zHour.substring(3, 5));
-			if (iAux.intValue()<0||iAux.intValue()>59) return false;
+			iAux = new Integer(zHour.substring(3, 5));
+			if (iAux.intValue() < 0 || iAux.intValue() > 59)
+				return false;
 
-			iAux=new Integer(zHour.substring(6, 8));
-			if (iAux.intValue()<0||iAux.intValue()>59) return false;
+			iAux = new Integer(zHour.substring(6, 8));
+			if (iAux.intValue() < 0 || iAux.intValue() > 59)
+				return false;
 
 		} catch (Exception e) {
 			return false;
@@ -378,6 +518,7 @@ public class JDateTools {
 		oCalendar.add(Calendar.YEAR, anios);
 		return oCalendar.getTime();
 	}
+
 	public static int getDayOfYears(Date zDate) {
 		Calendar oCalendar = Calendar.getInstance();
 		oCalendar.setTime(zDate);
@@ -402,24 +543,27 @@ public class JDateTools {
 	public static int getDaysBetween(Date begin, Date end) throws Exception {
 		return (int) ((end.getTime() - begin.getTime()) / (1000 * 60 * 60 * 24));
 	}
+
 	public static int getMinutesBetween(Date begin, Date end) throws Exception {
 		return (int) ((end.getTime() - begin.getTime()) / (1000 * 60));
 	}
+
 	public static int getYearsBetween(Date begin, Date end) throws Exception {
-		if (begin==null) return 0;
-		if (end==null) return 0;
+		if (begin == null)
+			return 0;
+		if (end == null)
+			return 0;
 		Calendar c1 = Calendar.getInstance();
 		c1.setTime(begin);
 		Calendar c2 = Calendar.getInstance();
 		c2.setTime(end);
-    int diff = c2.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
-    if (c1.get(Calendar.MONTH) < c2.get(Calendar.MONTH) || 
-        (c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH) && c1.get(Calendar.DATE) < c2.get(Calendar.DATE))) {
-        diff--;
-    }
-    return diff;
-   }
-	
+		int diff = c2.get(Calendar.YEAR) - c1.get(Calendar.YEAR);
+		if (c1.get(Calendar.MONTH) < c2.get(Calendar.MONTH) || (c1.get(Calendar.MONTH) == c2.get(Calendar.MONTH) && c1.get(Calendar.DATE) < c2.get(Calendar.DATE))) {
+			diff--;
+		}
+		return diff;
+	}
+
 	public static long subDates(Date begin, Date end) throws Exception {
 		return (end.getTime() - begin.getTime()) / (1000 * 60 * 60 * 24);
 	}
@@ -437,7 +581,7 @@ public class JDateTools {
 	public static Date addMill(Date zDate, int value) throws Exception {
 		return new JDateTools(new Date(zDate.getTime())).addMill(value);
 	}
-	
+
 	public static Date addMinutes(Date zDate, long zMinutes) {
 		Date oDate = new Date(zDate.getTime() + (1000 * 60 * zMinutes));
 		return oDate;
@@ -489,14 +633,15 @@ public class JDateTools {
 	// //
 	// Combina un Tipo "Date sin Hora" con un String que representa la hora
 	// Ej: zFecha = 12/nov/2001 00:00:00 zHora='134521'
-	// zFormatHora='HHmmss', este parámtro indica el formato de la hora recibida
+	// zFormatHora='HHmmss', este parï¿½mtro indica el formato de la hora recibida
 	//
 	// Resultado = tipo Date = 12/nov/2001 13:45:21
 	// --------------------------------------------------------------------------
 	// //
 	public static String DateTimeToString(Date zFecha, String zHora, String format) throws Exception {
 		String sFecha = JDateTools.DateToString(zFecha, "dd-MM-yyyy");
-		if (zHora!=null && !zHora.isEmpty()) sFecha = sFecha.concat(" "+zHora);
+		if (zHora != null && !zHora.isEmpty())
+			sFecha = sFecha.concat(" " + zHora);
 		Date date = JDateTools.StringToDateTime(sFecha);
 		return JDateTools.DateToString(date, format);
 	}
@@ -513,33 +658,37 @@ public class JDateTools {
 	public static String DateToActuateFormat(Date zVal) throws Exception {
 		return DateToString(zVal, "yyyy-dd-MM");
 	}
+
 	public static String DateTimeToActuateFormat(Date zVal) throws Exception {
 		return DateToString(zVal, "yyyy-dd-MM  HH:mm:ss");
 	}
+
 	public static String TimeToActuateFormat(Date zVal) throws Exception {
 		return DateToString(zVal, "HH:mm");
 	}
+
 	public static Date getCurrentGMTDate(long gmtoffset) throws Exception {
-		return StringToDate( getGMTDate(gmtoffset,"yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss" );
+		return StringToDate(getGMTDate(gmtoffset, "yyyy-MM-dd HH:mm:ss"), "yyyy-MM-dd HH:mm:ss");
 	}
-	
+
 	public static String getGMTDate(long gmtoffset, String fmt) throws Exception {
 		Date d = new Date();
 		java.text.SimpleDateFormat format = new SimpleDateFormat(fmt);
-		java.util.Calendar cal = Calendar.getInstance(new SimpleTimeZone((int)(3600000 * gmtoffset), "GMT"));
+		java.util.Calendar cal = Calendar.getInstance(new SimpleTimeZone((int) (3600000 * gmtoffset), "GMT"));
 		format.setCalendar(cal);
 		return format.format(d);
 	}
 
 	public static boolean equalsDate(Date one, Date two) throws Exception {
-		if (one==null || two==null) return false;
+		if (one == null || two == null)
+			return false;
 		JDateTools zOne = new JDateTools(one);
 		JDateTools zTwo = new JDateTools(two);
 		return zOne.equalsDate(zTwo);
 	}
 
 	public static Date getLastDayOfMonth(Date zDate) throws Exception {
-		if (zDate==null) 
+		if (zDate == null)
 			return null;
 		return new JDateTools(JDateTools.getFirstDayOfMonth(JDateTools.AddMonths(zDate, 1))).addDays(-1);
 	}
@@ -549,27 +698,32 @@ public class JDateTools {
 		c.setTime(getCurrentGMTDate(BizUsuario.getUsr().getGMT()));
 		return c.getTime();
 	}
+
 	public static Date getYesterday() throws Exception {
 		Calendar c = Calendar.getInstance();
 		c.setTime(getCurrentGMTDate(BizUsuario.getUsr().getGMT()));
 		c.add(Calendar.DAY_OF_MONTH, -1);
 		return c.getTime();
 	}
+
 	public static Date getBackDays(int day) throws Exception {
 		Calendar c = Calendar.getInstance();
 		c.setTime(getCurrentGMTDate(BizUsuario.getUsr().getGMT()));
-		c.add(Calendar.DAY_OF_MONTH, -1*day);
+		c.add(Calendar.DAY_OF_MONTH, -1 * day);
 		return c.getTime();
 	}
+
 	public static Date getLastDayOfYear(Date zDate) throws Exception {
 		return new JDateTools(JDateTools.getFirstDayOfYear(JDateTools.AddYears(zDate, 1))).addDays(-1);
 	}
+
 	public static Date getLastDayPreviousMonth() throws Exception {
 		Calendar c = Calendar.getInstance();
 		c.setTime(getFirstDayOfMonth(new Date()));
 		c.add(Calendar.DAY_OF_MONTH, -1);
 		return c.getTime();
 	}
+
 	public JDateTools add(int zCalendarField, int zValue) throws Exception {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(this.getValue());
@@ -582,15 +736,15 @@ public class JDateTools {
 		this.add(Calendar.DAY_OF_MONTH, zValue);
 		return this.getValue();
 	}
-	
+
 	public Date addMill(int value) throws Exception {
 		this.add(Calendar.MILLISECOND, value);
 		return this.getValue();
 	}
 
 	/*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
-	 * 0 =====> Si las 2 fechas son iguales. < 0 =====> Si el parémetro es mayor a
-	 * la fecha del objetoa > 0 =====> Si el parámetro es menor a la fecha del
+	 * 0 =====> Si las 2 fechas son iguales. < 0 =====> Si el parï¿½metro es mayor a
+	 * la fecha del objetoa > 0 =====> Si el parï¿½metro es menor a la fecha del
 	 * objeto
 	 * 
 	 ************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
@@ -630,100 +784,205 @@ public class JDateTools {
 		int iDay = oDate.get(Calendar.DAY_OF_WEEK);
 		return iDay;
 	}
+
 	public static int getDayOfTheWeek(Date d) throws Exception {
 		Calendar oDate = Calendar.getInstance();
 		oDate.setTime(d);
 		int iDay = oDate.get(Calendar.DAY_OF_WEEK);
 		return iDay;
 	}
-  /**
-   * Convert string to date
-   * 
-   * @param zStr input string
-   * @param zFormat date format
-   * @return the date object
-   * @throws Exception
-   */
+
+	/**
+	 * Convert string to date
+	 * 
+	 * @param zStr    input string
+	 * @param zFormat date format
+	 * @return the date object
+	 * @throws Exception
+	 */
 	@Deprecated
-  public static Date strToDate( String zStr, String zFormat )  throws Exception {
-  	return StringToDate(zStr, zFormat);
-  }
-  
+	public static Date strToDate(String zStr, String zFormat) throws Exception {
+		return StringToDate(zStr, zFormat);
+	}
+
 //  /**
 //   * @param zDate input date
 //   * @param zFormat date format
 //   * @return string representing a date in the format received
 //   * @throws Exception
 //   */
-  
-	@Deprecated
-  public static String dateToStr( Date zDate, String zFormat )  throws Exception {
-  	return DateToString(zDate, zFormat);
-  }
-  public static String getMonthDescr(Date fecha) throws Exception {
-  	if (fecha==null) return "";
-  	String mes = JDateTools.DateToString(fecha, "MM");
-  	if (mes.equals("01")) return "Enero";
-  	if (mes.equals("02")) return "Febrero";
-  	if (mes.equals("03")) return "Marzo";
-  	if (mes.equals("04")) return "Abril";
-  	if (mes.equals("05")) return "Mayo";
-  	if (mes.equals("06")) return "Junio";
-  	if (mes.equals("07")) return "Julio";
-  	if (mes.equals("08")) return "Agosto";
-  	if (mes.equals("09")) return "Septiembre";
-  	if (mes.equals("10")) return "Octubre";
-  	if (mes.equals("11")) return "Noviembre";
-  	if (mes.equals("12")) return "Diciembre";
-  	return "";
-  }
-  public static String formatFechaLarga(Date fecha) throws Exception {
-  	if (fecha==null) return "";
-  	String sfecha = JDateTools.DateToString(fecha, "dd");
-  	sfecha+=" de ";
-  	String mes = JDateTools.DateToString(fecha, "MM");
-  	if (mes.equals("01")) sfecha+="Enero";
-  	if (mes.equals("02")) sfecha+="Febrero";
-  	if (mes.equals("03")) sfecha+="Marzo";
-  	if (mes.equals("04")) sfecha+="Abril";
-  	if (mes.equals("05")) sfecha+="Mayo";
-  	if (mes.equals("06")) sfecha+="Junio";
-  	if (mes.equals("07")) sfecha+="Julio";
-  	if (mes.equals("08")) sfecha+="Agosto";
-  	if (mes.equals("09")) sfecha+="Septiembre";
-  	if (mes.equals("10")) sfecha+="Octubre";
-  	if (mes.equals("11")) sfecha+="Noviembre";
-  	if (mes.equals("12")) sfecha+="Diciembre";
-  	sfecha+=" del "+JDateTools.DateToString(fecha, "yyyy");
-  	return sfecha;
-  }
 
-  public static String formatFechaMediana(Date fecha) throws Exception {
-  	if (fecha==null) return "";
-  	String sfecha = JDateTools.DateToString(fecha, "dd");
-  	sfecha+=" ";
-  	String mes = JDateTools.DateToString(fecha, "MM");
-  	if (mes.equals("01")) sfecha+="Ene";
-  	if (mes.equals("02")) sfecha+="Feb";
-  	if (mes.equals("03")) sfecha+="Mar";
-  	if (mes.equals("04")) sfecha+="Abr";
-  	if (mes.equals("05")) sfecha+="May";
-  	if (mes.equals("06")) sfecha+="Jun";
-  	if (mes.equals("07")) sfecha+="Jul";
-  	if (mes.equals("08")) sfecha+="Ago";
-  	if (mes.equals("09")) sfecha+="Sep";
-  	if (mes.equals("10")) sfecha+="Oct";
-  	if (mes.equals("11")) sfecha+="Nov";
-  	if (mes.equals("12")) sfecha+="Dic";
-  	sfecha+=" "+JDateTools.DateToString(fecha, "yyyy");
-  	return sfecha;
-  }
-  
+	@Deprecated
+	public static String dateToStr(Date zDate, String zFormat) throws Exception {
+		return DateToString(zDate, zFormat);
+	}
+
+	public static String getMonthDescr(Date fecha) throws Exception {
+		if (fecha == null)
+			return "";
+		String mes = JDateTools.DateToString(fecha, "MM");
+		if (mes.equals("01"))
+			return "Enero";
+		if (mes.equals("02"))
+			return "Febrero";
+		if (mes.equals("03"))
+			return "Marzo";
+		if (mes.equals("04"))
+			return "Abril";
+		if (mes.equals("05"))
+			return "Mayo";
+		if (mes.equals("06"))
+			return "Junio";
+		if (mes.equals("07"))
+			return "Julio";
+		if (mes.equals("08"))
+			return "Agosto";
+		if (mes.equals("09"))
+			return "Septiembre";
+		if (mes.equals("10"))
+			return "Octubre";
+		if (mes.equals("11"))
+			return "Noviembre";
+		if (mes.equals("12"))
+			return "Diciembre";
+		return "";
+	}
+
+	public static String formatFechaLarga(Date fecha) throws Exception {
+		if (fecha == null)
+			return "";
+		String sfecha = JDateTools.DateToString(fecha, "dd");
+		sfecha += " de ";
+		String mes = JDateTools.DateToString(fecha, "MM");
+		if (mes.equals("01"))
+			sfecha += "Enero";
+		if (mes.equals("02"))
+			sfecha += "Febrero";
+		if (mes.equals("03"))
+			sfecha += "Marzo";
+		if (mes.equals("04"))
+			sfecha += "Abril";
+		if (mes.equals("05"))
+			sfecha += "Mayo";
+		if (mes.equals("06"))
+			sfecha += "Junio";
+		if (mes.equals("07"))
+			sfecha += "Julio";
+		if (mes.equals("08"))
+			sfecha += "Agosto";
+		if (mes.equals("09"))
+			sfecha += "Septiembre";
+		if (mes.equals("10"))
+			sfecha += "Octubre";
+		if (mes.equals("11"))
+			sfecha += "Noviembre";
+		if (mes.equals("12"))
+			sfecha += "Diciembre";
+		sfecha += " del " + JDateTools.DateToString(fecha, "yyyy");
+		return sfecha;
+	}
+
+	public static String formatFechaMediana(Date fecha) throws Exception {
+		if (fecha == null)
+			return "";
+		String sfecha = JDateTools.DateToString(fecha, "dd");
+		sfecha += " ";
+		String mes = JDateTools.DateToString(fecha, "MM");
+		if (mes.equals("01"))
+			sfecha += "Ene";
+		if (mes.equals("02"))
+			sfecha += "Feb";
+		if (mes.equals("03"))
+			sfecha += "Mar";
+		if (mes.equals("04"))
+			sfecha += "Abr";
+		if (mes.equals("05"))
+			sfecha += "May";
+		if (mes.equals("06"))
+			sfecha += "Jun";
+		if (mes.equals("07"))
+			sfecha += "Jul";
+		if (mes.equals("08"))
+			sfecha += "Ago";
+		if (mes.equals("09"))
+			sfecha += "Sep";
+		if (mes.equals("10"))
+			sfecha += "Oct";
+		if (mes.equals("11"))
+			sfecha += "Nov";
+		if (mes.equals("12"))
+			sfecha += "Dic";
+		sfecha += " " + JDateTools.DateToString(fecha, "yyyy");
+		return sfecha;
+	}
+
+	private static final Map<String, String> monthMap = new HashMap<>();
+
+	static {
+		// Mapear meses en inglÃ©s
+		monthMap.put("jan", "01");
+		monthMap.put("feb", "02");
+		monthMap.put("mar", "03");
+		monthMap.put("apr", "04");
+		monthMap.put("may", "05");
+		monthMap.put("jun", "06");
+		monthMap.put("jul", "07");
+		monthMap.put("aug", "08");
+		monthMap.put("sep", "09");
+		monthMap.put("oct", "10");
+		monthMap.put("nov", "11");
+		monthMap.put("dec", "12");
+
+		// Mapear meses en espaÃ±ol
+		monthMap.put("ene", "01");
+		monthMap.put("feb", "02");
+		monthMap.put("mar", "03");
+		monthMap.put("abr", "04");
+		monthMap.put("may", "05");
+		monthMap.put("jun", "06");
+		monthMap.put("jul", "07");
+		monthMap.put("ago", "08");
+		monthMap.put("sep", "09");
+		monthMap.put("oct", "10");
+		monthMap.put("nov", "11");
+		monthMap.put("dic", "12");
+	}
+
+	public static String convertMonthLiteralToNumberWithinSep(String dateStr) throws IllegalArgumentException {
+		for (String key : monthMap.keySet()) {
+			String out = monthMap.get(key);
+			dateStr = dateStr.toLowerCase().replace(key, out);
+		}
+		return dateStr;
+	}
+
+	public static String convertMonthLiteralToNumber(String dateStr) throws IllegalArgumentException {
+		if (dateStr == null || dateStr.trim().isEmpty()) {
+			throw new IllegalArgumentException("La fecha no puede ser nula o vacÃ­a");
+		}
+
+		String[] parts = dateStr.split("-");
+		if (parts.length != 3) {
+			parts = dateStr.split("/");
+		}
+
+		String day = parts[0];
+		String month = parts[1].toLowerCase(); // Convertir el mes a minÃºsculas
+		String year = parts[2];
+
+		String monthNumber = monthMap.get(month);
+		if (monthNumber == null) {
+			throw new IllegalArgumentException("Mes invÃ¡lido: " + month);
+		}
+
+		return day + "-" + monthNumber + "-" + year;
+	}
+
 	public static int getMonthNumber(Date zDate) throws Exception {
 		String sDate = JDateTools.DateToString(zDate);
 		return Integer.parseInt(sDate.substring(3, 5));
 	}
-	
+
 	public static int getYearNumber(Date zDate) throws Exception {
 		String sDate = JDateTools.DateToString(zDate);
 		return Integer.parseInt(sDate.substring(6));
@@ -734,14 +993,18 @@ public class JDateTools {
 	}
 
 	public static Date getStartDate(String range) throws Exception {
-		if (range==null) return null;
-		if (range.equals("")) return null;
+		if (range == null)
+			return null;
+		if (range.equals(""))
+			return null;
 		return JDateTools.StringToDate(range.substring(0, 10), "dd-MM-yyyy");
 	}
-	
+
 	public static Date getEndDate(String range) throws Exception {
-		if (range==null) return null;
-		if (range.equals("")) return null;
+		if (range == null)
+			return null;
+		if (range.equals(""))
+			return null;
 		return JDateTools.StringToDate(range.substring(10), "dd-MM-yyyy");
 	}
 
@@ -750,17 +1013,25 @@ public class JDateTools {
 	}
 
 	public static String getDayOfWeekName(Date value) throws Exception {
-		int dayofWeek = JDateTools.getDayOfTheWeek(value);	
-		 switch (dayofWeek) {
-		 case 1: return "Domingo";
-		 case 2: return "Lunes";
-		 case 3: return "Martes";
-		 case 4: return "Miércoles";
-		 case 5: return "Jueves";
-		 case 6: return "Viernes";
-		 case 7: return "Sábado";
-		 default: return "Desconocido";
-		 }		
+		int dayofWeek = JDateTools.getDayOfTheWeek(value);
+		switch (dayofWeek) {
+		case 1:
+			return "Domingo";
+		case 2:
+			return "Lunes";
+		case 3:
+			return "Martes";
+		case 4:
+			return "Miï¿½rcoles";
+		case 5:
+			return "Jueves";
+		case 6:
+			return "Viernes";
+		case 7:
+			return "Sï¿½bado";
+		default:
+			return "Desconocido";
+		}
 	}
 
 }

@@ -37,7 +37,9 @@ public class BizProcess extends JRecord {
 	public void setDescription(String zValue) {
 		description.setValue(zValue);
 	}
-
+	public String getDescription() throws Exception {
+		return description.getValue();
+	}
 	public void setClassName(String zValue) {
 		className.setValue(zValue);
 	}
@@ -55,7 +57,7 @@ public class BizProcess extends JRecord {
 	@Override
 	public void createFixedProperties() throws Exception {
 		addFixedItem(KEY, "pid", "Id", false, false, 20);
-		addFixedItem(FIELD, "description", "Descripción", true, true, 100);
+		addFixedItem(FIELD, "description", "DescripciÃ³n", true, true, 100);
 		addFixedItem(FIELD, "classname", "Clase", true, true, 300);
 	}
 
@@ -109,16 +111,21 @@ public class BizProcess extends JRecord {
 
 	public void executeInThread(BizProcessHost h) throws Exception {
 		uid = h.getUID();
-    Thread oth3 = new Thread() {
-      public void run() {
-      	try {
-          execute();
-      	} finally {
-          registerProcessStop();    		
-      		running.removeElement(uid+"");
-      	}
-      }
-    };
+    SchedulerHealth.setProcessStatus(uid, "Started");
+   Thread oth3 = new Thread() {
+			public void run() {
+				try {
+					SchedulerHealth.setProcessStatus(uid, "Running");
+					execute();
+					SchedulerHealth.setProcessStatus(uid, "Finished");
+				} catch (Exception e) {
+					SchedulerHealth.setProcessStatus(uid, "Error: " + e.getMessage());
+				} finally {
+					registerProcessStop();
+					running.removeElement(uid + "");
+				}
+			}
+		};
     oth3.start();
     running.addElement(uid+"", oth3);
 		h.setStatusToRunning();
@@ -143,7 +150,7 @@ public class BizProcess extends JRecord {
 		}
 	}
 
-	public void execute() {
+	public void execute() throws Exception {
 		try {
 			String sParametros="";
 			String sComando=className.getValue();
@@ -177,6 +184,7 @@ public class BizProcess extends JRecord {
 				oMethod.invoke(sMetodo, aParamArgs);
 		} catch (Exception e) {
 			PssLogger.logError(e);
+			throw e;
 		}
 	}
 

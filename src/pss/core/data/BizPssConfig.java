@@ -112,7 +112,13 @@ public class BizPssConfig {
 			PssIni.delete();
 		return new JIniFile(JPath.PssPathData() + "/" + name);
 	}
-
+	public static String chatIAServer() {
+		try {
+			return getPssConfig().getCachedStrictValue("GENERAL", "CHAT_IA_SERVER", "http://localhost:5000");
+		} catch (Exception e) {
+			return "http://localhost:5000";
+		}
+	}
 	/**
 	 * Devuelve un parametro del ini, el mismo se cachea. Si no se encuentra en la
 	 * seccion solicitada se busca en GENERAL
@@ -305,6 +311,14 @@ public class BizPssConfig {
 			PssLogger.logError(e);
 		}
 		return true;
+	}
+	public static int getHealthPort()  {
+		try {
+			return  Integer.parseInt(getPssConfig().getCachedStrictValue("HEALTH","PORT","9090"));
+		} catch (Exception e) {
+	
+		}
+		return 9090;
 	}
 
 	public static String getLog4J() {

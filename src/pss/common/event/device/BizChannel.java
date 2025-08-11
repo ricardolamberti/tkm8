@@ -1,14 +1,17 @@
 package pss.common.event.device;
 
 import pss.common.event.manager.BizEvent;
+import pss.common.event.manager.BizRegister;
 import pss.common.security.BizUsuario;
 import pss.core.data.interfaces.connections.JBDatos;
 import pss.core.services.JExec;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
+import pss.core.services.records.JRecords;
 import pss.core.tools.JDateTools;
 import pss.core.tools.JTools;
+import pss.core.tools.collections.JIterator;
 
 public class BizChannel  extends JRecord {
 	
@@ -149,7 +152,8 @@ public class BizChannel  extends JRecord {
 			processAddChannel(getIdDeviceWeb(),"Web",-1);
 	
 		else
-			execProcessAddChannel(getIdDeviceWeb(),"Web");	}
+			execProcessAddChannel(getIdDeviceWeb(),"Web");
+	}
 	
 	public void processAddChannel(String zUUID,String zType, long idType) throws Exception {
 		BizUsuario usuario ;

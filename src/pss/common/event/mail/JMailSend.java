@@ -175,7 +175,7 @@ public class JMailSend {
 		
 		
 	/*//////////////////////////////////////////////////////////////////////////////////
-		// Queda Preparado para Enviar mails con BCC, para cuando se pueda, porque con el método
+		// Queda Preparado para Enviar mails con BCC, para cuando se pueda, porque con el mÃ©todo
 		// Transport.sendmessage no sepuede.
 	 
 		 MRO 03/11/2017

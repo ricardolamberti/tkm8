@@ -37,7 +37,7 @@ public class FormMonedaFechaFlat extends JBaseForm {
 	public void InicializarPanel( JWin zWin ) throws Exception {
   	JFormPanelResponsive col = this.AddItemColumn(6);
   	col.addButton(this.getWin().GetNroIcono(), null, false, 1);
-  	col.AddItemLabel(JDateTools.DateToString(this.getCotiz().getFecha(), "dd/MM/yyyy"), 3);
+  	col.AddItemLabel(JDateTools.DateToString(this.getCotiz().getFechaHora(), "dd/MM/yyyy"), 3);
   	col.AddItemLabel(this.getCotiz().getCotizCompra()+"", 2).right().bold();
   	col.AddItemLabel(this.getCotiz().getCotizVenta()+"", 2).right().bold();
   	col.addButton(13, 2, 2);

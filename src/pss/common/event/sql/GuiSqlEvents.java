@@ -72,6 +72,8 @@ public class GuiSqlEvents extends JWins {
   		
   	}
     zLista.AddColumnaLista("descripcion").setGrupo(l1);
+    if (GetVision().equals("BACK"))
+    	zLista.AddColumnaLista("fecha_update").setGrupo(l1);
     zLista.AddColumnaLista("valor").setGrupo(l1);
     zLista.AddColumnaLista("var_valor").setGrupo(l1);
     zLista.AddColumnaLista("var_porc").setGrupo(l1);
@@ -79,7 +81,7 @@ public class GuiSqlEvents extends JWins {
     zLista.AddColumnaLista("valor_minimo").setGrupo(l2);
     zLista.AddColumnaLista("valor_emergencia").setGrupo(l2);
     zLista.AddColumnaLista("valor_aviso").setGrupo(l2);
-
+ 
   }
 
 }

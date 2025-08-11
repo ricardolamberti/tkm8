@@ -30,7 +30,7 @@ public class GuiMailingPersona extends JWin {
 
 		JRelation rel;
 		rel = rels.addRelationForce(10, "restriccion usuario");
-		rel.addFilter(" (BSP_PERSONA.company= 'COMPANY_CUSTOMLIST') ");
+		rel.addFilter(" (BSP_PERSONA.company in (COMPANY_CUSTOMLIST)) ");
 		
 		
 	}

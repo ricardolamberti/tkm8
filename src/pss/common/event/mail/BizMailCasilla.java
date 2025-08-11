@@ -526,7 +526,7 @@ public class BizMailCasilla extends JRecord {
 	public void processDesHabilitar() throws Exception {
 		BizMailCasilla c = (BizMailCasilla) this.getPreInstance();
 		c.setEstado(BizMailCasilla.STATUS_SUSPENDIDO);
-		c.setMensaje("Deshabilitación Manual");
+		c.setMensaje("DeshabilitaciÃ³n Manual");
 		c.update();
 		this.setEstado(c.getEstado());
 		this.setMensaje(c.getMensaje());

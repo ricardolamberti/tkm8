@@ -36,6 +36,7 @@ import pss.core.winUI.responsiveControls.JFormFileResponsive;
 import pss.core.winUI.responsiveControls.JFormHtmlTextAreaResponsive;
 import pss.core.winUI.responsiveControls.JFormImageCardResponsive;
 import pss.core.winUI.responsiveControls.JFormImageResponsive;
+import pss.core.winUI.responsiveControls.JFormInfoCardDoubleResponsive;
 import pss.core.winUI.responsiveControls.JFormInfoCardResponsive;
 import pss.core.winUI.responsiveControls.JFormIntervalCDatetimeResponsive;
 import pss.core.winUI.responsiveControls.JFormLabelDataResponsive;
@@ -642,6 +643,8 @@ public JWebControlInterface createWebComponentResponsive(JFormControl winControl
 			return JWebInfoCardResponsive.create(parent, (JFormInfoCardResponsive) winControl);
 		} else if (winControl instanceof JFormImageCardResponsive) {
 			return JWebImageCardResponsive.create(parent, (JFormImageCardResponsive) winControl);
+		} else if (winControl instanceof JFormInfoCardDoubleResponsive) {
+			return JWebInfoCardDoubleResponsive.create(parent, (JFormInfoCardDoubleResponsive) winControl);
 		} else if (winControl instanceof JFormImageResponsive) {
 			return JWebImageResponsive.create(parent, (JFormImageResponsive) winControl);
 		} else if (winControl instanceof JFormColumnResponsive) {

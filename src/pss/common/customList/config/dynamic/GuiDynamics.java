@@ -45,7 +45,6 @@ import pss.core.win.submits.JActNew;
 import pss.core.win.totalizer.JTotalizer;
 import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.forms.JBaseForm;
-import pss.core.winUI.lists.BizListExcludeCol;
 import pss.core.winUI.lists.JColumnaLista;
 import pss.core.winUI.lists.JEjeMatrix;
 import pss.core.winUI.lists.JFormFiltro;
@@ -261,7 +260,7 @@ public class GuiDynamics extends JWins {
   		} else if (f.isCheckInput()) {
   			c=filtros.nuevoCheckResponsive(f.getDescrCampoWithOp(),null, f.createProp(), f.createFixedProp());
   		} else if (f.isLOVInput()) {
-  			c=filtros.NuevoFormLov(f.getDescrCampoWithOp(), f.createProp(), f.createFixedProp(), this.createControlWinLOV(f));
+  			c=filtros.addWinLovResponsive(f.getDescrCampoWithOp(), f.createProp(), f.createFixedProp(), this.createControlWinLOV(f));
   		} else {
   			c=filtros.addEditResponsive(f.getDescrCampoWithOp(), JBaseForm.CHAR,null,  f.createProp(), f.createFixedProp(), f.getOperador(), true);
   		}

@@ -165,7 +165,7 @@ public class GuiCarpetas extends JWins {
 //   	c.setRefreshForm(true);
   	JFormControl c1 = zFiltros.addCheckResponsive("","only_owner","Mis DMs","Todos");
   	c1.SetValorDefault( hasDocOwner()?"S":"N");
-  	c1.setPreferredWidth(100);
+  	//c1.setPreferredWidth(100);
    	c1.setRefreshForm(true);
 
     

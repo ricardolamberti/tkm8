@@ -4,12 +4,17 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import pss.JPath;
+import pss.bsp.bspBusiness.BizBSPCompany;
+import pss.bsp.contrato.detalle.GuiDetalles;
 import pss.common.customList.config.customlist.BizCustomList;
 import pss.common.customList.config.customlist.GuiCustomList;
 import pss.common.customList.config.field.campo.BizCampo;
 import pss.common.customList.config.field.campo.BizCampos;
+import pss.common.customList.config.relation.JRelations;
 import pss.common.event.action.BizSqlEventAction;
 import pss.common.event.action.IActionData;
 import pss.common.event.action.history.BizSqlEventHistory;
@@ -18,6 +23,7 @@ import pss.common.event.sql.serie.GuiVirtualSeries;
 import pss.common.layoutWysiwyg.BizPlantilla;
 import pss.common.regions.company.BizCompany;
 import pss.common.security.BizUsuario;
+import pss.core.data.interfaces.connections.JBDatos;
 import pss.core.data.interfaces.sentences.JBaseRegistro;
 import pss.core.graph.Graph;
 import pss.core.graph.implementations.GraphScriptSerieTemporal;
@@ -73,7 +79,12 @@ public class BizSqlEvent extends JRecord implements IActionData {
   private JString pClass = new JString();
   private JString pConsulta = new JString();
   private JString pConsultaDetalle = new JString();
-
+  private JString pConsultaHistorico = new JString();
+  private JString pConsultaAux1 = new JString();
+  protected JString pDescrConsultaAux1 = new JString();
+  private JString pConsultaAux2 = new JString();
+  protected JString pDescrConsultaAux2 = new JString();
+  
   private JLong pCustomList = new JLong();
   private JBoolean   pInvisible = new JBoolean();
 
@@ -210,10 +221,14 @@ public class BizSqlEvent extends JRecord implements IActionData {
   public void setNullToValorMinimo() throws Exception {  pValorMinimo.setNull(); } 
   public void setConsulta(String zValue) throws Exception {    pConsulta.setValue(zValue);  }
   public String getConsulta() throws Exception {     return pConsulta.getValue();  }
+  public void setConsultaHistorico(String zValue) throws Exception {    pConsultaHistorico.setValue(zValue);  }
+  public String getConsultaHistorico() throws Exception {     return pConsultaHistorico.getValue();  }
   public void setClassDetalle(String zValue) throws Exception {    pClass.setValue(zValue);  }
   public String getClassDetalle() throws Exception {     return pClass.getValue();  }
   public boolean isNullConsulta() throws Exception { return  pConsulta.isNull(); } 
   public void setNullToConsulta() throws Exception {  pConsulta.setNull(); } 
+  public boolean isNullConsultaHistorico() throws Exception { return  pConsultaHistorico.isNull(); } 
+  public void setNullToConsultaHistorico() throws Exception {  pConsultaHistorico.setNull(); } 
   public void setConsultaDetalle(String zValue) throws Exception {    pConsultaDetalle.setValue(zValue);  }
   public String getConsultaDetalle() throws Exception {     return pConsultaDetalle.getValue();  }
   public boolean isNullConsultaDetalle() throws Exception { return  pConsultaDetalle.isNull(); } 
@@ -241,7 +256,15 @@ public class BizSqlEvent extends JRecord implements IActionData {
   public long getCustomList() throws Exception {     return pCustomList.getValue();  }
   public boolean isNullCustomList() throws Exception { return  pCustomList.isNull(); } 
   public void setNullToCustomList() throws Exception {  pCustomList.setNull(); } 
-
+  public void setConsultaAux1(String zValue) throws Exception {    pConsultaAux1.setValue(zValue);  }
+  public String getConsultaAux1() throws Exception {     return pConsultaAux1.getValue();  }
+  public void setConsultaAux2(String zValue) throws Exception {    pConsultaAux2.setValue(zValue);  }
+  public String getConsultaAux2() throws Exception {     return pConsultaAux2.getValue();  }
+  public void setDescrConsultaAux1(String zValue) throws Exception {    pDescrConsultaAux1.setValue(zValue);  }
+  public void setDescrConsultaAux2(String zValue) throws Exception {    pDescrConsultaAux2.setValue(zValue);  }
+  public String getDescrConsultaAux1() throws Exception {     return pDescrConsultaAux1.getValue();  }
+  public String getDescrConsultaAux2() throws Exception {     return pDescrConsultaAux2.getValue();  }
+ 
   public boolean isOK() throws Exception { return  pEstado.equals(OK); } 
   public boolean isERROR() throws Exception { return  pEstado.equals(ERROR); } 
   public boolean isREPROCESANDO() throws Exception { return  pEstado.equals(REPROCESANDO); } 
@@ -301,6 +324,7 @@ public class BizSqlEvent extends JRecord implements IActionData {
     this.addItem( "valor_aviso", pValorAviso );
     this.addItem( "valor_minimo", pValorMinimo );
     this.addItem( "consulta", pConsulta );
+    this.addItem( "consulta_historico", pConsultaHistorico );
     this.addItem( "consulta_detalle", pConsultaDetalle );
     this.addItem( "class_detalle", pClass );
     this.addItem( "campo", pCampo );
@@ -342,6 +366,12 @@ public class BizSqlEvent extends JRecord implements IActionData {
     this.addItem( "mapa", pMapa );
     this.addItem( "obj_variables", pVariables );
     this.addItem( "obj_filtros", pFiltros );
+    this.addItem( "consulta_aux1", pConsultaAux1 );
+    this.addItem( "aux1_detaille", pDescrConsultaAux1 );
+    this.addItem( "consulta_aux2", pConsultaAux2 );
+    this.addItem( "aux2_detaille", pDescrConsultaAux2 );
+    
+  
    }
   /**
    * Adds the fixed object properties
@@ -358,12 +388,13 @@ public class BizSqlEvent extends JRecord implements IActionData {
     this.addFixedItem( FIELD, "fecha_update", "Fecha update", true, false, 18 );
     this.addFixedItem( FIELD, "fecha_emergencia", "Fecha emergencia", true, false, 18 );
     this.addFixedItem( FIELD, "fecha_aviso", "Fecha aviso", true, false, 18 );
-    this.addFixedItem( FIELD, "fecha_minimo", "Fecha m�nimo", true, false, 18 );
-    this.addFixedItem( FIELD, "valor_emergencia", "Valor m�ximo", true, false, 18,2 );
+    this.addFixedItem( FIELD, "fecha_minimo", "Fecha mínimo", true, false, 18 );
+    this.addFixedItem( FIELD, "valor_emergencia", "Valor máximo", true, false, 18,2 );
     this.addFixedItem( FIELD, "valor_aviso", "Valor aviso(%)", true, false, 18,2 );
-    this.addFixedItem( FIELD, "valor_minimo", "Valor m�nimo", true, false, 18,2 );
+    this.addFixedItem( FIELD, "valor_minimo", "Valor mínimo", true, false, 18,2 );
     this.addFixedItem( FIELD, "consulta", "Consulta", true, true, 20000 );
-    this.addFixedItem( FIELD, "consulta_detalle", "Consulta Detalle", true, false, 20000 );
+    this.addFixedItem( FIELD, "consulta_historico", "Consulta Historico", true, false, 20000 );
+     this.addFixedItem( FIELD, "consulta_detalle", "Consulta Detalle", true, false, 20000 );
     this.addFixedItem( FIELD, "class_detalle", "Clase Detalle", true, false, 400 );
     this.addFixedItem( FIELD, "ejes_valor", "Ejes valores", true, false, 4000 );
     this.addFixedItem( FIELD, "campo_virtual", "Campo virtual", true, false, 4000 );
@@ -372,10 +403,14 @@ public class BizSqlEvent extends JRecord implements IActionData {
     this.addFixedItem( FIELD, "id_campo", "Id Campo", true, false, 18 );
     this.addFixedItem( FIELD, "system_protect", "Protegido", true, false, 18 );
     this.addFixedItem( FIELD, "custom_list", "Generador consultas", true, false, 18 );
+    this.addFixedItem( FIELD, "consulta_aux1", "Consulta aux1", true, false, 4000 );
+    this.addFixedItem( FIELD, "consulta_aux2", "Consulta aux2", true, false, 4000 );
+    this.addFixedItem( FIELD, "aux1_detaille", "Detalle aux1", true, false, 200 );
+    this.addFixedItem( FIELD, "aux2_detaille", "Detalle aux2", true, false, 200 );
     this.addFixedItem( FIELD, "activo", "Activo", true, false, 1 );
     this.addFixedItem( VIRTUAL, "valor", "Valor", true, false, 18, 2 );
-    this.addFixedItem( VIRTUAL, "var_valor", "Variaci�n", true, false, 18, 2 );
-    this.addFixedItem( VIRTUAL, "var_porc", "Variaci�n(%)", true, false, 18, 2 );
+    this.addFixedItem( VIRTUAL, "var_valor", "Variación", true, false, 18, 2 );
+    this.addFixedItem( VIRTUAL, "var_porc", "Variación(%)", true, false, 18, 2 );
     this.addFixedItem( VIRTUAL, "tendencia", "Tendencia", true, false, 18,2 );
     this.addFixedItem( VIRTUAL, "tendenciaview", "T.", true, false, 1 );
     this.addFixedItem( VIRTUAL, "imagen", "imagen", true, false, 4000 );
@@ -577,6 +612,13 @@ public class BizSqlEvent extends JRecord implements IActionData {
   public String extractMapa(long id) throws Exception {
   	return BizCustomList.extract(pMapa.getValue(),id);
   }
+  
+  public void attachRelationMap(JRelations rels) throws Exception {
+  	rels.setSourceWinsClass(GuiDetalles.class.getName());
+  	rels.hideField("id");
+
+
+  }
   @Override
   public void processInsert() throws Exception {
 		
@@ -616,7 +658,7 @@ public class BizSqlEvent extends JRecord implements IActionData {
    	this.SetVision(null);
   	super.processInsert();
   	processPopulate(null,null);
-  	crearAvisosBasicos();
+//  	crearAvisosBasicos();
   }
 
   public void crearAvisosBasicos() throws Exception {
@@ -708,33 +750,209 @@ public class BizSqlEvent extends JRecord implements IActionData {
 
 			@Override
 			public void Do() throws Exception {
-				processUpdateDatos();
+				processUpdateDatosInternal();
 			}
 		};
 		oExec.execute();
 	}
-
 	public void processUpdateDatos() throws Exception {
-		boolean updated =false;
+		if (JBDatos.GetBases().getPrivateCurrentDatabase().isTransactionInProgress()) {
+			processUpdateDatosInternal();
+		} else {
+			execProcessUpdateDatos();
+		}
+	}
+//	protected void processUpdateDatosInternal() throws Exception {
+//		boolean updated =false;
+//		BizSqlEventDato datoUltimo = new BizSqlEventDato();
+//		datoUltimo.addFilter("id_evento",getId());
+//		Date fechaUltimoDato = datoUltimo.SelectMaxDate("fecha");
+//		
+//
+//		Calendar fdesde = Calendar.getInstance();
+//		fdesde.setTime(fechaUltimoDato != null ? fechaUltimoDato : JDateTools.getFirstDayOfYear(new Date()));
+//		Calendar fhasta = Calendar.getInstance();
+//		fhasta.setTime(new Date());
+//		for (int day = 1; fdesde.before(fhasta); day++) {
+//			updated |= agregarASerie(true, fdesde, false,null)!=null;
+//			fdesde.add(Calendar.DAY_OF_YEAR, 1);
+//		}
+//		updated |= agregarASerie(true, fhasta, true,null)!=null;// siempre que se ejecute una vez, para actualizar el dia actual
+//		setFechaUpdate(new Date());
+//		update();
+//		
+//  }
+	protected void processUpdateDatosInternal() throws Exception {
+		if (isNullConsultaHistorico()) {
+			processUpdateDatosInternalSlow();
+			return;
+			
+		}
 		BizSqlEventDato datoUltimo = new BizSqlEventDato();
-		datoUltimo.addFilter("id_evento",getId());
+		datoUltimo.addFilter("id_evento", getId());
 		Date fechaUltimoDato = datoUltimo.SelectMaxDate("fecha");
-		
 
 		Calendar fdesde = Calendar.getInstance();
 		fdesde.setTime(fechaUltimoDato != null ? fechaUltimoDato : JDateTools.getFirstDayOfYear(new Date()));
-		Calendar fhasta = Calendar.getInstance();
-		fhasta.setTime(new Date());
-		for (int day = 1; fdesde.before(fhasta); day++) {
-			updated |= agregarASerie(true, fdesde, false,null)!=null;
-			fdesde.add(Calendar.DAY_OF_YEAR, 1);
+		Calendar fhasta = Calendar.getInstance(); // hoy
+
+		processUpdateDatosInternalFast(fdesde,fhasta);
+		update();
+
+	}
+	protected void processUpdateDatosInternalFast(Calendar fdesde,Calendar fhasta) throws Exception {
+		deleteRecords(getId());
+
+		String sql = getConsultaHistorico();
+		String sqlInsert = ""
+				+ sql
+				+ "	,periodos AS (\n"
+				+ "  SELECT \n"
+				+ "    periodo, \n"
+				+ "    LEAD(periodo) OVER (ORDER BY periodo) AS next_periodo\n"
+				+ "  FROM (\n"
+				+ "    SELECT DISTINCT periodo FROM base\n"
+				+ "  ) p\n"
+				+ "),\n"
+				+ "calendar AS (\n"
+				+ "  SELECT\n"
+				+ "    gs.fecha,\n"
+				+ "    p.periodo\n"
+				+ "  FROM generate_series('"+JDateTools.DateToString(fdesde.getTime(), "dd/MM/yyyy")+"'::date, '"+JDateTools.DateToString(fhasta.getTime(), "dd/MM/yyyy")+"'::date, interval '1 day') gs(fecha)\n"
+				+ "  JOIN periodos p ON gs.fecha >= p.periodo AND (p.next_periodo IS NULL OR gs.fecha < p.next_periodo)\n"
+				+ "),\n"
+
+				+ "completo AS (\n"
+				+ "  SELECT c.fecha, c.periodo, b.valor\n"
+				+ "  FROM calendar c\n"
+				+ "  LEFT JOIN base b ON c.fecha = b.fecha\n"
+				+ "),\n"
+				+ "relleno AS (\n"
+				+ "  SELECT\n"
+				+ "    fecha,\n"
+				+ "    periodo,\n"
+				+ "    valor,\n"
+				+ "    CASE\n"
+				+ "      WHEN valor IS NOT NULL THEN valor\n"
+				+ "      WHEN fecha = periodo THEN 0\n"
+				+ "      ELSE (\n"
+				+ "        SELECT r2.valor\n"
+				+ "        FROM completo r2\n"
+				+ "        WHERE r2.fecha < r1.fecha\n"
+				+ "          AND r2.valor IS NOT NULL\n"
+				+ "          AND r2.periodo = r1.periodo\n"
+				+ "        ORDER BY r2.fecha DESC\n"
+				+ "        LIMIT 1\n"
+				+ "      )\n"
+				+ "    END AS valor_acumulado\n"
+				+ "  FROM completo r1\n"
+				+ "),\n"
+				+ "calculado AS (\n"
+				+ "  SELECT\n"
+				+ "    fecha,\n"
+				+ "    valor_acumulado AS valor,\n"
+				+ "    valor_acumulado - LAG(valor_acumulado) OVER (ORDER BY fecha) AS var_val,\n"
+				+ "    CASE \n"
+				+ "      WHEN LAG(valor_acumulado) OVER (ORDER BY fecha) IS NULL THEN NULL\n"
+				+ "      WHEN LAG(valor_acumulado) OVER (ORDER BY fecha) = 0 THEN NULL\n"
+				+ "      ELSE ROUND(100.0 * (valor_acumulado - LAG(valor_acumulado) OVER (ORDER BY fecha)) / LAG(valor_acumulado) OVER (ORDER BY fecha), 2)\n"
+				+ "    END AS var_porc,\n"
+				+ "    CASE\n"
+				+ "      WHEN LAG(valor_acumulado) OVER (ORDER BY fecha) IS NULL THEN NULL\n"
+				+ "      WHEN valor_acumulado > LAG(valor_acumulado) OVER (ORDER BY fecha) THEN 1\n"
+				+ "      WHEN valor_acumulado < LAG(valor_acumulado) OVER (ORDER BY fecha) THEN -1\n"
+				+ "      ELSE 0\n"
+				+ "    END AS tendencia\n"
+				+ "  FROM relleno\n"
+				+ ")\n"
+				+ "			INSERT INTO evt_sqleventos_datos (fecha, value, id_evento, var_val, var_porc, tendencia)\n"
+				+ "			SELECT\n"
+				+ "			  fecha,\n"
+				+ "			  valor,\n"
+				+ "			  "+getId()+" AS id_evento, \n"
+				+ "			  var_val,\n"
+				+ "			  var_porc,\n"
+				+ "			  tendencia\n"
+				+ "			FROM calculado";
+		sqlInsert = JTools.replace(sqlInsert, "::DK::", "");
+		sqlInsert = JTools.replace(sqlInsert, "::FECHA::", "");
+
+		JBaseRegistro regs=JBaseRegistro.recordsetFactory();
+		regs.Execute(sqlInsert);
+		regs.close();
+		
+		String sqlAjuste ="WITH rellenado AS (\n"
+				+ "  SELECT d.*,\n"
+				+ "    (\n"
+				+ "      SELECT d2.value\n"
+				+ "      FROM evt_sqleventos_datos d2\n"
+				+ "      WHERE d2.fecha <= d.fecha\n"
+				+ "        AND d2.value IS NOT NULL\n"
+				+ "        AND d2.id_evento = d.id_evento\n"
+				+ "      ORDER BY d2.fecha DESC\n"
+				+ "      LIMIT 1\n"
+				+ "    ) AS valor_anterior\n"
+				+ "  FROM evt_sqleventos_datos d\n"
+				+ "  WHERE d.id_evento = "+getId()+"\n"
+				+ ")\n"
+				+ "UPDATE evt_sqleventos_datos d\n"
+				+ "SET value = r.valor_anterior\n"
+				+ "FROM rellenado r\n"
+				+ "WHERE d.fecha = r.fecha\n"
+				+ "  AND d.id_evento = r.id_evento\n"
+				+ "  AND d.value IS NULL;\n"
+				+ "";
+		regs=JBaseRegistro.recordsetFactory();
+		regs.Execute(sqlAjuste);
+		regs.close();
+		setFechaUpdate(new Date());
+
+	}
+	protected void processUpdateDatosInternalSlow() throws Exception {
+		boolean updated = false;
+		BizSqlEventDato datoUltimo = new BizSqlEventDato();
+		datoUltimo.addFilter("id_evento", getId());
+		Date fechaUltimoDato = datoUltimo.SelectMaxDate("fecha");
+
+		Calendar fdesde = Calendar.getInstance();
+		fdesde.setTime(fechaUltimoDato != null ? fechaUltimoDato : JDateTools.getFirstDayOfYear(new Date()));
+		Calendar fhasta = Calendar.getInstance(); // hoy
+
+		// Punto de corte para aumentar precisión (3 meses antes de hoy)
+		Calendar fPrecision = Calendar.getInstance();
+		fPrecision.setTime(new Date());
+		fPrecision.add(Calendar.MONTH, -3);
+
+		BizSqlEventDato anterior = null;
+		Calendar cursor = (Calendar) fdesde.clone();
+
+		while (cursor.before(fhasta)) {
+			if (cursor.before(fPrecision)) {
+				// HISTÓRICO: saltar 10 días y aproximar con interpolación
+				Calendar siguiente = (Calendar) cursor.clone();
+				siguiente.add(Calendar.DAY_OF_YEAR, 10);
+				if (siguiente.after(fhasta)) siguiente = (Calendar) fhasta.clone();
+
+				double valorIni = getValor(null, cursor);
+				double valorFin = getValor(null, siguiente);
+
+				anterior = agregarASerieWithValue(true, cursor, valorIni, siguiente, valorFin, anterior);
+				cursor = (Calendar) siguiente.clone();
+				updated = true;
+			} else {
+				// RECIENTE: día a día
+				anterior = agregarASerie(true, cursor, false, anterior);
+				cursor.add(Calendar.DAY_OF_YEAR, 1);
+				updated = true;
+			}
 		}
-		updated |= agregarASerie(true, fhasta, true,null)!=null;// siempre que se ejecute una vez, para actualizar el dia actual
+
+		// Asegurar actualización del día actual
+		anterior = agregarASerie(true, fhasta, true, anterior);
 		setFechaUpdate(new Date());
 		update();
-		
-  }
-  
+	}
+
  
   public String getColor() throws Exception {
   	
@@ -953,73 +1171,141 @@ public class BizSqlEvent extends JRecord implements IActionData {
 
 	}		
 	
-	protected void internalServiceProcessPopulate(Date fechaDesde, Date fechaHasta) throws Exception {
-		Calendar fechaInicial = Calendar.getInstance();
-		if (fechaHasta==null) fechaHasta=new Date();
-		//this
-		Calendar fdesde = Calendar.getInstance();
-		Calendar fhasta = Calendar.getInstance();
-		fhasta.setTime(fechaHasta);
-		if (fechaDesde==null) {
-			Date fechaI = new Date();
-			Calendar unoAtras = Calendar.getInstance();
-			unoAtras.setTime(new Date());
-			unoAtras.add(Calendar.YEAR, -1);
-			
-			fechaInicial.setTime(fechaI);
-
-			if (fechaInicial.before(unoAtras))
-				fechaInicial = unoAtras;			
-			
-			fdesde = fechaInicial;
-		} else 
-			fdesde.setTime(JDateTools.getFirstDayOfYear(fechaDesde));
-
-		if (getConsulta().startsWith("VIRTUAL:")) {
-			deleteRecords(getId());
-			agregarASerie(false,fhasta,false,null);
-			return;
-		}
-		if (fechaDesde==null) {
+//	protected void internalServiceProcessPopulate(Date fechaDesde, Date fechaHasta) throws Exception {
+//		Calendar fechaInicial = Calendar.getInstance();
+//		if (fechaHasta==null) fechaHasta=new Date();
+//		//this
+//		Calendar fdesde = Calendar.getInstance();
+//		Calendar fhasta = Calendar.getInstance();
+//		fhasta.setTime(fechaHasta);
+//		if (fechaDesde==null) {
+//			Date fechaI = new Date();
+//			Calendar unoAtras = Calendar.getInstance();
+//			unoAtras.setTime(new Date());
+//			unoAtras.add(Calendar.YEAR, -1);
+//			
+//			fechaInicial.setTime(fechaI);
+//
+//			if (fechaInicial.before(unoAtras))
+//				fechaInicial = unoAtras;			
+//			
+//			fdesde = fechaInicial;
+//		} else 
+//			fdesde.setTime(JDateTools.getFirstDayOfYear(fechaDesde));
+//
+//		if (getConsulta().startsWith("VIRTUAL:")) {
 //			deleteRecords(getId());
-			BizSqlEventDato last=null;
-			for (int day = 1; fdesde.before(fhasta); day++) {
-				last=agregarASerie(true,fdesde,false,last);
-				fdesde.add(Calendar.DAY_OF_YEAR, 1);
-				Thread.yield();
-			}
-			agregarASerie(true,fhasta,true,last);
-		} else {
-	//		deleteRecords(getId());//bug, se generaron registros de mas estap ara eliminar, pero deberia sacarse a futuro
-			int dias=1;
-			BizSqlEventDato last=null;
-			while( fdesde.before(fhasta)) {//fdesde.getTime() fhasta.getTime()
-				last=agregarASerie(true,fdesde,false,last);
-				fdesde.add(Calendar.DAY_OF_YEAR, dias);
-				Thread.sleep(10);
-				Thread.yield();
-			}
-			agregarASerie(true,fhasta,true,last);
+//			agregarASerie(false,fhasta,false,null);
+//			return;
+//		}
+//		if (fechaDesde==null) {
+////			deleteRecords(getId());
+//			BizSqlEventDato last=null;
+//			for (int day = 1; fdesde.before(fhasta); day++) {
+//				last=agregarASerie(true,fdesde,false,last);
+//				fdesde.add(Calendar.DAY_OF_YEAR, 1);
+//				Thread.yield();
+//			}
+//			agregarASerie(true,fhasta,true,last);
+//		} else {
+//	//		deleteRecords(getId());//bug, se generaron registros de mas estap ara eliminar, pero deberia sacarse a futuro
 //			int dias=1;
 //			BizSqlEventDato last=null;
 //			while( fdesde.before(fhasta)) {//fdesde.getTime() fhasta.getTime()
 //				last=agregarASerie(true,fdesde,false,last);
-//				if (fhasta.get(Calendar.YEAR)!=fdesde.get(Calendar.YEAR)) {
-//					fdesde.add(Calendar.MONTH, 1);
-//				} else {
-//					fdesde.add(Calendar.DAY_OF_YEAR, dias);
-//				}
+//				fdesde.add(Calendar.DAY_OF_YEAR, dias);
+//				Thread.sleep(10);
 //				Thread.yield();
 //			}
 //			agregarASerie(true,fhasta,true,last);
+////			int dias=1;
+////			BizSqlEventDato last=null;
+////			while( fdesde.before(fhasta)) {//fdesde.getTime() fhasta.getTime()
+////				last=agregarASerie(true,fdesde,false,last);
+////				if (fhasta.get(Calendar.YEAR)!=fdesde.get(Calendar.YEAR)) {
+////					fdesde.add(Calendar.MONTH, 1);
+////				} else {
+////					fdesde.add(Calendar.DAY_OF_YEAR, dias);
+////				}
+////				Thread.yield();
+////			}
+////			agregarASerie(true,fhasta,true,last);
+//		}
+//		setFechaUpdate(new Date());
+//		JRecords<BizSqlEventDato> sobrante =new JRecords<BizSqlEventDato>(BizSqlEventDato.class);
+//		sobrante.addFilter("id_evento", getId());
+//		sobrante.addFilter("fecha", fhasta.getTime(),">");
+//		sobrante.delete();
+//	}
+	protected void internalServiceProcessPopulate(Date fechaDesde, Date fechaHasta) throws Exception {
+		
+
+		
+		if (fechaHasta == null) fechaHasta = new Date();
+
+		Calendar fdesde = Calendar.getInstance();
+		Calendar fhasta = Calendar.getInstance();
+		fhasta.setTime(fechaHasta);
+
+		// Fecha inicial
+		if (fechaDesde == null) {
+			Calendar unoAtras = Calendar.getInstance();
+			unoAtras.add(Calendar.YEAR, -1);
+			fdesde.setTime(new Date());
+			if (fdesde.before(unoAtras))
+				fdesde = unoAtras;
+		} else {
+			fdesde.setTime(JDateTools.getFirstDayOfYear(fechaDesde));
 		}
-		setFechaUpdate(new Date());
-		JRecords<BizSqlEventDato> sobrante =new JRecords<BizSqlEventDato>(BizSqlEventDato.class);
+
+		// Si es consulta virtual
+		if (getConsulta().startsWith("VIRTUAL:")) {
+			deleteRecords(getId());
+			agregarASerie(false, fhasta, false, null);
+			return;
+		}
+		if (!isNullConsultaHistorico()) {
+			processUpdateDatosInternalFast(fdesde,fhasta);
+			return;
+		}
+		// Punto de precisión fina: últimos 3 meses
+		Calendar fPrecision = Calendar.getInstance();
+		fPrecision.setTime(fhasta.getTime());
+		fPrecision.add(Calendar.MONTH, -3);
+
+		BizSqlEventDato last = null;
+
+		while (fdesde.before(fhasta)) {
+			if (fdesde.before(fPrecision)) {
+				// Salto de 10 días con interpolación
+				Calendar siguiente = (Calendar) fdesde.clone();
+				siguiente.add(Calendar.DAY_OF_YEAR, 10);
+				if (siguiente.after(fhasta)) siguiente = (Calendar) fhasta.clone();
+
+				double valorIni = getValor(null, fdesde);
+				double valorFin = getValor(null, siguiente);
+
+				last = agregarASerieWithValue(true, fdesde, valorIni, siguiente, valorFin, last);
+				fdesde = (Calendar) siguiente.clone();
+			} else {
+				// Precisión diaria
+				last = agregarASerie(true, fdesde, false, last);
+				fdesde.add(Calendar.DAY_OF_YEAR, 1);
+			}
+		}
+
+		// Asegurar generación del día final
+		agregarASerie(true, fhasta, true, last);
+
+		// Eliminar sobrantes posteriores
+		JRecords<BizSqlEventDato> sobrante = new JRecords<>(BizSqlEventDato.class);
 		sobrante.addFilter("id_evento", getId());
-		sobrante.addFilter("fecha", fhasta.getTime(),">");
+		sobrante.addFilter("fecha", fhasta.getTime(), ">");
 		sobrante.delete();
+
+		setFechaUpdate(new Date());
 	}
-	
+
 	public BizSqlEventDato agregarASerie(boolean checkExistencia,Calendar fecha,boolean actual,BizSqlEventDato anterior) throws Exception{
 		BizSqlEventDato serie = new BizSqlEventDato();
 		double oldValue=0;
@@ -1034,7 +1320,7 @@ public class BizSqlEvent extends JRecord implements IActionData {
 		}
 		BizSqlEventDato last;
 		double valor;
-		valor=getValor(fecha);
+		valor=getValor(null,fecha);
 		if (anterior!=null) {
 			Calendar fant = Calendar.getInstance();
 			fant.setTime(anterior.getFecha());
@@ -1057,7 +1343,9 @@ public class BizSqlEvent extends JRecord implements IActionData {
 		if (insert) 
 			serie.processInsert();
 		else
-			serie.processUpdate();
+			serie.processUpdate();	
+		
+
 		Thread.yield();
 		return serie;
 		
@@ -1118,7 +1406,8 @@ public class BizSqlEvent extends JRecord implements IActionData {
 		datos.addFilter("id_evento", getId());
 		if (fechaDesde!=null) datos.addFilter("fecha", fechaDesde.getTime(),">=");
 		if (fechaHasta!=null) datos.addFilter("fecha", fechaHasta.getTime(),"<=");
-		 datos.addFilter("fecha", new Date(),"<=");
+		
+		datos.addFilter("fecha", new Date(),"<=");
 		datos.addOrderBy("fecha","DESC");
 		datos.setTop(1);
 		JIterator<BizSqlEventDato> it = datos.getStaticIterator();
@@ -1126,16 +1415,21 @@ public class BizSqlEvent extends JRecord implements IActionData {
 		BizSqlEventDato dato = it.nextElement();
 		return dato;
 	}	  
-	public double getValor(Calendar fecha) throws Exception {
-		return getValor(fecha,null);
+	public double getValor(Calendar fechaDesde,Calendar fecha) throws Exception {
+		return getValor(fechaDesde,fecha,null);
 	}
 	
-	public double getValor(Calendar fecha, String extraCondicion) throws Exception {
+	public double getValor(Calendar fechaDesde, Calendar fecha, String extraCondicion) throws Exception {
 		if (getId()==587)
 			PssLogger.logDebug("error");
 		
 		String sql = getConsulta();
 		sql = JTools.replace(sql, "::FECHA::", "");
+		
+		if (BizBSPCompany.getObjBSPCompany( BizUsuario.getUsr().getCompany()).isDependant()) 
+ 			sql = JTools.replace(sql, "::DK::", " AND (customer_id_reducido='"+BizBSPCompany.getObjBSPCompany( BizUsuario.getUsr().getCompany()).getCodigoCliente()+"') ");
+		else
+			sql = JTools.replace(sql, "::DK::", "");
 		if (sql.equals("")) return 0;
 		if (fecha==null || JDateTools.getDateStartDay(fecha.getTime()).equals(JDateTools.getDateStartDay(new Date()))) {
 			return this.getSqlValue(sql,getCampo());
@@ -1156,9 +1450,77 @@ public class BizSqlEvent extends JRecord implements IActionData {
 		 
 		return valor;
 	}
-	public double getAcumulado(Calendar fecha, String campo) throws Exception {
+	
+	public double getValorAux1(Calendar fechaDesde, Calendar fecha, String extraCondicion) throws Exception {
+		if (getId()==587)
+			PssLogger.logDebug("error");
+		
+		String sql = getConsultaAux1();
+		sql = JTools.replace(sql, "::FECHA::", "");
+		
+		if (BizBSPCompany.getObjBSPCompany( BizUsuario.getUsr().getCompany()).isDependant()) 
+ 			sql = JTools.replace(sql, "::DK::", " AND (customer_id_reducido='"+BizBSPCompany.getObjBSPCompany( BizUsuario.getUsr().getCompany()).getCodigoCliente()+"') ");
+		else
+			sql = JTools.replace(sql, "::DK::", "");
+		if (sql.equals("")) return 0;
+		if (fecha==null || JDateTools.getDateStartDay(fecha.getTime()).equals(JDateTools.getDateStartDay(new Date()))) {
+			return this.getSqlValue(sql,getCampo());
+		}
+		sql=JTools.replace(sql, "now()", "'"+JDateTools.DateToString(fecha.getTime())+"'::date ");
+		
+		Calendar ayer = Calendar.getInstance();
+		ayer.setTime(fecha.getTime());
+		ayer.add(Calendar.DAY_OF_MONTH, -1);
+		sql=JTools.replace(sql, "'yesterday'",  "'"+JDateTools.DateToString(ayer.getTime())+"'::date ");
+		
+		Calendar maniana = Calendar.getInstance();
+		maniana.setTime(fecha.getTime());
+		maniana.add(Calendar.DAY_OF_MONTH, 1);
+		sql=JTools.replace(sql, "'tomorrow'", "'"+JDateTools.DateToString(maniana.getTime())+"'::date ");
+	
+		double valor = this.getSqlValue(sql, getCampo());
+		 
+		return valor;
+	}
+	public double getValorAux2(Calendar fechaDesde, Calendar fecha, String extraCondicion) throws Exception {
+		if (getId()==587)
+			PssLogger.logDebug("error");
+		
+		String sql = getConsultaAux2();
+		sql = JTools.replace(sql, "::FECHA::", "");
+		
+		if (BizBSPCompany.getObjBSPCompany( BizUsuario.getUsr().getCompany()).isDependant()) 
+ 			sql = JTools.replace(sql, "::DK::", " AND (customer_id_reducido='"+BizBSPCompany.getObjBSPCompany( BizUsuario.getUsr().getCompany()).getCodigoCliente()+"') ");
+		else
+			sql = JTools.replace(sql, "::DK::", "");
+		if (sql.equals("")) return 0;
+		if (fecha==null || JDateTools.getDateStartDay(fecha.getTime()).equals(JDateTools.getDateStartDay(new Date()))) {
+			return this.getSqlValue(sql,getCampo());
+		}
+		sql=JTools.replace(sql, "now()", "'"+JDateTools.DateToString(fecha.getTime())+"'::date ");
+		
+		Calendar ayer = Calendar.getInstance();
+		ayer.setTime(fecha.getTime());
+		ayer.add(Calendar.DAY_OF_MONTH, -1);
+		sql=JTools.replace(sql, "'yesterday'",  "'"+JDateTools.DateToString(ayer.getTime())+"'::date ");
+		
+		Calendar maniana = Calendar.getInstance();
+		maniana.setTime(fecha.getTime());
+		maniana.add(Calendar.DAY_OF_MONTH, 1);
+		sql=JTools.replace(sql, "'tomorrow'", "'"+JDateTools.DateToString(maniana.getTime())+"'::date ");
+	
+		double valor = this.getSqlValue(sql, getCampo());
+		 
+		return valor;
+	}
+	public double getAcumulado(Calendar fechaDesde,Calendar fecha, String campo) throws Exception {
 		String sql = getConsultaDetalle();
 		sql = JTools.replace(sql, "::FECHA::", "");
+		if (BizBSPCompany.getObjBSPCompany( BizUsuario.getUsr().getCompany()).isDependant()) 
+ 			sql = JTools.replace(sql, "::DK::", " AND (customer_id_reducido='"+BizBSPCompany.getObjBSPCompany( BizUsuario.getUsr().getCompany()).getCodigoCliente()+"') ");
+		else
+			sql = JTools.replace(sql, "::DK::", "");
+	
 		sql=JTools.replace(sql, "now()", "'"+JDateTools.DateToString(fecha.getTime())+"'::date ");
 		Calendar ayer = Calendar.getInstance();
 		ayer.setTime(fecha.getTime());
@@ -1206,6 +1568,12 @@ public class BizSqlEvent extends JRecord implements IActionData {
 			
 		newEvent.setConsultaDetalle(sql);
 
+		sql = newEvent.getConsultaHistorico();
+		sql = JTools.replace(sql, "'"+this.getCompany()+"'", "'"+company+"'");
+		sql = JTools.replace(sql, "company="+this.getCompany(), "company="+company);
+			
+		newEvent.setConsultaHistorico(sql);
+	
 		newEvent.cloneCustomList();
 //			newCustomList= newEvent.getObjCustomListProtect(company,getObjCustomList()==null?null:getObjCustomList().getDescripcion());
 //		if (newCustomList==null)
@@ -1240,6 +1608,12 @@ public class BizSqlEvent extends JRecord implements IActionData {
 		sql = JTools.replace(sql, "company="+this.getCompany(), "company="+company);
 			
 		newEvent.setConsultaDetalle(sql);
+
+		sql = newEvent.getConsultaHistorico();
+		sql = JTools.replace(sql, "'"+this.getCompany()+"'", "'"+company+"'");
+		sql = JTools.replace(sql, "company="+this.getCompany(), "company="+company);
+			
+		newEvent.setConsultaHistorico(sql);
 
 		if (newCustomList==null)
 			newCustomList= newEvent.getObjCustomListProtect(getCustomList());
@@ -1360,19 +1734,31 @@ public class BizSqlEvent extends JRecord implements IActionData {
 
 		return newDoc;
 	}
-  public JWins getDetalles(Calendar fecha,String columnaDestacada) throws Exception {
+  public JWins getDetalles(Calendar fechaDesde,Calendar fecha,String columnaDestacada) throws Exception {
+  	return getDetalles(fechaDesde,fecha,columnaDestacada,"");
+	}
+  public JWins getDetalles(Calendar fechaDesde,Calendar fecha,String columnaDestacada,String extraContenido) throws Exception {
   	String clase = getClassDetalle();
   	if (clase.equals("")) return null;
 	 	JWins wins = (JWins)Class.forName(clase).newInstance();
-	 	wins.getRecords().SetSQL(getSQLDetalles(fecha));
+	 	wins.getRecords().SetSQL(getSQLDetalles(fechaDesde,fecha,extraContenido));
 		if (columnaDestacada!=null) wins.SetVision(columnaDestacada);
 		wins.setShowFilters(false);
   	return wins;
 	}
+  
+  public JWins procEvaluate(long number,String extraContenido) throws Exception {
+  	String clase = getClassDetalle();
+  	if (clase.equals("")) return null;
+	 	JWins wins = (JWins)Class.forName(clase).newInstance();
+	 	wins.getRecords().SetSQL(getSQLEvaluate(number,extraContenido));
+		wins.setShowFilters(false);
+  	return wins;
+	}
 
-  public double getDetallesSinFuncion(Calendar fecha,String columnaDestacada) throws Exception {
+  public double getDetallesSinFuncion(Calendar fechaDesde,Calendar fecha, String columnaDestacada) throws Exception {
 	 	JWins wins = (JWins)Class.forName(getClassDetalle()).newInstance();
-	 	wins.getRecords().SetSQL(getSQLDetalles(fecha));
+	 	wins.getRecords().SetSQL(getSQLDetalles(fechaDesde,fecha,""));
 		if (columnaDestacada!=null) wins.SetVision(columnaDestacada);
 		wins.setShowFilters(false);
 		if (getObjCampo().getCampo().equals("COUNT"))
@@ -1380,10 +1766,15 @@ public class BizSqlEvent extends JRecord implements IActionData {
   	return wins.getRecords().selectSum(getObjCampo().getCampo());
 	}
 
-  public String getSQLDetalles(Calendar fecha) throws Exception {
+  public String getSQLDetalles(Calendar fechaDesde,Calendar fecha, String extraContenido) throws Exception {
 		if (getClassDetalle()==null) throw new Exception("No se puede visualizar detalles de consultas basadas en SQL");
 	 	String sql = this.getConsultaDetalle();
-	 	sql = JTools.replace(sql, "::FECHA::", "");
+ 		sql = JTools.replace(sql, "::FECHA::", extraContenido);
+		if (BizBSPCompany.getObjBSPCompany( BizUsuario.getUsr().getCompany()).isDependant()) 
+ 			sql = JTools.replace(sql, "::DK::", " AND (customer_id_reducido='"+BizBSPCompany.getObjBSPCompany( BizUsuario.getUsr().getCompany()).getCodigoCliente()+"') ");
+		else
+			sql = JTools.replace(sql, "::DK::", "");
+	
 		if (fecha!=null) {
 			sql=JTools.replace(sql, "now()", "'"+JDateTools.DateToString(fecha.getTime())+"'::date ");
 			Calendar ayer = Calendar.getInstance();
@@ -1398,6 +1789,46 @@ public class BizSqlEvent extends JRecord implements IActionData {
 		}
 	 	return sql;
 	}
+  public String getSQLEvaluate(long number, String extraContenido) throws Exception {
+		if (getClassDetalle()==null) throw new Exception("No se puede visualizar detalles de consultas basadas en SQL");
+	 	String sql = this.getConsultaDetalle();
+ 		sql = JTools.replace(sql, "::FECHA::", extraContenido);
+		if (BizBSPCompany.getObjBSPCompany( BizUsuario.getUsr().getCompany()).isDependant()) 
+ 			sql = JTools.replace(sql, "::DK::", " AND (customer_id_reducido='"+BizBSPCompany.getObjBSPCompany( BizUsuario.getUsr().getCompany()).getCodigoCliente()+"') ");
+		else
+			sql = JTools.replace(sql, "::DK::", "");
+		Calendar fecha = Calendar.getInstance();
+		fecha.setTime(new Date());
+		if (fecha!=null) {
+			sql=JTools.replace(sql, "now()", "'"+JDateTools.DateToString(fecha.getTime())+"'::date ");
+			Calendar ayer = Calendar.getInstance();
+			ayer.setTime(fecha.getTime());
+			ayer.add(Calendar.DAY_OF_MONTH, -1);
+			sql=JTools.replace(sql, "'yesterday'",  "'"+JDateTools.DateToString(ayer.getTime())+"'::date ");
+			Calendar maniana = Calendar.getInstance();
+			maniana.setTime(fecha.getTime());
+			maniana.add(Calendar.DAY_OF_MONTH, 1);
+			sql=JTools.replace(sql, "'tomorrow'", "'"+JDateTools.DateToString(maniana.getTime())+"'::date ");
+		
+		}
+		sql = removeMarkersExcept(sql,number);
+	 	return sql;
+	}
+  public  String removeMarkersExcept(String input, long keep) {
+    for (int i = 1; i <= 27; i++) {
+        if (i == keep) {
+            continue; 
+        }
+        Pattern p = Pattern.compile("(?s)/\\*" + i + "\\*/(.*?)?/\\*" + i + "\\*/");
+        Matcher m = p.matcher(input);
+        input = m.replaceAll(" TRUE ");
+    }
+    String markerRegex = "/\\*" + keep + "\\*/";
+    input = input.replaceAll(markerRegex, "");
+
+    return input;
+}
+
   public void fillSqlDetalleFromCustomList() throws Exception {
   	BizCustomList biz = this.getObjCustomList();
    	JWins wins = (JWins)Class.forName(biz.getObjRelation().getObjRecordTarget().getRelationMap().getSourceWinsClass()).newInstance();
@@ -1517,6 +1948,7 @@ public class BizSqlEvent extends JRecord implements IActionData {
     	hist.setIdevento(""+getId());
     	hist.setCompany(getCompany());
     	hist.setFundamento(action.getDescripcionData()+" "+action.getFundamento());
+    	hist.setMensajeUsuario(action.getMensajeUsuario());
     	hist.setIdaction(action.getIdaction());
     	hist.setAccion(action.getAction());
    		hist.setDestinatario(action.getDestinatario());
@@ -1540,7 +1972,7 @@ public class BizSqlEvent extends JRecord implements IActionData {
 			if (action.isOutEXCEL()) {
 				GuiSqlEvent l = BizUsuario.getUsr().getObjBusiness().getSqlEventWinInstance();
 				l.setRecord(this);
-				String name = l.hashCode() + ".xls";
+				String name = l.hashCode() + ".xlsx";//.xls
 				return URLEncoder.encode(l.getHtmlView(40,"excel",a),"ISO-8859-1").replace("+", "%20");
 			}
 			if (action.isOutCSV()) {
@@ -1549,7 +1981,7 @@ public class BizSqlEvent extends JRecord implements IActionData {
 				String name = l.hashCode() + ".csv";
 				return URLEncoder.encode(l.getHtmlView(40,"csv",a),"ISO-8859-1").replace("+", "%20");
 			}
-		return action.getObjPlantilla().generateDocSimple(hist,this);
+		return action.getMensajeUsuario()+"<br/>"+ action.getObjPlantilla().generateDocSimple(hist,this);
   }
 	public String getCorreoAviso(JFilterMap a,BizSqlEventAction action,BizSqlEventHistory hist,String campo,String valor) throws Exception {
 		return getCorreoAviso(a,action, hist);
@@ -1575,7 +2007,7 @@ public class BizSqlEvent extends JRecord implements IActionData {
 				GuiSqlEvent l = BizUsuario.getUsr().getObjBusiness().getSqlEventWinInstance();
 				l.setRecord(this);
 				JTools.MakeDirectory(JPath.PssPathTempFiles() + "/"+l.GetcDato().getCompany());
-				String name = l.GetcDato().getCompany()+"/"+ l.hashCode() + ".xls";
+				String name = l.GetcDato().getCompany()+"/"+ l.hashCode() + ".xlsx";//.xls
 				String content = l.getHtmlView(40, "excel",a);
 //				if (action.isAccionDOWNLOAD()) // el encode es porque se por alguna razon no puedo hacer que el reques baje en 8859, entonces lo encodeo y zafo
 //					JTools.writeStringToFile(URLEncoder.encode(content,"ISO-8859-1").replace("+", "%20"),JPath.PssPathTempFiles()+"/"+name);
@@ -1606,7 +2038,7 @@ public class BizSqlEvent extends JRecord implements IActionData {
 	public String getArchivoExcelAviso(JFilterMap a, BizSqlEventAction action, BizSqlEventHistory hist) throws Exception {
 		GuiCustomList l = new GuiCustomList();
 		l.setRecord(this);
-		String name = l.hashCode() + ".xls";
+		String name = l.hashCode() + ".xlsx"; //.xls
 		JTools.writeStringToFile(l.getHtmlView(100, "excel",a), JPath.PssPathTempFiles() + "/" + name);
 		return name;
 	}
@@ -1622,11 +2054,11 @@ public class BizSqlEvent extends JRecord implements IActionData {
 		String resp = null;
 		if (!action.getTipoPeriodicidad().equals(BizSqlEventAction.LIMITE))
 			return null;
-		double valor = getValor(null);
+		double valor = getValor(null,null);
 		if (!isNullValorMinimo() && valor <= getValorMinimo()) {
 			if (isNullFechaMinimo()) {
 				resp = "MINIMO";
-				action.setFundamento("ca�do por debajo de " + getValorMinimo());
+				action.setFundamento("caído por debajo de " + getValorMinimo());
 //				setFechaMinimo(new Date());
 			}
 		} else {

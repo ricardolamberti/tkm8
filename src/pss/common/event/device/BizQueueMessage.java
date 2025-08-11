@@ -154,7 +154,7 @@ public class BizQueueMessage extends JRecord {
 		return read();
 	}
 
-	static BizQueueMessage buildSimpleMessage(String title,String info,String type, boolean permanent,String link) throws Exception {
+	static public BizQueueMessage buildSimpleMessage(String title,String info,String type, boolean permanent,String link) throws Exception {
 		BizQueueMessage queue = new BizQueueMessage();
 		queue.pTitle.setValue(title);
 		queue.pInfo.setValue(info);
@@ -166,7 +166,7 @@ public class BizQueueMessage extends JRecord {
 		return queue;
 	}
 	
-	static BizQueueMessage buildFromEvent(BizEvent e) throws Exception {
+	static public BizQueueMessage buildFromEvent(BizEvent e) throws Exception {
 		BizQueueMessage queue = new BizQueueMessage();
 		queue.pTitle.setValue(e.getTitle());
 		queue.pInfo.setValue(e.getInfo());

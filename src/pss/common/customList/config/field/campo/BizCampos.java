@@ -1,11 +1,8 @@
 package pss.common.customList.config.field.campo;
 
 import pss.common.customList.config.customlist.BizCustomList;
-import pss.common.customList.config.customlist.GuiCustomList;
 import pss.common.customList.config.relation.BizCampoGallery;
-import pss.common.customList.config.relation.GuiCampoGallery;
 import pss.core.data.interfaces.sentences.JBaseRegistro;
-import pss.core.services.fields.JObject;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.PssLogger;

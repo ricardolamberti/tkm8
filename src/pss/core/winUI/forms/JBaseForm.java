@@ -62,6 +62,7 @@ import pss.core.winUI.responsiveControls.JFormFileResponsive;
 import pss.core.winUI.responsiveControls.JFormHtmlTextAreaResponsive;
 import pss.core.winUI.responsiveControls.JFormImageCardResponsive;
 import pss.core.winUI.responsiveControls.JFormImageResponsive;
+import pss.core.winUI.responsiveControls.JFormInfoCardDoubleResponsive;
 import pss.core.winUI.responsiveControls.JFormInfoCardResponsive;
 import pss.core.winUI.responsiveControls.JFormIntervalCDatetimeResponsive;
 import pss.core.winUI.responsiveControls.JFormLabelDataResponsive;
@@ -1406,7 +1407,10 @@ public class JBaseForm  {
 	public JFormCardResponsive AddCardPanel(BizAction action, String title) throws Exception {
 		return getInternalPanel().AddCardPanel(action, title);
 	}
-
+	public JFormInfoCardDoubleResponsive AddInfoCardDouble(String zLabel, String zTipoDato, String sCampo,String sCampo2, JWebIcon image, String labelLink, int zaction) throws Exception {
+		BizAction action = getBaseWin().findAction(zaction);
+		return getInternalPanel().AddInfoCardDouble(zLabel, zTipoDato, sCampo, sCampo2, image, labelLink, action, null);
+	}
 	public JFormInfoCardResponsive AddInfoCard(String zLabel, String zTipoDato, String sCampo, JWebIcon image, String labelLink, int zaction) throws Exception {
 		BizAction action = getBaseWin().findAction(zaction);
 		return getInternalPanel().AddInfoCard(zLabel, zTipoDato, sCampo, image, labelLink, action, null);

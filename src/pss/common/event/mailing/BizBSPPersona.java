@@ -141,7 +141,7 @@ public class BizBSPPersona extends JRecord {
   
   public void attachRelationMap(JRelations rels) throws Exception {
   	rels.setSourceWinsClass(GuiBSPPersonas.class.getName());
-  	rels.hideField("company");
+  	//rels.hideField("company");
   	rels.hideField("id");
 		super.attachRelationMap(rels);
 

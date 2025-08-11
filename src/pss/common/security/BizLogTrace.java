@@ -6,9 +6,7 @@ import pss.core.services.fields.JDateTime;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.tools.JDateTools;
 import pss.core.tools.JTools;
-import pss.core.tools.crypt.AESCrypt;
 
 public class BizLogTrace extends JRecord {
 

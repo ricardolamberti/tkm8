@@ -47,7 +47,7 @@ public class BizCliente extends JRecord {
   };
   
   public boolean hasExistCompany()throws Exception {
-  	return BizCompany.getCompanyCache().getElement("C_"+pCustomerNumber.getValue())!=null;
+  	return BizCompany.getCompany("C_"+pCustomerNumber.getValue())!=null;
   }
  
 

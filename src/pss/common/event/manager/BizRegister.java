@@ -5,9 +5,7 @@ import pss.common.event.device.BizChannel;
 import pss.common.mail.mailing.BizMail;
 import pss.common.regions.entidad.BizEntidad;
 import pss.common.regions.nodes.BizNodo;
-import pss.common.restJason.JClientApiProcess;
 import pss.common.security.BizUsuario;
-import pss.core.services.JExec;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
@@ -154,13 +152,13 @@ public class BizRegister extends JRecord {
     this.addFixedItem( FIELD, "transformer", "Transformer", true, false, 10);
 //    this.addFixedItem( FIELD, "source_filters", "Source Filters", true, false, 10);
 //    this.addFixedItem( FIELD, "event_action_id", "Event Action Id", true, false, 18 );
-		this.addFixedItem(VIRTUAL, "descr_action", "Acción", true, true, 50);
+		this.addFixedItem(VIRTUAL, "descr_action", "Acciï¿½n", true, true, 50);
 		this.addFixedItem(VIRTUAL, "descr_evento", "Evento", true, true, 50);
 		this.addFixedItem(VIRTUAL, "descr_sendernodo", "Sender Nodo", true, true, 50);
 		this.addFixedItem(VIRTUAL, "descr_listenentidad", "Listen Entidad", true, true, 50);
 		this.addFixedItem(VIRTUAL, "descr_transformer", "Transformer", true, true, 50);
 //		this.addFixedItem(VIRTUAL, "descr_filtros", "Filtros", true, true, 50);
-//		this.addFixedItem(VIRTUAL, "descr_action_id", "Descripción Acción", true, false, 50);
+//		this.addFixedItem(VIRTUAL, "descr_action_id", "Descripciï¿½n Acciï¿½n", true, false, 50);
   }
   /**
    * Returns the table name

@@ -6,7 +6,6 @@ import pss.common.customList.config.relation.JRelation;
 import pss.common.customList.config.relation.JRelations;
 import pss.common.event.sql.BizSqlEvent;
 import pss.common.regions.company.BizCompany;
-import pss.common.regions.company.GuiCompany;
 import pss.core.data.interfaces.structure.RJoins;
 import pss.core.services.fields.JObject;
 import pss.core.services.records.JBaseRecord;

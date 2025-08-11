@@ -6,8 +6,6 @@
 
 package pss.common.security;
 
-import com.f1j.xml.dom.it;
-
 import pss.common.security.type.BizUsuarioTipo;
 import pss.core.data.BizPssConfig;
 import pss.core.services.fields.JLong;

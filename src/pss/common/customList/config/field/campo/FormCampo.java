@@ -21,7 +21,6 @@ import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormCheckResponsive;
 import pss.core.winUI.responsiveControls.JFormControlResponsive;
-import pss.core.winUI.responsiveControls.JFormDivResponsive;
 import pss.core.winUI.responsiveControls.JFormFieldsetResponsive;
 import pss.core.winUI.responsiveControls.JFormPanelResponsive;
 
@@ -34,19 +33,11 @@ private static final long serialVersionUID = 1226426905817L;
    * Constructor de la Clase
    */
   public FormCampo() throws Exception {
-    try { jbInit(); }
-    catch (Exception e) { e.printStackTrace(); } 
-  }
+   }
 
   public GuiCampo getWin() { return (GuiCampo) getBaseWin(); }
 
-  /**
-   * Inicializacion Grafica
-   */
-  protected void jbInit() throws Exception {
-  }
 
-  /**
    * Linkeo los campos con la variables del form
    */
   public void InicializarPanel( JWin zWin ) throws Exception {

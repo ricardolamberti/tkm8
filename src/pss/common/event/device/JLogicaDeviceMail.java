@@ -16,9 +16,8 @@ public class JLogicaDeviceMail implements ILogicaDevice {
 		n.setTitulo(title);
 		n.setBody(JTools.encodeIso(JTools.encodeString2(info)));
 		n.setMailTo(device.getUUID());
-		n.setEnviar(true);
 		n.processInsert();
-//		n.processEnviar();
+		n.processEnviar();
 		
 		BizQueueMessage newMess = new BizQueueMessage();
   	newMess.setCompany(device.getCompany());
@@ -33,16 +32,15 @@ public class JLogicaDeviceMail implements ILogicaDevice {
 
 	@Override
 	public void sendMessage(BizDevice device, BizEvent e) throws Exception {
-		if (!e.getObjSenderUser().hasMail()) return;
+		if (!e.getObjSender().hasMail()) return;
 		BizDocEmail n = new BizDocEmail();
 		n.setCompany(e.getCompany());
-		n.setObjMailCasilla(e.getObjSenderUser().getObjMailCasilla());
+		n.setObjMailCasilla(e.getObjSender().getObjMailCasilla());
 		n.setTitulo(e.getTitle());
 		n.setBody(JTools.encodeIso(JTools.encodeString2(e.getInfo())));
 		n.setMailTo(device.getUUID());
-		n.setEnviar(true);
 		n.processInsert();
-//		n.processEnviar();
+		n.processEnviar();
 		
 		BizQueueMessage newMess = new BizQueueMessage();
   	newMess.setCompany(device.getCompany());

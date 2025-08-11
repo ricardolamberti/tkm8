@@ -78,7 +78,10 @@ public class BizCompanyCountry extends JRecord {
 		this.addFilter("company", zCompany);
 		return this.read();
 	}
-
+	public boolean read(String zCompany) throws Exception {
+		this.addFilter("company", zCompany);
+		return this.read();
+	}
 //	public boolean read(String zCompany) throws Exception {
 //		this.addFilter("company", zCompany);
 //		return this.read();

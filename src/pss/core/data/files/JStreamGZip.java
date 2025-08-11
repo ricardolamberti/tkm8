@@ -170,5 +170,45 @@ public class JStreamGZip extends JBaseFile {
 	  }
 	
 	}
-
+	public static void unzipFileForDirectoryPlain(String zFile, String zDirectorySrc, String zDirectoryDest) throws Exception {
+	  try {
+	    // Create a ZipInputStream to read the zip file
+	    BufferedOutputStream dest = null;
+	    FileInputStream fis = new FileInputStream( (zDirectorySrc!=null?zDirectorySrc +"/":"")+  zFile );
+	    ZipInputStream zis = new ZipInputStream( new BufferedInputStream( fis ) );  //fuente comprimido
+	
+	    // Loop over all of the entries in the zip file
+	    int count;
+	    int BUFFER_SIZE = 8192;
+	    byte data[] = new byte[BUFFER_SIZE]; //8k
+	    ZipEntry entry;
+	    while( ( entry = zis.getNextEntry() ) != null )
+	    {
+	      if( !entry.isDirectory() )
+	      {
+	        String entryName = entry.getName();
+	        String destFN =zDirectoryDest+"/"+ entry.getName().substring(entry.getName().lastIndexOf("/")+1);
+	        String destDir = zDirectoryDest;
+	
+	        JTools.MakeDirectory(destDir);
+	
+	        // Write the file to the file system
+	        FileOutputStream fos = new FileOutputStream( destFN );
+	        dest = new BufferedOutputStream( fos, BUFFER_SIZE );
+	        while( (count = zis.read( data, 0, BUFFER_SIZE ) ) != -1 )
+	        {
+	          dest.write( data, 0, count );
+	        }
+	        dest.flush();
+	        dest.close();
+	      }
+	    }
+	    zis.close();
+	  }
+	  catch( Exception e )
+	  {
+	    e.printStackTrace();
+	  }
+	
+	}
 }

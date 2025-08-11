@@ -763,7 +763,7 @@ public class BizBSPCompany extends BizCompany implements IActionData {
 	
 	public static BizBSPCompany getObjBSPCompany(String company) throws Exception {
 		BizBSPCompany val = new BizBSPCompany();
-		BizCompany comp = BizCompany.getCompanyCache().getElement(company);
+		BizCompany comp = BizCompany.getCompany(company);
 		//val.Read(company);
 		if (comp==null) return null;
 		val.copyProperties(comp);

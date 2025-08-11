@@ -1,5 +1,6 @@
 package pss.common.event.sql;
 
+import pss.bsp.monitor.log.BizBspLog;
 import pss.common.customList.config.customlist.GuiCustomList;
 import pss.common.customList.config.customlist.GuiCustomListResult;
 import pss.common.event.action.GuiSqlEventAction;
@@ -262,7 +263,7 @@ public class GuiSqlEvent extends JWin {
   	return c;
   }
   public JWins getDetalles() throws Exception {
-  	return this.GetcDato().getDetalles(null,null);
+  	return this.GetcDato().getDetalles(null,null,null);
   }
   public JWins getHistorico() throws Exception {
   	GuiSqlEventDatos	c = new GuiSqlEventDatos();
@@ -353,14 +354,22 @@ public class GuiSqlEvent extends JWin {
 						if (sqlEvent.isREPROCESAR())continue;
 					}
 					if (!sqlEvent.isActivo()) continue;
+					long start = System.currentTimeMillis();
 					sqlEvent.execProcessUpdateDatos();
-				//	sqlEvent.processPopulate(null, null);
+					long end = System.currentTimeMillis();
+					if (end-start>1000*10) {
+						PssLogger.logError(sqlEventOrig.getCompany()+" "+sqlEventOrig.getDescripcion()+" "+sqlEventOrig.getId()+" Exceso de tiempo: "+((end-start)/1000)+" seg.");
+				  	BizBspLog.log(company, "PRINCIPAL_"+company, BizBspLog.BSPLOG_MODULO_INDICADOR, BizBspLog.BSPLOG_LOG , "SLOW QUERY %1 (%4 ms) id=%l", sqlEvent.getDescripcion(), null, null, end-start, sqlEvent.getId(), 0);
+					}//	sqlEvent.processPopulate(null, null);
 				}
 			
 		
   }
 	public void ExecCheckForEvents(String company) throws Exception {
 //
+		if (company.equals("BIBAM")) {
+			PssLogger.logInfo("check point");
+		}
 		JRecords<BizSqlEvent> events = new JRecords<BizSqlEvent>(BizSqlEvent.class);
 		events.addFilter("company", company);
 		events.addFilter("estado", BizSqlEvent.REPROCESAR);
@@ -370,18 +379,19 @@ public class GuiSqlEvent extends JWin {
 			BizSqlEvent sqlEventOrig = it.nextElement();
 	  	try {
 				BizSqlEvent sqlEvent = sqlEventOrig.getObjWithoutRead();
-//				if (sqlEvent.getConsulta().indexOf("continente")!=-1) continue;
-//				if (sqlEvent.getConsulta().indexOf("region")!=-1) continue;
 				if (BizUsuario.getUsr().getObjBusiness().isSqlEventProcessInService()) {
 					if (sqlEvent.isREPROCESANDO()) continue;
 					if (sqlEvent.isREPROCESAR()) {
+						BizBspLog.log(company, "PRINCIPAL_"+company, BizBspLog.BSPLOG_MODULO_INDICADOR, BizBspLog.BSPLOG_LOG , "REPROCESAR %1 ", sqlEvent.getDescripcion(), null, null, 0, 0, 0);
 						sqlEvent.execSetServicePopulate(null,null,BizSqlEvent.REPROCESANDO);
 						sqlEvent.execServiceProcessPopulate();
+						BizBspLog.log(company, "PRINCIPAL_"+company, BizBspLog.BSPLOG_MODULO_INDICADOR, BizBspLog.BSPLOG_LOG , "FIN REPROCESAR %1 ", sqlEvent.getDescripcion(), null, null, 0, 0, 0);
 						continue;
 					}
 				}
 				if (!sqlEvent.isActivo()) continue;
 			} catch (Exception e) {
+				BizBspLog.log(company, "PRINCIPAL_"+company, BizBspLog.BSPLOG_MODULO_INDICADOR, BizBspLog.BSPLOG_ERROR , e.getMessage(), null, null, null, 0, 0, 0);
 				PssLogger.logError(e);
 				sqlEventOrig.setEstado(BizSqlEvent.ERROR);
 				sqlEventOrig.execProcessUpdate();;

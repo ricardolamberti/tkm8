@@ -1,7 +1,5 @@
 package  pss.common.customList.config.field.campo;
 
-import java.awt.Dimension;
-
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.forms.JBaseForm;
@@ -16,21 +14,11 @@ private static final long serialVersionUID = 1226426966039L;
    * Constructor de la Clase
    */
   public FormCampoOrEmbbeded() throws Exception {
-    try { jbInit(); }
-    catch (Exception e) { e.printStackTrace(); } 
   }
 
   public GuiCampo getWin() { return (GuiCampo) getBaseWin(); }
 
-  /**
-   * Inicializacion Grafica
-   */
-  protected void jbInit() throws Exception {
-    setLayout(null);
-    setSize(new Dimension(493, 298));
 
-
-  }
   /**
    * Linkeo los campos con la variables del form
    */

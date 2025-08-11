@@ -8,7 +8,6 @@ import pss.core.JAplicacion;
 import pss.core.data.BizPssConfig;
 import pss.core.data.interfaces.connections.JBDatos;
 import pss.core.services.fields.JBoolean;
-import pss.core.services.fields.JDateTime;
 import pss.core.services.fields.JObject;
 import pss.core.services.fields.JPassword;
 import pss.core.services.fields.JString;
@@ -348,11 +347,11 @@ public class BizLoginTrace extends JRecord {
 		
 		if (this.isAutoLogin()) {
 			user=BizUsuario.createUserAutoLogin();
-			if (user==null) JExcepcion.SendError(getMessage("Usuario Inválido"));
+			if (user==null) JExcepcion.SendError(getMessage("Usuario Invï¿½lido"));
 			return user;
 		} 
 		
-		JExcepcion.SendError(getMessage("Usuario Inválido"));
+		JExcepcion.SendError(getMessage("Usuario Invï¿½lido"));
 		return null;
 	}
 

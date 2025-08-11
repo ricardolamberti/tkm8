@@ -573,6 +573,9 @@ public class JRegJDBCImpl extends JRegJDBC {
 	public String fdiames(String zFieldname) throws Exception {
 		return "extract('day' from " + (zFieldname) + ")";
 	}
+	public String fdiaano(String zFieldname) throws Exception {
+		return "extract('doy' from " + (zFieldname) + ")";
+	}
 	@Override
 	public String faniomes(String zFieldname) throws Exception {
 		return "(CAST(date_part('year'," + (zFieldname) + ") as Text) || '/' || lpad(CAST(date_part('month'::text," + (zFieldname) + ") as text),2,'0'))";
@@ -925,7 +928,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 
 	@Override
 	protected void checkSpecialErrors(SQLException zSQLExe) throws Exception {
-		if (zSQLExe.getMessage().indexOf("La conversión del tipo de datos char a datetime " + "produjo un valor datetime fuera de intervalo") != -1)
+		if (zSQLExe.getMessage().indexOf("La conversiï¿½n del tipo de datos char a datetime " + "produjo un valor datetime fuera de intervalo") != -1)
 			JExcepcion.SendError("Fecha fuera de rango");
 		if ((zSQLExe.getMessage().indexOf("value larger than specified precision allows for this column") != -1))
 			JExcepcion.SendError("Importe fuera de rango");

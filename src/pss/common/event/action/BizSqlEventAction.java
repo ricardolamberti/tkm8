@@ -7,6 +7,7 @@ import java.util.Date;
 import org.apache.commons.codec.net.URLCodec;
 
 import pss.JPath;
+import pss.bsp.monitor.log.BizBspLog;
 import pss.common.event.action.history.BizSqlEventHistory;
 import pss.common.event.mailing.BizMailingPersona;
 import pss.common.event.sql.BizSqlEvent;
@@ -14,11 +15,13 @@ import pss.common.layoutWysiwyg.BizPlantilla;
 import pss.common.mail.mailing.BizMail;
 import pss.common.mail.message.BizMessage;
 import pss.common.regions.company.BizCompany;
+import pss.common.security.BizUsuario;
 import pss.common.security.mail.BizUsrMailSender;
 import pss.core.services.JExec;
 import pss.core.services.fields.JBoolean;
 import pss.core.services.fields.JDateTime;
 import pss.core.services.fields.JHour;
+import pss.core.services.fields.JHtml;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JFilterMap;
@@ -60,7 +63,7 @@ public class BizSqlEventAction extends JRecord {
   private JString pFormato = new JString();
  private JString pTelefono = new JString();
   private JLong pIdaction = new JLong();
-  private JBoolean pAdjunto = new JBoolean();
+  private JString pAdjunto = new JString();
   private JString pClassEvento = new JString();
   private JString pDescripcion = new JString();
   private JString pIdevento = new JString();
@@ -70,6 +73,7 @@ public class BizSqlEventAction extends JRecord {
   private JString pTipoPeriodicidad = new JString();
   private JDateTime pFechaUltimoEnvio = new JDateTime();
   private JString pFundamento = new JString();
+  private JHtml pMensajeUsuario = new JHtml();
 
   private JBoolean pSemanaTodos = new JBoolean();
   private JBoolean pDiasTodos = new JBoolean();
@@ -178,7 +182,9 @@ public class BizSqlEventAction extends JRecord {
   public boolean isNullIdaction() throws Exception { return  pIdaction.isNull(); } 
   public void setNullToIdaction() throws Exception {  pIdaction.setNull(); } 
   public void setAdjunto(boolean zValue) throws Exception {    pAdjunto.setValue(zValue);  }
-  public boolean isAdjunto() throws Exception {     return pAdjunto.getValue();  }
+  public boolean isAdjunto() throws Exception {     return pAdjunto.isNotNull() && !pAdjunto.getValue().equals("N");  }
+  public boolean isAdjuntoAdd() throws Exception {     return pAdjunto.getValue().equals("A");  }
+  public boolean isAdjuntoOnly() throws Exception {     return pAdjunto.getValue().equals("S");  }
   public void setClassevento(String zValue) throws Exception {    pClassEvento.setValue(zValue);  }
   public String getClassevento() throws Exception {     return pClassEvento.getValue();  }
   public boolean isNullClassevento() throws Exception { return  pClassEvento.isNull(); } 
@@ -221,6 +227,8 @@ public class BizSqlEventAction extends JRecord {
 
   public void setFundamento(String zValue) throws Exception {    pFundamento.setValue(zValue);  }
   public String getFundamento() throws Exception {     return pFundamento.getValue();  }
+  public void setMensajeUsuario(String zValue) throws Exception {    pMensajeUsuario.setValue(zValue);  }
+  public String getMensajeUsuario() throws Exception {     return pMensajeUsuario.getValue();  }
 
   public void setFormato(String zValue) throws Exception {    pFormato.setValue(zValue);  }
 
@@ -311,6 +319,7 @@ public class BizSqlEventAction extends JRecord {
     this.addItem( "m12", pm12 );
 
     this.addItem( "fundamento", pFundamento );
+    this.addItem( "mensaje_usuario", pMensajeUsuario );
     this.addItem( "mensaje", pMensaje );
     this.addItem( "descr_action", pDescrAction );
     this.addItem( "descr_data", pDescrData );
@@ -329,6 +338,7 @@ public class BizSqlEventAction extends JRecord {
     this.addFixedItem( FIELD, "formato", "formato", true, false, 50 );
     this.addFixedItem( FIELD, "usuario", "Usuario", true, false, 50 );
     this.addFixedItem( FIELD, "descripcion", "Descripcion", true, false, 250 );
+    this.addFixedItem( FIELD, "mensaje_usuario", "Mensaje Usuario", true, false, 10000 );
     this.addFixedItem( FIELD, "correo", "Correo", true, false, 250 );
     this.addFixedItem( FIELD, "mailing", "Mailing", true, false, 250 );
     this.addFixedItem( FIELD, "telefono", "Telefono", true, false, 250 );
@@ -521,7 +531,7 @@ public class BizSqlEventAction extends JRecord {
   	gActions.addElement(URL,     "Publicar URL");
   	gActions.addElement(MAILING, "Mailing");
 		gActions.addElement(AVISO,   "Aviso dentro del sistema");
-		gActions.addElement(NOTIF,   "Notificación del celular");
+		gActions.addElement(NOTIF,   "NotificaciÃ³n del celular");
   	gActions.addElement(DOWNLOAD, "Descarga");
   	return gActions;
   }
@@ -531,7 +541,7 @@ public class BizSqlEventAction extends JRecord {
   	gTipoSalida=JCollectionFactory.createOrderedMap();
   	gTipoSalida.addElement(PANTALLA,   "Como se ve en la pantalla");
   	gTipoSalida.addElement(PDF,   "Reporte");
-  	gTipoSalida.addElement(EXCEL,   "Planilla de cálculo");
+  	gTipoSalida.addElement(EXCEL,   "Planilla de cÃ¡lculo");
   	gTipoSalida.addElement(CSV,   "CSV");
   	return gTipoSalida;
   }
@@ -635,7 +645,7 @@ public class BizSqlEventAction extends JRecord {
   }
   public String getMensajeAviso(JFilterMap a,BizSqlEventHistory hist) throws Exception {
   	if (isAccionDOWNLOAD()) {
-   		return URLEncoder.encode("Presione Aplicar y el archivo se descargará a su dispositivo.","ISO-8859-1").replace("+", "%20");
+   		return URLEncoder.encode("Presione Aplicar y el archivo se descargarï¿½ a su dispositivo.","ISO-8859-1").replace("+", "%20");
    	}
   	if (isAccionURL()) {
    		return getObjSqlEvent().getCorreoAviso(a,this,hist);
@@ -737,7 +747,7 @@ public class BizSqlEventAction extends JRecord {
 					
 				}
 				else {
-					setMensaje("No enviado por estar vacío");
+					setMensaje("No enviado por estar vacÃ­o");
 				};
 				
 			} else {
@@ -747,7 +757,7 @@ public class BizSqlEventAction extends JRecord {
 					getObjMailSender().send(mail,titulo,msg);
 				}
 				else {
-					setMensaje("No enviado por estar vacío");
+					setMensaje("No enviado por estar vacÃ­o");
 				};
 			}
 		}
@@ -836,8 +846,12 @@ public class BizSqlEventAction extends JRecord {
     	return meta;
   
   	}
-  	Date fechaControl = JDateTools.StringToDate(JDateTools.DateToString(d)+" "+getHora());
-  	Calendar meta = Calendar.getInstance();
+   	Calendar meta = Calendar.getInstance();
+   	meta.setTime( JDateTools.getDateStartDay(d));
+    meta.add(Calendar.DAY_OF_MONTH, 1);
+ 	
+  	Date fechaControl = JDateTools.StringToDate(JDateTools.DateToString(meta.getTime())+" "+getHora());
+  	meta = Calendar.getInstance();
   	meta.setTime(fechaControl);
   	return meta;
   }
@@ -1052,7 +1066,7 @@ public class BizSqlEventAction extends JRecord {
 
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			BizBspLog.log(BizUsuario.getUsr().getCompany(), "PRINCIPAL_"+BizUsuario.getUsr().getCompany(), BizBspLog.BSPLOG_MODULO_MENSAJERIA, BizBspLog.BSPLOG_ERROR , "Error envÃ­o "+ e.getMessage(), null, null, null, 0, 0, 0);
 			e.printStackTrace();
 		}
   }
@@ -1060,6 +1074,8 @@ public class BizSqlEventAction extends JRecord {
   public static void ExecCheckForEvents(String company) throws Exception {
 
   	try {
+			if (company.equals("BIBAM"))
+				PssLogger.logInfo("logpoint" );
 //  		if (BizBSPCompany.getObjBSPCompany(company).getObjExtraData().getSuspender()) RJL, pasar a bsp
 //  			return;
   		JRecords<BizSqlEventAction> events = new JRecords<BizSqlEventAction>(BizSqlEventAction.class);
@@ -1110,8 +1126,9 @@ public class BizSqlEventAction extends JRecord {
 		}
 		else
 			if (!hasRun()) return;
-		if (getCompany().equals("IUMIRA"))
+		if (getCompany().equals("BIBAM"))
 			PssLogger.logInfo("log point");
+		BizBspLog.log(getCompany(), "PRINCIPAL_"+getCompany(), BizBspLog.BSPLOG_MODULO_MENSAJERIA, BizBspLog.BSPLOG_LOG , "Intento enviar mensaje", null, null, null, this.getIdaction(), 0, 0);
 		BizSqlEventHistory msg=actionData.generarAviso(null,this,false);
 		if (msg==null) return;
 		if (msg.getDestinatario().equals("")) return;
@@ -1122,6 +1139,7 @@ public class BizSqlEventAction extends JRecord {
 		
 		
 		this.send(null,msg);
+		BizBspLog.log(getCompany(), "PRINCIPAL_"+getCompany(), BizBspLog.BSPLOG_MODULO_MENSAJERIA, BizBspLog.BSPLOG_LOG , "Mensaje Enviado", null, null, null, this.getIdaction(), 0, 0);
 
 		
 	}

@@ -1,15 +1,9 @@
 package  pss.bsp.consola.dashBoard;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-
 import pss.common.customList.config.customlist.BizCustomList;
 import pss.core.services.records.JRecords;
 import pss.core.tools.collections.JIterator;
-import pss.core.ui.components.JPssImage;
 import pss.core.win.JWin;
-import pss.core.winUI.controls.JFormImage;
 import pss.core.winUI.forms.JBaseForm;
 
 public class FormDashBoard extends JBaseForm {
@@ -24,15 +18,6 @@ public class FormDashBoard extends JBaseForm {
 	//JPssEdit usuario = new JPssEdit  ();
 	//JPssLabel lusos = new JPssLabel();
 
-	private JPssImage jTextField = null;
-
-	private JPssImage jTextField1 = null;
-	private JPssImage jTextField2 = null;
-	private JPssImage jTextField3 = null;
-	private JPssImage jTextField4 = null;
-	private JPssImage jTextField5 = null;
-
-
 
 	
 
@@ -40,39 +25,14 @@ public class FormDashBoard extends JBaseForm {
 	   * Constructor de la Clase
 	   */
 	  public FormDashBoard() throws Exception {
-	    try { jbInit(); }
-	    catch (Exception e) { e.printStackTrace(); } 
 	  }
 
 	  public GuiDashBoard getWin() { return (GuiDashBoard) getBaseWin(); }
 
 	  /**
-	   * Inicializacion Grafica
-	   */
-	  protected void jbInit() throws Exception {
-	    setSize(new Dimension(1070, 665));
-
-
-	   
-//	    lusuario.setText("Bienvenido/a");
-//	    lusuario.setBounds(new Rectangle(16, 16, 84, 22)); 
-//	    usuario.setBounds(new Rectangle(105, 16, 143, 22)); 
-//	    add(lusuario, null);
-//	    add(usuario , null);
-	//
-	//
-//	    lusos.setText( "Licencia" );
-//	    lusos.setBounds(new Rectangle(479, 16, 63, 22)); 
-//	    licencia.setBounds(new Rectangle(547, 16, 143, 22)); 
-//	    add(lusos, null);
-//	    add(licencia , null);
-	  }
-	  /**
 	   * Linkeo los campos con la variables del form
 	   */
 	  public void InicializarPanel( JWin zWin ) throws Exception {
-//	    AddItem( usuario, CHAR, REQ, "usuario" );
-//	    AddItem( licencia, CHAR, REQ, "licencia" );
 	  		setAutoRefresh(true, 10000, "DASHBOARD");
 	  		
 	  		
@@ -120,57 +80,7 @@ public class FormDashBoard extends JBaseForm {
 	public boolean isFixWidth() throws Exception {
 		return false;
 	}
-	/**
-	 * This method initializes jTextField	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private JPssImage getJTextField() {
-		if (jTextField == null) {
-			jTextField = new JPssImage();
-		}
-		return jTextField;
-	}
-
-	/**
-	 * This method initializes jTextField1	
-	 * 	
-	 * @return javax.swing.JTextField	
-	 */
-	private JPssImage getJTextField1() {
-		if (jTextField1 == null) {
-			jTextField1 = new JPssImage();
-		}
-		return jTextField1;
-	} 
-	private JPssImage getJTextField2() {
-		if (jTextField2 == null) {
-			jTextField2 = new JPssImage();
-			jTextField2.setName("jTextField2");
-		}
-		return jTextField2;
-	}
-	private JPssImage getJTextField3() {
-		if (jTextField3 == null) {
-			jTextField3 = new JPssImage();
-			jTextField3.setName("jTextField3");
-		}
-		return jTextField3;
-	}
-	private JPssImage getJTextField4() {
-		if (jTextField4 == null) {
-			jTextField4 = new JPssImage();
-			jTextField4.setName("jTextField4");
-		}
-		return jTextField4;
-	}
-	private JPssImage getJTextField5() {
-		if (jTextField5 == null) {
-			jTextField5 = new JPssImage();
-			jTextField5.setName("jTextField5");
-		}
-		return jTextField5;
-	}
+	
 
 
 

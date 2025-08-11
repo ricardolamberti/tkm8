@@ -28,16 +28,16 @@ public class BizCoreEvent extends BizEventCode {
 	/*public JRecords<BizEvent> getEventCodeList() throws Exception {
 		JRecords<BizEvent> oBDs=new JRecords<BizEvent>(BizEvent.class);
 		oBDs.addItem(create(MODULO_RETAIL, EVT_FINALIZACION_TRANSACCION, "Ventas", "trans"));
-		oBDs.addItem(create(MODULO_RETAIL, EVT_ANULACION_TRX, "Anulaci髇 de Venta", "voided"));
-		oBDs.addItem(create(MODULO_RETAIL, EVT_DEVOLUCION_TRX, "Devoluci髇 de Venta", "refund"));
-		oBDs.addItem(create(MODULO_RETAIL, EVT_ELIMINACION_ITEM, "Eliminaci髇 de Item en Venta", "items_deleted"));
+		oBDs.addItem(create(MODULO_RETAIL, EVT_ANULACION_TRX, "Anulaci贸n de Venta", "voided"));
+		oBDs.addItem(create(MODULO_RETAIL, EVT_DEVOLUCION_TRX, "DEvoluci贸n de Venta", "refund"));
+		oBDs.addItem(create(MODULO_RETAIL, EVT_ELIMINACION_ITEM, "Eliminaci锟絥 de Item en Venta", "items_deleted"));
 		oBDs.addItem(create(MODULO_RETAIL, EVT_DESCUENTO_MANUAL, "Descuento Manual", "manual_discounts"));
 		oBDs.addItem(create(MODULO_RETAIL, EVT_SOBREPRECIO_MANUAL, "Sobreprecio Manual", "manual_overprice"));
-		oBDs.addItem(create(MODULO_RETAIL, EVT_APERTURA_CAJON, "Apertura de Caj髇", "drawer_open"));
-		oBDs.addItem(create(MODULO_RETAIL, EVT_CASH_DROP, "Tirada de Buz髇", "safe_drop"));
+		oBDs.addItem(create(MODULO_RETAIL, EVT_APERTURA_CAJON, "Apertura de Caj锟絥", "drawer_open"));
+		oBDs.addItem(create(MODULO_RETAIL, EVT_CASH_DROP, "Tirada de Buz锟絥", "safe_drop"));
 		oBDs.addItem(create(MODULO_RETAIL, EVT_FALTANTE_CAJA, "Faltante de Caja", "cash_short"));
 		oBDs.addItem(create(MODULO_RETAIL, EVT_SOBRANTE_CAJA, "Sobrante de Caja", "cash_over"));
-		oBDs.addItem(create(MODULO_RETAIL, EVT_ANULACION_VTA_EN_CURSO, "Anulaci髇 Venta en Curso", "sale_cancellation"));
+		oBDs.addItem(create(MODULO_RETAIL, EVT_ANULACION_VTA_EN_CURSO, "Anulaci贸n Venta en Curso", "sale_cancellation"));
 		oBDs.addItem(create(MODULO_RETAIL, EVT_AUTHORIZE_DUPLICATE_CASH_DROP, "Autoriza Sobre Duplicado", "authorize_duplicate_safe_drop"));
 		return oBDs;
 	} */
@@ -62,9 +62,9 @@ public class BizCoreEvent extends BizEventCode {
 
 		} catch (Throwable ex) {
 			PssLogger.logDebug(ex);
-			// no puedo interrumpir la finalizaci髇 de una venta por culpa de un maldito evento
-			// el problema es que esto va despues de la impresi髇 porque sino bloquea otras
-			// ventas hasta que finaliza la impresi髇. El bloqueo se porque un evento acumulado
+			// no puedo interrumpir la finalizaci锟絥 de una venta por culpa de un maldito evento
+			// el problema es que esto va despues de la impresi贸n porque sino bloquea otras
+			// ventas hasta que finaliza la impresi贸n. El bloqueo se porque un evento acumulado
 			// hace un select en toda la tabla y queda bloqueado por el insert de otra venta.
 		}
 

@@ -1,40 +1,15 @@
 package pss.tourism.pnr;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Rectangle;
-
-import javax.swing.BorderFactory;
-import javax.swing.ButtonGroup;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.border.TitledBorder;
-
 import pss.common.regions.currency.BizMoneda;
 import pss.common.regions.currency.GuiMonedas;
 import pss.common.security.BizUsuario;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
-import pss.core.ui.components.JPssCalendarEdit;
-import pss.core.ui.components.JPssEdit;
 import pss.core.ui.components.JPssImage;
-import pss.core.ui.components.JPssLabel;
-import pss.core.ui.components.JPssLabelFormLov;
-import pss.core.ui.components.JPssPanel;
-import pss.core.win.JControlWin;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.controls.JFormControl;
-import pss.core.winUI.controls.JFormImage;
-import pss.core.winUI.controls.JFormLista;
-import pss.core.winUI.controls.JFormSwingRadio;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormFieldsetResponsive;
 import pss.core.winUI.responsiveControls.JFormImageResponsive;
@@ -48,11 +23,6 @@ public class FormPNRTicket extends JBaseForm {
 	// Constructor de la Clase
 	// -------------------------------------------------------------------------//
 	public FormPNRTicket() throws Exception {
-		try {
-			jbInit();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public GuiPNRTicket getWin() {
@@ -60,11 +30,6 @@ public class FormPNRTicket extends JBaseForm {
 	}
 
 
-	// -------------------------------------------------------------------------//
-	// Inicializacion Grafica
-	// -------------------------------------------------------------------------//
-	protected void jbInit() throws Exception {
-	}
 	
 	public JMap<String, String> getOptions() {
 		JMap<String, String> map = JCollectionFactory.createMap();

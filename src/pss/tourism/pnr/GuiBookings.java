@@ -1,19 +1,9 @@
 package pss.tourism.pnr;
 
-import java.util.Date;
-
-import pss.common.regions.company.GuiCompanies;
-import pss.common.security.BizUsuario;
-import pss.core.services.fields.JObject;
-import pss.core.tools.JDateTools;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
-import pss.core.winUI.controls.JControlCombo;
-import pss.core.winUI.controls.JFormCDate;
-import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;
-import pss.tourism.carrier.GuiCarriers;
 
 public class GuiBookings extends JWins {
 

@@ -75,8 +75,8 @@ public class BizSqlEventDato extends JRecord {
   public void createFixedProperties() throws Exception {
     this.addFixedItem( KEY, "id", "Id", false, false, 64 );
     this.addFixedItem( FIELD, "value", "Value", true, true, 18,2 );
-    this.addFixedItem( FIELD, "var_val", "Variación", true, false, 18,2 );
-    this.addFixedItem( FIELD, "var_porc", "Variación(%)", true, false, 18,2 );
+    this.addFixedItem( FIELD, "var_val", "VariaciÃ³n", true, false, 18,2 );
+    this.addFixedItem( FIELD, "var_porc", "VariaciÃ³n(%)", true, false, 18,2 );
     this.addFixedItem( FIELD, "tendencia", "Tendencia", true, false, 18,2 );
     this.addFixedItem( VIRTUAL, "tendenciaview", "T.", true, false, 50 );
     this.addFixedItem( FIELD, "fecha", "Fecha", true, true, 18 );

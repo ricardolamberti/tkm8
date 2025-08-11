@@ -697,7 +697,7 @@ public class JFormPanelResponsive extends JFormControlResponsive  {
 		oButton.setData(data);
 		if (action!=null && ok) {
 			if (this.isActionRestricted(action)) 
-				JExcepcion.SendError("Acción no permitida");
+				JExcepcion.SendError("Acciï¿½n no permitida");
 			BizAction oAction = action;
 			oButton.setAction(oAction);	
 			oButton.setSubmit(submit);
@@ -1449,7 +1449,42 @@ public class JFormPanelResponsive extends JFormControlResponsive  {
 	public JFormInfoCardResponsive AddInfoCard(String zLabel, String zTipoDato, String sCampo,JWebIcon image,String labelLink,BizAction action, String directLink) throws Exception {
 		return AddInfoCard(zLabel, zTipoDato, sCampo, image, labelLink, action, directLink, true);
 	}
-	
+	public JFormInfoCardDoubleResponsive AddInfoCardDouble(String zLabel, String zTipoDato, String sCampo, String sCampo2,JWebIcon image,String labelLink,BizAction action, String directLink) throws Exception {
+		return AddInfoCardDouble(zLabel, zTipoDato, sCampo, sCampo2, image, labelLink, action, directLink, true);
+	}
+	public JFormInfoCardDoubleResponsive AddInfoCardDouble(String zLabel, String zTipoDato, String sCampo, String sCampo2,JWebIcon image,String labelLink,BizAction action, String directLink,boolean submit) throws Exception {
+		JFormInfoCardDoubleResponsive oEdit= new JFormInfoCardDoubleResponsive();
+		oEdit.initialize();
+
+		oEdit.setLabel(zLabel);
+
+		if (sCampo != null) {
+			JObject<?> prop = getBaseWin().getRecord().getPropDeep(sCampo);
+			oEdit.setPropFrom(prop);
+			oEdit.setFieldPropFrom(sCampo);
+			oEdit.setFixedPropFrom(getBaseWin().getRecord().getFixedPropDeep(sCampo));
+		}
+		if (sCampo2 != null) {
+			JObject<?> prop = getBaseWin().getRecord().getPropDeep(sCampo2);
+			oEdit.setPropTo(prop);
+			oEdit.setFieldPropTo(sCampo2);
+			oEdit.setFixedPropTo(getBaseWin().getRecord().getFixedPropDeep(sCampo2));
+		}
+		
+		oEdit.SetTipoDato(zTipoDato);
+		if (action!=null)
+			oEdit.setAction(action);
+		else
+			oEdit.setVisible(false);
+		oEdit.setImagen(image);
+		oEdit.setLabelLink(labelLink);
+		oEdit.setSubmit(submit);
+		oEdit.setDirectLink(directLink);
+		oEdit.setResponsiveClass("card ");
+		BizUsuario.getUsr().getSkin().createGenerator().configureJFormItem(oEdit);
+		getControles().AddControl(oEdit,findByField(sCampo));
+		return oEdit;
+	}
 	public JFormInfoCardResponsive AddInfoCard(String zLabel, String zTipoDato, String sCampo,JWebIcon image,String labelLink,BizAction action, String directLink,boolean submit) throws Exception {
 		JFormInfoCardResponsive oEdit= new JFormInfoCardResponsive();
 		oEdit.initialize();
@@ -2133,7 +2168,7 @@ public class JFormPanelResponsive extends JFormControlResponsive  {
 			return AddItemTab(zId,null);
 		}
 		
-		// Additem de un JWins a un JTabbedPane a través de una acción
+		// Additem de un JWins a un JTabbedPane a travï¿½s de una acciï¿½n
 		public JFormLista AddItemTab(int zId,String title) throws Exception {
 			BizAction oAction = getBaseWin().findAction(zId);
 			if (title==null && oAction!=null) title=this.getBaseWin().getDescrAction(oAction);

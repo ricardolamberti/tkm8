@@ -2,6 +2,8 @@ package pss.common.event.mailing;
 
 
 import pss.common.customList.config.relation.JRelations;
+import pss.core.services.fields.JBoolean;
+import pss.core.services.fields.JFloat;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
@@ -17,13 +19,14 @@ public class BizMailingPersona extends JRecord {
   private JString pDescripcion = new JString();
   private JString pMail = new JString();
   private JString pNumero = new JString();
+  
   private JString pDescrip = new JString() {
   	public void preset() throws Exception {
   		pDescrip.setValue(getDescripOperativa());
   	};
   };
-  
 
+ 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Getter & Setters methods
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -44,6 +47,11 @@ public class BizMailingPersona extends JRecord {
   public boolean isNullCodigo() throws Exception { return  pCodigo.isNull(); } 
   public void setNullToCodigo() throws Exception {  pCodigo.setNull(); } 
 
+  public void setNumero(String zValue) throws Exception {    pNumero.setValue(zValue);  }
+  public String getNumero() throws Exception {     return pNumero.getValue();  }
+  public boolean isNullNumero() throws Exception { return  pNumero.isNull(); } 
+  public void setNullToNumero() throws Exception {  pNumero.setNull(); } 
+
   public void setMail(String zValue) throws Exception {    pMail.setValue(zValue);  }
   public String getMail() throws Exception {     return pMail.getValue();  }
   public boolean isNullMail() throws Exception { return  pMail.isNull(); } 
@@ -53,6 +61,8 @@ public class BizMailingPersona extends JRecord {
   public String getTipo() throws Exception {     return pTipo.getValue();  }
   public boolean isNullTipo() throws Exception { return  pTipo.isNull(); } 
   public void setNullToTipo() throws Exception {  pTipo.setNull(); } 
+
+  
 
   public String getDescripOperativa() throws Exception {     
   	return pCodigo.getValue()+"-"+pDescripcion.getValue();  
@@ -75,6 +85,7 @@ public class BizMailingPersona extends JRecord {
     this.addItem( "numero", pNumero );
     this.addItem( "mail", pMail );
     this.addItem( "tipo", pTipo );
+
   }
   /**
    * Adds the fixed object properties
@@ -85,13 +96,13 @@ public class BizMailingPersona extends JRecord {
     this.addFixedItem( FIELD, "codigo", "Codigo", true, true, 50 );
     this.addFixedItem( FIELD, "descripcion", "Descripcion mailing", true, false, 250 );
     this.addFixedItem( FIELD, "mail", "Mail", true, false, 250 );
-    this.addFixedItem( FIELD, "numero", "numero", true, false, 50 );
+    this.addFixedItem( FIELD, "numero", "Código unificado", true, false, 50 );
     this.addFixedItem( FIELD, "tipo", "Tipo", true, true, 50 );
     this.addFixedItem( VIRTUAL, "descripcion_op", "Descripcion mailing", true, false, 250 );
   }
   /**
    * Returns the table name
-   */
+   */ 
   public String GetTable() { return "BSP_PERSONA"; }
 
 
@@ -106,19 +117,31 @@ public class BizMailingPersona extends JRecord {
 	public final static String SUCURSAL = "Sucursal";
 	public final static String IATA = "Iata";
 
-  
+	public final static String OFRECIDO = "O";
+	public final static String CEDIDO = "C";
+	public final static String SIN_COMISION = "S";
+ 
   static JMap<String,String> gTipos;
   public static JMap<String,String> getTipos() throws Exception {
   	if (gTipos!=null) return gTipos;
   	gTipos=JCollectionFactory.createMap();
   	gTipos.addElement(CLIENTE, "Clientes");
   	gTipos.addElement(CLIENTERMK, "Clientes en remark");
-   	gTipos.addElement(CLIENTE_REDUCIDO, "Clientes id corto");
+   	gTipos.addElement(CLIENTE_REDUCIDO, "DK");
    	gTipos.addElement(VENDEDOR, "Vendedor");
   	gTipos.addElement(CCOSTO, "Centro de Costo");
   	gTipos.addElement(SUCURSAL, "Sucursal");
   	gTipos.addElement(IATA, "IATA");
   	return gTipos;
+  }
+  static JMap<String,String> gComision;
+  public static JMap<String,String> getTipoComision() throws Exception {
+  	if (gComision!=null) return gComision;
+  	gComision=JCollectionFactory.createMap();
+  	gComision.addElement(OFRECIDO, "Ofrecidos");
+  	gComision.addElement(CEDIDO, "Cedidos");
+  	gComision.addElement(SIN_COMISION, "Sin comisión");
+   	return gComision;
   }
  
   
@@ -149,7 +172,7 @@ public class BizMailingPersona extends JRecord {
   
   public void attachRelationMap(JRelations rels) throws Exception {
   	rels.setSourceWinsClass(GuiMailingPersonas.class.getName());
-  	rels.hideField("company");
+  	//rels.hideField("company");
   	rels.hideField("id");
 		super.attachRelationMap(rels);
 

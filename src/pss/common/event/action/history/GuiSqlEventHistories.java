@@ -36,7 +36,7 @@ public class GuiSqlEventHistories extends JWins {
    */
   public void createActionMap() throws Exception {
 //    addActionNew( 1, "Nuevo Registro" );
-		this.addAction(20, "Programación", null, 10026, true, true, true, "Group" );
+		this.addAction(20, "ProgramaciÃ³n", null, 10026, true, true, true, "Group" );
   }
 
 	public JAct getSubmitFor(BizAction a) throws Exception {
@@ -75,7 +75,7 @@ public class GuiSqlEventHistories extends JWins {
 		d.SetValorDefault(JDateTools.getFirstDayOfMonth(new Date()),JDateTools.getLastDayOfMonth(new Date()));
 
 //		zFiltros.NuevoCombo("Tipo",  "id_action", JWins.createVirtualWinsFromMap(BizSqlEventAction.getActions()));
-		zFiltros.addEditResponsive("Descripción", JObject.JSTRING, "fundamento").setOperator("ilike");
+		zFiltros.addEditResponsive("DescripciÃ³n", JObject.JSTRING, "fundamento").setOperator("ilike");
 	}
 
 }

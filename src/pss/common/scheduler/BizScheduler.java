@@ -1,8 +1,20 @@
 package pss.common.scheduler;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.URL;
 import java.util.Date;
 
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+
 import pss.core.JAplicacion;
+import pss.core.data.BizPssConfig;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JDateTools;
@@ -21,6 +33,78 @@ public class BizScheduler extends JRecord {
 
 	public BizScheduler() throws Exception {
 	}
+	
+
+	private static void startHealthCheckServer() {
+	    Thread healthThread = new Thread(new Runnable() {
+	        @Override
+	        public void run() {
+	            try {
+	                // Levanta el servidor en el puerto 8081
+	                HttpServer server = HttpServer.create(new InetSocketAddress(BizPssConfig.getHealthPort()), 0);
+	                
+	                server.createContext("/health", new HttpHandler() {
+	                    @Override
+	                    public void handle(HttpExchange exchange) throws IOException {
+	                        // Puedes construir una respuesta que incluya el estado global y el de cada proceso
+	                        StringBuilder response = new StringBuilder();
+	                        response.append("OK\n");
+	                        response.append("Scheduler Processes Status:\n");
+	                        response.append(SchedulerHealth.getStatusReport());
+	                        
+	                        byte[] bytes = response.toString().getBytes();
+	                        exchange.sendResponseHeaders(200, bytes.length);
+	                        OutputStream os = exchange.getResponseBody();
+	                        os.write(bytes);
+	                        os.close();
+	                    }
+	                });
+	                
+	                server.setExecutor(null);
+	                server.start();
+	                PssLogger.logDebug("Health check server started on port "+BizPssConfig.getHealthPort());
+	            } catch (IOException e) {
+	                PssLogger.logError(e, "Error starting health check server");
+	            }
+	        }
+	    });
+	    healthThread.setDaemon(true);
+	    healthThread.start();
+	}
+
+	public static String readStatus() {
+    String serviceUrl = "http://localhost:"+BizPssConfig.getHealthPort()+"/health"; // Ajusta la URL si es necesario
+    HttpURLConnection connection = null;
+    try {
+        URL url = new URL(serviceUrl);
+        connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        
+        connection.setConnectTimeout(2000); // Tiempo de conexión en milisegundos
+        connection.setReadTimeout(2000);    // Tiempo de lectura en milisegundos
+        
+        int responseCode = connection.getResponseCode();
+        if (responseCode == HttpURLConnection.HTTP_OK) {
+            // Se lee la respuesta del endpoint
+            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String inputLine;
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine).append("\n");
+            }
+            in.close();
+            return response.toString();
+        } else {
+            return "Error en la respuesta: " + responseCode;
+        }
+    } catch (Exception e) {
+        return "Service DOWN! -> " + e.getMessage();
+    } finally {
+        if (connection != null) {
+            connection.disconnect();
+        }
+    }
+}
 
 	public static void main(String[] args) {
 		try {
@@ -28,10 +112,12 @@ public class BizScheduler extends JRecord {
 			if (args.length >= 1) {
 				WinServiceTools w = new WinServiceTools();
 				w.setClassName("pss.common.scheduler.BizScheduler");
-				w.setServiceName("PWG6 Process Scheduler");
+				w.setServiceName("PWG7 Process Scheduler");
 				w.install();
 				System.exit(0);
 			}
+	    
+			startHealthCheckServer();
 
 			BizScheduler sched = new BizScheduler();
 			sched.executeScheduler();
@@ -113,6 +199,7 @@ public class BizScheduler extends JRecord {
 				BizProcessHost h = it.nextElement();
 				BizProcess bp = new BizProcess();
 				bp.copyProperties(proc);
+			  SchedulerHealth.setProcessDescription( h.getUID(), bp.getDescription());
 				if (h.getParams().equals("") == false)
 					bp.setClassName(proc.getClassName() + "|" + h.getParams());
 				if (bp.hasToExecuteProcess(h)) {

@@ -1,75 +1,30 @@
 package  pss.bsp.config.carrierGroups;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
 import pss.common.security.BizUsuario;
-import pss.core.winUI.forms.JBaseForm;
-import pss.core.ui.components.*;
 import pss.core.win.JWin;
-import javax.swing.JTabbedPane;
+import pss.core.winUI.forms.JBaseForm;
 
 public class FormCarrierGroup extends JBaseForm {
 
 
 private static final long serialVersionUID = 1245253307166L;
 
-  /**
-   * Propiedades de la Clase
-   */
-JPssLabel lpais = new JPssLabel();
-JPssEdit pais = new JPssEdit  ();
-JPssEdit company = new JPssEdit  ();
-JPssEdit id = new JPssEdit  ();
-
-private JTabbedPane jTabbedPane = null;
 /**
    * Constructor de la Clase
    */
   public FormCarrierGroup() throws Exception {
-    try { jbInit(); }
-    catch (Exception e) { e.printStackTrace(); } 
   }
 
   public GuiCarrierGroup getWin() { return (GuiCarrierGroup) getBaseWin(); }
 
   /**
-   * Inicializacion Grafica
-   */
-  protected void jbInit() throws Exception {
-    setLayout(null);
-    setSize(new Dimension(595, 312));
-
-
-    lpais.setText("Grupo");
-    lpais.setBounds(new Rectangle(15, 22, 123, 22)); 
-    pais.setBounds(new Rectangle(143, 22, 201, 22)); 
-    add(lpais, null);
-    add(pais , null);
-
-
-    this.add(getJTabbedPane(), null);
-  }
-  /**
    * Linkeo los campos con la variables del form
    */
   public void InicializarPanel( JWin zWin ) throws Exception {
-    AddItem( company, CHAR, OPT, "company" ).SetValorDefault(BizUsuario.getUsr().getCompany());
-    AddItem( pais, CHAR, REQ, "descripcion" );
-    AddItem( id, CHAR, OPT, "id_group" );
-    AddItem(getJTabbedPane(),10);
+    AddItemEdit( null, CHAR, OPT, "company" ).SetValorDefault(BizUsuario.getUsr().getCompany()).setHide(true);
+    AddItemEdit( "Grupo", CHAR, REQ, "descripcion" );
+    AddItemEdit( null, CHAR, OPT, "id_group" ).setHide(true);
+    AddItemTabPanel().AddItemList(10);
   }
 
-	/**
-	 * This method initializes jTabbedPane	
-	 * 	
-	 * @return javax.swing.JTabbedPane	
-	 */
-	private JTabbedPane getJTabbedPane() {
-		if (jTabbedPane == null) {
-			jTabbedPane = new JTabbedPane();
-			jTabbedPane.setBounds(new Rectangle(14, 54, 574, 246));
-		}
-		return jTabbedPane;
-	} 
 }  //  @jve:decl-index=0:visual-constraint="24,19"

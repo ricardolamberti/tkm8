@@ -1,7 +1,6 @@
 package pss.common.customList.config.field.campo;
 
 import pss.common.customList.config.customlist.GuiCustomList;
-import pss.common.customList.config.relation.GuiCampoGallery;
 import pss.common.customList.config.relation.GuiCamposGallery;
 import pss.core.services.records.JRecord;
 import pss.core.win.JBaseWin;

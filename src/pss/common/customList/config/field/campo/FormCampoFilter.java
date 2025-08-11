@@ -1,7 +1,5 @@
 package pss.common.customList.config.field.campo;
 
-import java.util.Date;
-
 import javax.swing.JTree;
 
 import pss.common.customList.config.dynamic.GuiDynamics;

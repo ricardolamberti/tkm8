@@ -174,6 +174,7 @@ public class JWebWinMatrixResponsive  extends JWebWinGenericResponsive implement
 		return this.getName();
 	}
 
+
 	@SuppressWarnings("unchecked")
 	public Class<?> getAbsoluteClass() {
 		return JWebWinListResponsive.class;
@@ -836,7 +837,7 @@ public class JWebWinMatrixResponsive  extends JWebWinGenericResponsive implement
 		// calculateTotalCount();
 		// alerta = getWins().anyAlert(totalCountElement);
 		// if (alerta!=null) setAlert(alerta); // warning referidos a los
-		// resultados, paso el tamaÒo para no volver a calcularlo
+		// resultados, paso el tama√±o para no volver a calcularlo
 		return true;
 	}
 
@@ -1024,8 +1025,8 @@ public class JWebWinMatrixResponsive  extends JWebWinGenericResponsive implement
 		JMap<Long, JOrdenEjeMatrix> localFilaGruposEjes = JCollectionFactory.createOrderedMap();
 		JMap<Long, String> gruposTitles = JCollectionFactory.createOrderedMap();
 		JMap<Long, String> gruposTotalesEjes = JCollectionFactory.createOrderedMap();
-		JMap<Long, String> gruposDiferenciaEjes = JCollectionFactory.createOrderedMap();
-		JMap<Long, String> gruposDiferenciaPorcEjes = JCollectionFactory.createOrderedMap();
+		JMap<String, JMap<Long, String>> gruposDiferenciaEjes = JCollectionFactory.createOrderedMap();
+		JMap<String, JMap<Long, String>> gruposDiferenciaPorcEjes = JCollectionFactory.createOrderedMap();
 		boolean fillGrupoEjes = true;
 		boolean displayTotales = false;
 		boolean withData = false;
@@ -1090,11 +1091,27 @@ public class JWebWinMatrixResponsive  extends JWebWinGenericResponsive implement
 						gruposTitles.addElement(level, eje.GetColumnaTitulo());
 						gruposTotalesEjes.addElement(level, level==0?"TOTALES":"");
 					}
-					if (eje.getEje()!=null && eje.getEje().getCalculeDiferencia() && level==0) {
-						gruposDiferenciaEjes.addElement(level, "DIFERENCIA "+eje.getEje().getObjCampoDiferencia().getDescrCampo());
-						if (eje.getEje().getPorcentajeDiferencia())
-							gruposDiferenciaPorcEjes.addElement(level, "DIF.PORCENTAJE "+eje.getEje().getObjCampoDiferencia().getDescrCampo());
+					
+					if (eje.getEje() != null && eje.getEje().getCalculeDiferencia() && level == 0) {
+						JIterator<BizCampo> itd = eje.getEje().getObjCampoDiferencia().getIterator();
+						while (itd.hasMoreElements()) {
+							BizCampo dif = itd.nextElement();
+							JMap<Long, String> grupo = new JCollectionFactory().createMap();
+							grupo.addElement(0l,  "DIFERENCIA " + dif.getDescrCampo());
+							gruposDiferenciaEjes.addElement(dif.getCampo(), grupo);
+							if (eje.getEje().getPorcentajeDiferencia()) {
+								JMap<Long, String> grupoPorc = new JCollectionFactory().createMap();
+								grupoPorc.addElement(0l,  "DIF.PORCENTAJE " + dif.getDescrCampo());
+								gruposDiferenciaPorcEjes.addElement(dif.getCampo(), grupoPorc);
+							}
+						}
 					}
+				
+//					if (eje.getEje()!=null && eje.getEje().getCalculeDiferencia() && level==0) {
+//						gruposDiferenciaEjes.addElement(level, "DIFERENCIA "+eje.getEje().getObjCampoDiferencia().getDescrCampo());
+//						if (eje.getEje().getPorcentajeDiferencia())
+//							gruposDiferenciaPorcEjes.addElement(level, "DIF.PORCENTAJE "+eje.getEje().getObjCampoDiferencia().getDescrCampo());
+//					}
 					level++;
 					idColumna += (idColumna.equals("") ? "" : "_") + JTools.LPad(""+eje.getValue(win),60,"0");
 					localColumnaGruposEjes.addElement(level, getOrdenEjeMatrix("C",level, idColumna, eje,JTools.LPad(""+eje.getValue(win),60,"0")));
@@ -1214,6 +1231,7 @@ public class JWebWinMatrixResponsive  extends JWebWinGenericResponsive implement
 					!dato.getFunctionTotalizadora().equals(BizCampo.FUNTION_CUATRIMESTRE) &&
 					!dato.getFunctionTotalizadora().equals(BizCampo.FUNTION_SEMESTRE) &&
 					!dato.getFunctionTotalizadora().equals(BizCampo.FUNTION_DIA_MES) &&
+					!dato.getFunctionTotalizadora().equals(BizCampo.FUNTION_DIA_ANO) &&
 					!dato.getFunctionTotalizadora().equals(BizCampo.FUNTION_DIA_SEMANA) &&
 					!dato.getFunctionTotalizadora().equals(BizCampo.FUNTION_MES) && 
 					value != null && !value.toString().equals("") && 
@@ -1436,16 +1454,18 @@ public class JWebWinMatrixResponsive  extends JWebWinGenericResponsive implement
 					JEjeMatrix eje = it.nextElement();
 					if (eje.getEje()==null) continue;
 					if (!eje.getEje().getCalculeDiferencia()) continue;
-					if (!campo.equals(eje.getEje().getObjCampoDiferencia().getNameField())) continue;
-
-					JObject dif = win.getRecord().getProp("xdiffval_"+eje.getEje().getNameField(),false);
+				//	if (!campo.equals(eje.getEje().getObjCampoDiferencia().getNameField())) continue;
+					if (!eje.getEje().getCampoDiferencia().containsElement(campo)) continue;
+					BizCampo fieldCampo = eje.getEje().findFieldDiferencia(campo);
+					
+					JObject dif = win.getRecord().getProp("xdiffval_"+eje.getEje().getNameField()+"_"+fieldCampo.getCampo(),false);
 
 					if (dif!=null&&dif.getObjectValue()!=null) {
-						JObject difTitle = win.getRecord().getPropRaw("xdiffcol_"+eje.getEje().getNameField());
+						JObject difTitle = win.getRecord().getPropRaw("xdiffcol_"+eje.getEje().getNameField()+"_"+fieldCampo.getCampo());
 						String newTitulo =difTitle.toString();
-						String idColD = "zzzzzzzzzzzzzz_DIFERENCIA_" + newTitulo;
+						String idColD = "zzzzzzzzzzzzzz_"+(10000-fieldCampo.getOrden())+"_DIFERENCIA_" + newTitulo+"_"+fieldCampo.getCampo();
 						JDataMatrix dataDif = getDiferencia( idColD );
-						JColumnaMatrix colMatrixD =getDiferenciaColumna(gruposDiferenciaEjes,newTitulo,idColD, infoColumna, dataDif);
+						JColumnaMatrix colMatrixD =getDiferenciaColumna(gruposDiferenciaEjes.getElement(fieldCampo.getCampo()),newTitulo,idColD, infoColumna, dataDif);
 						
 						if (isContable(infoColumna, dif)) {
 							dataDif.setValorOrdenador(dif.isString()?((JString)dif).getFloatValue():Float.parseFloat(dif.toString()));
@@ -1455,14 +1475,14 @@ public class JWebWinMatrixResponsive  extends JWebWinGenericResponsive implement
 					}
 
 					if (eje.getEje().getPorcentajeDiferencia()) {
-						JObject porcdif = win.getRecord().getProp("xdiffprc_"+eje.getEje().getNameField(),false);
+						JObject porcdif = win.getRecord().getProp("xdiffprc_"+eje.getEje().getNameField()+"_"+fieldCampo.getCampo(),false);
 
 						if (porcdif!=null&&porcdif.getObjectValue()!=null) {
-							JObject difTitle = win.getRecord().getPropRaw("xdiffcol_"+eje.getEje().getNameField());
+							JObject difTitle = win.getRecord().getPropRaw("xdiffcol_"+eje.getEje().getNameField()+"_"+fieldCampo.getCampo());
 							String newTitulo = difTitle.toString();
-							String idColD = "zzzzzzzzzzzzzz_DIFEPORCE_" + newTitulo;
+							String idColD = "zzzzzzzzzzzzzz_"+(10000-fieldCampo.getOrden())+"_DIFEPORCE_" + newTitulo+"_"+fieldCampo.getCampo();
 							JDataMatrix dataDif = getDiferencia( idColD );
-							JColumnaMatrix colMatrixD =getDiferenciaColumna(gruposDiferenciaPorcEjes,newTitulo,idColD, infoColumna, dataDif);
+							JColumnaMatrix colMatrixD =getDiferenciaColumna(gruposDiferenciaPorcEjes.getElement(fieldCampo.getCampo()),newTitulo,idColD, infoColumna, dataDif);
 							
 							if (isContable(infoColumna, porcdif)) {
 								dataDif.setValorOrdenador(porcdif.isString()?((JString)porcdif).getFloatValue():Float.parseFloat(porcdif.toString()));
@@ -1727,7 +1747,7 @@ public class JWebWinMatrixResponsive  extends JWebWinGenericResponsive implement
 				if (isGenerateInternalEvents())
 					BizUsuario.eventInterfaz(this.getClass().getCanonicalName(), "Leyendo registro "+limite, limite , limiteMax,  getSourceAction().isCancelable(), null);
 				if (limiteMax>0&&limite>limiteMax) {
-					infoExtra="ADVERTENCIA! LÌmite m·ximo de ["+limiteMax+"] reg. alcanzado, agregue un filtro para afinar la busqueda";
+					infoExtra="ADVERTENCIA! L√≠mite m√°ximo de ["+limiteMax+"] reg. alcanzado, agregue un filtro para afinar la busqueda";
 					break;
 				}
 				limite++;
@@ -2033,7 +2053,7 @@ public class JWebWinMatrixResponsive  extends JWebWinGenericResponsive implement
 		}
 
 	public JWebViewComponent addButtonExportToExcel(JWebViewComposite panel) throws Exception {
-		if (this.isAllowExportToExcel()) return null;
+		if (!this.isAllowExportToExcel()) return null;
 		return	BizUsuario.retrieveSkinGenerator().createBotonExport(panel,"export_to_excel",JWebActionFactory.createWinListExportAllToExcel(this.getSourceAction(), this, this.sourceObjectId,JBaseWin.MODE_MATRIX));
 	}
 	public JWebViewComponent addButtonExportToCSV(JWebViewComposite panel) throws Exception {

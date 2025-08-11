@@ -283,7 +283,7 @@ public class JTools {
 		return !a.equalsIgnoreCase(b);
 	}
 
-	/* Convierte el documento PDF a imagen con un tamaño grande */
+	/* Convierte el documento PDF a imagen con un tamaï¿½o grande */
 	public static String convertirPDF2Img(String pathIn, String pdf, String pathOut, String outFile) {
 		try {
 			PDDocument document = null;
@@ -340,7 +340,7 @@ public class JTools {
 	public static String quitarExcluidas(String s, String[] excluidas, long palabraMaxTama) {
 		if (excluidas == null)
 			return s;
-		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'º()[]+-=_,- ");
+		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'ï¿½()[]+-=_,- ");
 		String sw[] = new String[100];
 		int ls = 0, lt = 0;
 		while (ssw.hasMoreTokens()) {
@@ -371,8 +371,8 @@ public class JTools {
 	}
 
 	public static double editDistanceWords2(String s, String t, double distance) {
-		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'º()[]+-=_,- ");
-		StringTokenizer stw = new StringTokenizer(t, ".,;\"'º()[]+-=_,- ");
+		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'ï¿½()[]+-=_,- ");
+		StringTokenizer stw = new StringTokenizer(t, ".,;\"'ï¿½()[]+-=_,- ");
 		String sw[] = new String[100];
 		String tw[] = new String[100];
 		int ls = 0, lt = 0;
@@ -423,8 +423,8 @@ public class JTools {
 	}
 
 	public static double editDistanceWords(String s, String t, double distance) {
-		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'º()[]+-=_,- ");
-		StringTokenizer stw = new StringTokenizer(t, ".,;\"'º()[]+-=_,- ");
+		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'ï¿½()[]+-=_,- ");
+		StringTokenizer stw = new StringTokenizer(t, ".,;\"'ï¿½()[]+-=_,- ");
 		String sw[] = new String[100];
 		String tw[] = new String[100];
 		int ls = 0, lt = 0;
@@ -587,7 +587,7 @@ public class JTools {
 	}
 
 	public static String[] getWords(String s) {
-		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'º()[]+-=_,- ");
+		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'ï¿½()[]+-=_,- ");
 		String sw[] = new String[ssw.countTokens()];
 		int ls = 0;
 		while (ssw.hasMoreTokens()) {
@@ -860,11 +860,11 @@ public class JTools {
 		name = name.replace("%20", " ");
 		name = name.replace("%28", "(");
 		name = name.replace("%29", ")");
-		name = name.replace("%E1", "á");
-		name = name.replace("%E9", "é");
-		name = name.replace("%ED", "í");
-		name = name.replace("%F3", "ó");
-		name = name.replace("%FA", "ú");
+		name = name.replace("%E1", "ï¿½");
+		name = name.replace("%E9", "ï¿½");
+		name = name.replace("%ED", "ï¿½");
+		name = name.replace("%F3", "ï¿½");
+		name = name.replace("%FA", "ï¿½");
 		name = name.replace("%3F", "?");
 		name = name.replace("%40", "@");
 		return name;
@@ -1286,7 +1286,7 @@ public class JTools {
 			bResult = false;
 		}
 		if (bException && !bResult) {
-			JExcepcion.SendError("Dato hexa inválido: " + zStr);
+			JExcepcion.SendError("Dato hexa invï¿½lido: " + zStr);
 		}
 		return bResult;
 	}
@@ -1306,7 +1306,7 @@ public class JTools {
 			bResult = false;
 		}
 		if (bException && !bResult) {
-			JExcepcion.SendError("Dato binario inválido: " + zStr);
+			JExcepcion.SendError("Dato binario invï¿½lido: " + zStr);
 		}
 		return bResult;
 	}
@@ -1412,7 +1412,7 @@ public class JTools {
 		// Si el cliente espera exception la disparo
 		// -------------------------------------------
 		if (zException && !bRc)
-			JExcepcion.SendError("Formato de fecha inválida: " + zStr);
+			JExcepcion.SendError("Formato de fecha invï¿½lida: " + zStr);
 
 		// --------------------
 		// Seteo la respuesta
@@ -1811,6 +1811,30 @@ public class JTools {
 
 		return files;
 	}
+	public static void MoveFilesWithMark(String sDirOrigen, String sDirDestino, String mark) throws Exception {
+    File oFile = new File(sDirOrigen);
+    File[] oFiles = oFile.listFiles();
+    if (oFiles == null) {
+        throw new Exception("No se encontraron archivos en el directorio de origen: " + sDirOrigen);
+    }
+
+    for (File file : oFiles) {
+        if (file.isFile()) {
+            // Crear el archivo destino con la marca
+            File oDestFile = new File(sDirDestino + File.separator + mark + file.getName());
+
+            // Crear directorio destino si no existe
+            if (!oDestFile.getParentFile().exists()) {
+                oDestFile.getParentFile().mkdirs();
+            }
+
+            // Mover el archivo al destino
+            if (!file.renameTo(oDestFile)) {
+                throw new Exception("Error al mover el archivo: " + file.getAbsolutePath() + " a " + oDestFile.getAbsolutePath());
+            }
+        }
+    }
+}
 	public static void copyFile(String szSource, String szDestiny) throws Exception {
 		byte bBuffer[];
 		File oFile = new File(szSource);
@@ -2252,33 +2276,33 @@ public class JTools {
 	}
 
 	public static char replaceForeignChar(char msg) {
-		if (msg == 'á')
+		if (msg == 'ï¿½')
 			return 'a';
-		if (msg == 'é')
+		if (msg == 'ï¿½')
 			return 'e';
-		if (msg == 'í')
+		if (msg == 'ï¿½')
 			return 'i';
-		if (msg == 'ó')
+		if (msg == 'ï¿½')
 			return 'o';
-		if (msg == 'ú')
+		if (msg == 'ï¿½')
 			return 'u';
-		if (msg == 'Á')
+		if (msg == 'ï¿½')
 			return 'A';
-		if (msg == 'É')
+		if (msg == 'ï¿½')
 			return 'E';
-		if (msg == 'Í')
+		if (msg == 'ï¿½')
 			return 'I';
-		if (msg == 'Ó')
+		if (msg == 'ï¿½')
 			return 'O';
-		if (msg == 'Ú')
+		if (msg == 'ï¿½')
 			return 'U';
-		if (msg == 'ñ')
+		if (msg == 'ï¿½')
 			return 'n';
-		if (msg == 'Ñ')
+		if (msg == 'ï¿½')
 			return 'N';
-		if (msg == '¿')
+		if (msg == 'ï¿½')
 			return ' ';
-		if (msg == '¡')
+		if (msg == 'ï¿½')
 			return ' ';
 		// if (msg=='\'') return ' ';
 		return msg;
@@ -2300,56 +2324,50 @@ public class JTools {
 	}
 
 	public static char convertForeignChar(char msg) {
-		if (msg == 'á')
+		if (msg == 'ï¿½')
 			return 160;
-		if (msg == 'é')
+		if (msg == 'ï¿½')
 			return 130;
-		if (msg == 'í')
+		if (msg == 'ï¿½')
 			return 161;
-		if (msg == 'ó')
+		if (msg == 'ï¿½')
 			return 162;
-		if (msg == 'ú')
+		if (msg == 'ï¿½')
 			return 163;
-		if (msg == 'Á')
+		if (msg == 'ï¿½')
 			return 'A';
-		if (msg == 'É')
+		if (msg == 'ï¿½')
 			return 'E';
-		if (msg == 'Í')
+		if (msg == 'ï¿½')
 			return 'I';
-		if (msg == 'Ó')
+		if (msg == 'ï¿½')
 			return 'O';
-		if (msg == 'Ú')
+		if (msg == 'ï¿½')
 			return 'U';
-		if (msg == 'ñ')
+		if (msg == 'ï¿½')
 			return 164;
-		if (msg == 'Ñ')
+		if (msg == 'ï¿½')
 			return 165;
-		if (msg == '¿')
+		if (msg == 'ï¿½')
 			return ' ';
-		if (msg == '¡')
+		if (msg == 'ï¿½')
 			return ' ';
 		return msg;
 	}
 
+
 	public static byte getByteAscii(char cCaract) {
-		switch (cCaract) {
-		case 'á':
-			return -96;
-		case 'é':
-			return -126;
-		case 'í':
-			return -95;
-		case 'ó':
-			return -94;
-		case 'ú':
-			return -93;
-		case 'ñ':
-			return -92;
-		case 'Ñ':
-			return -91;
-		}
-		return (byte) (cCaract & 0x00FF);
-	}
+    switch (cCaract) {
+        case 'Ã±': return -96;
+        case 'Ã¼': return -126;
+        case 'Ã¡': return -95;
+        case 'Ã©': return -93;
+        case 'Ã³': return -92;
+        case 'Ãº': return -94;
+        case 'Ã­': return -91;
+    }
+    return (byte) (cCaract & 0x00FF);
+}
 
 	public static byte[] getBytesAscii(String s) {
 		int len = s.length();
@@ -2361,7 +2379,7 @@ public class JTools {
 	}
 
 	/*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
-	 * Dado un año y un mes, obtiene el dia maximo del mes en cuestion Mes de 1 a 12
+	 * Dado un aï¿½o y un mes, obtiene el dia maximo del mes en cuestion Mes de 1 a 12
 	 ************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 	public static int getMaxMonthDays(int iYear, int iMonth) {
 		boolean bBisciesto = ((iYear % 4) == 0);
@@ -2966,8 +2984,8 @@ public class JTools {
 		}
 		return sRet.toString();
 	}
-	// Se busca obtener el número existente dentro de en un string alfanumérico
-	// Se usa particularmente para obtener la parte numérica del nodo
+	// Se busca obtener el nï¿½mero existente dentro de en un string alfanumï¿½rico
+	// Se usa particularmente para obtener la parte numï¿½rica del nodo
 	public static String getNumberEmbedded(String sAlfaNumeric) throws Exception {
 		char cAlfa[] = sAlfaNumeric.toCharArray();
 		StringBuffer sRet = new StringBuffer();
@@ -3118,7 +3136,7 @@ public class JTools {
 		String s = sRet.toString().toLowerCase().replace("numero", "");
 		s = s.replace("nro.", "");
 		s = s.replace("nro", "");
-		s = s.replace("nº", "");
+		s = s.replace("nï¿½", "");
 		s = s.replace(" n ", "");
 		return s.trim();
 	}
@@ -3128,7 +3146,7 @@ public class JTools {
 		for (int i = cAlfa.length - 1; i >= 0; i--) {
 			if (cAlfa[i] == ' ' && sRet.length() > 0)
 				break;
-			if (cAlfa[i] == 'º' && sRet.length() > 0)
+			if (cAlfa[i] == 'ï¿½' && sRet.length() > 0)
 				break;
 			if (JTools.isAlpha("" + cAlfa[i]) && sRet.length() > 0)
 				break;
@@ -3168,18 +3186,18 @@ public class JTools {
 	 */
 	public static String replaceForeignCharsForWeb(String zValue) {
 		StringBuffer buff = new StringBuffer(zValue);
-		buff = replaceForeignCharsForWebAcute(buff, "á", "a");
-		buff = replaceForeignCharsForWebAcute(buff, "é", "e");
-		buff = replaceForeignCharsForWebAcute(buff, "í", "i");
-		buff = replaceForeignCharsForWebAcute(buff, "ó", "o");
-		buff = replaceForeignCharsForWebAcute(buff, "ú", "u");
-		buff = replaceForeignCharsForWebAcute(buff, "Á", "A");
-		buff = replaceForeignCharsForWebAcute(buff, "É", "E");
-		buff = replaceForeignCharsForWebAcute(buff, "Í", "I");
-		buff = replaceForeignCharsForWebAcute(buff, "Ó", "O");
-		buff = replaceForeignCharsForWebAcute(buff, "Ú", "U");
-		buff = replaceForeignCharsForWebTilde(buff, "ñ", "n");
-		buff = replaceForeignCharsForWebTilde(buff, "Ñ", "N");
+		buff = replaceForeignCharsForWebAcute(buff, "ï¿½", "a");
+		buff = replaceForeignCharsForWebAcute(buff, "ï¿½", "e");
+		buff = replaceForeignCharsForWebAcute(buff, "ï¿½", "i");
+		buff = replaceForeignCharsForWebAcute(buff, "ï¿½", "o");
+		buff = replaceForeignCharsForWebAcute(buff, "ï¿½", "u");
+		buff = replaceForeignCharsForWebAcute(buff, "ï¿½", "A");
+		buff = replaceForeignCharsForWebAcute(buff, "ï¿½", "E");
+		buff = replaceForeignCharsForWebAcute(buff, "ï¿½", "I");
+		buff = replaceForeignCharsForWebAcute(buff, "ï¿½", "O");
+		buff = replaceForeignCharsForWebAcute(buff, "ï¿½", "U");
+		buff = replaceForeignCharsForWebTilde(buff, "ï¿½", "n");
+		buff = replaceForeignCharsForWebTilde(buff, "ï¿½", "N");
 		buff = replaceForeignCharsForWeb(buff, "'", "middot");
 		return buff.toString();
 	}
@@ -3206,18 +3224,18 @@ public class JTools {
 	}
 	public static String replaceWebForForeignChars(String value) {
 		StringBuffer zValue = new StringBuffer(value);
-		zValue = replaceWebForForeignChars(zValue, "&aacute;", "á");
-		zValue = replaceWebForForeignChars(zValue, "&eacute;", "é");
-		zValue = replaceWebForForeignChars(zValue, "&iacute;", "í");
-		zValue = replaceWebForForeignChars(zValue, "&oacute;", "ó");
-		zValue = replaceWebForForeignChars(zValue, "&uacute;", "ú");
-		zValue = replaceWebForForeignChars(zValue, "&Aacute;", "Á");
-		zValue = replaceWebForForeignChars(zValue, "&Eacute;", "É");
-		zValue = replaceWebForForeignChars(zValue, "&Iacute;", "Í");
-		zValue = replaceWebForForeignChars(zValue, "&Oacute;", "Ó");
-		zValue = replaceWebForForeignChars(zValue, "&Uacute;", "Ú");
-		zValue = replaceWebForForeignChars(zValue, "&ntilde;", "ñ");
-		zValue = replaceWebForForeignChars(zValue, "&Ntilde;", "Ñ");
+		zValue = replaceWebForForeignChars(zValue, "&aacute;", "ï¿½");
+		zValue = replaceWebForForeignChars(zValue, "&eacute;", "ï¿½");
+		zValue = replaceWebForForeignChars(zValue, "&iacute;", "ï¿½");
+		zValue = replaceWebForForeignChars(zValue, "&oacute;", "ï¿½");
+		zValue = replaceWebForForeignChars(zValue, "&uacute;", "ï¿½");
+		zValue = replaceWebForForeignChars(zValue, "&Aacute;", "ï¿½");
+		zValue = replaceWebForForeignChars(zValue, "&Eacute;", "ï¿½");
+		zValue = replaceWebForForeignChars(zValue, "&Iacute;", "ï¿½");
+		zValue = replaceWebForForeignChars(zValue, "&Oacute;", "ï¿½");
+		zValue = replaceWebForForeignChars(zValue, "&Uacute;", "ï¿½");
+		zValue = replaceWebForForeignChars(zValue, "&ntilde;", "ï¿½");
+		zValue = replaceWebForForeignChars(zValue, "&Ntilde;", "ï¿½");
 		zValue = replaceWebForForeignChars(zValue, "&middot;", "'");
 		return zValue.toString();
 	}
@@ -4147,20 +4165,20 @@ public class JTools {
 	public static String limpiarSimbolos(String texto) throws Exception {
 		StringBuilder out = new StringBuilder();
 		for (int c = 0; c < texto.length(); c++) {
-			if (texto.charAt(c) == 'á' && texto.charAt(c) == 'Á')
+			if (texto.charAt(c) == 'ï¿½' && texto.charAt(c) == 'ï¿½')
 				out.append('A');
-			else if (texto.charAt(c) == 'é' || texto.charAt(c) == 'É')
+			else if (texto.charAt(c) == 'ï¿½' || texto.charAt(c) == 'ï¿½')
 				out.append('E');
 //			else if (texto.charAt(c)=='S' || texto.charAt(c)=='Z' || texto.charAt(c)=='X') out.append('S');
-			else if (texto.charAt(c) == 'í' || texto.charAt(c) == 'í')
+			else if (texto.charAt(c) == 'ï¿½' || texto.charAt(c) == 'ï¿½')
 				out.append('I');
-			else if (texto.charAt(c) == 'ó' || texto.charAt(c) == 'Ó')
+			else if (texto.charAt(c) == 'ï¿½' || texto.charAt(c) == 'ï¿½')
 				out.append('O');
-			else if (texto.charAt(c) == 'ú' || texto.charAt(c) == 'Ú' || texto.charAt(c) == 'ü'
-					|| texto.charAt(c) == 'Ü')
+			else if (texto.charAt(c) == 'ï¿½' || texto.charAt(c) == 'ï¿½' || texto.charAt(c) == 'ï¿½'
+					|| texto.charAt(c) == 'ï¿½')
 				out.append('U');
 //			else if (texto.charAt(c)=='Y' || texto.charAt(c)=='y') out.append('I');
-			else if (texto.charAt(c) == 'ñ' || texto.charAt(c) == 'Ñ')
+			else if (texto.charAt(c) == 'ï¿½' || texto.charAt(c) == 'ï¿½')
 				out.append('N');
 			else if (texto.charAt(c) == 'B' || texto.charAt(c) == 'b')
 				out.append('V');
@@ -4234,19 +4252,19 @@ public class JTools {
 //		line = line.replace("'", "&apos;");
 //		line = line.replace("\"", "&quot;");
 		line = line.replace("\\", "\\\\");
-		line = line.replace("á", "&aacute;");
-		line = line.replace("é", "&eacute;");
-		line = line.replace("í", "&iacute;");
-		line = line.replace("ó", "&oacute;");
-		line = line.replace("ú", "&uacute;");
-		line = line.replace("ñ", "&ntilde;");
-		line = line.replace("Á", "&Aacute;");
-		line = line.replace("É", "&Eacute;");
-		line = line.replace("Í", "&Iacute;");
-		line = line.replace("Ó", "&Oacute;");
-		line = line.replace("Ú", "&Uacute;");
-		line = line.replace("ñ", "&ntilde;");
-		line = line.replace("Ñ", "&Ntilde;");
+		line = line.replace("ï¿½", "&aacute;");
+		line = line.replace("ï¿½", "&eacute;");
+		line = line.replace("ï¿½", "&iacute;");
+		line = line.replace("ï¿½", "&oacute;");
+		line = line.replace("ï¿½", "&uacute;");
+		line = line.replace("ï¿½", "&ntilde;");
+		line = line.replace("ï¿½", "&Aacute;");
+		line = line.replace("ï¿½", "&Eacute;");
+		line = line.replace("ï¿½", "&Iacute;");
+		line = line.replace("ï¿½", "&Oacute;");
+		line = line.replace("ï¿½", "&Uacute;");
+		line = line.replace("ï¿½", "&ntilde;");
+		line = line.replace("ï¿½", "&Ntilde;");
 
 		return line;
 	}
@@ -4260,19 +4278,19 @@ public class JTools {
 //		line = line.replace("'", "&apos;");
 //		line = line.replace("\"", "&quot;");
 //		line = line.replace("\\", "\\\\");
-//		line = line.replace("á", "&aacute;");
-//		line = line.replace("é", "&eacute;");
-//		line = line.replace("í", "&iacute;");
-//		line = line.replace("ó", "&oacute;");
-//		line = line.replace("ú", "&uacute;");
-//		line = line.replace("ñ", "&ntilde;");
-//		line = line.replace("Á", "&Aacute;");
-//		line = line.replace("É", "&Eacute;");
-//		line = line.replace("Í", "&Iacute;");
-//		line = line.replace("Ó", "&Oacute;");
-//		line = line.replace("Ú", "&Uacute;");
-//		line = line.replace("ñ", "&ntilde;");
-//		line = line.replace("Ñ", "&Ntilde;");
+//		line = line.replace("ï¿½", "&aacute;");
+//		line = line.replace("ï¿½", "&eacute;");
+//		line = line.replace("ï¿½", "&iacute;");
+//		line = line.replace("ï¿½", "&oacute;");
+//		line = line.replace("ï¿½", "&uacute;");
+//		line = line.replace("ï¿½", "&ntilde;");
+//		line = line.replace("ï¿½", "&Aacute;");
+//		line = line.replace("ï¿½", "&Eacute;");
+//		line = line.replace("ï¿½", "&Iacute;");
+//		line = line.replace("ï¿½", "&Oacute;");
+//		line = line.replace("ï¿½", "&Uacute;");
+//		line = line.replace("ï¿½", "&ntilde;");
+//		line = line.replace("ï¿½", "&Ntilde;");
 
 //		return line;
 	}
@@ -4286,29 +4304,29 @@ public class JTools {
 		line = line.replace("\"", "&quot;");
 		line = line.replace("'", "&apos;");
 		line = line.replace("\\", "\\\\");
-//		line = line.replace("á", "&aacute;");
-//		line = line.replace("é", "&eacute;");
-//		line = line.replace("í", "&iacute;");
-//		line = line.replace("ó", "&oacute;");
-//		line = line.replace("ú", "&uacute;");
-//		line = line.replace("ñ", "&ntilde;");
-//		line = line.replace("Á", "&Aacute;");
-//		line = line.replace("É", "&Eacute;");
-//		line = line.replace("Í", "&Iacute;");
-//		line = line.replace("Ó", "&Oacute;");
-//		line = line.replace("Ú", "&Uacute;");
+//		line = line.replace("ï¿½", "&aacute;");
+//		line = line.replace("ï¿½", "&eacute;");
+//		line = line.replace("ï¿½", "&iacute;");
+//		line = line.replace("ï¿½", "&oacute;");
+//		line = line.replace("ï¿½", "&uacute;");
+//		line = line.replace("ï¿½", "&ntilde;");
+//		line = line.replace("ï¿½", "&Aacute;");
+//		line = line.replace("ï¿½", "&Eacute;");
+//		line = line.replace("ï¿½", "&Iacute;");
+//		line = line.replace("ï¿½", "&Oacute;");
+//		line = line.replace("ï¿½", "&Uacute;");
 
-//		line = line.replace("á", "&aacute;");
-//		line = line.replace("é", "&eacute;");
-//		line = line.replace("í", "&iacute;");
-//		line = line.replace("ó", "&oacute;");
-//		line = line.replace("ú", "&uacute;");
-//		line = line.replace("ñ", "&ntilde;");
-//		line = line.replace("Á", "&Aacute;");
-//		line = line.replace("É", "&Eacute;");
-//		line = line.replace("Í", "&Iacute;");
-//		line = line.replace("Ó", "&Oacute;");
-//		line = line.replace("Ú", "&Uacute;");
+//		line = line.replace("ï¿½", "&aacute;");
+//		line = line.replace("ï¿½", "&eacute;");
+//		line = line.replace("ï¿½", "&iacute;");
+//		line = line.replace("ï¿½", "&oacute;");
+//		line = line.replace("ï¿½", "&uacute;");
+//		line = line.replace("ï¿½", "&ntilde;");
+//		line = line.replace("ï¿½", "&Aacute;");
+//		line = line.replace("ï¿½", "&Eacute;");
+//		line = line.replace("ï¿½", "&Iacute;");
+//		line = line.replace("ï¿½", "&Oacute;");
+//		line = line.replace("ï¿½", "&Uacute;");
 
 		return line;
 	}
@@ -4929,7 +4947,7 @@ public static int crc16(byte[] bytes) throws Exception {
 
   public static String encriptarAES(String textoPlano, String skey, String siv) {
       try {
-          // Crear IV y clave de encriptación
+          // Crear IV y clave de encriptaciï¿½n
           IvParameterSpec iv = new IvParameterSpec(siv.getBytes(StandardCharsets.UTF_8));
           SecretKeySpec skeySpec = new SecretKeySpec(skey.getBytes(StandardCharsets.UTF_8), "AES");
 
@@ -4940,7 +4958,7 @@ public static int crc16(byte[] bytes) throws Exception {
           // Encriptar texto plano
           byte[] encrypted = cipher.doFinal(textoPlano.getBytes(StandardCharsets.UTF_8));
 
-          // Convertir a Base64 para su representación legible
+          // Convertir a Base64 para su representaciï¿½n legible
           return Base64.getEncoder().encodeToString(encrypted);
       } catch (Exception ex) {
           ex.printStackTrace();
@@ -4950,7 +4968,7 @@ public static int crc16(byte[] bytes) throws Exception {
 
   public static String desencriptarAES(String textoEncriptado, String skey, String siv) {
       try {
-          // Crear IV y clave de desencriptación
+          // Crear IV y clave de desencriptaciï¿½n
           IvParameterSpec iv = new IvParameterSpec(siv.getBytes(StandardCharsets.UTF_8));
           SecretKeySpec skeySpec = new SecretKeySpec(skey.getBytes(StandardCharsets.UTF_8), "AES");
 

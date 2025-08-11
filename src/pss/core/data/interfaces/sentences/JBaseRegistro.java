@@ -389,7 +389,9 @@ public class JBaseRegistro  implements Serializable {
 	public String fdiames(String zFieldname) throws Exception {
 		throw new UnsupportedOperationException();
 	}
-
+	public String fdiaano(String zFieldname) throws Exception {
+		throw new UnsupportedOperationException();
+	}
 
 	public String fsubstring(String zFieldname, int desde, int hasta) throws Exception {
 		throw new UnsupportedOperationException();

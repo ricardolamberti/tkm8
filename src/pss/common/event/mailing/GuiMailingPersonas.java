@@ -1,9 +1,11 @@
 package  pss.common.event.mailing;
 
+import pss.common.customList.config.relation.JRelation;
+import pss.common.customList.config.relation.JRelations;
 import pss.core.win.JWin;
-import pss.core.win.JWins;
 import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;
+import pss.core.win.JWins;
 
 public class GuiMailingPersonas extends JWins {
 
@@ -35,6 +37,7 @@ public class GuiMailingPersonas extends JWins {
     zLista.AddColumnaLista("codigo");
     zLista.AddColumnaLista("descripcion");
     zLista.AddColumnaLista("mail");
+    zLista.AddColumnaLista("numero");
   }
   
   @Override
@@ -42,6 +45,7 @@ public class GuiMailingPersonas extends JWins {
   	zFiltros.addEditResponsive("Codigo", "codigo");
   	zFiltros.addEditResponsive("Descripcion", "descripcion").setOperator("ilike");
   	zFiltros.addEditResponsive("Mail", "mail").setOperator("ilike");
+  	zFiltros.addEditResponsive("Codigo unificado", "numero").setOperator("ilike");
   	super.ConfigurarFiltros(zFiltros);
   }
 	

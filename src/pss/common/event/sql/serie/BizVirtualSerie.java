@@ -42,7 +42,7 @@ public class BizVirtualSerie extends JRecord {
   @Override
 	public void createFixedProperties() throws Exception {
     addFixedItem( KEY, "valor"      , "Valor"      , true, true, 20);
-    addFixedItem( FIELD, "descripcion" , "Descripción" , true, true, 50);
+    addFixedItem( FIELD, "descripcion" , "DescripciÃ³n" , true, true, 50);
     addFixedItem( FIELD, "fecha" , "fecha" , true, true, 50);
   }
   

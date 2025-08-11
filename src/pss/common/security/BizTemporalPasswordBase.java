@@ -1,8 +1,11 @@
 package pss.common.security;
 
 import java.util.Date;
+
+import pss.core.services.fields.JDateTime;
+import pss.core.services.fields.JLong;
+import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.services.fields.*;
 
 
 public class BizTemporalPasswordBase extends JRecord {

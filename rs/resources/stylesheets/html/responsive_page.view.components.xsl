@@ -277,6 +277,77 @@
        </div>
 	</div>
 </xsl:template>
+<xsl:template match="infocarddouble_responsive">
+
+	<div>
+        <xsl:attribute name="class"><xsl:value-of select="@size_responsive"/></xsl:attribute>
+        <div>
+	      <xsl:call-template name="basic_generate_component_responsive"/>
+	      <xsl:if test="@label and @label!=''">
+	          <div class="card-body">
+	               <div class="row gutter-0">
+	                   <div>
+			        	    <xsl:attribute name="class"><xsl:value-of select="@class_header_image"/></xsl:attribute>
+		           			<xsl:call-template name="render_icon"/>
+	                   </div>
+	                   <div>
+	 	           		   <xsl:attribute name="class"><xsl:value-of select="@class_header_text"/></xsl:attribute>
+                           <div class="infocarddouble"><xsl:value-of select="@labelname_from"/>: <xsl:value-of select="@prop_from"/></div>
+	                       <div class="infocarddouble"><xsl:value-of select="@labelname_to"/>: <xsl:value-of select="@prop_to"/></div>
+	             	       <div><xsl:value-of select="@label"/></div>
+	                   </div>
+	               </div>
+	           </div>
+           </xsl:if>
+           <xsl:if test="@directlink!=''">
+	               <div>
+	                   <xsl:if test="@label and @label!=''">
+	                       <xsl:attribute name="class">panel-footer</xsl:attribute>
+				       </xsl:if>
+				       <xsl:if test="not(@label and @label!='')">
+	                       <xsl:attribute name="class">panel-heading</xsl:attribute>
+				       </xsl:if>
+			           <a>
+				           <xsl:attribute name="id"><xsl:value-of select="@name"/>_link</xsl:attribute>
+				           <xsl:attribute name="href">#<xsl:value-of select="@directlink"/></xsl:attribute>
+				           <xsl:attribute name="data-toggle">collapse</xsl:attribute>
+		   		           <xsl:attribute name="aria-expanded">false</xsl:attribute>
+		   		           <xsl:attribute name="aria-controls"><xsl:value-of select="@directlink"/></xsl:attribute>
+				  			<xsl:if test="@dataparent">
+				 				  	   <xsl:attribute name="data-parent">#<xsl:value-of select="@dataparent"/></xsl:attribute>
+				   			</xsl:if>
+				  
+			                   <span class="pull-left"><xsl:value-of select="@label_link"/></span>
+			                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+			                   <div class="clearfix"></div>
+			           </a>
+ 	               </div>
+           </xsl:if>
+           <xsl:if test="action">
+	               <div>
+	                   <xsl:if test="@label and @label!=''">
+	                       <xsl:attribute name="class">panel-footer</xsl:attribute>
+				       </xsl:if>
+				       <xsl:if test="not(@label and @label!='')">
+	                       <xsl:attribute name="class">panel-heading</xsl:attribute>
+				       </xsl:if>
+			           <a>
+				           <xsl:attribute name="id"><xsl:value-of select="@name"/>_link</xsl:attribute>
+				           <xsl:attribute name="onclick">
+								<xsl:for-each select="action">
+										<xsl:call-template name="generate_action_invokation"/>
+								</xsl:for-each>
+				           </xsl:attribute>
+			
+						       <span class="pull-left"><xsl:value-of select="@label_link"/></span>
+			                   <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+			                   <div class="clearfix"></div>
+			           </a>
+ 	               </div>
+           </xsl:if>
+       </div>
+	</div>
+</xsl:template>
 <xsl:template name="view_image_responsive">
 		<xsl:choose>
 			<xsl:when test="@diferido='true'">
