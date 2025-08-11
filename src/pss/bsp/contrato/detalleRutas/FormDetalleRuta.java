@@ -55,7 +55,6 @@ private JPanel jPanel = null;
 
 private JTabbedPane jTabbedPane = null;
 
-private JPanel jPanel1 = null;
 
 private JPssLabel lvalor1 = null;
 
@@ -114,102 +113,35 @@ private JTextField textField_3;
    * Inicializacion Grafica
    */
   protected void jbInit() throws Exception {
-    lvariable11 = new JPssLabel();
-    lvariable11.setBounds(new Rectangle(15, 11, 72, 22));
-    lvariable11.setText("Descripcion");
-    lvalor2 = new JPssLabel();
-    lvalor2.setText("Periodicidad");
-    lvalor2.setBounds(new Rectangle(122, 14, 94, 22));
-    setLayout(null);
-    setSize(new Dimension(996, 665));
-
-
-    this.add(getJTextArea(), null);
-    this.add(getJTextArea1(), null);
-//    getJPanel().add(getJCheckBox(), null);
-//    getJPanel().add(getJComboBox(), null);
-//    getJPanel().add(lvalor2, null);
-//    this.add(getJPanel(), null);
-    this.add(getJTabbedPane(), null);
-    this.add(getJPanel1(), null);
-    this.add(getJCheckBox1(), null);
-    this.add(getJDescr(), null);
-    this.add(lvariable11, null);
- 
-//    getJPanel().setBorder(new TitledBorder(BorderFactory.createEtchedBorder(),"Acumulaci�n"));
-    getJPanel1().setBorder(new TitledBorder(BorderFactory.createEtchedBorder(),"Resultados"));
-    
-    JPssLabel pssLabel = new JPssLabel();
-    pssLabel.setText("FMS Max");
-    pssLabel.setBounds(new Rectangle(10, 11, 110, 22));
-    pssLabel.setBounds(15, 67, 63, 22);
-    add(pssLabel);
-    
-    JPssLabel pssLabel_1 = new JPssLabel();
-    pssLabel_1.setText("FMS Min");
-    pssLabel_1.setBounds(new Rectangle(10, 11, 110, 22));
-    pssLabel_1.setBounds(153, 66, 63, 22);
-    add(pssLabel_1);
-    
-    JPssLabel pssLabel_2 = new JPssLabel();
-    pssLabel_2.setText("M�n.Cantidad");
-    pssLabel_2.setBounds(new Rectangle(10, 11, 110, 22));
-    pssLabel_2.setBounds(274, 64, 72, 22);
-    add(pssLabel_2);
-    
-    textFieldb.setBounds(new Rectangle(76, 9, 242, 23));
-    textFieldb.setBounds(86, 67, 57, 23);
-    add(textFieldb);
-    
-    textFieldb_1.setBounds(new Rectangle(76, 9, 242, 23));
-    textFieldb_1.setBounds(215, 66, 49, 23);
-    add(textFieldb_1);
-    
-    textFieldb_2.setBounds(new Rectangle(76, 9, 242, 23));
-    textFieldb_2.setBounds(345, 65, 67, 23);
-    add(textFieldb_2);
-    
-    JPssLabel pssLabel_3 = new JPssLabel();
-    pssLabel_3.setText("período");
-    pssLabel_3.setBounds(new Rectangle(15, 11, 72, 22));
-    pssLabel_3.setBounds(15, 35, 72, 22);
-    add(pssLabel_3);
-    
-    textField_3 = new JTextField();
-    textField_3.setBounds(new Rectangle(87, 9, 325, 23));
-    textField_3.setBounds(87, 36, 220, 23);
-    add(textField_3);
-
- 
   }
   /**
    * Linkeo los campos con la variables del form
    */
   public void InicializarPanel( JWin zWin ) throws Exception {
 		setAutoRefresh(true, 10000, "DASHBOARD");
-		AddItem( company, CHAR, REQ, "company" ).SetValorDefault(BizUsuario.getUsr().getCompany());
-    AddItem( id, UINT, OPT, "id" );
-    AddItem( linea, UINT, OPT, "linea" );
-    AddItem( variable, CHAR, OPT, "variable" );
-    AddItem( variable1, CHAR, OPT, "variable_ganancia" );
-    AddItem( textFieldb, CHAR, OPT, "fms_max" );
-    AddItem( textFieldb_1, CHAR, OPT, "fms_min" );
-    AddItem( textFieldb_2, CHAR, OPT, "Limite" );
-    AddItem( textField_3, CHAR, OPT, "periodo_detalle" ).SetReadOnly(true);
+		AddItemEdit("company", CHAR, REQ, "company").SetValorDefault(BizUsuario.getUsr().getCompany());
+    AddItemEdit("id", UINT, OPT, "id");
+    AddItemEdit("linea", UINT, OPT, "linea");
+    AddItemEdit("variable", CHAR, OPT, "variable");
+    AddItemEdit("variable_ganancia", CHAR, OPT, "variable_ganancia");
+    AddItemEdit("fms_max", CHAR, OPT, "fms_max");
+    AddItemEdit("fms_min", CHAR, OPT, "fms_min");
+    AddItemEdit("Limite", CHAR, OPT, "Limite");
+    AddItemEdit("periodo_detalle", CHAR, OPT, "periodo_detalle").SetReadOnly(true);
        
-    JFormControl c=AddItem( getJCheckBox(), OPT,"acumulativo");
+    JFormControl c=AddItemCheck("acumulativo", OPT, "acumulativo");
     c.SetValorDefault(false);
-    AddItem( getJComboBox(), CHAR, OPT, "periodo" , JWins.createVirtualWinsFromMap(BizDetalleRuta.getPeriodos()));
+    AddItemCombo("periodo", CHAR, OPT, "periodo", JWins.createVirtualWinsFromMap(BizDetalleRuta.getPeriodos()));
 //    AddItem( getValorActual(), FLOAT, OPT, "valor_actual" ).SetReadOnly(true);
-    AddItem( getValorActualFC(), FLOAT, OPT, "valor_fcontrato" ).SetReadOnly(true);
+    AddItemEdit("valor_fcontrato", FLOAT, OPT, "valor_fcontrato").SetReadOnly(true);
 //    AddItem( getValorObjetivo(), FLOAT, OPT, "valor_total" ).setVisible(true);
-    AddItem( getValorObjetivoFC(), FLOAT, OPT, "valor_totalcontrato" ).setVisible(true);
-    AddItem( getEvalua(), CHAR, OPT, "conclusion" ).SetReadOnly(true);
-    AddItem( getJDescr(), CHAR, OPT, "descripcion" ).SetReadOnly(true);
+    AddItemEdit("valor_totalcontrato", FLOAT, OPT, "valor_totalcontrato").setVisible(true);
+    AddItemEdit("conclusion", CHAR, OPT, "conclusion").SetReadOnly(true);
+    AddItemEdit("descripcion", CHAR, OPT, "descripcion").SetReadOnly(true);
 //    AddItem( getNivel1(), CHAR, OPT, "nivel_alcanzado" ).SetReadOnly(true);
 //    AddItem( getEvalua1(), FLOAT, OPT, "ganancia" ).SetReadOnly(true);
-    AddItem( getNivel2(), CHAR, OPT, "nivel_alcanzado_estimada" ).SetReadOnly(true);
-    AddItem( getEvalua2(), FLOAT, OPT, "ganancia_estimada" ).SetReadOnly(true);
+    AddItemEdit("nivel_alcanzado_estimada", CHAR, OPT, "nivel_alcanzado_estimada").SetReadOnly(true);
+    AddItemEdit("ganancia_estimada", FLOAT, OPT, "ganancia_estimada").SetReadOnly(true);
     JFormImage i=AddItem( getJTextArea(), "imagen1" );
     i.setSource(JPssImage.SOURCE_SCRIPT);
 
@@ -217,7 +149,7 @@ private JTextField textField_3;
     i=AddItem( getJTextArea1(), "imagen2" );
     i.setSource(JPssImage.SOURCE_SCRIPT);
 
-    AddItem(getJCheckBox1(),OPT,"kicker");
+    AddItemCheck("kicker", OPT, "kicker");
     JFormLista l=AddItem(getJTabbedPane(),34);
     l=AddItem(getJTabbedPane(),35);
    }
@@ -332,46 +264,6 @@ private JTextField textField_3;
 		return jTabbedPane;
 	}
 
-	/**
-	 * This method initializes jPanel1	
-	 * 	
-	 * @return javax.swing.JPanel	
-	 */
-	private JPanel getJPanel1() {
-		if (jPanel1 == null) {
-			lvalor1113 = new JPssLabel();
-			lvalor1113.setBounds(new Rectangle(7, 56, 148, 20));
-			lvalor1113.setText("Valor Base comisionable");
-			lvalor11111 = new JPssLabel();
-			lvalor11111.setBounds(new Rectangle(260, 34, 74, 20));
-			lvalor11111.setText("Nivel");
-			lvalor112 = new JPssLabel();
-			lvalor112.setBounds(new Rectangle(7, 34, 148, 20));
-			lvalor112.setText("Valor indicador objetivo");
-			lvalor12 = new JPssLabel();
-			lvalor12.setText("Comisi\u00F3n");
-			lvalor12.setBounds(new Rectangle(260, 56, 63, 20));
-			lvalor1 = new JPssLabel();
-			lvalor1.setText("Evaluación");
-			lvalor1.setBounds(new Rectangle(7, 13, 72, 20));
-			jPanel1 = new JPanel();
-			jPanel1.setLayout(null);
-			jPanel1.setBounds(new Rectangle(438, 9, 552, 87));
-			jPanel1.add(lvalor12, null);
-			jPanel1.add(getEvalua2(), null);
-			jPanel1.add(lvalor112, null);
-			jPanel1.add(getNivel2(), null);
-			jPanel1.add(lvalor11111, null);
-			jPanel1.add(getValorObjetivoFC(), null);
-			jPanel1.add(getValorActualFC(), null);
-			jPanel1.add(lvalor1113, null);
-			jPanel1.add(getEvalua(), null);
-			jPanel1.add(lvalor1, null);
-		}
-		return jPanel1;
-	}
-
-	/**
 	 * This method initializes evalua	
 	 * 	
 	 * @return pss.core.ui.components.JPssEdit	
