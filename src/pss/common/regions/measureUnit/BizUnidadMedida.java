@@ -1,0 +1,176 @@
+package  pss.common.regions.measureUnit;
+
+import pss.common.components.JSetupParameters;
+import pss.core.services.fields.JFloat;
+import pss.core.services.fields.JString;
+import pss.core.services.records.JRecord;
+import pss.core.services.records.JRecords;
+import pss.core.tools.JExcepcion;
+
+public class BizUnidadMedida extends JRecord {
+
+	public static final String UNI_UNIDAD="u";
+
+	// -------------------------------------------------------------------------//
+	// Propiedades de la Clase
+	// -------------------------------------------------------------------------//
+	protected JString pUnidadMedida=new JString();
+	protected JString pDescrip=new JString();
+	protected JString pAbreviatura=new JString();
+	protected JString pTipo=new JString();
+	protected JFloat pFactor=new JFloat();
+	private BizTipoMedida oTipoMedida=null;
+
+	public String GetUnidadMedida() throws Exception {
+		return pUnidadMedida.getValue();
+	}
+
+	public String GetDescrip() throws Exception {
+		return pDescrip.getValue();
+	}
+
+	public String getShortDescription() throws Exception {
+		return this.pAbreviatura.getValue();
+	}
+
+	// -------------------------------------------------------------------------//
+	// Constructor de la Clase
+	// -------------------------------------------------------------------------//
+	public BizUnidadMedida() throws Exception {
+	}
+
+	@Override
+	public void createProperties() throws Exception {
+		addItem("unidad_medida", pUnidadMedida);
+		addItem("descripcion", pDescrip);
+		addItem("abreviatura", pAbreviatura);
+		addItem("Tipo", pTipo);
+		addItem("factor", pFactor);
+	}
+
+	@Override
+	public void createFixedProperties() throws Exception {
+		addFixedItem(KEY, "unidad_medida", "Unidad de Medida", true, true, 15);
+		addFixedItem(FIELD, "descripcion", "Descripción", true, true, 50);
+		addFixedItem(FIELD, "abreviatura", "Abreviatura", true, true, 4);
+		addFixedItem(FIELD, "Tipo", "Tipo", true, true, 20);
+		addFixedItem(FIELD, "factor", "Factor", true, true, 18, 8);
+	}
+
+	@Override
+	public String GetTable() {
+		return "UNI_UNIDADMEDIDA";
+	}
+
+	@Override
+	public void setupConfig(JSetupParameters zParams) throws Exception {
+		zParams.setExportData(true);
+		zParams.setTruncateData(true);
+	}
+
+	public boolean Read(String zCodigo) throws Exception {
+		this.addFilter("Unidad_Medida", zCodigo);
+		return this.Read();
+	}
+
+	/*
+	 * public boolean ReadByCrind(String zCodigo) throws Exception { this.SetFiltros("codigo_crind", zCodigo); return this.Read(); }
+	 */
+	public boolean ReadByAbrev(String zAbrev) throws Exception {
+		this.addFilter("abreviatura", zAbrev);
+		return this.Read();
+	}
+
+	@Override
+	public void processInsert() throws Exception {
+		BizUnidadMedida oUni=new BizUnidadMedida();
+		oUni.dontThrowException(true);
+		if (oUni.ReadByAbrev(pAbreviatura.getValue())) JExcepcion.SendError("La Abreviatura ya se encuentra utilizada");
+
+		this.insertRecord();
+	}
+
+	@Override
+	public void processDelete() throws Exception {
+		if (JRecords.existsComplete("pss.erp.Articulos.BizArticulo", "medida_default", pUnidadMedida.getValue())) {
+			JExcepcion.SendError("No se puede eliminar esta unidad de medida porque está asociada a un articulo");
+		}
+		if (JRecords.existsComplete("pss.erp.addIns.AddInPump.BizPumpConfig", "unidad_medida", pUnidadMedida.getValue())) {
+			JExcepcion.SendError("No se puede eliminar esta unidad de medida porque está asociada a la Configuración del CEM");
+		}
+		if (JRecords.existsComplete("pss.erp.Stock.BizStock", "unidad_medida", pUnidadMedida.getValue())) {
+			JExcepcion.SendError("No se puede eliminar esta unidad de medida porque está asociada a un Stock");
+		}
+		if (JRecords.existsComplete("Pss.eClub.Product.BizProduct", "unidad_medida", pUnidadMedida.getValue())) {
+			JExcepcion.SendError("No se puede eliminar esta unidad de medida porque está asociada a un Producto-eClub");
+		}
+		if (JRecords.existsComplete("pss.erp.addIns.AddInPagoFacil.BizPfRetailConfig", "unidad_medida", pUnidadMedida.getValue())) {
+			JExcepcion.SendError("No se puede eliminar esta unidad de medida porque está asociada a Pago Fácil");
+		}
+		super.processDelete();
+	}
+
+	public BizTipoMedida ObtenerTipoMedida() throws Exception {
+		if (oTipoMedida!=null) return oTipoMedida;
+		oTipoMedida=BizTipoMedida.obtenerTipoMedida(pTipo.getValue(), true);
+		return oTipoMedida;
+	}
+
+	public String format(double zValue) throws Exception {
+		return ObtenerTipoMedida().format(zValue);
+	}
+
+	public double Convertir(double zCantidad, String zAbr) throws Exception {
+		BizUnidadMedida oUniDest=new BizUnidadMedida();
+		oUniDest.ReadByAbrev(zAbr);
+
+		if (!this.pTipo.getValue().equals(oUniDest.pTipo.getValue())) JExcepcion.SendError("Conversión Invalida");
+
+		return zCantidad*(this.pFactor.getValue()/oUniDest.pFactor.getValue());
+	}
+
+	public double Convertir2(double zCantidad, String zMedida) throws Exception {
+		BizUnidadMedida oUniDest=new BizUnidadMedida();
+		oUniDest.Read(zMedida);
+
+		if (!this.pTipo.getValue().equals(oUniDest.pTipo.getValue())) JExcepcion.SendError("Conversión Invalida");
+
+		return zCantidad*(this.pFactor.getValue()/oUniDest.pFactor.getValue());
+	}
+
+	public boolean isCompatibleForConversion(String zUnidadMedidaDestino) throws Exception {
+		BizUnidadMedida oUniDest=new BizUnidadMedida();
+		oUniDest.Read(zUnidadMedidaDestino);
+		return oUniDest.pTipo.getValue().equals(this.pTipo.getValue());
+	}
+
+	/*
+	 * public JSetupPropagate doSetupPropagate(JSetupPropagate zSetup) throws Exception { zSetup.setPropagate(true); zSetup.setPropagateParent(true); zSetup.setPropagateChildren(true); zSetup.setPropagateMaster(true); return zSetup; }
+	 */
+	private static JRecords<BizUnidadMedida> oUnidadesMedida;
+	public static synchronized BizUnidadMedida obtenerUnidadMedida(String sUnidad, boolean bThrowExc) throws Exception {
+		if (oUnidadesMedida==null) {
+			oUnidadesMedida=new JRecords<BizUnidadMedida>(BizUnidadMedida.class);
+			oUnidadesMedida.readAll();
+			oUnidadesMedida.convertToHash("Unidad_Medida");
+		}
+		BizUnidadMedida oUnidad=(BizUnidadMedida) oUnidadesMedida.findInHash(sUnidad);
+		if (oUnidad==null&&bThrowExc) {
+			JExcepcion.SendError("No existe la unidad de medida: "+sUnidad);
+		}
+		return oUnidad;
+	}
+	
+	public static String GetDescripcionReporte(String zValor) throws Exception {
+		String sDesc="";
+		sDesc="Unid. de Medida: ^";
+		if (zValor.equals("")) sDesc+="< Todas >";
+		else {
+			BizUnidadMedida oUomReport=new BizUnidadMedida();
+			oUomReport.Read(zValor);
+			sDesc+=zValor+"-"+oUomReport.GetDescrip();
+		}
+		return sDesc;
+	}	
+
+}

@@ -1,0 +1,1421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map:sitemap xmlns:map="http://apache.org/cocoon/sitemap/1.0">
+
+	<!-- =========================== Components ================================ -->
+	<map:components> 
+
+		<map:transformers default="xslt">
+			<map:transformer logger="sitemap.transformer.xslt" name="xslt" pool-grow="2" pool-max="32" pool-min="8" src="pss.www.platform.transformer.JWebTransformer">
+				<use-request-parameters>false</use-request-parameters>
+				<use-browser-capabilities-db>false</use-browser-capabilities-db>
+				<use-deli>false</use-deli>
+			</map:transformer>
+			<map:transformer name="writeDOMsession" src="org.apache.cocoon.transformation.WriteDOMSessionTransformer"/>
+		</map:transformers>
+
+		<map:serializers default="html">
+			<map:serializer name="xml" logger="sitemap.serializer.xml" mime-type="text/xml" src="org.apache.cocoon.serialization.XMLSerializer"/>
+
+			<map:serializer name="html" logger="sitemap.serializer.html" mime-type="text/html" pool-grow="4" pool-max="32" pool-min="4" src="pss.www.platform.content.compression.JCompressedHTMLSerializer">
+				<doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
+				<buffer-size>1024</buffer-size>
+				<encoding>ISO-8859-1</encoding>
+				<omit-xml-declaration>yes</omit-xml-declaration>
+				<indent>no</indent>
+			</map:serializer>
+
+			<map:serializer name="html-decoded" logger="sitemap.serializer.html" mime-type="text/html" pool-grow="4" pool-max="32" pool-min="4" src="pss.www.platform.content.compression.JCompressedHTMLSerializer">
+				<doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
+				<buffer-size>1024</buffer-size>
+				<encoding>ISO-8859-5</encoding>
+				<omit-xml-declaration>yes</omit-xml-declaration>
+				<indent>no</indent>
+			</map:serializer>
+
+			<map:serializer name="html-nocompress" logger="sitemap.serializer.html" mime-type="text/html" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.HTMLSerializer">
+				<doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
+				<buffer-size>1024</buffer-size>
+				<encoding>ISO-8859-5</encoding>
+				<omit-xml-declaration>yes</omit-xml-declaration>
+				<indent>no</indent>
+			</map:serializer>
+
+			<map:serializer name="graph" logger="sitemap.serializer.html" mime-type="text/html" pool-grow="4" pool-max="32" pool-min="4" src="pss.www.platform.content.compression.JCompressedHTMLSerializer">
+				<doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
+				<buffer-size>1024</buffer-size>
+				<encoding>ISO-8859-1</encoding>
+				<omit-xml-declaration>yes</omit-xml-declaration>
+				<indent>no</indent>
+			</map:serializer>
+
+			<map:serializer name="map" logger="sitemap.serializer.html" mime-type="text/html" pool-grow="4" pool-max="32" pool-min="4" src="pss.www.platform.content.compression.JCompressedHTMLSerializer">
+				<doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
+				<buffer-size>1024</buffer-size>
+				<encoding>ISO-8859-1</encoding>
+				<omit-xml-declaration>yes</omit-xml-declaration>
+				<indent>no</indent>
+			</map:serializer>
+
+			<map:serializer name="excel" logger="sitemap.serializer.xls" mime-type="application/vnd.ms-excel" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.XMLSerializer">
+				<buffer-size>1024</buffer-size>
+				<encoding>ISO-8859-1</encoding>
+				<omit-xml-declaration>yes</omit-xml-declaration>
+				<indent>no</indent>
+			</map:serializer>
+
+
+			<map:serializer name="none" logger="sitemap.serializer.xls" mime-type="application/vnd.ms-excel" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.TextSerializer">
+				<buffer-size>1024</buffer-size>
+				<encoding>ISO-8859-1</encoding>
+				<omit-xml-declaration>yes</omit-xml-declaration>
+				<indent>no</indent>
+			</map:serializer>
+
+			<map:serializer name="json" logger="sitemap.serializer.json" mime-type="application/json" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.TextSerializer">
+				<buffer-size>1024</buffer-size>
+				<encoding>UTF-8</encoding>
+				<omit-xml-declaration>yes</omit-xml-declaration>
+				<indent>no</indent>
+			</map:serializer>
+
+			<map:serializer name="json-compress" logger="sitemap.serializer.json" mime-type="application/json" pool-grow="4" pool-max="32" pool-min="4" src="pss.www.platform.content.compression.JCompressedTextSerializer">
+				<buffer-size>1024</buffer-size>
+				<encoding>UTF-8</encoding>
+				<omit-xml-declaration>yes</omit-xml-declaration>
+				<indent>no</indent>
+			</map:serializer>
+
+			<map:serializer name="mobile" logger="sitemap.serializer.json" mime-type="application/json" pool-grow="4" pool-max="32" pool-min="4" src="pss.www.platform.content.compression.JCompressedTextSerializer">
+				<buffer-size>1024</buffer-size>
+				<encoding>UTF-8</encoding>
+				<omit-xml-declaration>yes</omit-xml-declaration>
+				<indent>no</indent>
+			</map:serializer>
+			
+			<map:serializer name="csv" logger="sitemap.serializer.csv" mime-type="text/csv" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.TextSerializer">
+				<buffer-size>1024</buffer-size>
+				<encoding>UTF-8</encoding>
+				<omit-xml-declaration>yes</omit-xml-declaration>
+				<indent>no</indent>
+			</map:serializer>
+
+			<map:serializer name="js" logger="sitemap.serializer.js" mime-type="text/javascript" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.TextSerializer">
+				<buffer-size>1024</buffer-size>
+				<encoding>ISO-8859-1</encoding>
+				<omit-xml-declaration>yes</omit-xml-declaration>
+				<indent>no</indent>
+			</map:serializer>
+
+			<map:serializer name="css" logger="sitemap.serializer.css" mime-type="text/css" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.TextSerializer">
+				<buffer-size>1024</buffer-size>
+				<encoding>ISO-8859-1</encoding>
+				<omit-xml-declaration>yes</omit-xml-declaration>
+				<indent>no</indent>
+			</map:serializer>
+<!--
+			<map:serializer name="report" logger="sitemap.serializer.report"  mime-type="application/pdf"  pool-grow="4" pool-max="32" pool-min="4" src="pss.www.platform.content.compression.JReportSerializer">
+				<user-config>WEB-INF/fop-config.xml</user-config>
+			</map:serializer>
+
+-->
+
+		</map:serializers>
+
+		<map:matchers default="wildcard">
+			<map:matcher logger="sitemap.matcher.wildcard" name="wildcard" src="pss.www.platform.AstorMatcher"/>
+		</map:matchers>
+
+		<map:selectors default="browser">
+			<map:selector logger="sitemap.selector.browser" name="browser" src="org.apache.cocoon.selection.BrowserSelector">
+				<!-- # NOTE: The appearance indicates the search order. This is very important since
+           #       some words may be found in more than one browser description. (MSIE is
+           #       presented as "Mozilla/4.0 (Compatible; MSIE 4.01; ...")
+      -->
+				<browser name="explorer" useragent="MSIE"/>
+				<browser name="pocketexplorer" useragent="MSPIE"/>
+				<browser name="handweb" useragent="HandHTTP"/>
+				<browser name="avantgo" useragent="AvantGo"/>
+				<browser name="imode" useragent="DoCoMo"/>
+				<browser name="opera" useragent="Opera"/>
+				<browser name="lynx" useragent="Lynx"/>
+				<browser name="java" useragent="Java"/>
+				<browser name="wap" useragent="Nokia"/>
+				<browser name="wap" useragent="UP"/>
+				<browser name="wap" useragent="Wapalizer"/>
+				<browser name="mozilla5" useragent="Mozilla/5"/>
+				<browser name="mozilla5" useragent="Netscape6/"/>
+				<browser name="netscape" useragent="Mozilla"/>
+			</map:selector>
+
+			<map:selector name="parameter" logger="sitemap.selector.parameter" src="org.apache.cocoon.selection.ParameterSelector"/>
+
+		</map:selectors>
+
+		<!-- action resolvers -->
+		<map:actions>
+			<!-- indoors actions -->
+			<map:action name="JDoPssAction" src="pss.www.platform.actions.resolvers.JDoPssActionResolver"/>
+			<map:action name="JDoPssActionHelp" src="pss.www.platform.actions.resolvers.JDoPssActionHelpResolver"/>
+			<!--map:action name="JDoRefresh" src="pss.www.platform.actions.resolvers.JDoRefreshResolver"/-->
+			<map:action name="JDoAjaxAction" src="pss.www.platform.actions.resolvers.JDoAjaxActionResolver"/>
+			<map:action name="JDoFormLovAction" src="pss.www.platform.actions.resolvers.JDoFormLovActionResolver"/>
+			<map:action name="JDoWinLovAction" src="pss.www.platform.actions.resolvers.JDoWinLovActionResolver"/>
+			<map:action name="JBasicFrontDoorActionResolver" src="pss.www.platform.actions.resolvers.JBasicFrontDoorActionResolver"/>
+			<map:action name="JBasicLoginActionResolver" src="pss.www.platform.actions.resolvers.JBasicLoginActionResolver"/>
+			<map:action name="JDoWinListRefreshAction" src="pss.www.platform.actions.resolvers.JDoWinListRefreshActionResolver"/>
+			<map:action name="JDoWinListJSonRequestResolver" src="pss.www.platform.actions.resolvers.JDoWinListJSonRequestResolver"/>
+			<map:action name="JDoInternalRequestResolver" src="pss.www.platform.actions.resolvers.JDoInternalRequestResolver"/>
+			<map:action name="JDoGraphRefreshActionResolver" src="pss.www.platform.actions.resolvers.JDoGraphRefreshActionResolver"/>
+			<map:action name="JDoWinListExpandAction" src="pss.www.platform.actions.resolvers.JDoWinListExpandActionResolver"/>
+			<map:action name="JDoWinListFormLovRefreshAction" src="pss.www.platform.actions.resolvers.JDoWinListFormLovRefreshActionResolver"/>
+			<map:action name="JDoWinListDeleteAction" src="pss.www.platform.actions.resolvers.JDoWinListDeleteActionResolver"/>
+			<map:action name="JDoWinListEditAction" src="pss.www.platform.actions.resolvers.JDoWinListEditActionResolver"/>
+			<map:action name="JDoSaveHelpAction" src="pss.www.platform.actions.resolvers.JDoSaveHelpActionResolver"/>
+			<map:action name="JDoCheckRefreshAction" src="pss.www.platform.actions.resolvers.JDoCheckRefreshActionResolver"/>
+			<map:action name="JDoLayoutAction" src="pss.www.platform.actions.resolvers.JDoLayoutActionResolver"/>
+			<map:action name="JDoWaitingAction" src="pss.www.platform.actions.resolvers.JDoWaitingResolver"/>
+			<map:action name="JDoEchoAction" src="pss.www.platform.actions.resolvers.JDoEchoResolver"/>
+			<!--map:action name="JDoWinListReloadAction" src="pss.www.platform.actions.resolvers.JDoWinListReloadActionResolver"/-->
+			<!--map:action name="JDoReportAction" src="pss.www.platform.actions.resolvers.JDoReportActionResolver"/-->
+			<map:action name="JDoViewAreaAction" src="pss.www.platform.actions.resolvers.JDoViewAreaActionResolver"/>
+			<map:action name="JDoExceptionAction" src="pss.www.platform.actions.resolvers.JDoExceptionAction"/>
+			<map:action name="JDoViewAreaAndTitleAction" src="pss.www.platform.actions.resolvers.JDoViewAreaAndTitleActionResolver"/>
+			<map:action name="JDoViewAllPanelsAction" src="pss.www.platform.actions.resolvers.JDoViewAllPanelsActionResolver"/>
+			<map:action name="JDoMenuAllPanelsAction" src="pss.www.platform.actions.resolvers.JDoMenuAllPanelsActionResolver"/>
+			<map:action name="JDoDropAction" src="pss.www.platform.actions.resolvers.JDoDropActionResolver"/>
+			<map:action name="JDoPreviewAreaAction" src="pss.www.platform.actions.resolvers.JDoPreviewAreaActionResolver"/>
+			<map:action name="JDoListExpandAreaAction" src="pss.www.platform.actions.resolvers.JDoListExpandAreaActionResolver"/>
+			<map:action name="JDoBackToQueryAction" src="pss.www.platform.actions.resolvers.JDoBackToQueryActionResolver"/>
+			<map:action name="JDoBackAction" src="pss.www.platform.actions.resolvers.JDoBackActionResolver"/>
+			<map:action name="JDoGotoHistoryAction" src="pss.www.platform.actions.resolvers.JDoGotoHistoryActionResolver"/>
+			<map:action name="JDoRefreshAction" src="pss.www.platform.actions.resolvers.JDoRefreshActionResolver"/>
+			<map:action name="JDoWinListReportAction" src="pss.www.platform.actions.resolvers.JDoWinListReportActionResolver"/>
+			<map:action name="JDoReportFormAction" src="pss.www.platform.actions.resolvers.JDoWinListReportActionResolver"/>
+			<map:action name="JDoTreeExpandAction" src="pss.www.platform.actions.resolvers.JDoTreeExpandActionResolver"/>
+			<map:action name="JDoPartialRefreshForm" src="pss.www.platform.actions.resolvers.JDoPartialRefreshFormActionResolver"/>
+			<map:action name="JDoPartialRefreshPreviewForm" src="pss.www.platform.actions.resolvers.JDoPartialRefreshPreviewFormActionResolver"/>
+			<map:action name="JDoUpdateServerField" src="pss.www.platform.actions.resolvers.JDoUpdateServerFieldActionResolver"/>
+			<map:action name="JDoPushNotification" src="pss.www.platform.actions.resolvers.JDoPushNotificationActionResolver"/>
+			<map:action name="JDoGetChannel" src="pss.www.platform.actions.resolvers.JDoGetChannelActionResolver"/>
+
+			<!-- front door actions -->
+			<map:action name="JDoSubsessionLogin" src="pss.www.platform.actions.resolvers.JDoSubsessionLoginResolver"/>
+			<map:action name="JDoAutoLogin" src="pss.www.platform.actions.resolvers.JDoAutoLoginResolver"/>
+			<map:action name="JDoRemoteLogin" src="pss.www.platform.actions.resolvers.JDoRemoteLoginResolver"/>
+			<map:action name="JDoPersistentLogin" src="pss.www.platform.actions.resolvers.JDoPersistentLoginResolver"/>
+			<map:action name="JDoLogin" src="pss.www.platform.actions.resolvers.JDoLoginResolver"/>
+			<map:action name="JDoLoginByIni" src="pss.www.platform.actions.resolvers.JDoLoginByIniResolver"/>
+			<map:action name="JDoPasswordChange" src="pss.www.platform.actions.resolvers.JDoPasswordChangeResolver"/>
+			<map:action name="JDoSecurity" src="pss.www.platform.actions.resolvers.JDoSecurityResolver"/>
+			<map:action name="JDoExcludeColumns" src="pss.www.platform.actions.resolvers.JDoExcludeColumnsResolver"/>
+			<map:action name="JDoRegister" src="pss.www.platform.actions.resolvers.JDoRegisterResolver"/>
+			<map:action name="JDoRecovery" src="pss.www.platform.actions.resolvers.JDoRecoveryResolver"/>
+			<!-- generic http action -->
+			<map:action name="JDoUpload" src="pss.www.platform.actions.resolvers.JDoUpload"/>      
+			<map:action name="JDoSign" src="pss.www.platform.actions.resolvers.JDoSign"/>      
+			<map:action name="http-header-action" src="org.apache.cocoon.acting.HttpHeaderAction"/>
+		</map:actions>
+
+		<!-- resource readers -->
+		<map:readers default="resource">
+			<map:reader name="resource" pool-max="32" src="pss.www.platform.content.providers.JCompressibleResourceProvider"/>
+			<map:reader name="pss_resource" pool-max="32" src="pss.www.platform.content.providers.JInternalPssResourceProvider"/>
+			<map:reader name="skin_resource" pool-max="32" src="pss.www.platform.content.providers.JSkinProvider"/>
+			<map:reader name="pssdata_resource" pool-max="32" src="pss.www.platform.content.providers.JWebPssDataFileProvider"/>
+			<map:reader name="pss_icon" pool-max="32" src="pss.www.platform.content.providers.JPssIconProvider"/>
+			<map:reader name="publicweb" pool-max="32" src="pss.www.platform.content.providers.JPssPublicWebProvider"/>
+			<!--map:reader name="report" pool-max="32" src="pss.www.platform.content.providers.jreportgenerator"/-->
+			<map:reader name="file" pool-max="32" src="pss.www.platform.content.providers.JWebFileProvider"/>
+			<map:reader name="layout" pool-max="32" src="pss.www.platform.content.providers.JWebLayoutBackgroundProvider"/>
+			<map:reader name="business_resource" pool-max="32" src="pss.www.platform.content.providers.JWebBusinessFileProvider"/>
+		</map:readers>
+
+		<!-- XML generators -->    
+		<map:generators default="file">
+
+			<map:generator label="content,data" logger="sitemap.generator.file" name="file" pool-grow="4" pool-max="32" pool-min="8" src="org.apache.cocoon.generation.FileGenerator"/>
+			<!-- page generators -->
+			<map:generator name="JClosedPageGenerator" src="pss.www.platform.content.generators.JClosedPageGenerator"/>
+			<map:generator name="JRegisterPageGenerator" src="pss.www.platform.content.generators.JRegisterPageGenerator"/>
+			<map:generator name="JRecoveryPageGenerator" src="pss.www.platform.content.generators.JRecoveryPageGenerator"/>
+			<map:generator name="JHttpOptions" src="pss.www.platform.content.generators.JHttpOptions"/>
+			<map:generator name="JLoginPageGenerator" src="pss.www.platform.content.generators.JLoginPageGenerator"/>
+			<map:generator name="JLoginEmbbededPageGenerator" src="pss.www.platform.content.generators.JLoginEmbbededPageGenerator"/>
+			<map:generator name="JLoginByIniPageGenerator" src="pss.www.platform.content.generators.JLoginByIniPageGenerator"/>
+			<map:generator name="JClosedAndLoginPageGenerator" src="pss.www.platform.content.generators.JClosedAndLoginPageGenerator"/>
+			<map:generator name="JPasswordChangePageGenerator" src="pss.www.platform.content.generators.JPasswordChangePageGenerator"/>
+			<map:generator name="JUploaderPageGenerator" src="pss.www.platform.content.generators.JUploaderPageGenerator"/>      
+			<map:generator name="JFTPPageGenerator" src="pss.www.platform.content.generators.JFTPPageGenerator"/>      
+			<map:generator name="JSignPageGenerator" src="pss.www.platform.content.generators.JSignPageGenerator"/>      
+			<map:generator name="JIndoorsPageGenerator" src="pss.www.platform.content.generators.JIndoorsPageGenerator"/>
+			<map:generator name="JHelpPageGenerator" src="pss.www.platform.content.generators.JHelpPageGenerator"/>
+			<map:generator name="JComboPageGenerator" src="pss.www.platform.content.generators.JComboPageGenerator"/>
+			<map:generator name="JComboFormLovPageGenerator" src="pss.www.platform.content.generators.JComboFormLovPageGenerator"/>
+			<map:generator name="JComboResponsiveFormLovPageGenerator" src="pss.www.platform.content.generators.JComboResponsiveFormLovPageGenerator"/>
+			<map:generator name="JUpdateServerFieldPageGenerator" src="pss.www.platform.content.generators.JUpdateServerFieldPageGenerator"/>
+			<map:generator name="JPushNotificationPageGenerator" src="pss.www.platform.content.generators.JPushNotificationPageGenerator"/>
+			<map:generator name="JGetChannelPageGenerator" src="pss.www.platform.content.generators.JGetChannelPageGenerator"/>
+			<map:generator name="JFormLovPageGenerator" src="pss.www.platform.content.generators.JFormLovPageGenerator"/>
+			<map:generator name="JFormLovRefreshPageGenerator" src="pss.www.platform.content.generators.JFormLovRefreshPageGenerator"/>
+			<map:generator name="JGraphRefreshPageGenerator" src="pss.www.platform.content.generators.JGraphRefreshPageGenerator"/>
+			<map:generator name="JWinListInternalRequestPageGenerator" src="pss.www.platform.content.generators.JWinListInternalRequestPageGenerator"/>
+			<map:generator name="JWinListJSonRequestPageGenerator" src="pss.www.platform.content.generators.JWinListJSonRequestPageGenerator"/>
+			<map:generator name="JWinListRefreshPageGenerator" src="pss.www.platform.content.generators.JWinListRefreshPageGenerator"/>
+			<map:generator name="JWinListExpandPageGenerator" src="pss.www.platform.content.generators.JWinListExpandPageGenerator"/>
+			<map:generator name="JWinListDeletePageGenerator" src="pss.www.platform.content.generators.JWinListDeletePageGenerator"/>
+			<map:generator name="JWinListEditPageGenerator" src="pss.www.platform.content.generators.JWinListEditPageGenerator"/>
+			<map:generator name="JSaveHelpPageGenerator" src="pss.www.platform.content.generators.JSaveHelpPageGenerator"/>
+			<map:generator name="JCheckRefreshPageGenerator" src="pss.www.platform.content.generators.JCheckRefreshPageGenerator"/>
+			<map:generator name="JLayoutPageGenerator" src="pss.www.platform.content.generators.JLayoutPageGenerator"/>
+			<map:generator name="JWaitingPageGenerator" src="pss.www.platform.content.generators.JWaitingPageGenerator"/>
+			<map:generator name="JEchoPageGenerator" src="pss.www.platform.content.generators.JEchoPageGenerator"/>
+			<!--map:generator name="JWinListReloadPageGenerator" src="pss.www.platform.content.generators.JWinListReloadPageGenerator"/-->
+			<map:generator name="JViewAreaPageGenerator" src="pss.www.platform.content.generators.JViewAreaPageGenerator"/>
+			<map:generator name="JViewAreaAllPanelsPageGenerator" src="pss.www.platform.content.generators.JViewAreaAllPanelsPageGenerator"/>
+			<map:generator name="JViewAreaDropGenerator" src="pss.www.platform.content.generators.JViewAreaDropGenerator"/>
+			<map:generator name="JPreviewAreaPageGenerator" src="pss.www.platform.content.generators.JPreviewAreaPageGenerator"/>
+			<map:generator name="JListExpandAreaPageGenerator" src="pss.www.platform.content.generators.JListExpandAreaPageGenerator"/>
+			<map:generator name="JMessageGenerator" src="pss.www.platform.content.generators.JMessageGenerator"/>
+			<map:generator name="JMessageGeneratorAjax" src="pss.www.platform.content.generators.JMessageGeneratorAjax"/>
+			<map:generator name="JSessionTimeOutGenerator" src="pss.www.platform.content.generators.JSessionTimeOutGenerator"/>
+			<map:generator name="JSkinGenerator" src="pss.www.platform.content.generators.JSkinGenerator"/>
+			<map:generator name="JMenuGenerator" src="pss.www.platform.content.generators.JMenuGenerator"/>
+			<map:generator name="JTreeGenerator" src="pss.www.platform.content.generators.JTreeGenerator"/> 
+			<map:generator name="JTreeExpandGenerator" src="pss.www.platform.content.generators.JTreeExpandGenerator"/>
+			<map:generator name="JGlobalStringsGenerator" src="pss.www.platform.content.generators.JGlobalStringsGenerator"/> 
+			<map:generator name="exception" src="org.apache.cocoon.generation.ExceptionGenerator"/>
+		</map:generators>
+
+		<map:pipes default="caching">
+			<map:pipe name="caching" src="org.apache.cocoon.components.pipeline.impl.CachingProcessingPipeline">
+				<!--+
+           | If not specified, the value of the outputBufferSize parameter is -1.
+           | This will cause Cocoon to buffer all output until processing has finished
+           | before sending it to the client. This has the advantage that in case
+           | an error occurs during the processing of the SAX-pipeline, Cocoon is still
+           | able to reset the response and send an error page instead. Otherwise the
+           | error page will be appended to the output already send to the client.
+           | If you are generating larger pages, it might be benificial to enable
+           | this parameter, so that output is gradually send to the client as it
+           | is being generated.
+           | For more granularity, you can also supply this parameter to
+           | individual map:pipeline elements (using map:parameter syntax).
+           +-->
+				<parameter name="outputBufferSize" value="0"/>
+			</map:pipe>
+			<map:pipe name="caching-point" src="org.apache.cocoon.components.pipeline.impl.CachingPointProcessingPipeline">
+				<!-- parameter name="autoCachingPoint" value="On"/ -->
+				<!-- parameter name="outputBufferSize" value="8192"/ -->
+			</map:pipe>
+			<map:pipe name="noncaching" src="org.apache.cocoon.components.pipeline.impl.NonCachingProcessingPipeline">
+				<!-- parameter name="outputBufferSize" value="8192"/ -->
+			</map:pipe>
+			<!--+
+         | This pipeline implementation caches the complete content for a defined
+         | period of time (expires). The cache key is the current uri.
+         +-->
+			<map:pipe name="expires" src="org.apache.cocoon.components.pipeline.impl.ExpiresCachingProcessingPipeline">
+				<parameter name="cache-expires" value="${expires-pipeline.cache-expires}"/>
+				<!-- Expires in secondes -->
+			</map:pipe>
+
+		</map:pipes>
+
+
+	</map:components>
+
+
+	<!-- =========================== Pipelines ================================= -->
+
+	<map:pipelines>
+
+		<!-- Internal resources pipeline -->
+		<map:pipeline internal-only="true">
+
+			<map:match pattern="pss-object-generator" type="wildcard">
+				<map:generate type="JIndoorsPageGenerator"/>
+				<map:serialize type="xml"/>
+			</map:match>
+
+		</map:pipeline>
+
+
+		<!-- Client request resolving pipeline -->
+
+		<map:pipeline>
+
+			<!-- content URL mappings -->
+
+			<map:match pattern="http_options_request" type="wildcard">
+				<map:generate type="JHttpOptions"/>
+				<map:transform src="resources/stylesheets/html/responsive_page.xsl" type="xslt">
+					<map:parameter name="requestid" value="{__requestid}"/>
+				</map:transform>
+				<map:serialize type="html"/>
+			</map:match>
+			
+			<map:match pattern="login_embbeded" type="wildcard">
+				<map:generate type="JLoginEmbbededPageGenerator"/>
+				<map:transform src="resources/stylesheets/html/login_embbeded.xsl" type="xslt">
+					<map:parameter name="requestid" value="{__requestid}"/>
+				</map:transform>
+				<map:serialize type="html"/>
+			</map:match>
+			
+			<map:match pattern="login" type="wildcard">
+				<map:act type="JBasicLoginActionResolver">
+					<map:generate type="JLoginPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_page.xsl" type="xslt">
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="responsive_login" type="wildcard">
+				<map:act type="JBasicLoginActionResolver">
+					<map:generate type="JLoginPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_page.xsl" type="xslt">
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+	
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+		
+			<map:match pattern="closed" type="wildcard">
+				<map:act type="JBasicFrontDoorActionResolver">
+					<map:generate type="JClosedAndLoginPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+			
+			<map:match pattern="closed_subsession" type="wildcard">
+				<map:act type="JBasicFrontDoorActionResolver">
+					<map:generate type="JClosedPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do" type="wildcard">
+				<map:act type="JBasicLoginActionResolver">
+					<map:generate type="JLoginByIniPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_page.xsl" type="xslt">
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+		<map:match pattern="mobile-do" type="wildcard">
+				<map:act type="JBasicLoginActionResolver">
+					<map:generate type="JLoginByIniPageGenerator"/>
+					<map:transform src="resources/stylesheets/mobile/page.xsl" type="xslt">
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:serialize type="mobile"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="register" type="wildcard">
+				<map:act type="JBasicFrontDoorActionResolver">
+					
+					<map:generate type="JRegisterPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="recovery" type="wildcard">
+				<map:act type="JBasicFrontDoorActionResolver">
+					<map:generate type="JRecoveryPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="password.change" type="wildcard">
+				<map:act type="JBasicFrontDoorActionResolver">
+					<map:generate type="JPasswordChangePageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="show.message" type="wildcard">
+				<map:act type="JBasicFrontDoorActionResolver">
+					<map:generate type="JMessageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+
+			
+			<map:match pattern="show.message.mobile" type="wildcard">
+				<map:generate type="JMessageGenerator"/>
+				<map:transform src="resources/stylesheets/mobile/page.xsl" type="xslt">
+					<map:parameter name="requestid" value="{__requestid}"/>
+				</map:transform>
+				<map:serialize type="mobile"/>
+			</map:match>
+
+
+
+
+			<map:match pattern="html/do-upload" type="wildcard">
+				<map:act type="JDoUpload">
+					<map:generate type="JUploaderPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.upload.xsl" type="xslt"/>
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+			<map:match pattern="do-ftp" type="wildcard">
+				<map:act type="JDoUpload">
+					<map:generate type="JFTPPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.upload.xsl" type="xslt"/>
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<!-- action resolving URL mappings -->
+			<map:match pattern="do-sign" type="wildcard">
+				<map:act type="JDoSign">
+					<map:generate type="JSignPageGenerator"/>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{browser}"/>
+						<map:when test="Explorer">
+							<map:transform src="resources/stylesheets/html/ajax.sign.explorer.xsl" type="xslt"/>
+						</map:when>
+						<map:when test="Mozilla">
+							<map:transform src="resources/stylesheets/html/ajax.sign.mozilla.xsl" type="xslt"/>
+						</map:when>
+						<map:otherwise>
+							<map:transform src="resources/stylesheets/html/ajax.sign.other.xsl" type="xslt"/>
+						</map:otherwise>
+
+					</map:select>
+					<map:serialize type="html"/>
+
+				</map:act>
+			</map:match>
+
+
+			<map:match pattern="subsession" type="wildcard">
+				<map:act type="JDoSubsessionLogin"/>
+			</map:match>
+
+			<map:match pattern="autologin" type="wildcard">
+				<map:act type="JDoAutoLogin"/>
+			</map:match>
+
+			<map:match pattern="remotelogin" type="wildcard">
+				<map:act type="JDoRemoteLogin"/>
+			</map:match>
+			
+			<map:match pattern="persistentLogin" type="wildcard">
+				<map:act type="JDoPersistentLogin"/>
+			</map:match>
+
+			<map:match pattern="do-logout" type="wildcard">
+				<map:redirect-to uri="login"/>
+			</map:match>
+
+			<map:match pattern="do-login" type="wildcard">
+				<map:act type="JDoLogin"/>
+			</map:match>
+
+			<map:match pattern="do-login-ini" type="wildcard">
+				<map:act type="JDoLoginByIni"/>
+			</map:match>
+
+			<map:match pattern="do-passwordchange" type="wildcard">
+				<map:act type="JDoPasswordChange"/>
+			</map:match>
+
+			<map:match pattern="do-register" type="wildcard">
+				<map:act type="JDoRegister"/>
+			</map:match>
+			<map:match pattern="do-recovery" type="wildcard">
+				<map:act type="JDoRecovery"/>
+			</map:match>
+
+			<map:match pattern="show.message.ajax" type="wildcard">
+				<map:generate type="JMessageGeneratorAjax"/>
+				<map:transform src="resources/stylesheets/html/ajax.message.xsl" type="xslt"/>
+				<map:serialize type="xml"/>
+			</map:match>
+
+			<map:match pattern="ajax-sessionTimeOut" type="wildcard">
+				<map:generate type="JSessionTimeOutGenerator"/>
+				<map:transform src="resources/stylesheets/html/ajax.message.xsl" type="xslt"/>
+				<map:serialize type="html-nocompress"/>
+			</map:match>
+			
+			<map:match pattern="mobile-sessionTimeOut" type="wildcard">
+				<map:generate type="JSessionTimeOutGenerator"/>
+				<map:transform src="resources/stylesheets/mobile/page.xsl" type="xslt"/>
+				<map:serialize type="mobile"/>
+			</map:match>
+
+			<map:match pattern="do-ViewAreaAndTitleAction" type="wildcard">
+				<map:act type="JDoViewAreaAndTitleAction">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-allPanelsAction" type="wildcard">
+				<map:act type="JDoViewAllPanelsAction">
+					<map:generate type="JViewAreaAllPanelsPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-menuPanelsAction" type="wildcard">
+				<map:act type="JDoMenuAllPanelsAction">
+					<map:generate type="JViewAreaAllPanelsPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-DropAction" type="wildcard">
+				<map:act type="JDoDropAction">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_ajax.viewAreaAndTitle.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-ViewAreaAction" type="wildcard">
+				<map:act type="JDoViewAreaAction">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="modaldo-ViewAreaAction" type="wildcard">
+				<map:act type="JDoViewAreaAction">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_ajax.modalviewarea.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+			
+			<map:match pattern="modaldo-exceptionaction" type="wildcard">
+				<map:act type="JDoExceptionAction">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_ajax.modalmessage.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+			
+			<map:match pattern="do-PreviewAreaAction" type="wildcard">
+				<map:act type="JDoPreviewAreaAction">
+					<map:generate type="JPreviewAreaPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-ListExpandAreaAction" type="wildcard">
+				<map:act type="JDoListExpandAreaAction">
+					<map:generate type="JListExpandAreaPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_ajax.viewarea.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-respaction*" type="wildcard">
+				<map:act type="JDoPssAction">
+					<map:generate type="JIndoorsPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="basedir" value="http://localhost:8080"/>
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="excel">
+							<map:serialize type="excel"/>
+						</map:when>
+						<map:when test="graph">
+							<map:serialize type="graph"/>
+						</map:when>
+						<map:when test="map">
+							<map:serialize type="map"/>
+						</map:when>
+						<map:when test="csv">
+							<map:serialize type="csv"/>
+						</map:when>
+				<!--		<map:when test="report">
+							<map:serialize type="report"/>
+						</map:when>-->
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-help*" type="wildcard">
+				<map:act type="JDoPssActionHelp">
+					<map:generate type="JHelpPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.help.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-pushnotification" type="wildcard">
+				<map:act type="JDoPushNotification">
+					<map:generate type="JPushNotificationPageGenerator">
+						<map:parameter name="deviceid" value="{__deviceid}"/>
+					</map:generate>
+					<map:transform src="resources/stylesheets/mobile/pushnotification.json.xsl" type="xslt"/>
+
+					<map:serialize type="json-compress"/>
+				</map:act>
+			</map:match>
+			
+			<map:match pattern="do-getchannel" type="wildcard">
+				<map:act type="JDoGetChannel">
+					<map:generate type="JGetChannelPageGenerator"/>
+					<map:transform src="resources/stylesheets/mobile/pushnotification.json.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="json-compress"/>
+				</map:act>
+			</map:match>
+			
+
+			<map:match pattern="do-updateserverfield*" type="wildcard">
+				<map:act type="JDoUpdateServerField">
+					<map:generate type="JUpdateServerFieldPageGenerator"/>
+					<map:transform src="resources/stylesheets/json/ajax.updateserverfield.json.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="json-compress"/>
+				</map:act>
+			</map:match>
+			
+			<map:match pattern="do-comboResponsiveFormLovAction*" type="wildcard">
+				<map:act type="JDoPartialRefreshForm">
+					<map:generate type="JComboResponsiveFormLovPageGenerator"/>
+					<map:transform src="resources/stylesheets/json/ajax.comboFormLov.json.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="json-compress"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-comboFormLovAction*" type="wildcard">
+				<map:act type="JDoPartialRefreshForm">
+					<map:generate type="JComboFormLovPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.comboFormLov.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-comboAction*" type="wildcard">
+				<map:act type="JDoAjaxAction">
+					<map:generate type="JComboPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.combo.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-FormLovAction*" type="wildcard">
+				<map:act type="JDoFormLovAction">
+					<map:generate type="JFormLovPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.formLov.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-FormLovIndoorAction*" type="wildcard">
+				<map:act type="JDoFormLovAction">
+					<map:generate type="JFormLovPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.formLovIndoor.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-WinLovAction*" type="wildcard">
+				<map:act type="JDoWinLovAction">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_ajax.viewAreaAndTitle.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+			<map:match pattern="modaldo-WinLovAction*" type="wildcard">
+				<map:act type="JDoWinLovAction">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_ajax.modalviewarea.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+			<map:match pattern="do-WinListRefreshAction" type="wildcard">
+				<map:act type="JDoWinListRefreshAction">
+					<map:generate type="JWinListRefreshPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+			<map:match pattern="do-InternalRequestResolver" type="wildcard">
+				<map:act type="JDoInternalRequestResolver">
+					<map:generate type="JWinListInternalRequestPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="basedir" value="http://localhost:8080"/>
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="htmlfull">
+							<map:serialize type="html-nocompress"/>
+						</map:when>
+						<map:when test="html">
+							<map:serialize type="html-nocompress"/>
+						</map:when>
+						<map:when test="excel">
+							<map:serialize type="excel"/>
+						</map:when>
+						<map:when test="graph">
+							<map:serialize type="graph"/>
+						</map:when>
+						<map:when test="map">
+							<map:serialize type="map"/>
+						</map:when>
+						<map:when test="csv">
+							<map:serialize type="csv"/>
+						</map:when>
+					<!--	<map:when test="report">
+							<map:serialize type="report"/>
+						</map:when>-->
+						<map:when test="json">
+							<map:serialize type="json"/>
+						</map:when>
+					</map:select>
+
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-WinListJSonResolver" type="wildcard">
+				<map:act type="JDoWinListJSonRequestResolver">
+					<map:generate type="JWinListJSonRequestPageGenerator"/>
+					<map:transform src="resources/stylesheets/export/page.ajax.json.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:serialize type="json"/>
+				</map:act>
+			</map:match>
+			<map:match pattern="do-BuildGraphResolver" type="wildcard">
+				<map:act type="JDoGraphRefreshActionResolver">
+					<map:generate type="JGraphRefreshPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.graph.refresh.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-WinListExpandAction" type="wildcard">
+				<map:act type="JDoWinListExpandAction">
+					<map:generate type="JWinListExpandPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.winList.refresh.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-FormLovRefreshAction" type="wildcard">
+				<map:act type="JDoWinListFormLovRefreshAction">
+					<map:generate type="JFormLovRefreshPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.winList.refresh.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-TreeExpandNode" type="wildcard">
+				<map:act type="JDoTreeExpandAction">
+					<map:generate type="JTreeExpandGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.treeExpand.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html-decoded"/>
+				</map:act>
+			</map:match>
+
+
+
+			<map:match pattern="do-BackToQueryAction" type="wildcard">
+				<map:act type="JDoBackToQueryAction">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-BackAction" type="wildcard">
+				<map:act type="JDoBackAction">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-GotoHistoryAction" type="wildcard">
+				<map:act type="JDoGotoHistoryAction">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_ajax.viewAreaAndTitle.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-RefreshAction" type="wildcard">
+				<map:act type="JDoRefreshAction">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_ajax.viewAreaAndTitle.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="modaldo-ReportFormAction" type="wildcard">
+				<map:act type="JDoReportFormAction">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_ajax.modalviewarea.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-ReportAction" type="wildcard">
+				<map:act type="JDoWinListReportAction">
+					<map:generate type="JIndoorsPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-WinListDeleteAction" type="wildcard">
+				<map:act type="JDoWinListDeleteAction">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_ajax.viewAreaAndTitle.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-WinListEditAction" type="wildcard">
+				<map:act type="JDoWinListEditAction">
+					<map:generate type="JWinListEditPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_ajax.viewAreaAndTitle.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-saveHelp*" type="wildcard">
+				<map:act type="JDoSaveHelpAction">
+					<map:generate type="JSaveHelpPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.message.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-checkRefresh" type="wildcard">
+				<map:act type="JDoCheckRefreshAction">
+					<map:generate type="JCheckRefreshPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.message.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-LayoutAction" type="wildcard">
+				<map:act type="JDoLayoutAction">
+					<map:generate type="JLayoutPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.message.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-WaitingAction" type="wildcard">
+				<map:act type="JDoWaitingAction">
+					<map:generate type="JWaitingPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.message.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+			
+			<map:match pattern="do-echoAction" type="wildcard">
+				<map:act type="JDoEchoAction">
+					<map:generate type="JEchoPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/ajax.message.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<!--map:match pattern="do-ReportAction">
+        <map:act type="JDoReportAction">
+          <map:read type="report" mime-type="application/pdf" />
+		</map:act>
+      </map:match-->
+
+			<map:match pattern="do-excludecolumns" type="wildcard">
+				<map:act type="JDoExcludeColumns">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+
+
+			<map:match pattern="do-PartialRefreshForm" type="wildcard">
+				<map:act type="JDoPartialRefreshForm">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:select type="parameter">
+						<map:parameter name="parameter-selector-test" value="{serializer}"/>
+						<map:when test="html">
+							<map:serialize type="html"/>
+						</map:when>
+						<map:when test="mobile">
+							<map:serialize type="mobile"/>
+						</map:when>
+					</map:select>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-PartialRefreshPreviewForm" type="wildcard">
+				<map:act type="JDoPartialRefreshPreviewForm">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="{transformer}" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<map:match pattern="do-security" type="wildcard">
+				<map:act type="JDoSecurity">
+					<map:generate type="JViewAreaPageGenerator"/>
+					<map:transform src="resources/stylesheets/html/responsive_ajax.viewAreaAndTitle.xsl" type="xslt">
+						<map:parameter name="dictionary" value="{__dictionary}"/>
+						<map:parameter name="requestid" value="{__requestid}"/>
+					</map:transform>
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+			<!--map:match pattern="do-refreshwinlist" type="wildcard">
+        <map:act type="JDoRefresh"/>
+      </map:match-->
+
+			<!--map:match pattern="do-export" type="wildcard">
+        <map:act type="JDoRefresh"/>
+      </map:match-->
+
+
+			<!-- resource reading URL mapping -->
+
+			<map:match pattern="lov*" type="wildcard">
+				<map:act type="JDoPssAction">
+					<map:aggregate element="aggregation">
+						<map:part src="cocoon://xsp-generator.system.constantes.xsp"/>
+						<map:part src="{generator}"/>
+					</map:aggregate>
+					<map:transform src="resources/stylesheets/html/system.lov.xsl" type="xslt"/>
+					<map:serialize type="html"/>
+				</map:act>
+			</map:match>
+
+
+			<!-- JavaScript contents URL mapping -->
+
+			<map:match pattern="resources/menu[*].js" type="wildcard">
+				<map:act type="http-header-action">
+					<map:parameter name="Last-Modified" value=""/>
+				</map:act>
+				<map:generate type="JMenuGenerator"/>
+				<map:transform src="resources/stylesheets/js/menu.js.xsl" type="xslt"/>
+				<map:serialize type="js"/>
+			</map:match>
+
+			<map:match pattern="resources/tree[*].js" type="wildcard">
+				<map:act type="http-header-action">
+					<map:parameter name="Last-Modified" value=""/>
+				</map:act>
+				<map:generate type="JTreeGenerator"/>
+				<map:transform src="resources/stylesheets/js/tree.js.xsl" type="xslt"/>
+				<map:serialize type="js"/>
+			</map:match>
+
+
+
+			<map:match pattern="resources/nls.strings.*.js" type="wildcard">
+				<map:act type="http-header-action">
+					<map:parameter name="Last-Modified" value=""/>
+				</map:act>
+				<map:generate type="JGlobalStringsGenerator"/>
+				<map:transform src="resources/stylesheets/js/nls.strings.js.xsl" type="xslt"/>
+			<map:serialize type="html-nocompress"/>
+			</map:match>
+
+			<map:match pattern="v_*/**/*.js" type="wildcard">
+				<map:read type="resource" src="{2}/{3}.js" mime-type="text/javascript"/>
+			</map:match>
+
+			<map:match pattern="js/*.js" type="wildcard">
+				<map:read type="resource" src="js/{1}.js" mime-type="text/javascript"/>
+			</map:match>
+
+			<map:match pattern="v_*/**/*.css" type="wildcard">
+				<map:read type="resource" src="{2}/{3}.css" mime-type="text/css"/>
+			</map:match>
+			
+			<map:match pattern="css/*.css" type="wildcard">
+				<map:read type="resource" src="css/{1}.css" mime-type="text/css"/>
+			</map:match>
+
+
+			<map:match pattern="v_*/**.*" type="wildcard">
+				<map:read type="resource" src="{2}.{3}"/>
+			</map:match>
+		
+
+			<!-- CSS contents -->
+
+			<map:match pattern="resources/styles[*].css" type="wildcard">
+				<map:act type="http-header-action">
+					<map:parameter name="Last-Modified" value=""/>
+				</map:act>
+				<map:generate type="JSkinGenerator"/>
+				<map:transform src="resources/stylesheets/css/styles.css.xsl" type="xslt"/>
+				<map:serialize type="css"/>
+			</map:match>
+
+
+			<!-- pss resources -->  
+			<map:match pattern="file/**.*" type="wildcard">
+				<map:read type="file" src="{1}.{2}"/>
+			</map:match>
+			<map:match pattern="business_resource/**.*" type="wildcard">
+				<map:read type="business_resource" src="{1}.{2}"/>
+			</map:match>
+			<map:match pattern="pss_icon/**.*" type="wildcard">
+				<map:read type="pss_icon" src="{1}.{2}"/>
+			</map:match>
+			<map:match pattern="publicweb/*" type="wildcard">
+				<map:read type="publicweb" src="{1}"/>
+			</map:match>
+
+
+			<map:match pattern="markPending/**" type="wildcard">
+				<map:read type="publicweb" src="{1}"/>
+			</map:match>
+
+			<map:match pattern="skin/**.*" type="wildcard">
+				<map:read type="skin_resource" src="{1}.{2}"/>
+			</map:match>
+			<map:match pattern="pss_data/**.*" type="wildcard">
+				<map:read type="pssdata_resource" src="{1}.{2}"/>
+			</map:match>
+			<map:match pattern="pssdata_resource/**.*" type="wildcard">
+				<map:read type="pssdata_resource" src="{1}.{2}"/>
+			</map:match>
+			<map:match pattern="layout/**.*" type="wildcard">
+				<map:read type="layout" src="{1}.{2}"/>
+			</map:match>
+
+
+
+			<!-- image resources -->
+			<map:match pattern="work/**.png" type="wildcard">
+				<map:read type="resource" mime-type="image/jpg" src="work/{1}.png"/>
+			</map:match>
+			<map:match pattern="work/**.jpg" type="wildcard">
+				<map:read type="resource" mime-type="image/jpg" src="work/{1}.jpg"/>
+			</map:match>
+			<map:match pattern="work/**.gif" type="wildcard">
+				<map:read type="resource" mime-type="image/jpg" src="work/{1}.gif"/>
+			</map:match>
+
+
+			<!-- generic resources -->
+			<map:match pattern="**.*" type="wildcard">
+				<map:read type="resource" src="{1}.{2}"/>
+			</map:match>
+
+			<map:match pattern="*" type="wildcard">
+				<map:redirect-to uri="do" />
+			</map:match>
+
+			<map:handle-errors>
+				<map:generate type="exception"/>
+				<map:transform src="resources/stylesheets/html/system.error2html.xsl" type="xslt"/>
+				<map:serialize type="html-nocompress"/>
+			</map:handle-errors>
+
+
+		</map:pipeline>
+	</map:pipelines>
+
+	<map:views>
+		<map:view name="pretty-content" from-label="data">
+			<map:transform src="simple-page2html.xsl"/>
+			<map:serialize type="html"/>
+		</map:view>
+	</map:views>
+
+</map:sitemap>

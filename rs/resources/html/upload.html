@@ -1,0 +1,104 @@
+<html><head><title>UPLOAD</title>
+
+<style type="text/css">
+<!--
+
+.clear { /* generic container (i.e. div) for floating buttons */
+    overflow: hidden;
+    width: 100%;
+}
+/* Padding y margin */
+* {
+margin: 0;
+padding: 0;
+}
+
+/* Tamaños de los headers */
+h1, h2, h3, h4, h5, h6 {
+font-size: 100%;
+}
+
+/* Estilos de las listas */
+ol, ul {
+list-style: none;
+}
+
+/* Estilo y grosor de las fuentes */
+address, caption, cite, code, dfn, em, strong, th, var {
+font-style: normal;
+font-weight: normal;
+}
+
+/* Bordes de las tablas */
+table {
+border-collapse: collapse;
+border-spacing: 0;
+}
+
+/* Otros bordes */
+fieldset, img {
+border: 0;
+}
+
+/* Alineación del texto */
+caption, th {
+text-align: left;
+}
+
+/* Comillas */
+q:before, q:after {
+content: ”;
+}
+
+
+body {font-family: helvetica}
+p {font-size: 12pt}
+.red {color: red; width:30px;}
+.blue {color: blue; width:30px;}
+.redBig {color: red; width:40px;}
+.blueBig {color: blue; width:40px;}
+.redFree {color: red; }
+-->
+</style></head>
+<body style="overflow: hidden; background-color:transparent;" >
+
+<script>
+function upload_submit() {
+	if (document.getElementById('uploaded_file').value == '') return;
+	
+    document.getElementById('f1_upload_process').innerHTML ='<img src="indicator.gif"/>';
+	document.getElementById('form_upload').submit();
+	
+}
+
+function startUpload(){
+    return true;
+}
+
+function stopUpload(success){
+      if (success==1){
+         document.getElementById('f1_upload_process').innerHTML ='<img  src="trueColumn.gif"/>';
+      }
+      else {
+         document.getElementById('f1_upload_process').innerHTML = '<img src="falseColumn.gif"/>';
+      }
+      return true;   
+}
+</script>
+	<form id="form_upload" action="do-upload" method="post" enctype="multipart/form-data" target="upload_target" onsubmit="startUpload();" >
+		<div align="left" >
+			<table width="100%" >
+			<tr>
+				<td valign="top">
+		   		<input name="uploaded_file" id="uploaded_file" type="file" onchange="upload_submit()"/>
+				</td>
+				<td width="100" align="right" valign="top">
+				<p id="f1_upload_process"> </p>
+				</td>
+			</tr>
+			</table>
+		</div> 
+	</form>
+	<iframe id="upload_target" name="upload_target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>                 
+</body>
+</html>

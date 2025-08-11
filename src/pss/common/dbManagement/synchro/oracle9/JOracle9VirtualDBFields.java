@@ -1,0 +1,42 @@
+/**
+ * 
+ */
+package  pss.common.dbManagement.synchro.oracle9;
+
+import pss.common.dbManagement.synchro.base.JBaseVirtualDBField;
+import pss.common.dbManagement.synchro.base.JBaseVirtualDBFields;
+import pss.core.tools.collections.JIterator;
+
+/**
+ * 
+ *
+ */
+public class JOracle9VirtualDBFields extends JBaseVirtualDBFields {
+
+	/**
+	 * 
+	 */
+	public JOracle9VirtualDBFields() {
+		// TODO Auto-generated constructor stub
+	}
+
+	@Override
+	public String generateFieldsDeclarationSQL() throws Exception {
+		String sql = new String("");
+		JIterator<JBaseVirtualDBField> virtualDBFieldIterator;
+		JBaseVirtualDBField virtualDBField;
+		
+		virtualDBFieldIterator = this.oFields.getValueIterator();
+		
+		while (virtualDBFieldIterator.hasMoreElements()) {
+			virtualDBField = virtualDBFieldIterator.nextElement();
+			if (sql.isEmpty() == false) {
+				sql += ", ";
+			}
+			sql += virtualDBField.getFieldDeclarationSQL();
+		} // end while
+		
+		return sql;
+	}
+
+}

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+  - Licensed to the Apache Software Foundation (ASF) under one or more
+  - contributor license agreements.  See the NOTICE file distributed with
+  - this work for additional information regarding copyright ownership.
+  - The ASF licenses this file to You under the Apache License, Version 2.0
+  - (the "License"); you may not use this file except in compliance with
+  - the License.  You may obtain a copy of the License at
+  -
+  -     http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -
+  - $Id: log4j.xml 127 2007-09-27 00:08:16Z vgritsenko $
+  -->
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<!--
+  - SVN $Id: log4j.xml 127 2007-09-27 00:08:16Z vgritsenko $
+  -->
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+  <!-- Logs everything Cocoon under a log file rotated at midnight -->
+  <appender name="core" class="org.apache.log4j.DailyRollingFileAppender">
+    <param name="File" value="${org.apache.cocoon.work.directory}/logs/cocoon.log"/>
+    <param name="Append" value="false"/>
+    <param name="DatePattern" value="'.'yyyy-MM-dd'.log'"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d %-5p %t %c{2} - %m%n"/>
+    </layout>
+  </appender>
+
+  <logger name="org.springframework">
+    <level value="WARN"/>
+  </logger>
+  <logger name="org.apache.cocoon.core.container">
+    <level value="WARN"/>
+  </logger>
+
+  <!--
+    - Cocoon loggers
+    -->
+  <logger name="cocoon.access">
+    <level value="WARN"/>
+  </logger>
+  <logger name="cocoon.core.cache">
+    <level value="WARN"/>
+  </logger>
+  <logger name="cocoon.core.store.janitor">
+    <level value="WARN"/>
+  </logger>
+  <logger name="cocoon.core.source">
+    <level value="WARN"/>
+  </logger>
+  <logger name="cocoon.core.xslt">
+    <level value="WARN"/>
+  </logger>
+  <logger name="cocoon.flow">
+    <level value="WARN"/>
+  </logger>
+  <logger name="cocoon.flow.manager">
+    <level value="WARN"/>
+  </logger>
+  <logger name="cocoon.sitemap.handled-errors">
+    <level value="WARN"/>
+  </logger>
+
+  <root>
+    <priority value="INFO"/>
+    <appender-ref ref="core"/>
+  </root>
+</log4j:configuration>

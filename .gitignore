@@ -1,0 +1,9 @@
+# Ignorar todas las carpetas que empiezan con punto (como .settings)
+.*
+
+# Pero no ignores el archivo .gitignore mismo
+!.gitignore
+
+# Ignorar carpetas específicas
+/bin/
+/pssData/

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  - Licensed to the Apache Software Foundation (ASF) under one or more
+  - contributor license agreements.  See the NOTICE file distributed with
+  - this work for additional information regarding copyright ownership.
+  - The ASF licenses this file to You under the Apache License, Version 2.0
+  - (the "License"); you may not use this file except in compliance with
+  - the License.  You may obtain a copy of the License at
+  -
+  -     http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -
+  - $Id: cocoon.xconf 125 2007-09-27 00:07:02Z vgritsenko $
+  -->
+  
+<!--
+  - Classic Cocoon configuration file
+  -->
+<cocoon version="2.2">
+  <!--
+    - Include the core roles definitions. This is for the sake of clarity,
+    - as they are implicitely loaded at startup, but we may want to remove
+    - this implicit behaviour in the future now that we have the include
+    - mechanism.
+    -->
+  <include src="resource://org/apache/cocoon/cocoon.roles"/>
+
+  <!--
+    - Allow other building blocks to supply components
+    - by dropping configuration file into the directory.
+    -->
+  <include dir="/WEB-INF/cocoon/avalon" pattern="*.xconf"/>
+
+  <!-- =========================== Sitemap =============================== -->
+  <sitemap check-reload="yes" file="context://sitemap.xmap" logger="sitemap"/>
+
+  <!-- ======================== Sitemap Flowscript ======================== -->
+
+
+  <!-- =================== Templates ====================== -->
+  <component role="org.apache.cocoon.template.script.ScriptManager"
+             class="org.apache.cocoon.template.script.DefaultScriptManager"/>
+  <component role="org.apache.cocoon.template.script.InstructionFactory"
+            class="org.apache.cocoon.template.script.DefaultInstructionFactory"/>
+
+  <!-- =================== Sitemap Input/Output Modules ====================== -->
+  <input-modules>
+    <component-instance class="org.apache.cocoon.components.modules.input.RequestModule" logger="core.modules.input" name="request"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.SessionModule" logger="core.modules.input" name="session"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.RequestParameterModule" logger="core.modules.input" name="request-param"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.RequestAttributeModule" logger="core.modules.input" name="request-attr"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.HeaderAttributeModule" logger="core.modules.input" name="request-header"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.SessionAttributeModule" logger="core.modules.input" name="session-attr"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.CookieModule" logger="core.modules.input" name="cookie"/>
+    <component-instance class="org.apache.cocoon.components.modules.input.FlowAttributeModule" logger="core.modules.input" name="flow-attr"/>
+  </input-modules>
+
+  <!-- ================================= XML ================================ -->
+  <xslt-processor logger="core.xslt">
+    <parameter name="use-store" value="true"/>
+    <parameter name="incremental-processing" value="false"/>
+  </xslt-processor>
+  <component class="org.apache.cocoon.components.xslt.TraxProcessor" logger="core.xslt" role="org.apache.excalibur.xml.xslt.XSLTProcessor/xalan">
+    <parameter name="use-store" value="true"/>
+    <parameter name="incremental-processing" value="false"/>
+    <parameter name="transformer-factory" value="org.apache.xalan.processor.TransformerFactoryImpl"/>
+  </component>
+  <component class="org.apache.cocoon.components.xslt.TraxProcessor" logger="core.xslt" role="org.apache.excalibur.xml.xslt.XSLTProcessor/saxon">
+    <parameter name="use-store" value="true"/>
+    <parameter name="transformer-factory" value="net.sf.saxon.TransformerFactoryImpl"/>
+  </component>
+  <xpath-processor class="org.apache.excalibur.xml.xpath.XPathProcessorImpl" logger="core.xpath"/>
+
+  <!-- ========================= Protocol Handlers =========================== -->
+  <source-resolver logger="core.source"/>
+  <source-factories logger="core.source">
+    <component-instance class="org.apache.excalibur.source.impl.ResourceSourceFactory" logger="core.source" name="resource"/>
+    <component-instance class="org.apache.cocoon.components.source.impl.ContextSourceFactory" logger="core.source" name="context"/>
+    <component-instance class="org.apache.cocoon.components.source.impl.SitemapSourceFactory" logger="core.source" name="cocoon"/>
+    <component-instance class="org.apache.excalibur.source.impl.FileSourceFactory" logger="core.source" name="file"/>
+    <component-instance class="org.apache.cocoon.components.source.impl.PartSourceFactory" logger="core.source" name="upload"/>
+    <component-instance class="org.apache.cocoon.components.source.impl.ModuleSourceFactory" logger="core.source" name="module"/>
+    <component-instance class="org.apache.cocoon.components.source.impl.XModuleSourceFactory" logger="core.source" name="xmodule"/>
+    <component-instance class="org.apache.cocoon.components.source.impl.ZipSourceFactory" logger="core.source" name="zip"/>
+    <component-instance class="org.apache.cocoon.components.source.impl.EmptySourceFactory" logger="core.source" name="empty"/>
+    <component-instance class="org.apache.excalibur.source.impl.URLSourceFactory" logger="core.source" name="*"/>
+  </source-factories>
+
+  <!-- ================ Internationalization Catalogs =================== -->
+  <i18n-bundles logger="core.i18n">
+    <store-role>org.apache.excalibur.store.Store/TransientStore</store-role>
+    <reload-interval>${org.apache.cocoon.i18n.reload-interval}</reload-interval>
+    <catalogue-location>context://samples/i18n/translations</catalogue-location>
+  </i18n-bundles>
+
+
+</cocoon>

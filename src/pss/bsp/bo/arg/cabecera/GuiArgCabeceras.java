@@ -1,0 +1,37 @@
+package  pss.bsp.bo.arg.cabecera;
+
+import pss.core.win.JWin;
+import pss.core.winUI.lists.JWinList;
+import pss.core.win.JWins;
+
+public class GuiArgCabeceras extends JWins {
+
+
+
+  /**
+   * Constructor de la Clase
+   */
+  public GuiArgCabeceras() throws Exception {
+  }
+
+
+  public int     GetNroIcono() throws Exception  { return 10054; } 
+  public String  GetTitle()    throws Exception  { return "Interfaz Cabeceras"; }
+  public Class<? extends JWin>  GetClassWin()                   { return GuiArgCabecera.class; }
+  /**
+   * Mapeo las acciones con las operaciones
+   */
+  public void createActionMap() throws Exception {
+    addActionNew( 1, "Nuevo Registro" );
+  }
+
+
+
+  /**
+   * Configuro las columnas que quiero mostrar en la grilla
+   */
+  public void ConfigurarColumnasLista(JWinList zLista) throws Exception {
+    super.ConfigurarColumnasLista(zLista);
+  }
+
+}

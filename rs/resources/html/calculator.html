@@ -1,0 +1,302 @@
+<html><head><title>Calculadora</title>
+<style type="text/css">
+<!--
+
+.clear { /* generic container (i.e. div) for floating buttons */
+    overflow: hidden;
+    width: 100%;
+}
+/* Padding y margin */
+* {
+margin: 0;
+padding: 0;
+}
+
+/* Tamaños de los headers */
+h1, h2, h3, h4, h5, h6 {
+font-size: 100%;
+}
+
+/* Estilos de las listas */
+ol, ul {
+list-style: none;
+}
+
+/* Estilo y grosor de las fuentes */
+address, caption, cite, code, dfn, em, strong, th, var {
+font-style: normal;
+font-weight: normal;
+}
+
+/* Bordes de las tablas */
+table {
+border-collapse: collapse;
+border-spacing: 0;
+}
+
+/* Otros bordes */
+fieldset, img {
+border: 0;
+}
+
+/* Alineación del texto */
+caption, th {
+text-align: left;
+}
+
+/* Comillas */
+q:before, q:after {
+content: ”;
+}
+
+
+body {font-family: helvetica}
+p {font-size: 12pt}
+.red {color: red; width:30px;}
+.blue {color: blue; width:30px;}
+.redBig {color: red; width:40px;}
+.blueBig {color: blue; width:40px;}
+.redFree {color: red; }
+-->
+</style></head><body style="overflow: hidden;background-color:transparent;" onload="FillField()">
+<script language="JavaScript">
+<!-- Original:  Steve Dulaney -->
+<!-- Web Site:  http://www.hmhd.com/steve -->
+
+<!-- This script and many more are available free online at -->
+<!-- The JavaScript Source!! http://javascript.internet.com -->
+
+<!-- Begin
+var Memory = 0;
+var Number1 = "";
+var Number2 = "";
+var NewNumber = "blank";
+var opvalue = "";
+
+function Display(displaynumber) {
+document.calculator.answer.value = displaynumber;
+}
+
+function MemoryClear() {
+Memory = 0;
+document.calculator.mem.value = "";
+}
+
+function MemoryRecall(answer) {
+if(NewNumber != "blank") {
+Number2 += answer;
+} else {
+Number1 = answer;
+}
+NewNumber = "blank";
+Display(answer);
+}
+
+function MemorySubtract(answer) {
+Memory = Memory - eval(answer);
+}
+
+function MemoryAdd(answer) {
+Memory = Memory + eval(answer);
+document.calculator.mem.value = " M ";
+NewNumber = "blank";
+}
+
+function ClearCalc() {
+Number1 = "";
+Number2 = "";
+NewNumber = "blank";
+Display("");
+}
+
+function Backspace(answer) {
+answerlength = answer.length;
+answer = answer.substring(0, answerlength - 1);
+if (Number2 != "") {
+Number2 = answer.toString();
+Display(Number2);
+} else {
+Number1 = answer.toString();
+Display(Number1);
+   }
+}
+
+function CECalc() {
+Number2 = "";
+NewNumber = "yes";
+Display("");
+}
+
+function CheckNumber(answer) {
+if(answer == ".") {
+Number = document.calculator.answer.value;
+if(Number.indexOf(".") != -1) {
+answer = "";
+   }
+}
+if(NewNumber == "yes") {
+Number2 += answer;
+Display(Number2);
+}
+else {
+if(NewNumber == "blank") {
+Number1 = answer;
+Number2 = "";
+NewNumber = "no";
+}
+else {
+Number1 += answer;
+}
+Display(Number1);
+   }
+}
+function AddButton(x) {
+if(x == 1) EqualButton();
+if(Number2 != "") {
+Number1 = parseFloat(Number1) + parseFloat(Number2);
+}
+NewNumber = "yes";
+opvalue = '+';
+Display(Number1);
+}
+function SubButton(x) {
+if(x == 1) EqualButton();
+if(Number2 != "") {
+Number1 = parseFloat(Number1) - parseFloat(Number2);
+}
+NewNumber = "yes";
+opvalue = '-';
+Display(Number1);
+}
+function MultButton(x) {
+if(x == 1) EqualButton();
+if(Number2 != "") {
+Number1 = parseFloat(Number1) * parseFloat(Number2);
+}
+NewNumber = "yes";
+opvalue = '*';
+Display(Number1);
+}
+function DivButton(x) {
+if(x == 1) EqualButton();
+if(Number2 != "") {
+Number1 = parseFloat(Number1) / parseFloat(Number2);
+}
+NewNumber = "yes";
+opvalue = '/';
+Display(Number1);
+}
+function SqrtButton() {
+Number1 = Math.sqrt(Number1);
+NewNumber = "blank";
+Display(Number1);
+}
+function PercentButton() {
+if(NewNumber != "blank") {
+Number2 *= .01;
+NewNumber = "blank";
+Display(Number2);
+   }
+}
+function RecipButton() {
+Number1 = 1/Number1;
+NewNumber = "blank";
+Display(Number1);
+}
+function NegateButton() {
+Number1 = parseFloat(-Number1);
+NewNumber = "no";
+Display(Number1);
+}
+function CloseKey() {
+	parent.document.getElementById("calculator").style.display="none";
+}
+function EnterKey() {
+	var calc = parent.document.getElementById("calculator");
+	var realInput = calc.name.substring(11);
+	parent.document.getElementById(realInput).value = document.getElementById("answer").value;
+	parent.document.getElementById("calculator").style.display="none";
+}
+
+function FillField() {
+	var calc = parent.document.getElementById("calculator");
+	var realInput = calc.name.substring(11);
+	document.getElementById("answer").value = parent.document.getElementById(realInput).value;
+}
+
+function EqualButton() {
+if(opvalue == '+') AddButton(0);
+if(opvalue == '-') SubButton(0);
+if(opvalue == '*') MultButton(0);
+if(opvalue == '/') DivButton(0);
+Number2 = "";
+opvalue = "";
+}
+//  End -->
+</script>
+<form name="calculator">
+<table bgcolor="#aaaaaa"  cellpadding="0" cellspacing="0">
+<tbody><tr><td>
+<table bgcolor="#cccccc" border="1" >
+<tbody><tr><td>
+<table border="0" cellpadding="0">
+<tbody>
+<tr>
+	<td bgcolor="#000080" width="80">
+	<table border="0" cellpadding="0" width ="230">
+		<tbody>
+		<tr>
+		<td align="left"><b style="color: white;">Calculadora</b></td>
+		<td width="100%" align="right"> <input name="Close" class="red" value="X" onclick="CloseKey(); return false;" type="button"></td>
+		</tr>
+	</tbody></table>
+	
+</tr>
+<tr><td>
+<table border="0" width="100%">
+<tbody>
+<tr><td colspan="6">
+<input name="answer" id="answer" size="25" maxlength="30" onchange="CheckNumber(this.value)" type="text">
+<input name="Enter" class="redFree" value="Entrar" onclick="EnterKey(); return false;" type="button">
+</td></tr>
+<tr><td colspan="6">
+<table border="0" cellpadding="0">
+<tbody><tr><td>
+<input name="mem" size="3" maxlength="3" type="text" readonly="true"> <input name="backspace" class="redFree" value="Backspace" onclick="Backspace(document.calculator.answer.value); return false;" type="button"> <input name="CE" class="red" value=" CE " onclick="CECalc(); return false;" type="button"> <input name="C" class="red" value="  C  " onclick="ClearCalc(); return false;" type="reset">
+</td></tr>
+</tbody></table>
+</td></tr>
+<tr><td><input name="MC" class="redBig" value=" MC " onclick="MemoryClear(); return false;" type="button"></td>
+<td><input name="calc7" class="blue" value="  7  " onclick="CheckNumber('7'); return false;" type="button"></td>
+<td><input name="calc8" class="blue" value="  8  " onclick="CheckNumber('8'); return false;" type="button"></td>
+<td><input name="calc9" class="blue" value="  9  " onclick="CheckNumber('9'); return false;" type="button"></td>
+<td><input name="divide" class="redBig" value="  /  " onclick="DivButton(1); return false;" type="button"></td>
+<td><input name="sqrt" class="blueBig" value="sqrt" onclick="SqrtButton(); return false;" type="button"></td></tr>
+<tr><td><input name="MR" class="redBig" value=" MR " onclick="MemoryRecall(Memory); return false;" type="button"></td>
+<td><input name="calc4" class="blue" value="  4  " onclick="CheckNumber('4'); return false;" type="button"></td>
+<td><input name="calc5" class="blue" value="  5  " onclick="CheckNumber('5'); return false;" type="button"></td>
+<td><input name="calc6" class="blue" value="  6  " onclick="CheckNumber('6'); return false;" type="button"></td>
+<td><input name="multiply" class="redBig" value="  *  " onclick="MultButton(1); return false;" type="button"></td>
+<td><input name="percent" class="blueBig" value=" %  " onclick="PercentButton(); return false;" type="button"></td></tr>
+<tr><td><input name="MS" class="redBig" value=" MS " onclick="MemorySubtract(document.calculator.answer.value); return false;" type="button"></td>
+<td><input name="calc1" class="blue" value="  1  " onclick="CheckNumber('1'); return false;" type="button"></td>
+<td><input name="calc2" class="blue" value="  2  " onclick="CheckNumber('2'); return false;" type="button"></td>
+<td><input name="calc3" class="blue" value="  3  " onclick="CheckNumber('3'); return false;" type="button"></td>
+<td><input name="minus" class="redBig" value="  -  " onclick="SubButton(1); return false;" type="button"></td>
+<td><input name="recip" class="blueBig" value="1/x " onclick="RecipButton(); return false;" type="button"></td></tr>
+<tr><td><input name="Mplus" class="redBig" value=" M+  " onclick="MemoryAdd(document.calculator.answer.value); return false;" type="button"></td>
+<td><input name="calc0" class="blue" value="  0  " onclick="CheckNumber('0'); return false;" type="button"></td>
+<td><input name="negate" class="blue" value="+/- " onclick="NegateButton(); return false;" type="button"></td>
+<td><input name="dot" class="blue" value="  .   " onclick="CheckNumber('.'); return false;" type="button"></td>
+<td><input name="plus" class="redBig" value=" +  " onclick="AddButton(1); return false;" type="button"></td>
+<td><input name="equal" class="redBig" value="  =   " onclick="EqualButton(); return false;" type="button"></td>
+</tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</td></tr>
+</tbody></table>
+</form>
+</body></html>
