@@ -15,6 +15,11 @@ public class JActReport extends JActFileGenerate {
 	 */
 	private static final long serialVersionUID = -2199579210846916239L;
 
+	public JActReport() {
+		super();
+	}
+
+
 	public JActReport(JBaseWin zResult, int zActionId) {
 		super(zResult, zActionId);
 	}

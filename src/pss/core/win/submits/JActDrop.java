@@ -10,6 +10,11 @@ public class JActDrop extends JAct {
 	 * 
 	 */
 	private static final long serialVersionUID = 5672707536896804453L;
+
+	public JActDrop() {
+		super();
+	}
+
 	private JBaseWin oDropListener;
 
 

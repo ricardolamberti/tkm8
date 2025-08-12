@@ -17,6 +17,11 @@ public class JActNew extends JActModify {
 	 * 
 	 */
 	private static final long serialVersionUID = 8861951660654597358L;
+
+	public JActNew() {
+		super();
+	}
+
 	private boolean updIfRead=false;
 	private boolean bNewForm=false;
 	private boolean bNoWas=true;

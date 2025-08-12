@@ -6,6 +6,10 @@ import pss.core.win.JBaseWin;
 import pss.core.win.JWins;
 
 public class JActFieldSwapWins extends JActWins {
+	public JActFieldSwapWins() {
+		super();
+	}
+
 
 	JWins selecteds;
 	JWins options;

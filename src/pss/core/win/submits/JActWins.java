@@ -14,6 +14,10 @@ import pss.core.win.JWins;
  * </p>
  */
 public class JActWins extends JAct {
+	public JActWins() {
+		super();
+	}
+
 	
 	private boolean bMultiple=true;
 	private boolean bLineSelect=true;

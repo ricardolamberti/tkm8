@@ -14,6 +14,11 @@ public class JActExternalLink extends JActSubmit {
 	 * 
 	 */
 	private static final long serialVersionUID = -8671110613347096282L;
+
+	public JActExternalLink() {
+		super();
+	}
+
 	private String url;
 	
 	public String getUrl() {

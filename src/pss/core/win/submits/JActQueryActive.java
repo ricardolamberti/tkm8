@@ -11,6 +11,11 @@ public class JActQueryActive  extends JActModify {
 	 */
 	private static final long serialVersionUID = 4568131727914487531L;
 
+	public JActQueryActive() {
+		super();
+	}
+
+
 
 	public JActQueryActive(JBaseWin zResult) {
 		super(zResult,-1);

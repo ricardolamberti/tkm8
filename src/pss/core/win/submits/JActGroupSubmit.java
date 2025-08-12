@@ -4,6 +4,10 @@ import pss.core.win.JWins;
 
 
 public class JActGroupSubmit extends JAct {
+	public JActGroupSubmit() {
+		super();
+	}
+
 	
 	JAct actSubmit;
 	

@@ -9,6 +9,10 @@ import pss.core.win.JWin;
 import pss.core.win.JWins;
 
 public class JActFieldWins extends JActWins {
+	public JActFieldWins() {
+		super();
+	}
+
 
 	JWin winSource;
 	String field;

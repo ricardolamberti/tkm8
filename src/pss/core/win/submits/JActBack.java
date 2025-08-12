@@ -27,6 +27,11 @@ public class JActBack extends JAct {
 	 */
 	private static final long serialVersionUID = 1861951660654597358L;
 
+	public JActBack() {
+		super();
+	}
+
+
 	// private JBaseForm form;
 	int backStep = 1;
 

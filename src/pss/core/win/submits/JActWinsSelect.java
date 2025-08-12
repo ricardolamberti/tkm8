@@ -5,6 +5,10 @@ import pss.core.win.JWins;
 
 
 public class JActWinsSelect extends JActWins {
+	public JActWinsSelect() {
+		super();
+	}
+
 	
 
 	public JActWinsSelect(JWins zWins, JBaseWin listener, boolean zMulti) throws Exception {

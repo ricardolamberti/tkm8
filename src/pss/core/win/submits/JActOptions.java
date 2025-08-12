@@ -4,6 +4,10 @@ import pss.core.win.JBaseWin;
 import pss.core.win.JWins;
 
 public class JActOptions extends JActWins {
+	public JActOptions() {
+		super();
+	}
+
 	
 	String question;
 

@@ -12,6 +12,11 @@ public class JActMultiSubmit extends JAct {
 	 * 
 	 */
 	private static final long serialVersionUID = 6166414369116254357L;
+
+	public JActMultiSubmit() {
+		super();
+	}
+
 	JList<JAct> actionsList = null; 
 	JAct nextAction=null;
 	
