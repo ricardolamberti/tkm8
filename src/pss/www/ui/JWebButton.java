@@ -28,14 +28,14 @@ public class JWebButton  extends JWebAbstractActionView  implements JWebControlI
   }
 
 
-	public static JWebButton create(JWebViewComposite parent, JPssButton zComp, JFormButton zControl) throws Exception {
-		JWebButton webButton=new JWebButton();
-		webButton.takeAttributesForm(parent,zComp);
-		webButton.takeAttributesFormControl(zControl);
-		webButton.setResponsive(zControl.isResponsive());
-		webButton.setSize(zComp.getSize().width, zComp.getSize().height);
-		webButton.setLabel(zControl.getButton().getLabel());
-		if (zComp.getParent()==null) webButton.setVisible(false);
+        public static JWebButton create(JWebViewComposite parent, JPssButton zComp, JFormButton zControl) throws Exception {
+                JWebButton webButton=new JWebButton();
+                webButton.takeAttributesForm(parent,zComp.getComponent());
+                webButton.takeAttributesFormControl(zControl);
+                webButton.setResponsive(zControl.isResponsive());
+                webButton.setSize(zComp.getSize().width, zComp.getSize().height);
+                webButton.setLabel(zControl.getButton().getLabel());
+                if (zComp.getParent()==null) webButton.setVisible(false);
 		if (parent!=null) parent.addChild(zControl.getName(), webButton);
 		if (zControl.getAction()!=null && parent!=null) {
 			webButton.setWebAction(JWebActionFactory.createViewAreaAndTitleAction(zControl.getAction(),webButton.getObjectProvider(),zControl.isSubmit(),null));

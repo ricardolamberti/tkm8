@@ -25,8 +25,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -68,7 +68,7 @@ public class JPssDateChooser extends JComponent {
 	private int model = DATE;
 	
   private JFormattedTextField field;
-  private JButton button;
+  private JPssButton button;
   private JSpinner monthSpinner;
   private JSpinner yearSpinner;
   private JPanel monthGridPanel;
@@ -152,7 +152,7 @@ public class JPssDateChooser extends JComponent {
     
     this.setLayout(new BorderLayout(0,0));
     this.add(field, BorderLayout.CENTER);
-    this.add(button, BorderLayout.EAST);
+    this.add(button.getComponent(), BorderLayout.EAST);
 
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
@@ -257,10 +257,10 @@ public class JPssDateChooser extends JComponent {
       this.createDefaultDateFormat();
       return;
     }
-    // el patron no puede estar vacío
+    // el patron no puede estar vacÃ­o
     String sample = this.dateFormat.format(new Date());
     if (sample==null || sample.trim().length() < 1) {
-      PssLogger.logDebug("El DateFormat de un JPssDateChooser debe tener un patrón no vacío");
+      PssLogger.logDebug("El DateFormat de un JPssDateChooser debe tener un patrÃ³n no vacÃ­o");
       this.createDefaultDateFormat();
       return;
     }
@@ -328,7 +328,7 @@ public class JPssDateChooser extends JComponent {
 //    JPssLabel monthHeader = new JPssLabel("Mes");
 //    monthHeader.setOpaque(false);
 //    monthHeader.setFont(this.spinnersFont);
-//    JPssLabel yearHeader = new JPssLabel("Año");
+//    JPssLabel yearHeader = new JPssLabel("AÃ±o");
 //    yearHeader.setOpaque(false);
 //    yearHeader.setFont(this.spinnersFont);
 //    spinnersPanel.add(monthHeader);
@@ -542,10 +542,10 @@ public class JPssDateChooser extends JComponent {
       JLanguage.translate("Domingo"),
       JLanguage.translate("Lunes"),
       JLanguage.translate("Martes"),
-      JLanguage.translate("Miércoles"),
+      JLanguage.translate("MiÃ©rcoles"),
       JLanguage.translate("Jueves"),
       JLanguage.translate("Viernes"),
-      JLanguage.translate("Sábado")
+      JLanguage.translate("SÃ¡bado")
       };
     }
     return this.aDayNames;
@@ -930,7 +930,7 @@ public class JPssDateChooser extends JComponent {
   }
   public Date getMiminumAllowed() {
     if (this.miminumAllowed==null) {
-      // el mínimo default es 01/Enero/1800
+      // el mÃ­nimo default es 01/Enero/1800
       Calendar oCal = Calendar.getInstance();
       oCal.set(Calendar.YEAR, 1800);
       oCal.set(Calendar.MONTH, Calendar.JANUARY);

@@ -57,10 +57,10 @@ public class JFormButton  extends JFormControl  {
   //-------------------------------------------------------------------------//
   public JFormButton() {
   }
-  
+
   @Override
-	public Component getComponent() {
-    return this.button;
+  public Component getComponent() {
+    return this.button == null ? null : this.button.getComponent();
   }
   @Override
 	protected int getDefaultWidth() {
