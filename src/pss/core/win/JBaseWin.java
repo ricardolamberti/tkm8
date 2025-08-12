@@ -985,7 +985,7 @@ public abstract class JBaseWin implements IInMemory,Transferable,Serializable {
 	 * 
 	 * jbaccion.toSAX(wrapper);
 	 * 
-	 * if (bRecursive) { if (jbaccion.hasSubActions()) { // Subacción jbaccion.GetSubAcciones().firstRecord(); while (jbaccion.GetSubAcciones().nextRecord()) { BizAction subaccion = (BizAction) jbaccion .GetSubAcciones().getRecord(); WebGenerarAcciones(wrapper, bRecursive, subaccion, bToolbar, bMenu, bWeb, zID); } }
+	 * if (bRecursive) { if (jbaccion.hasSubActions()) { // Subacciï¿½n jbaccion.GetSubAcciones().firstRecord(); while (jbaccion.GetSubAcciones().nextRecord()) { BizAction subaccion = (BizAction) jbaccion .GetSubAcciones().getRecord(); WebGenerarAcciones(wrapper, bRecursive, subaccion, bToolbar, bMenu, bWeb, zID); } }
 	 * 
 	 * wrapper.endElement("item"); } } }
 	 */
@@ -1453,7 +1453,7 @@ public abstract class JBaseWin implements IInMemory,Transferable,Serializable {
 	}
 
 	public String getUniqueId() throws Exception {
-		return "obj_"+ uniqueID;
+		return "uuid_"+ uniqueID;
 	}
 	
 	// funciones que se disparan en el recorrido, de la generacion de la grilla, se habilitan los siguientes metodos para hacer calculos y no tener que hacer dos recorridas

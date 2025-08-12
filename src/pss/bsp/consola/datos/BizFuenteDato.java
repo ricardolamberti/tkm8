@@ -370,7 +370,8 @@ public class BizFuenteDato extends JRecord {
   
   
   public void createProperties() throws Exception {
-    this.addItem( "total", pTotal );
+  	this.addItem( "company", pCompany );
+  	this.addItem( "total", pTotal );
     this.addItem( "hoy", pHoy );
     this.addItem( "cliente_ok", pClientesOk );
   	this.addItem( "cliente_error", pClientesError );
@@ -392,6 +393,7 @@ public class BizFuenteDato extends JRecord {
    * Adds the fixed object properties
    */
   public void createFixedProperties() throws Exception {
+    this.addFixedItem( FIELD, "company", "company", true, false, 50 );
     this.addFixedItem( FIELD, "total", "total", true, false, 15 );
     this.addFixedItem( FIELD, "hoy", "hoy", true, false, 15 );
     this.addFixedItem( FIELD, "cliente_ok", "cliente_ok", true, false, 15 );

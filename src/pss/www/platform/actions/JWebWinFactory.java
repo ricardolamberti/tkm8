@@ -16,9 +16,11 @@ import pss.core.services.records.JBaseRecord;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JTools;
+import pss.core.tools.PssLogger;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JList;
+import pss.core.ui.components.JPssLabelWinLov;
 import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
@@ -766,7 +768,7 @@ public class JWebWinFactory {
 			if (zAction.hasSubmit()) {
 				JAct submit = zAction.getObjSubmit();
 				if (submit != null && submit.hasResult()) {
-					String idResult = JWebActionFactory.getCurrentRequest().registerObjectObj(zAction.getObjOwner());
+					String idResult = JWebActionFactory.getCurrentRequest().registerObjectObj(zAction.getResult());
 					// String resultPacked = packer.baseWinToPack(submit.getResult());
 					if (idResult != null && !idResult.isEmpty()) {
 						dict.put("r", idResult);
@@ -793,6 +795,10 @@ public class JWebWinFactory {
 
 			JBaseWin win = (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(ownerKey);
 
+			if (win==null) {
+				PssLogger.logError("No se encontro el win: "+ownerKey);
+			}
+			
 			action = win.findActionByUniqueId(id);
 			action.setForceProviderName(prov);
 

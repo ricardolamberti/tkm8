@@ -757,7 +757,7 @@ public class JWebRequest {
 	}
 
 	public synchronized String registerObjectObj(Serializable zObject, boolean temp) throws Exception {
-		if (temp && zObject instanceof JBaseWin)
+		if (zObject instanceof JBaseWin)
 			return registerWinObjectObj((JBaseWin) zObject);
 		if (isLargeObject(zObject)) {
 			String id = "obj_c_" + UUID.randomUUID().toString();
@@ -776,20 +776,21 @@ public class JWebRequest {
 	Map<String, String> objectsCreated = new HashMap<String, String>();
 
 	public synchronized String registerWinObjectObj(JBaseWin zObject) throws Exception {
-		if (objectsCreated.containsKey(zObject.getUniqueId()))
-			return objectsCreated.get(zObject.getUniqueId());
+		if (zObject.getUniqueId()!=null && objectsCreated.containsKey(zObject.getUniqueId()))
+			return zObject.getUniqueId();
+		String id = zObject.getUniqueId() != null ? zObject.getUniqueId() : UUID.randomUUID().toString();
 		if (isLargeObject(zObject)) {
-			String id = zObject.getUniqueId() != null ? zObject.getUniqueId() : UUID.randomUUID().toString();
 			CacheProvider.get().putBytes(id, serializeObjectToBytes(zObject), CACHE_EXPIRE_SECONDS);
 			String out = CACHE_PREFIX + id;
 			getRegisteredObjectsNew().put(id, out);
-			objectsCreated.put(zObject.getUniqueId(), out);
-			return out;
+			objectsCreated.put(id, out);
+			return id;
 		}
 		String packed = new JWinPackager(null).baseWinToJSON(zObject);
 		String out = "obj_t_" + packed;
-		objectsCreated.put(zObject.getUniqueId(), out);
-		return out;
+		getRegisteredObjectsNew().put(id, out);
+		objectsCreated.put(id, out);
+		return id;
 	}
 
 	public synchronized String registerRecObjectObj(JBaseRecord zObject) throws Exception {
@@ -820,6 +821,10 @@ public class JWebRequest {
 				byte[] data = CacheProvider.get().getBytes(obj.substring(CACHE_PREFIX.length()));
 				return (Serializable) deserializeObjectFromBytes(data);
 			}
+			if (obj.startsWith("obj_i:")) {
+				return (Serializable) getRegisterObject(obj.substring(6));
+			}
+
 			if (obj.startsWith("obj_t:")) {
 				return (Serializable) fetchFromCache(obj.substring(6));
 			}
@@ -838,6 +843,8 @@ public class JWebRequest {
 				String json = JTools.byteVectorToString(raw);
 				return new JWinPackager(new JWebWinFactory(null)).jsonToBaseRec(json);
 			}
+			if (obj.startsWith("uuid_"))
+				PssLogger.logInfo("obj = "+obj);
 			return deserializeObject(obj);
 		} catch (Exception e) {
 			PssLogger.logError(e);
@@ -872,9 +879,9 @@ public class JWebRequest {
 	public synchronized String registerObject(String pos, JBaseWin zBaseWin) throws Exception {
 		if (zBaseWin == null)
 			return null;
-		if (reuseIfPresent(pos) != null)
-			return pos;
-		this.getRegisteredObjectsNew().put(pos, registerWinObjectObj(zBaseWin));
+//		if (reuseIfPresent(pos) != null)
+//			return pos;
+		this.getRegisteredObjectsNew().put(pos, "obj_i:"+registerWinObjectObj(zBaseWin));
 		return pos;
 	}
 
