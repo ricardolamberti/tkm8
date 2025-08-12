@@ -423,9 +423,9 @@ public class JWebWinFactory {
 	 * representa una ventana embebida dentro de otra.
 	 * <p>
 	 * El nombre del parámetro debe contener la cadena <code>"_card_"</code> e
-	 * incluye información del provider y del identificador del objeto card. En
-	 * caso de que el nombre también contenga <code>"_row_"</code> se trata de una
-	 * tabla cuyos datos se parsean delegando en {@link #processTableElement}.
+	 * incluye información del provider y del identificador del objeto card. En caso
+	 * de que el nombre también contenga <code>"_row_"</code> se trata de una tabla
+	 * cuyos datos se parsean delegando en {@link #processTableElement}.
 	 * </p>
 	 *
 	 * @param ds     nombre del parámetro recibido
@@ -501,8 +501,7 @@ public class JWebWinFactory {
 	 * @param total  indica si la carga es completa o parcial
 	 * @param finder lista para evitar procesar repetidos
 	 * @param zwin   ventana donde reside la tabla
-	 * @return {@code true} si el parámetro es una tabla y se procesó
-	 *         correctamente
+	 * @return {@code true} si el parámetro es una tabla y se procesó correctamente
 	 * @throws Exception en caso de errores de parseo
 	 */
 	public boolean processTableElement(String ds, boolean total, JList<String> finder, JWin zwin) throws Exception {
@@ -685,7 +684,7 @@ public class JWebWinFactory {
 				continue;
 			if (record == null)
 				continue;
-			JObject<?> prop = record.getPropDeep(field.getName(), false);
+			JObject<?> prop = record.getPropDeep( field.getName(), false);
 			if (prop == null) {
 				record.addExtraData(field.getName(), field.getValue());
 				continue;
@@ -693,15 +692,9 @@ public class JWebWinFactory {
 //			if (field.getName().equals("previousPriceQuantity"))
 //			PssLogger.logDebug(field.getName()+"="+field.getValue());
 
-                        String value = field.getValue();
-                        Object obj = null;
-                        if (value.startsWith("obj_")) {
-                                if (value.startsWith(JWebRequest.OBJ_T_UNDERSCORE_PREFIX)) {
-                                        obj = getRegisterObjectTemp(value.substring(JWebRequest.OBJ_T_UNDERSCORE_PREFIX.length()));
-                                } else {
-                                        obj = JWebActionFactory.getCurrentRequest().getRegisterObject(value);
-                                }
-                        }
+			String value = field.getValue();
+			JBaseWin obj = extractRegisterObjectFromValue(value);
+	
 			if (prop.isRecord()) {
 				if (obj != null && obj instanceof JWin)
 					prop.setValue(record.getPropValue(field.getName(), prop, ((JWin) obj).getRecord()));
@@ -714,12 +707,15 @@ public class JWebWinFactory {
 		}
 	}
 
-	public JBaseWin getRegisterObjectTemp(String zKey) throws Exception {
-		return packager.getRegisterObjectTemp(zKey);
-	}
-
-	public JBaseRecord getRegisterObjectRecTemp(String zKey) throws Exception {
-		return packager.getRegisterObjectRecTemp(zKey);
+	public JBaseWin extractRegisterObjectFromValue(String value) throws Exception {
+		JBaseWin obj = null;
+		if (!value.startsWith(JWebRequest.OBJ_PREFIX)) return obj;
+		if (value.startsWith(JWebRequest.IN_TEMP_PREFIX)) {
+			obj = (JBaseWin)packager.getRegisterObjectTemp(value.substring(JWebRequest.IN_TEMP_PREFIX.length()));
+		} else {
+			obj = (JBaseWin)JWebActionFactory.getCurrentRequest().getRegisterObject(value);
+		}
+		return obj;
 	}
 
 	private boolean isExport() throws Exception {
@@ -764,7 +760,7 @@ public class JWebWinFactory {
 				dict.put("o", idOwner);
 			}
 			dict.put("p", zAction.getForceProviderName());
-			
+
 			if (zAction.hasSubmit()) {
 				JAct submit = zAction.getObjSubmit();
 				if (submit != null && submit.hasResult()) {
@@ -791,14 +787,14 @@ public class JWebWinFactory {
 
 			String ownerKey = dict.containsKey("o") ? dict.get("o") : dict.get("owner");
 			String id = dict.containsKey("i") ? dict.get("i") : dict.get("actionid");
-			String prov = dict.containsKey("p") ? dict.get("p") : dict.get("forceProveiderName");
+			String prov = dict.containsKey("p") ? dict.get("p") : dict.get("forceProviderName");
 
 			JBaseWin win = (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(ownerKey);
 
-			if (win==null) {
-				PssLogger.logError("No se encontro el win: "+ownerKey);
+			if (win == null) {
+				PssLogger.logError("No se encontro el win: " + ownerKey);
 			}
-			
+
 			action = win.findActionByUniqueId(id);
 			action.setForceProviderName(prov);
 

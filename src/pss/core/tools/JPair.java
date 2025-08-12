@@ -1,7 +1,8 @@
 package pss.core.tools;
 
+import java.io.Serializable;
 
-public class JPair<F,S>  {
+public class JPair<F extends Serializable,S extends Serializable>  implements Serializable {
 
 	
   //-------------------------------------------------------------------------//

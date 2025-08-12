@@ -22,6 +22,7 @@ import org.apache.cocoon.environment.http.HttpResponse;
 
 import io.jsonwebtoken.Claims;
 import pss.core.services.records.JFilterMap;
+import pss.core.tools.PssLogger;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JList;
@@ -83,15 +84,16 @@ public abstract class JIndoorsActionResolver extends JBasicWebActionResolver {
       				session.attachGlobalsToCurrentRequest();
 
       				request.setAttribute("session", session);
-      		    return super.act(redirector, resolver, objectModel, source, parameters);
-      		              } catch (Exception e) {
-              // Token inválido
-              response.setStatus(HttpResponse.SC_UNAUTHORIZED);
-    					throw new AuthenticationException("Acceso no Autorizado");
+							return super.act(redirector, resolver, objectModel, source, parameters);
+						} catch (Exception e) {
+							// Token invï¿½lido
+							PssLogger.logError(e);
+							response.setStatus(HttpResponse.SC_UNAUTHORIZED);
+							throw new AuthenticationException("Acceso no Autorizado");
          }
       }
 
-      // Si no hay token, también denegar acceso
+      // Si no hay token, tambiï¿½n denegar acceso
       response.setStatus(HttpResponse.SC_UNAUTHORIZED);
 			throw new AuthenticationException("Acceso no Autorizado");
   }

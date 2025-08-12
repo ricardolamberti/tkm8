@@ -45,6 +45,7 @@ import pss.core.winUI.lists.JFormFiltro;
 import pss.www.platform.actions.IControlToBD;
 import pss.www.platform.actions.JWebActionFactory;
 import pss.www.platform.actions.JWebRequest;
+import pss.www.platform.actions.JWebWinFactory;
 import pss.www.platform.actions.requestBundle.JWebActionData;
 import pss.www.platform.actions.requestBundle.JWebActionDataField;
 import pss.www.platform.actions.results.JWebActionResult;
@@ -316,15 +317,9 @@ public class JDoPssActionResolver extends JIndoorsActionResolver implements ICon
 //			if (field.getName().equals("previousPriceQuantity"))
 //			PssLogger.logDebug(field.getName()+"="+field.getValue());
 
-                        String value = field.getValue();
-                        Object obj = null;
-                        if (value.startsWith("obj_")) {
-                                if (value.startsWith(JWebRequest.OBJ_T_UNDERSCORE_PREFIX)) {
-                                        obj = winFactory.getRegisterObjectTemp(value.substring(JWebRequest.OBJ_T_UNDERSCORE_PREFIX.length()));
-                                } else {
-                                        obj = JWebActionFactory.getCurrentRequest().getRegisterObject(value);
-                                }
-                        }
+			String value = field.getValue();
+			JBaseWin obj = new JWebWinFactory(this).extractRegisterObjectFromValue(value);
+    		
 			if (prop.isRecord()) {
 				if (obj != null && obj instanceof JWin)
 					prop.setValue(record.getPropValue(field.getName(), prop, ((JWin) obj).getRecord()));

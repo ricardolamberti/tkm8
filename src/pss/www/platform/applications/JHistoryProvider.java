@@ -42,7 +42,7 @@ public class JHistoryProvider implements Serializable {
 		JWins wins = (JWins) Class.forName(multiSelectName).newInstance();
 		wins.SetEstatico(true);
 		for(String sWin: multipleSelect) {
-                               JWin win =(JWin)new JWebWinFactory(null).getRegisterObjectTemp(sWin);
+      JWin win =(JWin)new JWebWinFactory(null).extractRegisterObjectFromValue(sWin);
 			wins.addRecord(win);
 		}
 	//	wins.PasarADatos();

@@ -412,6 +412,11 @@ public class BizFuenteDato extends JRecord {
     this.addFixedItem( FIELD, "total_comision", "Total comisión", true, false, 18, 2 );
 
   }
+  
+  @Override
+  public String GetTable() throws Exception {
+  	return "";
+  }
 
   public  void processLimpiar() throws Exception {
   	String sql="";

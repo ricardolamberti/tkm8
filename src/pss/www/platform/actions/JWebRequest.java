@@ -72,16 +72,17 @@ public class JWebRequest {
 	private Map<String, String> oRegisteredObjectsOld;
 	private JWebHistoryManager oHistoryManager;
 
-        // Cache for large or server-only objects
-        private static final String CACHE_PREFIX = "cache:";
-        public static final String OBJ_I_PREFIX = "obj_i:";
-        public static final String OBJ_T_PREFIX = "obj_t:";
-        public static final String OBJ_REC_PREFIX = "obj_rec:";
-        public static final String OBJ_T_UNDERSCORE_PREFIX = "obj_t_";
-        public static final String OBJ_REC_UNDERSCORE_PREFIX = "obj_rec_";
-        public static final String OBJ_C_UNDERSCORE_PREFIX = "obj_c_";
-        public static final String OBJ_P_UNDERSCORE_PREFIX = "obj_p_";
-        private static final long CACHE_EXPIRE_SECONDS = Long.getLong("jwebrequest.cache.expireMinutes", 10L) * 60L;
+	// Cache for large or server-only objects
+	public static final String OUT_CACHE_PREFIX = "cache:";
+	public static final String OUT_INDIRECT_PREFIX = "obj_i:";
+	public static final String OUT_TEMP_PREFIX = "obj_t:";
+	public static final String OUT_REC_PREFIX = "obj_rec:";
+	public static final String OBJ_PREFIX = "obj_";
+	public static final String IN_TEMP_PREFIX = OBJ_PREFIX+"t_";
+	public static final String IN_REC_PREFIX = OBJ_PREFIX+"rec_";
+	public static final String IN_CACHED_PREFIX = OBJ_PREFIX+"c_";
+	public static final String IN_POINTER_PREFIX = OBJ_PREFIX+"p_";
+	private static final long CACHE_EXPIRE_SECONDS = Long.getLong("jwebrequest.cache.expireMinutes", 600L) * 60L;
 
 	/**
 	 * Lightweight snapshot of the request's registered objects and history manager.
@@ -89,21 +90,12 @@ public class JWebRequest {
 	 * when needed.
 	 */
 	public class JWebRequestPackage {
+		private Map<String, String> localNameDictionay;
 		private Map<String, String> localRegisteredObject;
 		private JLocalHistoryManager localHistoryManager;
 
-//		@Override
-//	  public String toString() {
-//	    try {
-//				return  getRegisterObjectsSerialized();
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//				return "error";
-//			}
-//	  }
-
 		public String getRegisterObjectsSerialized() throws Exception {
-			return buildOutgoingDictionary(readHoldsFromRequest());
+			return buildOutgoingDictionary();
 		}
 	}
 
@@ -557,17 +549,6 @@ public class JWebRequest {
 		return sourceControl.substring(pos + 3);
 	}
 
-	// public String getPssIdAction() throws Exception {
-	// String pssIdAction =
-	// getArgument(JWebActionFactory.ACTION_DATA_PREFIX+"id_action");
-	// return pssIdAction;
-	// }
-	// public String getPssActionOwner() throws Exception {
-	// String pssIdAction =
-	// getArgument(JWebActionFactory.ACTION_DATA_PREFIX+"act_owner");
-	// return pssIdAction;
-	// }
-
 	public String getTableProvider() throws Exception {
 		return getArgument(JWebActionFactory.ACTION_DATA_PREFIX + "table_provider");
 	}
@@ -656,11 +637,6 @@ public class JWebRequest {
 	public JMap<String, JWebActionData> getFilters() throws Exception {
 		return this.getAllFormData("filter_pane");
 	}
-//	private void cleanUpGlobalData() throws Exception {
-//		BizUsuario.SetGlobal(null);
-//		JAplicacion.SetApp(null);
-//		JBDatos.SetGlobal(null);
-//	}
 
 	public boolean hasNavigation() throws Exception {
 		return !this.getData("win_list_nav").isNull();
@@ -682,38 +658,42 @@ public class JWebRequest {
 		return oRegisteredObjectsOld;
 	}
 
-        public Map<String, String> getRegisteredObjectsNew() {
-                if (oRegisteredObjectsNew == null) {
-                        oRegisteredObjectsNew = (Map<String, String>) this.oServletRequest.getAttribute("registeredObjectsNew");
-                        if (oRegisteredObjectsNew == null) {
-                                oRegisteredObjectsNew = new HashMap<String, String>();
-                                this.oServletRequest.setAttribute("registeredObjectsNew", oRegisteredObjectsNew);
-                        }
+	public Map<String, String> getRegisteredObjectsNew() {
+		if (oRegisteredObjectsNew == null) {
+			oRegisteredObjectsNew = (Map<String, String>) this.oServletRequest.getAttribute("registeredObjectsNew");
+			if (oRegisteredObjectsNew == null) {
+				oRegisteredObjectsNew = new HashMap<String, String>();
+				this.oServletRequest.setAttribute("registeredObjectsNew", oRegisteredObjectsNew);
+			}
 
-                }
-                return oRegisteredObjectsNew;
-        }
+		}
+		return oRegisteredObjectsNew;
+	}
 
-        private void addRegisteredObject(String key, String value) {
-                getRegisteredObjectsNew().put(key, value);
-        }
+	private void addRegisteredObject(String key, String value) {
+		PssLogger.logInfo("Registrando ----> ["+key+"] value ["+value+"]");
+		getRegisteredObjectsNew().put(key, value);
+	}
 
-        private void addRegisteredObjects(Map<String, String> map) {
-                getRegisteredObjectsNew().putAll(map);
-        }
+	private void addRegisteredObjects(Map<String, String> map) {
+		getRegisteredObjectsNew().putAll(map);
+	}
 
-        private String getRegisteredObject(String key) {
-                return getRegisteredObjectsOld().get(key);
-        }
+	private String getRegisteredObject(String key) {
+		return getRegisteredObjectsOld().get(key);
+	}
 
-        private String reuseIfPresent(String key) {
-                String oldVal = getRegisteredObject(key);
-                if (oldVal != null) {
-                        addRegisteredObject(key, oldVal);
-                        return key;
-                }
-                return null;
-        }
+	private String getRegisteredObjectNew(String key) {
+		return getRegisteredObjectsNew().get(key);
+	}
+	private String reuseIfPresent(String key) {
+		String oldVal = getRegisteredObjectNew(key);
+		if (oldVal != null) {
+			return key;
+		}
+		return null;
+	}
+
 
 	private static String sha256(byte[] data) throws Exception {
 		MessageDigest md = MessageDigest.getInstance("SHA-256");
@@ -778,92 +758,94 @@ public class JWebRequest {
 	public synchronized String registerObjectObj(Serializable zObject, boolean temp) throws Exception {
 		if (zObject instanceof JBaseWin)
 			return registerWinObjectObj((JBaseWin) zObject);
-                if (isLargeObject(zObject)) {
-                        String id = OBJ_C_UNDERSCORE_PREFIX + UUID.randomUUID().toString();
-                        CacheProvider.get().putBytes(id, serializeObjectToBytes(zObject), CACHE_EXPIRE_SECONDS);
-                        addRegisteredObject(id, CACHE_PREFIX + id);
-                        return id;
-                }
-                String payload = serializeObject(zObject);
-                String id = OBJ_P_UNDERSCORE_PREFIX + sha256(JTools.stringToByteArray(payload));
-                if (reuseIfPresent(id) != null)
-                        return id;
-                addRegisteredObject(id, payload);
-                return id;
-        }
+		if (isLargeObject(zObject)) {
+			String id = IN_CACHED_PREFIX + UUID.randomUUID().toString();
+			CacheProvider.get().putBytes(id, serializeObjectToBytes(zObject), CACHE_EXPIRE_SECONDS);
+			addRegisteredObject(id, OUT_CACHE_PREFIX + id);
+			return id;
+		}
+		String payload = serializeObject(zObject);
+		String id = IN_POINTER_PREFIX + sha256(JTools.stringToByteArray(payload));
+//		if (reuseIfPresent(id) != null)
+//			return id;
+		addRegisteredObject(id, payload);
+		return id;
+	}
 
-	Map<String, String> objectsCreated = new HashMap<String, String>();
+//	Map<String, String> objectsCreated = new HashMap<String, String>();
 
 	public synchronized String registerWinObjectObj(JBaseWin zObject) throws Exception {
-		if (zObject.getUniqueId()!=null && objectsCreated.containsKey(zObject.getUniqueId()))
-			return zObject.getUniqueId();
+//		if (zObject.getUniqueId() != null && objectsCreated.containsKey(zObject.getUniqueId())) {
+//			return zObject.getUniqueId();
+//		}
 		String id = zObject.getUniqueId() != null ? zObject.getUniqueId() : UUID.randomUUID().toString();
-                if (isLargeObject(zObject)) {
-                        CacheProvider.get().putBytes(id, serializeObjectToBytes(zObject), CACHE_EXPIRE_SECONDS);
-                        String out = CACHE_PREFIX + id;
-                        addRegisteredObject(id, out);
-                        objectsCreated.put(id, out);
-                        return id;
-                }
-                String packed = new JWinPackager(null).baseWinToJSON(zObject);
-                String out = OBJ_T_UNDERSCORE_PREFIX + packed;
-                addRegisteredObject(id, out);
-                objectsCreated.put(id, out);
-                return id;
+		if (isLargeObject(zObject)) {
+			CacheProvider.get().putBytes(id, serializeObjectToBytes(zObject), CACHE_EXPIRE_SECONDS);
+			PssLogger.logInfo("cacheado : ["+id+"]");
+			String out = OUT_CACHE_PREFIX + id;
+			addRegisteredObject(id, out);
+	//		objectsCreated.put(id, out);
+			return id;
+		}
+		String packed = new JWinPackager(null).baseWinToJSON(zObject);
+		String out = IN_TEMP_PREFIX + packed;
+		addRegisteredObject(id, out);
+	//	objectsCreated.put(id, out);
+		return id;
 	}
 
 	public synchronized String registerRecObjectObj(JBaseRecord zObject) throws Exception {
 		if (zObject == null)
 			return null;
 		String key = zObject.getUniqueId();
-		if (reuseIfPresent(key) != null)
+//		if (reuseIfPresent(key) != null)
+//			return key;
+		if (isLargeObject(zObject)) {
+			CacheProvider.get().putBytes(key, serializeObjectToBytes(zObject), CACHE_EXPIRE_SECONDS);
+			addRegisteredObject(key, OUT_CACHE_PREFIX + key);
 			return key;
-                if (isLargeObject(zObject)) {
-                        CacheProvider.get().putBytes(key, serializeObjectToBytes(zObject), CACHE_EXPIRE_SECONDS);
-                        addRegisteredObject(key, CACHE_PREFIX + key);
-                        return key;
-                }
-                String packed = new JWinPackager(null).baseRecToJSON(zObject);
-                String payload = OBJ_REC_UNDERSCORE_PREFIX + packed;
-                addRegisteredObject(key, payload);
-                return key;
-        }
+		}
+		String packed = new JWinPackager(null).baseRecToJSON(zObject);
+		String payload = IN_REC_PREFIX + packed;
+		addRegisteredObject(key, payload);
+		return key;
+	}
 
-        public Serializable getRegisterObject(String key) {
-                String obj = getRegisteredObject(key);
-                if (obj == null) {
-                        PssLogger.logError("Falta objeto");
-                        return null;
-                }
-                try {
-                        if (obj.startsWith(CACHE_PREFIX)) {
-                                byte[] data = CacheProvider.get().getBytes(obj.substring(CACHE_PREFIX.length()));
-                                return (Serializable) deserializeObjectFromBytes(data);
-                        }
-                        if (obj.startsWith(OBJ_I_PREFIX)) {
-                                return (Serializable) getRegisterObject(obj.substring(OBJ_I_PREFIX.length()));
-                        }
+	public Serializable getRegisterObject(String key) {
+		String obj = getRegisteredObject(key);
+		if (obj == null) {
+			PssLogger.logError("Falta objeto");
+			return null;
+		}
+		try {
+			if (obj.startsWith(OUT_CACHE_PREFIX)) {
+				byte[] data = CacheProvider.get().getBytes(obj.substring(OUT_CACHE_PREFIX.length()));
+				return (Serializable) deserializeObjectFromBytes(data);
+			}
+			if (obj.startsWith(OUT_INDIRECT_PREFIX)) {
+				return (Serializable) getRegisterObject(obj.substring(OUT_INDIRECT_PREFIX.length()));
+			}
 
-                        if (obj.startsWith(OBJ_T_PREFIX)) {
-                                return (Serializable) fetchFromCache(obj.substring(OBJ_T_PREFIX.length()));
-                        }
-                        if (obj.startsWith(OBJ_REC_PREFIX)) {
-                                return (Serializable) fetchFromCache(obj.substring(OBJ_REC_PREFIX.length()));
-                        }
-                        if (obj.startsWith(OBJ_T_UNDERSCORE_PREFIX)) {
-                                String payload = obj.substring(OBJ_T_UNDERSCORE_PREFIX.length());
-                                byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
-                                String json = JTools.byteVectorToString(raw);
-                                return new JWinPackager(new JWebWinFactory(null)).jsonToBaseWin(json);
-                        }
-                        if (obj.startsWith(OBJ_REC_UNDERSCORE_PREFIX)) {
-                                String payload = obj.substring(OBJ_REC_UNDERSCORE_PREFIX.length());
-                                byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
-                                String json = JTools.byteVectorToString(raw);
-                                return new JWinPackager(new JWebWinFactory(null)).jsonToBaseRec(json);
-                        }
-			if (obj.startsWith("uuid_"))
-				PssLogger.logInfo("obj = "+obj);
+			if (obj.startsWith(OUT_TEMP_PREFIX)) {
+				return (Serializable) fetchFromCache(obj.substring(OUT_TEMP_PREFIX.length()));
+			}
+			if (obj.startsWith(OUT_REC_PREFIX)) {
+				return (Serializable) fetchFromCache(obj.substring(OUT_REC_PREFIX.length()));
+			}
+			if (obj.startsWith(IN_TEMP_PREFIX)) {
+				String payload = obj.substring(IN_TEMP_PREFIX.length());
+				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
+				String json = JTools.byteVectorToString(raw);
+				return new JWinPackager(new JWebWinFactory(null)).jsonToBaseWin(json);
+			}
+			if (obj.startsWith(IN_REC_PREFIX)) {
+				String payload = obj.substring(IN_REC_PREFIX.length());
+				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
+				String json = JTools.byteVectorToString(raw);
+				return new JWinPackager(new JWebWinFactory(null)).jsonToBaseRec(json);
+			}
+//			if (obj.startsWith("uuid_"))
+//				PssLogger.logInfo("obj = " + obj);
 			return deserializeObject(obj);
 		} catch (Exception e) {
 			PssLogger.logError(e);
@@ -871,24 +853,6 @@ public class JWebRequest {
 		}
 	}
 
-//	public synchronized String registerObject(JBaseWin zBaseWin) throws Exception {
-//		if (zBaseWin == null)
-//			return null;
-//		String key = zBaseWin.getUniqueId();
-//		if (reuseIfPresent(key) != null)
-//			return key;
-//		String payload = baseWinToSession(zBaseWin);
-//		getRegisteredObjectsNew().put(key, payload);
-//		return key;
-//	}
-//	public synchronized String registerObject(String pos, JBaseWin zBaseWin) throws Exception {
-//		if (zBaseWin == null)
-//			return null;
-//		if (reuseIfPresent(pos) != null)
-//			return pos;
-//		this.getRegisteredObjectsNew().put(pos, baseWinToSession(zBaseWin));
-//		return pos;
-//	}
 	public synchronized String registerObject(JBaseWin zBaseWin) throws Exception {
 		if (zBaseWin == null)
 			return null;
@@ -900,46 +864,45 @@ public class JWebRequest {
 			return null;
 //		if (reuseIfPresent(pos) != null)
 //			return pos;
-                addRegisteredObject(pos, OBJ_I_PREFIX + registerWinObjectObj(zBaseWin));
-                return pos;
-        }
+		String realId =  registerWinObjectObj(zBaseWin);
+		if (realId.equals(pos)) {
+			registerWinObjectObj(zBaseWin);
+		} else
+			addRegisteredObject(pos, OUT_INDIRECT_PREFIX + registerWinObjectObj(zBaseWin));
+		return pos;
+	}
 
 	public static class ReconcileResult {
 		public java.util.List<String> keep = new java.util.ArrayList<>();
 		public java.util.List<String> evict = new java.util.ArrayList<>();
 	}
 
-	public ReconcileResult reconcileDictionaries(java.util.List<String> holds) {
+	public ReconcileResult reconcileDictionaries() {
 		ReconcileResult rr = new ReconcileResult();
 		Map<String, String> oldMap = getRegisteredObjectsOld();
 		Map<String, String> newMap = getRegisteredObjectsNew();
 		rr.keep.addAll(newMap.keySet());
-		for (String k : oldMap.keySet()) {
-			if (!newMap.containsKey(k)) {
-				if (holds == null || !holds.contains(k)) {
-					rr.evict.add(k);
-				}
-			}
-		}
+
 		return rr;
 	}
 
-	public String buildOutgoingDictionary(java.util.List<String> holds) throws Exception {
-		ReconcileResult rr = reconcileDictionaries(holds);
-                for (String k : rr.evict) {
-                        String val = getRegisteredObject(k);
-                        if (val != null) {
-                                if (val.startsWith(CACHE_PREFIX)) {
-                                        CacheProvider.get().delete(val.substring(CACHE_PREFIX.length()));
-                                } else if (val.startsWith(OBJ_T_PREFIX)) {
-                                        invalidateHandle(val.substring(OBJ_T_PREFIX.length()));
-                                } else if (val.startsWith(OBJ_REC_PREFIX)) {
-                                        invalidateHandle(val.substring(OBJ_REC_PREFIX.length()));
-                                }
-                        }
-                }
+	public String buildOutgoingDictionary() throws Exception {
+		ReconcileResult rr = reconcileDictionaries();
+		for (String k : rr.evict) {
+			String val = getRegisteredObject(k);
+			if (val != null) {
+				if (val.startsWith(OUT_CACHE_PREFIX)) {
+					CacheProvider.get().delete(val.substring(OUT_CACHE_PREFIX.length()));
+				} else if (val.startsWith(OUT_TEMP_PREFIX)) {
+					invalidateHandle(val.substring(OUT_TEMP_PREFIX.length()));
+				} else if (val.startsWith(OUT_REC_PREFIX)) {
+					invalidateHandle(val.substring(OUT_REC_PREFIX.length()));
+				}
+			}
+		}
 		pack.localHistoryManager = getHistoryManager().serializeHistoryManager();
 		pack.localRegisteredObject = getRegisteredObjectsNew();
+		pack.localNameDictionay = getNameDictionary();
 		return serializeRegisterJSON(pack);
 	}
 
@@ -950,14 +913,7 @@ public class JWebRequest {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	private java.util.List<String> readHoldsFromRequest() throws Exception {
-		String payload = getArgument("dg_holds");
-		if (payload == null || payload.isEmpty())
-			return null;
-		com.google.gson.Gson gson = new com.google.gson.Gson();
-		return gson.fromJson(payload, java.util.List.class);
-	}
+
 
 	static long idDictionaryGenerator = 0;
 
@@ -988,14 +944,14 @@ public class JWebRequest {
 	static long id = 0;
 
 	public String getNameDictionary(String s) {
-//		if (s.indexOf("anonimus_") != -1)
+		if (s.indexOf("anonimus_") != -1)
 		return s;
-//		String k = getNameDictionary().get(s);
-//		if (k != null)
-//			return k;
-//		String key = "k" + (id++) + "";
-//		getNameDictionary().put(s, key);
-//		return key;
+		String k = getNameDictionary().get(s);
+		if (k != null)
+			return k;
+		String key = "k" + (id++) + "";
+		getNameDictionary().put(s, key);
+		return key;
 	}
 
 	public String getNameDictionary(long id) {
@@ -1024,13 +980,15 @@ public class JWebRequest {
 			if (dictionary == null || dictionary.isEmpty())
 				return;
 			pack = (JWebRequestPackage) deserializeRegisterJSON(dictionary);
+			oNameDictionary =pack.localNameDictionay;
 			oRegisteredObjectsOld = pack.localRegisteredObject;
 			if (getHistoryManager().sizeHistory() == 0) {
 				getHistoryManager().deserializeHistoryManager(pack.localHistoryManager);
 				factory.fillHistory();
 			}
-                        if (preserve)
-                                addRegisteredObjects(pack.localRegisteredObject);
+			if (preserve)
+				addRegisteredObjects(pack.localRegisteredObject);
+			
 			JWebApplication app = JWebServer.getInstance().getWebApplication(null);
 			app.getStadistics().addInfoSession(getSession());
 		} catch (Exception e) {
@@ -1117,15 +1075,15 @@ public class JWebRequest {
 		}
 	}
 
-	public static String baseWinToSession(JBaseWin zOwner) throws Exception {
-//	  if (!zOwner.canConvertToURL()) return serializeObject(zOwner);
-//		if (zOwner.hasDropListener()) return serializeObject(zOwner);
-//		if (zOwner.hasSubmitListener()) return serializeObject(zOwner);
-//		if (zOwner.isModeWinLov()) return serializeObject(zOwner);
-//		if (!zOwner.isReaded()) return serializeObject(zOwner);
-
-                String packed = new JWinPackager(null).baseWinToJSON(zOwner);
-                return OBJ_T_UNDERSCORE_PREFIX + packed;
-        }
+//	public static String baseWinToSession(JBaseWin zOwner) throws Exception {
+////	  if (!zOwner.canConvertToURL()) return serializeObject(zOwner);
+////		if (zOwner.hasDropListener()) return serializeObject(zOwner);
+////		if (zOwner.hasSubmitListener()) return serializeObject(zOwner);
+////		if (zOwner.isModeWinLov()) return serializeObject(zOwner);
+////		if (!zOwner.isReaded()) return serializeObject(zOwner);
+//
+//		String packed = new JWinPackager(null).baseWinToJSON(zOwner);
+//		return IN_TEMP_PREFIX + packed;
+//	}
 
 }

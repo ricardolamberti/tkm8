@@ -269,8 +269,8 @@ public class JWinPackager {
 		JRecords recs = (JRecords<JRecord>) actionOwner;
 		recs.setStatic(true);
                 for (String element : serializableWin.elements) {
-                        if (element.startsWith(JWebRequest.OBJ_REC_UNDERSCORE_PREFIX)) {
-                                recs.getStaticItems().addElement(getRegisterObjectRecTemp(element.substring(JWebRequest.OBJ_REC_UNDERSCORE_PREFIX.length())));
+                        if (element.startsWith(JWebRequest.IN_REC_PREFIX)) {
+                                recs.getStaticItems().addElement(getRegisterObjectRecTemp(element.substring(JWebRequest.IN_REC_PREFIX.length())));
                         } else {
                                 Serializable obj = JWebActionFactory.getCurrentRequest().getRegisterObject(element);
                                 if (obj instanceof JBaseRecord) {
@@ -294,15 +294,15 @@ public class JWinPackager {
 
                         if (fieldKey.startsWith("REC_")) {
                                 JObject<?> obj = ((JRecord) actionOwner).getProp(fieldKey.substring(4));
-                                if (propValue.startsWith(JWebRequest.OBJ_REC_UNDERSCORE_PREFIX)) {
-                                        obj.setValue(getRegisterObjectRecTemp(propValue.substring(JWebRequest.OBJ_REC_UNDERSCORE_PREFIX.length())));
+                                if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
+                                        obj.setValue(getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length())));
                                 } else {
                                         obj.setValue((JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue));
                                 }
                         } else if (fieldKey.startsWith("RECS_")) {
                                 JObject<?> obj = ((JRecord) actionOwner).getProp(fieldKey.substring(5));
-                                if (propValue.startsWith(JWebRequest.OBJ_REC_UNDERSCORE_PREFIX)) {
-                                        obj.setValue(getRegisterObjectRecTemp(propValue.substring(JWebRequest.OBJ_REC_UNDERSCORE_PREFIX.length())));
+                                if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
+                                        obj.setValue(getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length())));
                                 } else {
                                         obj.setValue((JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue));
                                 }
@@ -326,8 +326,8 @@ public class JWinPackager {
                                 Field field = currentClass.getDeclaredField(fieldKey.substring(5));
                                 field.setAccessible(true);
                                 JBaseRecord obj;
-                                if (propValue.startsWith(JWebRequest.OBJ_REC_UNDERSCORE_PREFIX)) {
-                                        obj = getRegisterObjectRecTemp(propValue.substring(JWebRequest.OBJ_REC_UNDERSCORE_PREFIX.length()));
+                                if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
+                                        obj = getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length()));
                                 } else {
                                         obj = (JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue);
                                 }
@@ -336,8 +336,8 @@ public class JWinPackager {
                                 Field field = currentClass.getDeclaredField(fieldKey.substring(6));
                                 field.setAccessible(true);
                                 JBaseRecord obj;
-                                if (propValue.startsWith(JWebRequest.OBJ_REC_UNDERSCORE_PREFIX)) {
-                                        obj = getRegisterObjectRecTemp(propValue.substring(JWebRequest.OBJ_REC_UNDERSCORE_PREFIX.length()));
+                                if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
+                                        obj = getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length()));
                                 } else {
                                         obj = (JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue);
                                 }
