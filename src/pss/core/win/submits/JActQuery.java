@@ -13,10 +13,15 @@ import pss.core.winUI.forms.JBaseForm;
  */
 public class JActQuery extends JAct {
 
-	public JActQuery(JWin zResult) {
-		super(zResult);
-		historyAction=true;
-	}
+        public JActQuery() {
+                super();
+                historyAction = true;
+        }
+
+        public JActQuery(JWin zResult) {
+                super(zResult);
+                historyAction = true;
+        }
 
 //	@Override
 //	public void Do() throws Exception {
