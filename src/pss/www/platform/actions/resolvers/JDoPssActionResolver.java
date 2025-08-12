@@ -316,15 +316,15 @@ public class JDoPssActionResolver extends JIndoorsActionResolver implements ICon
 //			if (field.getName().equals("previousPriceQuantity"))
 //			PssLogger.logDebug(field.getName()+"="+field.getValue());
 
-			String value = field.getValue();
-			Object obj = null;
-			if (value.startsWith("obj_")) {
-				if (value.startsWith("obj_t_")) {
-					obj = winFactory.getRegisterObjectTemp(value.substring(6));
-				} else {
-					obj = JWebActionFactory.getCurrentRequest().getRegisterObject(value);
-				}
-			}
+                        String value = field.getValue();
+                        Object obj = null;
+                        if (value.startsWith("obj_")) {
+                                if (value.startsWith(JWebRequest.OBJ_T_UNDERSCORE_PREFIX)) {
+                                        obj = winFactory.getRegisterObjectTemp(value.substring(JWebRequest.OBJ_T_UNDERSCORE_PREFIX.length()));
+                                } else {
+                                        obj = JWebActionFactory.getCurrentRequest().getRegisterObject(value);
+                                }
+                        }
 			if (prop.isRecord()) {
 				if (obj != null && obj instanceof JWin)
 					prop.setValue(record.getPropValue(field.getName(), prop, ((JWin) obj).getRecord()));
