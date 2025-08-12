@@ -114,9 +114,9 @@
 			setAnchorCancel('<xsl:value-of select="@name"/>');
 		</script>
 		</xsl:if>
-		<xsl:if test="@funtionKey">
+		<xsl:if test="@functionKey">
 		<script>
-			setAnchorF(<xsl:value-of select="@funtionKey"/>,'<xsl:value-of select="@name"/>');
+			setAnchorF(<xsl:value-of select="@functionKey"/>,'<xsl:value-of select="@name"/>');
 		</script>
 		</xsl:if>
 </xsl:template>

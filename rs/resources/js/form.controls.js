@@ -924,10 +924,8 @@ ZResponsiveFormLov.prototype.refreshForm = function() {
      		goToRefreshForm('do-WinListRefreshAction',this.FormLovId, this.provider, this.objectOwner, 'win_list_complete_'+this.provider, this.objectAction);	
      	else
      		goToRefreshForm('do-PartialRefreshForm',this.FormLovId, this.provider, null, getLastModal(), null);	
-	} else {
-		if (!this.multiple)
-			nextFocusH($("#"+this.FormLovId)[0],+1,true);
-	}
+	} else
+		nextFocusH($("#"+this.FormLovId)[0],+1,true);
 
     executeOnChange(this.FormLovId);
     if (this.detectchange)
@@ -994,7 +992,7 @@ ZResponsiveFormLov.prototype.fillDataList = function(search) {
 
 ZResponsiveFormLov.prototype.fillDataListJSON = function(search) {
 	var cfg = {ajaxContainer: this.FormLovId,
-		dg_dictionary: document.navform.dg_dictionary.value,
+		dg_dictionary:  sessionStorage.getItem('dictionary'),
 		subsession: document.navform.subsession.value,
 		src_uri: document.navform.src_uri.value,
 		src_sbmt: document.navform.src_sbmt.value,

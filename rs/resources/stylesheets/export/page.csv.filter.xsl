@@ -15,7 +15,7 @@
 <xsl:template match="div_responsive[@name='filter_header']" />
 <xsl:template match="div_responsive[@name='filter_body ']" />
 <xsl:template match="form_responsive[starts-with(@name,'filter_pane')]" />
-<xsl:template match="*/text_field_responsive" />
+	<xsl:template match="*/text_field_responsive" />
 
  <xsl:template name="addSeparadores">
       <xsl:param name="pStart"/>
@@ -84,7 +84,7 @@
 			</xsl:if>
 		</xsl:for-each>
 		<xsl:value-of select="$newline" />
-		<xsl:for-each select="details"> 
+		<xsl:for-each select="details">
 			<xsl:text>H2;</xsl:text>
 			<xsl:for-each select="header/column">
 				<xsl:if test="not(title/.='')">

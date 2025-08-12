@@ -26,7 +26,7 @@ public class FormObjetivosRuta extends JBaseForm {
         row.AddItemEdit("Variacion", UFLOAT, REQ, "variacion").setSizeColumns(6);
 
         row = AddItemRow();
-        row.AddItemDate("Fecha desde", DATE, REQ, "fecha_desde").setSizeColumns(6);
-        row.AddItemDate("Fecha hasta", DATE, REQ, "fecha_hasta").setSizeColumns(6);
+        row.AddItemDateTime("Fecha desde", DATE, REQ, "fecha_desde").setSizeColumns(6);
+        row.AddItemDateTime("Fecha hasta", DATE, REQ, "fecha_hasta").setSizeColumns(6);
     }
 }

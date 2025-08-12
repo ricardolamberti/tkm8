@@ -1,6 +1,5 @@
 package pss.bsp.contrato.detalle;
 
-import java.awt.Dimension;
 import java.awt.Rectangle;
 
 import javax.swing.JCheckBox;
@@ -19,8 +18,8 @@ import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.controls.JFormControl;
-import pss.core.winUI.controls.JFormTable;
 import pss.core.winUI.forms.JBaseForm;
+import pss.core.winUI.responsiveControls.JFormTableResponsive;
 
 public class FormEditDetalle extends JBaseForm {
 
@@ -117,11 +116,8 @@ public class FormEditDetalle extends JBaseForm {
     AddItemCheck("kicker", OPT, "kicker");
     c=AddItemCheck("acumulativo", OPT, "acumulativo");
 	    c.SetValorDefault(false);
-//	    c.setRefreshForm(true);
-//	    AddItem( getJComboBox(), CHAR, OPT, "periodo" , JWins.createVirtualWinsFromMap(BizDetalle.getPeriodos()));
-    JFormTable t=AddItem( getJTable(), "niveles", GuiNiveles.class);
-    t.setKeepHeight(true);
-    t.setKeepWidth(true);
+   JFormTableResponsive t=AddItemTable( "Niveles", "niveles", GuiNiveles.class);
+
     AddItemEdit("valor_fcontrato", UFLOAT, OPT, "valor_fcontrato").SetReadOnly(true);
     AddItemEdit("valor_totalcontrato", UFLOAT, OPT, "valor_totalcontrato").SetReadOnly(true);
 //	    AddItem( getValorObjetivo(), UFLOAT, OPT, "valor_objetivo" ).setVisible(false);

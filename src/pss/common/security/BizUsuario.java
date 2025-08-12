@@ -2023,7 +2023,7 @@ public class BizUsuario extends JMMRecord {
 
 	public boolean hasUsuarioTipo() throws Exception {
 		if (pUsuarioTipo.isNotNull()) return true;
-		//if (this.findGenericUsuarioTipo()!=null) return true; // el que lo necesite que lo haga mas eficiente
+		if (this.findGenericUsuarioTipo()!=null) return true; 
 		return false;
 	}
 
@@ -2033,8 +2033,7 @@ public class BizUsuario extends JMMRecord {
 		BizUsuarioTipo u = new BizUsuarioTipo();
 		u.dontThrowException(true);
 		if (!u.Read(pCompany.getValue(),pUsuarioTipo.getValue())) {
-			//u=this.findGenericUsuarioTipo(); el que lo necesita q lo incorpore a la funcion hasUsuarioTipo()
-			return null;
+			this.findGenericUsuarioTipo();
 		}
 		return (tipoUsuario = u);
 	}

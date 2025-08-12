@@ -166,6 +166,8 @@ function registerStartedScript(orden, field, script) {
   sc[0]=orden; sc[1]=field; sc[2]=script;
   scriptStartedArr[scriptStartedCount] = sc;
   scriptStartedCount++;
+  if(orden!=null && orden!="")
+  	scriptStartedArr=scriptStartedArr.sort();
 }
 
 function cleanStartedScriptRegistry() {
@@ -225,7 +227,7 @@ function formatear(fName) {
 		componente = document.getElementById(fName);
 		
 		if (componente) {
-			componente.style.textAlign=val[11];
+//			componente.style.textAlign=val[11];
 			valor = componente.value; 
 			if (isNumberFloatDt(dt) ) {
 				componente.style.paddingRight = 1;
@@ -290,6 +292,8 @@ function executeScripts(field) {
 
 function executeOneScript(zScript) {
 	zScript = replaceSpecialCharacters(zScript);
+//	console.log("one script:"+zScript);
+
 	if (window.ActiveXObject)			{
 		window.execScript(zScript);
 	}

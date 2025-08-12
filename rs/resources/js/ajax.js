@@ -95,6 +95,7 @@ ZAjaxSubmit.prototype.addStadistics = function() {
 }
 
 
+
 ZAjaxSubmit.prototype.setAjaxCallback = function(callBack,callBackError) {
 	this.ajaxListener = callBack;
 	this.ajaxErrorListener = callBackError;
@@ -183,7 +184,6 @@ ZAjaxSubmit.prototype.fetch = function(asinc) {
       	   if (downloadTime==0)
       			downloadTime= new Date().getTime();
 		 } 
-	//	 ,"timeout": 15000 
      } );
 
 }
@@ -228,12 +228,13 @@ function get_url_param(url, name)
 function getAjaxContainer(zUrl) {
 	var param = get_url_param(zUrl,"ajaxContainer");
 	return param;
-} 
+}
 
 function waitPendingNow() {
 	lastContainer='view_area_and_title';
 	efectiveShowWorkingPane("(ICONO)");	
 }
+
 var pendingSend=0;
 function waitPendingUpdates() {
 	var stop=false;
@@ -280,7 +281,7 @@ function updateServerField(object, event, datatable) {
 	var objAjax = $.ajax( {
          "type":     "post",
          "url":      "do-updateserverfield",
-         "data":     { "dg_dictionary": document.navform.dg_dictionary.value,"vrs": ++idRequest, "obj_provider_parent": providerParent, "obj_provider": provider, "field":field, "value": value, "lastupdate": datetime , "subsession":getURLParameters("subsession")},
+         "data":     { "dg_dictionary":  sessionStorage.getItem('dictionary'),"vrs": ++idRequest, "obj_provider_parent": providerParent, "obj_provider": provider, "field":field, "value": value, "lastupdate": datetime , "subsession":getURLParameters("subsession")},
          "dataType": "json",
          "cache":    false,
          "tryCount" : 0,
@@ -440,7 +441,7 @@ function showWorkingPaneIcon(response) {
 }
 function efectiveShowWorkingPane(messageConfig) {
     var obj = lastContainer;
-	
+    
 	var reenter = $("#"+obj).hasClass("processing");
  	var nomessage = messageConfig.indexOf("(NOMESSAGE)")!=-1;
 	var cancel = messageConfig.indexOf("(CANCEL)")!=-1;
@@ -455,16 +456,16 @@ function efectiveShowWorkingPane(messageConfig) {
 	if (nomessage) {
 		if (reenter) return;
 		if (!(progress||cancel)) {
-			var x = ($("#"+obj).offset()==null)?0:$("#"+obj).offset().left + ($("#"+obj).width()/2)-20;
-     var y = ($("#"+obj).offset()==null)?0:$("#"+obj).offset().top + ($("#"+obj).height()/2)-20;
-   	 workingPaneHTML =  '<div id="waiting_pane" style="position:absolute;top:'+y+'px;left:'+x+'px;" > ';
-		 workingPaneHTML += ' <i class="'+icono+'"/>';
-		 workingPaneHTML +='  <span class="sr-only">'+msgProcessing+'</span>';
-		 workingPaneHTML +='</div>	';  	
-		 if (!reenter)
-			 $("#"+obj).addClass("processing");
-		 $('#waitpane').html(workingPaneHTML);
-			return;
+			 var x = ($("#"+obj).offset()==null)?0:$("#"+obj).offset().left + ($("#"+obj).width()/2)-20;
+			 var y = ($("#"+obj).offset()==null)?0:$("#"+obj).offset().top + (($("#"+obj).height()==0?300:$("#"+obj).height())/2)-20;
+			 workingPaneHTML =  '<div id="waiting_pane" style="position:absolute;top:'+y+'px;left:'+x+'px;" > ';
+			 workingPaneHTML += ' <i class="'+icono+'"/>';
+			 workingPaneHTML +='  <span class="sr-only">'+msgProcessing+'</span>';
+			 workingPaneHTML +='</div>	';  	
+			 if (!reenter)
+				 $("#"+obj).addClass("processing");
+			 $('#waitpane').html(workingPaneHTML);
+			 return;
 		}
 	}
 	if (progress) {
@@ -594,16 +595,11 @@ function ajaxRecieved(msg, ajaxOptions, ajaxXmlHttp, url, ajaxobj) {
 				closeModals(ajaxContainer);
 			}
 			adjustSessionID();
-	    const downloadUrl = ajaxXmlHttp.getResponseHeader('x-response-url');
-			const params = ajaxobj && ajaxobj.data ? ajaxobj.data : {};
-
-			postToNewTab(downloadUrl, params);
-/*	    	if (ajaxXmlHttp.getResponseHeader('x-response-url').indexOf(".pdf")!=-1 || ajaxXmlHttp.getResponseHeader('x-response-url').indexOf(".mpdf")!=-1)
+//	    	if (ajaxXmlHttp.getResponseHeader('x-response-url').indexOf(".pdf")!=-1 || ajaxXmlHttp.getResponseHeader('x-response-url').indexOf(".mpdf")!=-1)
 	    		downloadInNewTab(ajaxXmlHttp.responseText,ajaxXmlHttp.getResponseHeader('x-response-url'),ajaxXmlHttp.responseType);
-	    	else {
-
-    			download(ajaxXmlHttp.response,getNameFile(ajaxXmlHttp.getResponseHeader('x-response-url')),ajaxXmlHttp.responseType);
-			}	*/
+//	    	else
+//	    		download(ajaxXmlHttp.responseText,getNameFile(ajaxXmlHttp.getResponseHeader('x-response-url')),ajaxXmlHttp.responseType);
+			releaseSemaphore();
 			if (ajaxobj.UrlParameters['back_on_print']=='true') {
 				setChangeInputs(false);//mejorar
 				goTo(this,'do-BackToQueryAction', false, '', null, 'view_area_and_title', '', '', true, true, event, null, false, '','','true'); 
@@ -677,6 +673,7 @@ function ajaxRecieved(msg, ajaxOptions, ajaxXmlHttp, url, ajaxobj) {
 
 	}
 	var processTime= new Date().getTime();
+
 	stadistics="IDREQ="+(ajaxobj.getFinalParams()["vrs"])+"|AJAX="+(returnTime-startTime)+"|BUILD="+(processTime-returnTime)+"|JS="+(es-ss)+"|DT="+(returnTime-downloadTime)+"|PT="+(downloadTime-startTime)+"|SIZE="+ajaxXmlHttp.responseText.length;
 //	    alert("Return ajax: "+(returnTime-startTime)+"ms |Process ajax: "+(processTime-returnTime)+"ms| scripts: "+(es-ss)+"ms");
 //    	firstFocus();
@@ -719,7 +716,7 @@ function setModalChanges( change ) {
 }
 function getModalChanges() {
 	if (modalQueueLast==-1) {
-		return basechanges;
+		return false;
 	}
 	return modalChangesArray[modalQueueLast];
 }
@@ -875,7 +872,7 @@ function createModal(arrayParents, ajaxContainer, ajaxobj, contents, nuevo, with
 	var modalName=registerModal(ajaxContainer);
 	$("#"+modalName).remove();
 	modalChanges=false;
-	var shtml='<div class="modal'+(nuevo?' fade':'')+'" id="'+modalName+'" data-focus-on="input:first"><div class="'+calculeModalClass(contents)+'" style="width:'+ancho+'"><div class="modal-content">';
+	var shtml='<div style="z-index:5000;" class="modal'+(nuevo?' fade':'')+'" id="'+modalName+'" data-focus-on="input:first"><div class="'+calculeModalClass(contents)+'" style="width:'+ancho+'"><div class="modal-content">';
 
 	if (!withCancel || contents.indexOf('id="actionbar')!=-1) { // tiene action bar pero sin cancel
 		shtml+='<div class="modal-body">'+contents; 
@@ -1246,7 +1243,7 @@ function addAnRegisterToUrl(campo) {
 		} else if (obj.tagName == "DIV") {
 			vector = collect(vector,formDataRegisterToUrlRadioButton(obj,campo));
 		} else if (obj.tagName == "IFRAME") {
-            pushArray(obj.name,escape(obj.contentWindow.document.body.innerHTML.replace("+","[PLUS]")),vector);
+            pushArray(obj.name,escape(obj.contentWindow.document.body.innerHTML),vector);
 		} else if (obj.tagName == "SELECT") {
 			 var comboValue = getSelectValues(obj)
              pushArray(obj.name,comboValue,vector);
@@ -1307,7 +1304,7 @@ function addAnRegisterToUrlFromList(campo,values) {
 				getstr += formDataRegisterToUrlRadioButtonStr(obj,campo);
 		
 			}else if (obj.tagName == "IFRAME") {
-				getstr += ""+escape(obj.contentWindow.document.body.innerHTML.replace("+","[PLUS]"));
+				getstr += ""+encodeURIComponent((obj.contentWindow.document.body.innerHTML)).replace(/'/g,"%27").replace(/"/g,"%22");
 			}else if (obj.tagName == "SELECT") {
 	            getstr += "" + getSelectValues(obj);
 	        }

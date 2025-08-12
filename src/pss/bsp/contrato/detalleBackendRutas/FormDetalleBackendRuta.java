@@ -89,14 +89,14 @@ private static final long serialVersionUID = 1446860278358L;
     s.setFontWeigth(JFormEditResponsive.FONT_WEIGHT_BOLD);
 
     if (!getWin().GetcDato().getDescrSqlAux1Meta().equals(""))
-    	panelR.AddItemEdit( getWin().GetcDato().getDescrSqlAux1Meta(), CHAR, OPT, "sql_aux1_meta" ).setSizeColumns(6).SetReadOnly(true).setAlignContent(JFormControl.ALIGN_CONTENT_RIGHT);
+    	panelR.AddItemEdit( getWin().GetcDato().getDescrSqlAux1Meta(), CHAR, OPT, "sql_aux1_meta" ).setSizeColumns(6).right().SetReadOnly(true);
     if (!getWin().GetcDato().getDescrSqlAux2Meta().equals(""))
-       panelR.AddItemEdit( getWin().GetcDato().getDescrSqlAux2Meta(), CHAR, OPT, "sql_aux2_meta" ).setSizeColumns(6).SetReadOnly(true).setAlignContent(JFormControl.ALIGN_CONTENT_RIGHT);
+       panelR.AddItemEdit( getWin().GetcDato().getDescrSqlAux2Meta(), CHAR, OPT, "sql_aux2_meta" ).setSizeColumns(6).right().SetReadOnly(true);
 
     if (!getWin().GetcDato().getDescrSqlAux1Base().equals(""))
-       panelR.AddItemEdit( getWin().GetcDato().getDescrSqlAux1Base(), CHAR, OPT, "sql_aux1_base" ).setSizeColumns(6).SetReadOnly(true).setAlignContent(JFormControl.ALIGN_CONTENT_RIGHT);
+       panelR.AddItemEdit( getWin().GetcDato().getDescrSqlAux1Base(), CHAR, OPT, "sql_aux1_base" ).setSizeColumns(6).right().SetReadOnly(true);
     if (!getWin().GetcDato().getDescrSqlAux2Base().equals(""))
-      panelR.AddItemEdit( getWin().GetcDato().getDescrSqlAux2Base(), CHAR, OPT, "sql_aux2_base" ).setSizeColumns(6).SetReadOnly(true).setAlignContent(JFormControl.ALIGN_CONTENT_RIGHT);
+      panelR.AddItemEdit( getWin().GetcDato().getDescrSqlAux2Base(), CHAR, OPT, "sql_aux2_base" ).setSizeColumns(6).right().SetReadOnly(true);
 
 
     JFormTabPanelResponsive tabsI = column2.AddItemTabPanel();

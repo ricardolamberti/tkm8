@@ -39,6 +39,6 @@ private static final long serialVersionUID = 1245253394589L;
     JFormTabPanelResponsive tabs = AddItemTabPanel();
     tabs.AddItemList(20);
     tabs.AddItemList(25);
-    tabs.AddItemList(10);
+    tabs.AddItemForm(10);
   }
 }

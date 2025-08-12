@@ -23,9 +23,7 @@
 		 firstFocus('<xsl:value-of select="@scroll"/>');
 		 analizeTable('<xsl:value-of select="@scroll"/>');
 		 analizeModal('<xsl:value-of select="@scroll"/>');
-
-		 document.getElementById("navform").dg_dictionary.value=<xsl:value-of select="$dictionary" />;
-  		 document.getElementById("mainform").dg_dictionary.value=<xsl:value-of select="$dictionary" />;
+							sessionStorage.setItem('dictionary', '<xsl:value-of select="../url/@payload"/>');
 		</script>
 		<xsl:for-each select="*">
 			<xsl:apply-templates select="*"/>

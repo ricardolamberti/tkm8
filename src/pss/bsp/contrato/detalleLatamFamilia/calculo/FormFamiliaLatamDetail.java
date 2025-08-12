@@ -22,8 +22,9 @@ public class FormFamiliaLatamDetail extends JBaseForm {
 
         JFormPanelResponsive row = AddItemRow();
         row.AddItemEdit("Familia", CHAR, REQ, "familia")
-           .setToolTip("clases separadas por ,")
-           .setSizeColumns(8);
+        		.setSizeColumns(8)
+           .setToolTip("clases separadas por ,");
+           
 
         row = AddItemRow();
         row.AddItemEdit("Peso", FLOAT, REQ, "peso").setSizeColumns(4);

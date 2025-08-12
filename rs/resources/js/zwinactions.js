@@ -176,6 +176,22 @@ function hide_show_subdetail(name_row, display) {
 	} 
 }
 
+function hide_show_icon(elem, icon) {
+	var ielem = $(elem).find("i");
+	var oldclass = $(ielem).attr('oldclass');
+	if (oldclass) {
+		$(ielem).removeAttr('oldclass');
+		$(ielem).removeAttr('class');
+		$(ielem).attr('class', oldclass);
+	} else {
+		var currclass = $(ielem).attr('class');
+		$(ielem).attr('oldclass', currclass);
+		$(ielem).removeAttr('class');
+		$(ielem).attr('class', icon);
+	}
+	
+}
+
 
 
 function rclickCell(cell,e,listactions,skin){

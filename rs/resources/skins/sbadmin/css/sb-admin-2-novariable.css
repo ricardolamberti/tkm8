@@ -190,9 +190,10 @@ tr.selected {
   padding: 0 0 0 0;
 }
 
-#main_canvas {
+.main_canvas {
    margin: 0 0 0 0;
    padding: 0 0 0 0;
+   z-index:0;
 }
  
 .workarea {

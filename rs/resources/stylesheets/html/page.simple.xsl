@@ -90,8 +90,8 @@
 	</xsl:template>
 	
 	<xsl:template name="render_view_simple">
-		<div id="row" style="zoom:40%">
-			<DIV class="main_canvas" >
+		<div id="row">
+			<DIV class="main_canvas">
 				<xsl:call-template name="basic_generate_component_responsive" />
 			</DIV>
 		</div>

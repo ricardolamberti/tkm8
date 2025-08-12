@@ -17,97 +17,6 @@ function funcClick(t, e, code) {
 	}
 }
 
-function downloadImage(elementId) {
-    let svg = document.getElementById(elementId);
-    let serializer = new XMLSerializer();
-    let source = serializer.serializeToString(svg);
-    
-    // Crear un blob con el contenido del SVG
-    let blob = new Blob([source], { type: "image/svg+xml" });
-    let url = URL.createObjectURL(blob);
-
-    // Crear un enlace temporal para la descarga
-    let a = document.createElement("a");
-    a.href = url;
-    a.download = "grafico.svg";
-    
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-
-    // Liberar memoria
-    URL.revokeObjectURL(url);
-}
-
-
-function openModalImage(elementId, originalData) {
-    // Crear un modal dinámico
-    let modal = document.createElement("div");
-    modal.id = "modalGraph"; 
-    modal.style.position = "fixed";
-    modal.style.top = "0";
-    modal.style.left = "0";
-    modal.style.width = "100vw";
-    modal.style.height = "100vh";
-    modal.style.background = "rgba(0,0,0,0.8)";
-    modal.style.display = "flex";
-    modal.style.justifyContent = "center";
-    modal.style.alignItems = "center";
-    modal.style.zIndex = "1000";
-
-    // Crear un contenedor para el gráfico
-    let container = document.createElement("div");
-    container.style.width = "80%"; 
-    container.style.height = "80%"; 
-    container.style.background = "white";
-    container.style.padding = "20px";
-    container.style.borderRadius = "10px";
-    container.style.position = "relative";
-    container.style.display = "flex";
-    container.style.flexDirection = "column";
-    container.style.alignItems = "center";
-
-    // Botón de cierre
-    let closeButton = document.createElement("button");
-    closeButton.innerText = "Cerrar";
-    closeButton.style.position = "absolute";
-    closeButton.style.top = "10px";
-    closeButton.style.right = "10px";
-    closeButton.style.background = "red";
-    closeButton.style.color = "white";
-    closeButton.style.border = "none";
-    closeButton.style.padding = "10px";
-    closeButton.style.cursor = "pointer";
-    closeButton.onclick = function () {
-        document.body.removeChild(modal);
-    };
-
-    // Crear un contenedor para la leyenda y el gráfico
-    let chartContainer = document.createElement("div");
-    chartContainer.id = "modalChartContainer";
-    chartContainer.style.width = "100%";
-    chartContainer.style.height = "90%";
-
-    // Crear el SVG donde se dibujará el gráfico
-    let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.id = "modalSvg";
-    svg.style.width = "100%";
-    svg.style.height = "100%";
-    svg.setAttribute("viewBox", "0 0 800 800");
-    svg.setAttribute("preserveAspectRatio", "xMidYMid meet");
-
-    chartContainer.appendChild(svg);
-    container.appendChild(closeButton);
-    container.appendChild(chartContainer);
-    modal.appendChild(container);
-    document.body.appendChild(modal);
-
-	Pie("modalSvg","",700,700,originalData);
-}
-
-function closeModalImage() {
-    document.getElementById("modal").style.display = "none";
-}
 function runClick(t, e, code) {
 	// if (e.ctrlKey) return;
 	// if (e.shiftKey) return;
@@ -702,6 +611,8 @@ function onFocusObject(obj) {
 	if (changeFocus == 1) {
 		focusObject = obj ? obj.id : null;
 	}
+	if (obj!=null && (obj.tagName.toLowerCase() === 'input' || obj.tagName.toLowerCase() === 'textarea'))
+		obj.select();
 	renderHelp();
 }
 
@@ -1045,18 +956,19 @@ function prepareLogin() {
 }
 
 function adjustSessionID(force) {
-	var cookie = document.cookie;
-	var strgCookie = sessionStorage.getItem("TABID");
-	if (force || (strgCookie == null || strgCookie == "undefined" || strgCookie == '')) {
-		var id = create_UUID(force);
-		sessionStorage.setItem("TABID", id);
-		document.cookie = 'TABID=' + id +";path=/";
-		return id;
-	} else {
-		document.cookie = 'TABID=' + strgCookie+";path=/";
-		return strgCookie;
-	}
+  var cookie = document.cookie;
+  var strgCookie = sessionStorage.getItem("TABID");
+  if (force || (strgCookie == null || strgCookie == "undefined" || strgCookie == '')) {
+    var id = create_UUID(force);
+    sessionStorage.setItem("TABID", id);
+    document.cookie = 'TABID=' + id +";path=/";
+    return id;
+  } else {
+    document.cookie = 'TABID=' + strgCookie+";path=/";
+    return strgCookie;
+  }
 }
+
 var lastOp = "";
 function goTo(zSource, zUrl, zIsSubmit, zActionOwnerProvider, zObjectOwnerId, zAjaxContainer, zResolveString, action, asinc, cancelable, event, cfg, uploadData, dataasoc, specialselector, backOnPrint, refreshOnPrint, contextobj,zIsBackAfterSubmit, runextraaction) {
 	adjustSessionID();
@@ -1072,6 +984,7 @@ function goTo(zSource, zUrl, zIsSubmit, zActionOwnerProvider, zObjectOwnerId, zA
 	if (lastOp == zUrl && isAjaxWorking()) return;
 	lastOp = zUrl;
 	clearClick();
+	
 	// alert("url:"+zUrl+" zIsSubmit:"+zIsSubmit+"
 	// zActionOwnerProvider:"+zActionOwnerProvider+"
 	// zObjectOwnerId:"+zObjectOwnerId+" zAjaxContainer:"+ zAjaxContainer+"
@@ -1227,6 +1140,7 @@ function captureF5(e) {
 }
 
 
+
 function goBack(form, event) {
 	wait(2000);
 	goTo(form, 'do-BackToQueryAction', false, '', null, 'view_area_and_title', '', '', true, true, event)
@@ -1312,6 +1226,10 @@ function goToViaForm(zUrl, zFormToSubmit, zActionOwnerProvider, zObjectOwnerId, 
 		disablear();
 		return;
 	}
+	if (zAjaxContainer != '') {
+		document.getElementById("navform").dg_dictionary.value=   sessionStorage.getItem('dictionary');
+		document.getElementById("mainform").dg_dictionary.value=  sessionStorage.getItem('dictionary');
+	}
 	if (runextraaction) runextraaction();
 	// setChangeInputs(false);
 	// alert("url:"+zUrl);
@@ -1329,6 +1247,7 @@ function goToViaForm(zUrl, zFormToSubmit, zActionOwnerProvider, zObjectOwnerId, 
 	zFormToSubmit.method = 'POST';
 	if (zAjaxContainer == '') {
 		zFormToSubmit.action = zUrl;
+
 		if (zUrl == 'closed_subsession') {
 			zFormToSubmit.submit();
 			//setTimeout(function () {
@@ -1382,7 +1301,7 @@ function goToViaForm(zUrl, zFormToSubmit, zActionOwnerProvider, zObjectOwnerId, 
 		ajax.addUrlParameters(getFormControlsParameters(zFormToSubmit));
 	}
 	if (zAjaxContainer.indexOf('PRINT_WINDOW') != -1 || zAjaxContainer.indexOf('NEW_WINDOW') != -1) {
-		if (zUrl == 'do-login') {
+		if (zUrl == 'do-login' || zUrl == 'do-login-ini') {
 			var newConf = zFormToSubmit.dg_client_conf.value + ',sw=' + 800 + ',sh=' + 600;
 			zFormToSubmit.dg_client_conf.value = newConf;
 			zFormToSubmit.subsession.value = getURLParameters("subsession");
@@ -1391,8 +1310,6 @@ function goToViaForm(zUrl, zFormToSubmit, zActionOwnerProvider, zObjectOwnerId, 
 		ajax.addUrlParameters(getMetaFormParameters(zFormToSubmit));
 		ajax.addUrlParameters(getHiddenFormParameters(zFormToSubmit));
 		ajax.addUrlParameters(getWinListFilters());
-		
-
 		openInNewWindowPre(zFormToSubmit, ajax, (zAjaxContainer.indexOf('NEW_WINDOW_REFRESH') != -1) ? windowsParentLoaded : ((zAjaxContainer.indexOf('NEW_WINDOW_CLOSE') != -1) ? windowsLoadedClose : ((zAjaxContainer.indexOf('PRINT_WINDOW_REFRESH') != -1) ? windowsLoaded : ((zAjaxContainer.indexOf('PRINT_WINDOW_CLOSE') != -1) ? windowsLoadedClose : null))), zAjaxContainer.indexOf('PRINT_WINDOW_REFRESH') != -1 || zAjaxContainer.indexOf('PRINT_WINDOW_CLOSE') != -1 || zAjaxContainer.indexOf('NEW_WINDOW_CLOSE') != -1, zAjaxContainer.indexOf('PRINT_WINDOW') != -1, zAjaxContainer.indexOf('MAX') != -1);
 		disablear();
 		if ((zAjaxContainer.indexOf('NEW_WINDOW_REFRESH') == -1) && (zAjaxContainer.indexOf('PRINT_WINDOW_CLOSE') == -1) && (zAjaxContainer.indexOf('NEW_WINDOW_CLOSE') == -1)) {
@@ -1403,17 +1320,20 @@ function goToViaForm(zUrl, zFormToSubmit, zActionOwnerProvider, zObjectOwnerId, 
 	if (zAjaxContainer.indexOf('NEW_SESSION') != -1) {
 		var d = new Date();
 		var n = d.getMilliseconds();
-		if (cfg) ajax.addUrlParameters(cfg);
-		ajax.setAjaxContainer(zAjaxContainer);
-		ajax.addUrlParameters(getMetaFormParameters(zFormToSubmit));
-		ajax.addUrlParameters(getHiddenFormParameters(zFormToSubmit));
-		ajax.addUrlParameters(getWinListFilters());
-		ajax.deleteUrlParameters("subsession");
-		ajax.addUrlParameters(getUrlParameter("subsession", n));
-		sendEcho(function () {
-			openInNewWindowAcc(zFormToSubmit, ajax.getFinalUrlWithParameters(), zAjaxContainer.indexOf('MAX') != -1, setParentTab());
-		});
-		releaseSemaphore();
+//		if (cfg) ajax.addUrlParameters(cfg);
+//		ajax.setAjaxContainer(zAjaxContainer);
+//		ajax.addUrlParameters(getMetaFormParameters(zFormToSubmit));
+//		ajax.addUrlParameters(getHiddenFormParameters(zFormToSubmit));
+//		ajax.addUrlParameters(getWinListFilters());
+//		ajax.deleteUrlParameters("subsession");
+//		ajax.addUrlParameters(getUrlParameter("subsession", n));
+//		sendEcho(function () {
+//			openInNewWindowAcc(zFormToSubmit, ajax.getFinalUrlWithParameters(), zAjaxContainer.indexOf('MAX') != -1, setParentTab());
+	//	});
+		const currentUrl = new URL(window.location.href);
+	    const originalParams = localStorage.getItem('originalParams') || '';
+	    openInNewWindowAcc(null, `./html/redirect.html${originalParams}`, zAjaxContainer.indexOf('MAX') != -1, setParentTab());
+	    releaseSemaphore();
 		disablear();
 		return;
 	}
@@ -1425,6 +1345,7 @@ function goToViaForm(zUrl, zFormToSubmit, zActionOwnerProvider, zObjectOwnerId, 
 		ajax.addUrlParameters(getMetaFormParameters(zFormToSubmit));
 		ajax.addUrlParameters(getHiddenFormParameters(zFormToSubmit));
 		ajax.addUrlParameters(getWinListFilters());
+		ajax.deleteUrlParameters("dg_dictionary");
 		return ajax.getFinalUrlWithParameters();
 	}
 	if (cfg) ajax.addUrlParameters(cfg);
@@ -1506,6 +1427,7 @@ function windowsLoaded() {
 	parent.goTo(this, 'do-RefreshAction', false, '', null, 'view_area_and_title', '', '', true, true);
 }
 
+
 function windowsParentLoadedClose() {
 	parent.windowsParentLoadedClose();
 }
@@ -1568,6 +1490,7 @@ function addActionOwnerParameters(zUrl, zFormToSubmit, zActionOwnerProvider, zTh
 					zObjectOwnerId = (zObjectOwnerId != null) ? zObjectOwnerId : oProvider.getCurrentActionOwner();
 					zObjectOwnerDest = oProvider.getMultipleCurrentActionOwnerDest();
 					sMultipleOwnerList = oProvider.getMultipleActionOwnerList();
+					zObjectSelectId = oProvider.getCurrentActionOwnerFromSelect();
 					bHasMultipleOwner = oProvider.hasMultipleSelect();
 					zClearSelection = oProvider.getClearSelection() ? "1" : "0";
 				}
@@ -1623,7 +1546,7 @@ function addActionOwnerParameters(zUrl, zFormToSubmit, zActionOwnerProvider, zTh
 function fillJSonRequest(url, action, owner, provider) {
 	var cfg = {
 		ajaxContainer: 'view_area_and_title',
-		dg_dictionary: document.navform.dg_dictionary.value,
+		dg_dictionary: sessionStorage.getItem('dictionary'),
 		subsession: document.navform.subsession.value,
 		src_uri: document.navform.src_uri.value,
 		src_sbmt: document.navform.src_sbmt.value,
@@ -1649,7 +1572,7 @@ function addTreeParameters(zFormToSubmit) {
 }
 
 function addLoginParameters(zUrl, zFormToSubmit) {
-	if (zUrl == 'do-login') {
+	if (zUrl == 'do-login' || zUrl == 'do-login-ini') {
 		var newConf = zFormToSubmit.dg_client_conf.value + ',sw=' + screen.width + ',sh=' + screen.height;
 		zFormToSubmit.dg_client_conf.value = newConf;
 		/*
@@ -1857,39 +1780,10 @@ function openInNewWindowAcc(zFormToSubmit, zUrl, max, postAccion) {
 }
 
 function openInNewWindowPre(zFormToSubmit, ajax, postAccion, runOnParent, print, full) {
-	if ( ajax.getFinalUrl().startsWith("do-ReportAction") ||
-	ajax.getFinalUrl().startsWith("do-respaction")
-	
-	) {
-		openInNewWindowPostReport(zFormToSubmit, ajax.getFinalUrl(), ajax.getFinalParams(), postAccion, runOnParent, print, full);
-	} else {
+	if (Object.keys(ajax.getFinalParams()).length > 60) {
 		openInNewWindowPost(zFormToSubmit, ajax.getFinalUrl(), ajax.getFinalParams(), postAccion, runOnParent, print, full);
-	//	openInNewWindow(zFormToSubmit, ajax.getFinalUrlWithParameters(), postAccion, runOnParent, print, full);
-	}
-}
-
-function openInNewWindowPostReport(zFormToSubmit, zUrl, obj, postAccion, runOnParent, print, full) {
-	const form = document.createElement("form");
-	form.setAttribute("method", "post");
-	form.setAttribute("action", zUrl);
-	form.style.display = "none";
-
-	for (const key in obj) {
-		if (obj.hasOwnProperty(key)) {
-			const input = document.createElement("input");
-			input.type = "hidden";
-			input.name = key;
-			input.value = obj[key];
-			form.appendChild(input);
-		}
-	}
-
-	document.body.appendChild(form);
-	form.submit();
-	document.body.removeChild(form);
-
-	if (typeof postAccion === "function") {
-		postAccion();
+	} else {
+		openInNewWindow(zFormToSubmit, ajax.getFinalUrlWithParameters(), postAccion, runOnParent, print, full);
 	}
 }
 
@@ -1936,7 +1830,7 @@ function openInNewWindowPost(zFormToSubmit, zUrl, obj, postAccion, runOnParent, 
 				$(win).ready(postAccion);
 			} else {
 				win.addEventListener('load', postAccion, false);
-				win.attachEvent('onload', postAccion, false);
+				if (isMS) win.attachEvent('onload', postAccion, false);
 			}
 		}
 	}, 1000);
@@ -1965,7 +1859,7 @@ function openInNewWindow(zFormToSubmit, zUrl, postAccion, runOnParent, print, fu
 			$(win).ready(postAccion);
 		} else {
 			win.addEventListener('load', postAccion, false);
-			win.attachEvent('onload', postAccion, false);
+			if (isMS) win.attachEvent('onload', postAccion, false);
 		}
 	}
 }
@@ -2026,26 +1920,7 @@ function toUTF(bytes, encoding) {
 	for (var i = 0; i < n; i++) chars[i] = enc.charAt(bytes.charCodeAt(i));
 	return chars.join('');
 }
-function postToNewTab(url, params) {
-  const form = document.createElement("form");
-  form.method = "POST";
-  form.action = url;
-  form.target = "_blank";
 
-  for (const key in params) {
-    if (params.hasOwnProperty(key)) {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = key;
-      input.value = params[key];
-      form.appendChild(input);
-    }
-  }
-
-  document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
-}
 function download(strData, strFileName, strMimeType) {
 	var D = document,
 		A = arguments,
@@ -2075,7 +1950,7 @@ function download(strData, strFileName, strMimeType) {
 	// do iframe dataURL download:
 	var f = D.createElement("iframe");
 	D.body.appendChild(f);
-	f.src = "data:" + (A[2] ? A[2] : "application/octet-stream;charset=utf-8,") + (window.btoa ? ";base64" : "") + "," + (window.btoa ? window.btoa : escape)(strData);
+	f.src = "data:" + (A[2] ? A[2] : "application/octet-stream") + (window.btoa ? ";base64" : "") + "," + (window.btoa ? window.btoa : escape)(strData);
 	setTimeout(function () {
 		D.body.removeChild(f);
 	}, 555);
@@ -2114,6 +1989,7 @@ function screenGrabber(object) {
 	});
 }
 
+
 function round(numero, dec) {
 	var original = parseFloat(numero);
 	var result = Math.round(original * Math.pow(10, dec)) / Math.pow(10, dec);
@@ -2133,6 +2009,37 @@ function findCoefIva(baseImp, iva, tasa, absoluto) {
 	var coef = round(iva / tasa, 2) / baseImp;
 	if (coef > 0.999) return 1;
 	return absoluto ? 0 : coef;
+}
+
+
+function firstDate(type,period,date) {
+	var month=12;
+	var y = date.getFullYear();
+	var m = date.getMonth();
+	var firstDay = new Date(y, m, 1);
+	
+	if (type=='FY') {
+		m=0;
+		firstDay = new Date(y, m, 1);
+		month=12;
+	}
+	if (type=='Q') {
+		m=m<2?0:m<5?3:m<8?6:9;
+		firstDay = new Date(y, m, 1);
+		month=3;
+	}
+	if (type=='ME') {
+		firstDay = new Date(y, m, 1);
+		month=1;
+	}
+	month=month*period;
+	firstDay.setMonth (firstDay.getMonth () + month);
+
+	y = firstDay.getFullYear();
+	m = firstDay.getMonth();
+	firstDay = new Date(y, m, 1);
+
+	return firstDay.getDate()+"/"+(firstDay.getMonth()+1)+"/"+firstDay.getFullYear();
 }
 
 function parseDate(str1) {
@@ -2314,13 +2221,13 @@ function uf(i, text) {
 function runAction(that, confirmation, question, target, action) {
 	if (confirmation) openModalConfirm(question, action);
 	else {
-		if ((target == 'do-BackAction') && hasChangeInputs()) {
-			openModalConfirm(question, function () {
-				action(that);
-			});
-		} else {
+		//if ((target == 'do-BackAction') && hasChangeInputs()) {
+		//	openModalConfirm(question, function () {
+			//	action(that);
+		//	});
+	//	} else {
 			action(that);
-		}
+	//	}
 	}
 }
 

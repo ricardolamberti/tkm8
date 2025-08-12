@@ -12,7 +12,7 @@
 		<form name="navform" id="navform" METHOD="post">
 			<xsl:call-template name="generate_basic_form" />
 		</form>
-		<form name="mainform" id="mainform" METHOD="post">
+		<form name="mainform" id="mainform" METHOD="post" autocomplete="off">
 			<xsl:call-template name="generate_basic_form" />
 
 			<div id="row" onscroll="renderHelp();" >
@@ -22,7 +22,7 @@
 							<xsl:call-template name="basic_generate_component_responsive" />
 						</DIV>
 						<DIV data-html2canvas-ignore="true" class="col-sm-3">
-							<iframe style="height:600px;width:100%;">
+							<iframe style="height:100%;width:100%;">
 								<xsl:attribute name="id">help_session</xsl:attribute>
 								<xsl:attribute name="src">
 									about:blank
@@ -137,7 +137,7 @@
 			<div id="waitpane"></div>
 			<div id="modal-zone"></div>
 			<div id="modal-zone-confirm"></div>
-
+			
 		</div>
 
 	</xsl:template>

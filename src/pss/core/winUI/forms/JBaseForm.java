@@ -40,6 +40,7 @@ import pss.core.winUI.controls.JControlTree;
 import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.controls.JFormControles;
 import pss.core.winUI.controls.JFormLista;
+import pss.core.winUI.controls.JFormLocalForm;
 import pss.core.winUI.controls.JFormRow;
 import pss.core.winUI.icons.GuiIconos;
 import pss.core.winUI.lists.JPlantilla;
@@ -918,7 +919,7 @@ public class JBaseForm  {
 
 		JFormLocalForm oForm = new JFormLocalForm();
 		oForm.setForm(this);
-		oForm.setTabPane(getInternalTabPanel(null));
+		oForm.setTabPane(getInternalTabPanel());
 		oForm.setIdControl("tf_" + buildTabName(title));
 		oForm.SetDisplayName(title);
 		getControles().AddControl(oForm);

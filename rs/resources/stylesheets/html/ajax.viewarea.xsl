@@ -32,7 +32,7 @@
 			<DIV>
 					<xsl:if test="../header/session/@dictionary">
 						<script>
-							document.getElementById("navform").dg_dictionary.value=<xsl:value-of select="$dictionary" />;
+							sessionStorage.setItem('dictionary', '<xsl:value-of select="../url/@payload"/>');
 						</script>
 					</xsl:if>
 				<xsl:call-template name="basic_generate_component" />

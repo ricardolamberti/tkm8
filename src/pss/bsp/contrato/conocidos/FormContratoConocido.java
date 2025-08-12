@@ -32,7 +32,7 @@ public class FormContratoConocido extends JBaseForm {
         row.AddItemEdit("Descripcion", CHAR, REQ, "descripcion").setSizeColumns(12);
 
         row = AddItemRow();
-        row.AddItemCombo("Compañia", CHAR, REQ, "company", new GuiCompanies()).setRefreshForm(true).setSizeColumns(6);
+        row.AddItemCombo("Compañia", CHAR, REQ, "company", new GuiCompanies()).setSizeColumns(6).setRefreshForm(true);
         row.AddItemCombo("País", CHAR, REQ, "pais", new GuiPaisesLista()).setSizeColumns(6);
 
         row = AddItemRow();

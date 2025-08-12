@@ -31,9 +31,8 @@
 			</script>
  			<script>initializeViewArea();</script> 
 			<DIV>
-						<script>
-							document.getElementById("navform").dg_dictionary.value=<xsl:value-of select="$dictionary" />;
-							document.getElementById("mainform").dg_dictionary.value=<xsl:value-of select="$dictionary" />;
+					<script>
+							sessionStorage.setItem('dictionary', '<xsl:value-of select="../url/@payload"/>');
 						</script>					
 					<xsl:if test="@modalmustback">
 						<div class="hiddden">

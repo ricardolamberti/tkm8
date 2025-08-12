@@ -45,9 +45,6 @@
 				</script>
 				
 				<xsl:apply-templates select="*" />
-				<xsl:if test="header/layouts/@is_stage='true'">
-					<div class="ribbon">STAGE</div>
-				</xsl:if>
 			</body>
 		</html>
 	</xsl:template>

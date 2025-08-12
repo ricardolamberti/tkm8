@@ -1,17 +1,11 @@
 package pss.bsp.contrato.detalleCopaWS.objetivos;
 
-import pss.bsp.contrato.detalle.GuiDetalle;
 import pss.core.services.records.JRecords;
-import pss.core.tools.collections.JCollectionFactory;
-import pss.core.tools.collections.JOrderedMap;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.win.totalizer.JTotalizer;
-import pss.core.winUI.controls.JFormControl;
-import pss.core.winUI.controls.JFormSwingEdit;
 import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;
-import pss.core.winUI.responsiveControls.JFormIntervalCDatetimeResponsive;
 
 public class GuiObjetivosCopasWS extends JWins {
 
@@ -68,7 +62,7 @@ public class GuiObjetivosCopasWS extends JWins {
 	}
 	
 	public void ConfigurarFiltros(JFormFiltro zFiltros) throws Exception {
-		zFiltros.NuevoEdit("Ruta","CHAR", "ruta","ilike");
+		zFiltros.addEditResponsive("Ruta","CHAR", "ruta","ilike");
 		zFiltros.addIntervalCDateResponsive("Intervalo", "fecha");
 	}
 	

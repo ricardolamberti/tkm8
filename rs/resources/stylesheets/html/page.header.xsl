@@ -65,7 +65,7 @@
 			<!-- http://69.65.97.45:8080/astor/ es ABQIAAAAXW9Ge-JkQvsWrHsdEM5ughQR3xk6oBaqc-s0CBYtDQPQbRiSLRTrpcfa-RZAAjYyxycfoirYkJrRkA -->
 			<!-- http://127.0.0.1:8080/astor/ es ABQIAAAAXW9Ge-JkQvsWrHsdEM5ughT42aBd2TDQoA4gzG0PdqlIyh6G7hTJV7B6weD_DWCl_ncFmCKF2GuSCg -->
 			<xsl:if test="application/@google_map_key!=''">
-				<script type="text/javascript" defer="">
+				<script type="text/javascript">
 					<xsl:attribute name="src"><![CDATA[https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&language=es]]></xsl:attribute>
 				</script>
 			</xsl:if>

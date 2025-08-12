@@ -500,8 +500,7 @@ public abstract class JBasicLayoutGenerator  implements ILayoutGenerator {
 	public void configuereBars(JWebViewNavigationBar bar, String menu)  throws Exception{
 //		if (menu.equals("TOP")) bar.setNavBarBlack(true);
 	}
-	public JWebViewNavigationBar getMenuBar(JWebViewComposite parent)  throws Exception{
-		if (menuPosPrincipal().equals("TOP")) {
+	public JWebViewNavigationBar getMenuBar(JWebViewComposite parent)  throws Exception{		if (menuPosPrincipal().equals("TOP")) {
 			JWebNavigationBarTop n=new JWebNavigationBarTop();
 			//n.setNavBarInverse(true);
 			n.setNavBarRight(false);
@@ -910,7 +909,7 @@ public abstract class JBasicLayoutGenerator  implements ILayoutGenerator {
 		JWebViewZoneRow root = new JWebViewZoneRow();
 		root.setName(parent.getCompletePanelName());
 		root.setClassResponsive(parent.getClassResponsive());
-		parent.setClassResponsive(null);//ya use su tamaño original en la zone que lo incluye
+		parent.setClassResponsive(null);//ya use su tamaï¿½o original en la zone que lo incluye
 
 		if (parent.hasPreviewPanel()) {
 			panelWithPreview.setOrientation(JWebSplit.ORIENT_VERTICAL);
@@ -1541,7 +1540,7 @@ public abstract class JBasicLayoutGenerator  implements ILayoutGenerator {
 		return a;
 	}
 	public String getMessageConfirmLostData() throws Exception {
-		return JLanguage.translate("Se perderán datos, continúa?");
+		return JLanguage.translate("Se perderï¿½n datos, continï¿½a?");
 	}
 	public String getMessageConfirm(String msgDefa,String extra) throws Exception {
 		Object params[]= {extra};

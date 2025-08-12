@@ -1,90 +1,72 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Preparando descarga...</title>
-  <style>
-    body { font-family: sans-serif; text-align: center; padding: 50px; }
-    .progress-bar-bg {
-      width: 80%; margin: 30px auto; background: #eee; border-radius: 20px; height: 25px;
-    }
-    .progress-bar {
-      height: 100%; width: 0%; background: #4caf50; border-radius: 20px; transition: width 0.2s;
-    }
-  </style>
-</head>
-<body>
-  <h1>Estamos preparando tu archivo para descarga</h1>
-  <h2 id="filename">archivo.xlsx</h2>
-
-  <div class="progress-bar-bg">
-    <div class="progress-bar" id="bar"></div>
-  </div>
-
- 
-  <script>
-    let data = {};
-    try {
-      data = JSON.parse(window.name || '{}');
-    } catch (e) {
-      document.body.innerHTML = '<h2>Error: No se pudo obtener la información del archivo a descargar.</h2>';
-      throw e;
-    }
-
-    const fileUrl = data.url;
-    const params = data.params || {};
-	let title = "archivo.xlsx";
-
-	try {
-	  const url = new URL("http://dummyhost" + fileUrl); // Añadir host para que funcione como URL válida
-	  const dgExport = url.searchParams.get("dg_export");
-
-	  if (dgExport) {
-	    const parts = dgExport.split(",");
-	    for (const part of parts) {
-	      if (part.startsWith("title___op1=")) {
-	        title = decodeURIComponent(part.split("=")[1]);
-	        break;
-	      }
-	    }
-	  }
-	} catch (e) {
-	  console.warn("No se pudo extraer el título de la URL:", e);
-	}
-    document.getElementById("filename").textContent = title;
-   // document.getElementById(" haz clic aquí.lLink").href = fileUrl;
-
-    let progress = 0;
-    const bar = document.getElementById("bar");
-
-    const interval = setInterval(() => {
-      progress += 5;
-      if (progress > 100) progress = 100;
-      bar.style.width = progress + '%';
-
-      if (progress >= 100) {
-        clearInterval(interval);
-
-        // Crear un formulario y enviarlo por POST al backend
-        const form = document.createElement("form");
-        form.method = "post";
-        form.action = fileUrl;
-        form.style.display = "none";
-
-        for (const key in params) {
-          if (params.hasOwnProperty(key)) {
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = key;
-            input.value = params[key];
-            form.appendChild(input);
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Descargar Game Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('images/fondo.jpg'); /* Cambia esta ruta por la de tu imagen */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            color: white;
+            text-align: center;
         }
 
-        document.body.appendChild(form);
-        form.submit();
-      }
-    }, 100);
-  </script>
+        h1 {
+            margin-top: 20px;
+            font-size: 4em;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        .download-section {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        a {
+            font-size: 1.5em;
+            background-color: #28a745;
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            transition: background-color 0.3s ease;
+        }
+
+        a:hover {
+            background-color: #218838;
+        }
+
+        footer {
+            padding: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #ffffff;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Game Demo</h1>
+
+    <div class="download-section">
+        <a href="download/game.exe" download="game.exe">
+            Descargar Game Demo
+        </a>
+    </div>
+
+    <footer>
+        Versión 1.0
+    </footer>
 </body>
 </html>

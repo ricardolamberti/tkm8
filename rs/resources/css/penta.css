@@ -12,20 +12,10 @@
   -moz-box-shadow:none !important;
   box-shadow:none !important;
 }
-
-.ribbon {
-  width: 150px;
-  background: red;
-  color: white;
-  text-align: center;
-  font: bold 14px sans-serif;
-  position: absolute;
-  top: 25px;
-  left: -45px;
-  transform: rotate(-45deg);
-  z-index: 9999;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  padding: 5px 0;
+.gutter-0 {
+	padding-right:0px;
+	padding-left:0px;
+	
 }
 
 .to-bottom-header {
@@ -37,6 +27,14 @@
   display: table-cell;
   vertical-align: bottom;
 }
+.btn-circle.btn-xxl {
+    width: 150px;
+    height: 150px;
+    padding: 10px 16px;
+    border-radius: 130px;
+    font-size: 24px;
+    line-height: 1.33;
+}
 .conborde {
     border: 5px;
     border-color: #000;
@@ -44,7 +42,6 @@
     border-width: thin;
     padding: 5px;
 }
-
 .no-margin{
 	margin-right:0px  !important;
 	margin-left:0px  !important;
@@ -408,6 +405,8 @@ margin: -30px 0 0 40px;
 .required>.dropdownwinlov>.dropdown-toggle {
 	background-color: #F4F2D9;
 }
+
+
 .noclicks { pointer-events:none; }
 
 .point {  opacity:.6; }
@@ -475,9 +474,6 @@ margin: -30px 0 0 40px;
 
 .infocard {
   font-size: 40px;
-}
-.infocarddouble {
-  font-size: 20px;
 }
 
 fieldset.panel-default {
@@ -550,26 +546,6 @@ legend {
   padding-left: 0px !important;
   padding-top: 0px !important;
   padding-bottom: 0px !important;
-  margin-right: -0px !important;
-  margin-left: -0px !important;
-  margin-top: -0px !important;
-  margin-bottom: -0px !important;
-}
-.expand_responsive #row {
-  padding-right: 0px !important;
-  padding-left: 0px !important;
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
-  margin-right: -0px !important;
-  margin-left: -0px !important;
-  margin-top: -0px !important;
-  margin-bottom: -0px !important;
-}
-.expand_responsive .panel-body {
-  padding-right: 0px !important;
-  padding-left: 0px !important;
-  padding-top: 5px !important;
-  padding-bottom: 5px !important;
   margin-right: -0px !important;
   margin-left: -0px !important;
   margin-top: -0px !important;
@@ -680,7 +656,7 @@ legend {
 	-moz-border-radius: 3px !important;
 	border-radius: 3px !important;
 	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.13) !important;
-	-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.13) !important;
+	-moz- box-shadow: 0 0 1px rgba(0, 0, 0, 0.13) !important;
 	box-shadow: 0 0 1px rgba(0, 0, 0, 0.13) !important;
 }
 
@@ -690,7 +666,7 @@ legend {
 	-moz-border-radius: 30px !important;
 	border-radius: 30px !important;
 	-webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.13) !important;
-	-moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.13) !important;
+	-moz- box-shadow: 0 1px 2px rgba(0, 0, 0, 0.13) !important;
 	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.13) !important;
 }
 
@@ -701,7 +677,7 @@ legend {
 	-moz-border-radius: 3px !important;
 	border-radius: 3px !important;
 	-webkit-box-shadow: 0 0 1px rgba(0, 0, 0, 0.13) !important;
-	-moz-box-shadow: 0 0 1px rgba(0, 0, 0, 0.13) !important;
+	-moz- box-shadow: 0 0 1px rgba(0, 0, 0, 0.13) !important;
 	box-shadow: 0 0 1px rgba(0, 0, 0, 0.13) !important;
 }
 
@@ -1306,25 +1282,7 @@ table.dataTable input[type=text] {
     outline-offset: 0px; 
 }
 
-.custom-tooltip {
-    position: absolute;
-    background: white;
-    padding: 5px;
-    border: 1px solid black;
-    border-radius: 5px;
-    pointer-events: none;
-    font-size: 14px;
-    font-weight: bold;
-    display: none;
-}
-.close {
-    position: absolute;
-    top: 20px;
-    right: 30px;
-    font-size: 40px;
-    color: white;
-    cursor: pointer;
-}
+
 .modal-component {
 	position: absolute;
 	width: fit-content;

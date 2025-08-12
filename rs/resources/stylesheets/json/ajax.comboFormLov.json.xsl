@@ -12,7 +12,7 @@
 	<xsl:template match="page/view/history_bar" />
 	<xsl:template match="page/view/objects" />
 	<xsl:template match="page/message" />
-	
+
 	<xsl:template match="page/help" />
 	<xsl:template match="page/help_form" />
 	<xsl:template match="page/publicity_campaign" />
@@ -104,8 +104,7 @@
 		    ,"pagination": {
 			    "more": <xsl:value-of select="@moreOptions"/>
 			  }
-		  , "dictionary": <xsl:value-of select="$dictionary" />
-		}
+			}
 	</xsl:template>
 
 		

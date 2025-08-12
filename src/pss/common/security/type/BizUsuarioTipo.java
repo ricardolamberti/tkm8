@@ -105,7 +105,7 @@ public class BizUsuarioTipo extends JMMRecord {
 	}
 
 	public boolean getHasNavigayionBar() throws Exception {
-		return pHasNavigationBar.getValue();
+		return pHasNavigationBar.isNull() || pHasNavigationBar.getValue();
 	}
 	public boolean getHasMail() throws Exception {
 		return pHasMail.getValue();
@@ -218,11 +218,11 @@ public class BizUsuarioTipo extends JMMRecord {
 	public void createFixedProperties() throws Exception {
 		this.addFixedItem(KEY, "tipo_usuario", "Usuario tipo", true, false, 16);
 		this.addFixedItem(KEY, "company", "Empresa", true, false, 15);
-		this.addFixedItem(FIELD, "descripcion", "Descripción", true, true, 50);
+		this.addFixedItem(FIELD, "descripcion", "Descripciï¿½n", true, true, 50);
 		this.addFixedItem(FIELD, "lenguaje", "Idioma", true, true, 2, 0, JObject.JLOWERCASE);
 		this.addFixedItem(FIELD, "loguear", "Loguear", true, false, 1);
-		this.addFixedItem(FIELD, "birth_country", "País de origen", true, true, 15);
-		this.addFixedItem(FIELD, "custom_menu", "Menú Custom", true, false, 15);
+		this.addFixedItem(FIELD, "birth_country", "Paï¿½s de origen", true, true, 15);
+		this.addFixedItem(FIELD, "custom_menu", "Menï¿½ Custom", true, false, 15);
 		this.addFixedItem(FIELD, "skin", "Skin", true, false, 50);
 		this.addFixedItem(FIELD, "skin_web", "Skin Web", true, false, 50);
 		this.addFixedItem(FIELD, "home_web", "Origen web", true, false, 250);

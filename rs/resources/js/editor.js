@@ -318,7 +318,7 @@ WYSIWYG_Editor.prototype.display = function (){
         	s+='<body ';
         	if (window.chrome && this.readonly==false && this.formulario==false) s+='contentEditable=\'true\' onload=\'load()\' '; 
         	else if (window.chrome && this.readonly==false && this.formulario==true) s+=' onload=\'load()\' '; 
-        	s+='style="margin-left: 0px;margin-right: 0px; margin-top: 0px; margin-bottom: 0px;width:100%;'+(this.isweb?'overflow-x:hidden;':'')+'">';
+        	s+='style="margin-left: 0px;margin-right: 0px; margin-top: 0px; margin-bottom: 0px;width:100%;">';
         }
         s+=this.content;
         if (this.content.indexOf('<BODY')==-1)s+='</body>';
@@ -409,7 +409,7 @@ WYSIWYG_Editor.prototype._display_editor = function (){
         s = s + ('           <option value="sans-serif">Sans Serif</option>');
         s = s + ('           <option value="serif">Serif</option>');
         s = s + ('           <option value="monospace">Typewriter</option>');
-        s = s + ('           <option value="barcode39ext">Código de barra</option>');
+        s = s + ('           <option value="barcode39ext">C�digo de barra</option>');
         s = s + ('          </select>');
         s = s + ('          <select onChange="getRegisteredRTE(\''+this.instance_name+'\').doTextFormat(\'fontSize\',this.options[this.selectedIndex].value)">');
         s = s + ('           <option value="">- Size -</option>');
@@ -1178,8 +1178,11 @@ WYSIWYG_Editor.prototype.insertPageLand= function (){
 	   this.doTextFormat('insertHTML',htmlText,null);
 	}
 WYSIWYG_Editor.prototype.insertField = function (){
-	   var htmlText = '<DIV class="editable" style="display:inline-block;">&nbsp;&nbsp;&nbsp;</DIV>';
-	   this.doTextFormat('insertHTML',htmlText,null);
+    gr = prompt('Variable');
+    if (gr==null || gr==0) return;
+
+    var htmlText = '<DIV id="variable__'+gr+'" class="editable" style="display:inline-block;">&nbsp;&nbsp;&nbsp;</DIV>';
+	this.doTextFormat('insertHTML',htmlText,null);
 	}
 
 /**

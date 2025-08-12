@@ -1123,7 +1123,7 @@ public class BizAction extends JRecord {
 		if (JWebActionFactory.getCurrentRequest().getLevel() > 1)
 			action += "__l" + JWebActionFactory.getCurrentRequest().getLevel();
 
-		return "p_" + action + (row != null ? "_" + row : "");
+		return forceProviderName="p_" + action + (row != null ? "_" + row : "");
 	}
 
 	public void setObjFilterMap(JFilterMap f) {

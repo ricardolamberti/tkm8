@@ -20,97 +20,97 @@
 				<doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
 				<buffer-size>1024</buffer-size>
 				<encoding>ISO-8859-1</encoding>
-				<omit-xml-declaration>yes</omit-xml-declaration>
-				<indent>no</indent>
+				<omit-xml-declaration>true</omit-xml-declaration>
+				<indent>false</indent>
 			</map:serializer>
 
 			<map:serializer name="html-decoded" logger="sitemap.serializer.html" mime-type="text/html" pool-grow="4" pool-max="32" pool-min="4" src="pss.www.platform.content.compression.JCompressedHTMLSerializer">
 				<doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
 				<buffer-size>1024</buffer-size>
 				<encoding>ISO-8859-5</encoding>
-				<omit-xml-declaration>yes</omit-xml-declaration>
-				<indent>no</indent>
+				<omit-xml-declaration>true</omit-xml-declaration>
+				<indent>false</indent>
 			</map:serializer>
 
 			<map:serializer name="html-nocompress" logger="sitemap.serializer.html" mime-type="text/html" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.HTMLSerializer">
 				<doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
 				<buffer-size>1024</buffer-size>
 				<encoding>ISO-8859-5</encoding>
-				<omit-xml-declaration>yes</omit-xml-declaration>
-				<indent>no</indent>
+				<omit-xml-declaration>true</omit-xml-declaration>
+				<indent>false</indent>
 			</map:serializer>
 
 			<map:serializer name="graph" logger="sitemap.serializer.html" mime-type="text/html" pool-grow="4" pool-max="32" pool-min="4" src="pss.www.platform.content.compression.JCompressedHTMLSerializer">
 				<doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
 				<buffer-size>1024</buffer-size>
 				<encoding>ISO-8859-1</encoding>
-				<omit-xml-declaration>yes</omit-xml-declaration>
-				<indent>no</indent>
+				<omit-xml-declaration>true</omit-xml-declaration>
+				<indent>false</indent>
 			</map:serializer>
 
 			<map:serializer name="map" logger="sitemap.serializer.html" mime-type="text/html" pool-grow="4" pool-max="32" pool-min="4" src="pss.www.platform.content.compression.JCompressedHTMLSerializer">
 				<doctype-public>-//W3C//DTD HTML 4.01 Transitional//EN</doctype-public>
 				<buffer-size>1024</buffer-size>
 				<encoding>ISO-8859-1</encoding>
-				<omit-xml-declaration>yes</omit-xml-declaration>
-				<indent>no</indent>
+				<omit-xml-declaration>true</omit-xml-declaration>
+				<indent>false</indent>
 			</map:serializer>
 
 			<map:serializer name="excel" logger="sitemap.serializer.xls" mime-type="application/vnd.ms-excel" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.XMLSerializer">
 				<buffer-size>1024</buffer-size>
 				<encoding>ISO-8859-1</encoding>
-				<omit-xml-declaration>yes</omit-xml-declaration>
-				<indent>no</indent>
+				<omit-xml-declaration>true</omit-xml-declaration>
+				<indent>false</indent>
 			</map:serializer>
 
 
 			<map:serializer name="none" logger="sitemap.serializer.xls" mime-type="application/vnd.ms-excel" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.TextSerializer">
 				<buffer-size>1024</buffer-size>
 				<encoding>ISO-8859-1</encoding>
-				<omit-xml-declaration>yes</omit-xml-declaration>
-				<indent>no</indent>
+				<omit-xml-declaration>true</omit-xml-declaration>
+				<indent>false</indent>
 			</map:serializer>
 
 			<map:serializer name="json" logger="sitemap.serializer.json" mime-type="application/json" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.TextSerializer">
 				<buffer-size>1024</buffer-size>
 				<encoding>UTF-8</encoding>
-				<omit-xml-declaration>yes</omit-xml-declaration>
-				<indent>no</indent>
+				<omit-xml-declaration>true</omit-xml-declaration>
+				<indent>false</indent>
 			</map:serializer>
 
 			<map:serializer name="json-compress" logger="sitemap.serializer.json" mime-type="application/json" pool-grow="4" pool-max="32" pool-min="4" src="pss.www.platform.content.compression.JCompressedTextSerializer">
 				<buffer-size>1024</buffer-size>
 				<encoding>UTF-8</encoding>
-				<omit-xml-declaration>yes</omit-xml-declaration>
-				<indent>no</indent>
+				<omit-xml-declaration>true</omit-xml-declaration>
+				<indent>false</indent>
 			</map:serializer>
 
 			<map:serializer name="mobile" logger="sitemap.serializer.json" mime-type="application/json" pool-grow="4" pool-max="32" pool-min="4" src="pss.www.platform.content.compression.JCompressedTextSerializer">
 				<buffer-size>1024</buffer-size>
 				<encoding>UTF-8</encoding>
-				<omit-xml-declaration>yes</omit-xml-declaration>
-				<indent>no</indent>
+				<omit-xml-declaration>true</omit-xml-declaration>
+				<indent>false</indent>
 			</map:serializer>
 			
 			<map:serializer name="csv" logger="sitemap.serializer.csv" mime-type="text/csv" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.TextSerializer">
 				<buffer-size>1024</buffer-size>
-				<encoding>UTF-8</encoding>
-				<omit-xml-declaration>yes</omit-xml-declaration>
-				<indent>no</indent>
+				<encoding>ISO-8859-1</encoding>
+				<omit-xml-declaration>true</omit-xml-declaration>
+				<indent>false</indent>
 			</map:serializer>
 
 			<map:serializer name="js" logger="sitemap.serializer.js" mime-type="text/javascript" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.TextSerializer">
 				<buffer-size>1024</buffer-size>
 				<encoding>ISO-8859-1</encoding>
-				<omit-xml-declaration>yes</omit-xml-declaration>
-				<indent>no</indent>
+				<omit-xml-declaration>true</omit-xml-declaration>
+				<indent>false</indent>
 			</map:serializer>
 
 			<map:serializer name="css" logger="sitemap.serializer.css" mime-type="text/css" pool-grow="4" pool-max="32" pool-min="4" src="org.apache.cocoon.serialization.TextSerializer">
 				<buffer-size>1024</buffer-size>
 				<encoding>ISO-8859-1</encoding>
-				<omit-xml-declaration>yes</omit-xml-declaration>
-				<indent>no</indent>
+				<omit-xml-declaration>true</omit-xml-declaration>
+				<indent>false</indent>
 			</map:serializer>
 <!--
 			<map:serializer name="report" logger="sitemap.serializer.report"  mime-type="application/pdf"  pool-grow="4" pool-max="32" pool-min="4" src="pss.www.platform.content.compression.JReportSerializer">
@@ -195,14 +195,8 @@
 			<map:action name="JDoPartialRefreshForm" src="pss.www.platform.actions.resolvers.JDoPartialRefreshFormActionResolver"/>
 			<map:action name="JDoPartialRefreshPreviewForm" src="pss.www.platform.actions.resolvers.JDoPartialRefreshPreviewFormActionResolver"/>
 			<map:action name="JDoUpdateServerField" src="pss.www.platform.actions.resolvers.JDoUpdateServerFieldActionResolver"/>
-			<map:action name="JDoPushNotification" src="pss.www.platform.actions.resolvers.JDoPushNotificationActionResolver"/>
-			<map:action name="JDoGetChannel" src="pss.www.platform.actions.resolvers.JDoGetChannelActionResolver"/>
 
 			<!-- front door actions -->
-			<map:action name="JDoSubsessionLogin" src="pss.www.platform.actions.resolvers.JDoSubsessionLoginResolver"/>
-			<map:action name="JDoAutoLogin" src="pss.www.platform.actions.resolvers.JDoAutoLoginResolver"/>
-			<map:action name="JDoRemoteLogin" src="pss.www.platform.actions.resolvers.JDoRemoteLoginResolver"/>
-			<map:action name="JDoPersistentLogin" src="pss.www.platform.actions.resolvers.JDoPersistentLoginResolver"/>
 			<map:action name="JDoLogin" src="pss.www.platform.actions.resolvers.JDoLoginResolver"/>
 			<map:action name="JDoLoginByIni" src="pss.www.platform.actions.resolvers.JDoLoginByIniResolver"/>
 			<map:action name="JDoPasswordChange" src="pss.www.platform.actions.resolvers.JDoPasswordChangeResolver"/>
@@ -253,8 +247,6 @@
 			<map:generator name="JComboFormLovPageGenerator" src="pss.www.platform.content.generators.JComboFormLovPageGenerator"/>
 			<map:generator name="JComboResponsiveFormLovPageGenerator" src="pss.www.platform.content.generators.JComboResponsiveFormLovPageGenerator"/>
 			<map:generator name="JUpdateServerFieldPageGenerator" src="pss.www.platform.content.generators.JUpdateServerFieldPageGenerator"/>
-			<map:generator name="JPushNotificationPageGenerator" src="pss.www.platform.content.generators.JPushNotificationPageGenerator"/>
-			<map:generator name="JGetChannelPageGenerator" src="pss.www.platform.content.generators.JGetChannelPageGenerator"/>
 			<map:generator name="JFormLovPageGenerator" src="pss.www.platform.content.generators.JFormLovPageGenerator"/>
 			<map:generator name="JFormLovRefreshPageGenerator" src="pss.www.platform.content.generators.JFormLovRefreshPageGenerator"/>
 			<map:generator name="JGraphRefreshPageGenerator" src="pss.www.platform.content.generators.JGraphRefreshPageGenerator"/>
@@ -353,7 +345,6 @@
 				</map:transform>
 				<map:serialize type="html"/>
 			</map:match>
-			
 			<map:match pattern="login_embbeded" type="wildcard">
 				<map:generate type="JLoginEmbbededPageGenerator"/>
 				<map:transform src="resources/stylesheets/html/login_embbeded.xsl" type="xslt">
@@ -361,7 +352,6 @@
 				</map:transform>
 				<map:serialize type="html"/>
 			</map:match>
-			
 			<map:match pattern="login" type="wildcard">
 				<map:act type="JBasicLoginActionResolver">
 					<map:generate type="JLoginPageGenerator"/>
@@ -401,23 +391,6 @@
 				</map:act>
 			</map:match>
 			
-			<map:match pattern="closed_subsession" type="wildcard">
-				<map:act type="JBasicFrontDoorActionResolver">
-					<map:generate type="JClosedPageGenerator"/>
-					<map:transform src="{transformer}" type="xslt">
-						<map:parameter name="requestid" value="{__requestid}"/>
-					</map:transform>
-					<map:select type="parameter">
-						<map:parameter name="parameter-selector-test" value="{serializer}"/>
-						<map:when test="html">
-							<map:serialize type="html"/>
-						</map:when>
-						<map:when test="mobile">
-							<map:serialize type="mobile"/>
-						</map:when>
-					</map:select>
-				</map:act>
-			</map:match>
 
 			<map:match pattern="do" type="wildcard">
 				<map:act type="JBasicLoginActionResolver">
@@ -428,6 +401,7 @@
 					<map:serialize type="html"/>
 				</map:act>
 			</map:match>
+
 
 		<map:match pattern="mobile-do" type="wildcard">
 				<map:act type="JBasicLoginActionResolver">
@@ -562,21 +536,10 @@
 			</map:match>
 
 
-			<map:match pattern="subsession" type="wildcard">
-				<map:act type="JDoSubsessionLogin"/>
-			</map:match>
 
-			<map:match pattern="autologin" type="wildcard">
-				<map:act type="JDoAutoLogin"/>
-			</map:match>
-
-			<map:match pattern="remotelogin" type="wildcard">
-				<map:act type="JDoRemoteLogin"/>
-			</map:match>
 			
-			<map:match pattern="persistentLogin" type="wildcard">
-				<map:act type="JDoPersistentLogin"/>
-			</map:match>
+
+			
 
 			<map:match pattern="do-logout" type="wildcard">
 				<map:redirect-to uri="login"/>
@@ -585,6 +548,8 @@
 			<map:match pattern="do-login" type="wildcard">
 				<map:act type="JDoLogin"/>
 			</map:match>
+
+
 
 			<map:match pattern="do-login-ini" type="wildcard">
 				<map:act type="JDoLoginByIni"/>
@@ -779,7 +744,7 @@
 							<map:serialize type="mobile"/>
 						</map:when>
 					</map:select>
-				</map:act>
+			 	</map:act>
 			</map:match>
 
 			<map:match pattern="do-help*" type="wildcard">
@@ -794,29 +759,6 @@
 				</map:act>
 			</map:match>
 
-			<map:match pattern="do-pushnotification" type="wildcard">
-				<map:act type="JDoPushNotification">
-					<map:generate type="JPushNotificationPageGenerator">
-						<map:parameter name="deviceid" value="{__deviceid}"/>
-					</map:generate>
-					<map:transform src="resources/stylesheets/mobile/pushnotification.json.xsl" type="xslt"/>
-
-					<map:serialize type="json-compress"/>
-				</map:act>
-			</map:match>
-			
-			<map:match pattern="do-getchannel" type="wildcard">
-				<map:act type="JDoGetChannel">
-					<map:generate type="JGetChannelPageGenerator"/>
-					<map:transform src="resources/stylesheets/mobile/pushnotification.json.xsl" type="xslt">
-						<map:parameter name="dictionary" value="{__dictionary}"/>
-						<map:parameter name="requestid" value="{__requestid}"/>
-					</map:transform>
-
-					<map:serialize type="json-compress"/>
-				</map:act>
-			</map:match>
-			
 
 			<map:match pattern="do-updateserverfield*" type="wildcard">
 				<map:act type="JDoUpdateServerField">
@@ -1309,7 +1251,7 @@
 				</map:act>
 				<map:generate type="JGlobalStringsGenerator"/>
 				<map:transform src="resources/stylesheets/js/nls.strings.js.xsl" type="xslt"/>
-			<map:serialize type="html-nocompress"/>
+				<map:serialize type="js"/>
 			</map:match>
 
 			<map:match pattern="v_*/**/*.js" type="wildcard">
@@ -1400,7 +1342,6 @@
 			<map:match pattern="*" type="wildcard">
 				<map:redirect-to uri="do" />
 			</map:match>
-
 			<map:handle-errors>
 				<map:generate type="exception"/>
 				<map:transform src="resources/stylesheets/html/system.error2html.xsl" type="xslt"/>

@@ -24,6 +24,10 @@
 		 analizeTable('<xsl:value-of select="@scroll"/>');
 		 analizeModal('<xsl:value-of select="@scroll"/>');
 		</script>
+							<script>
+							sessionStorage.setItem('dictionary', '<xsl:value-of select="../url/@payload"/>');
+						</script>					
+		
 		<script>initializeViewArea();</script>
    		<xsl:if test="@modalmustback">
 			<div class="hiddden">

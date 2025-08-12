@@ -1,6 +1,6 @@
 
 body {
-  background-color: var(--colorbody));
+  background-color: var(--colorbody);
 } 
 #wrapper {
   width: 100%;
@@ -743,9 +743,10 @@ td.selected {
   padding: 0 0 0 0;
 }
 
-#main_canvas {
+.main_canvas {
    margin: 0 0 0 0;
    padding: 0 0 0 0;
+   z-index:0;
 }
  
 .workarea {
@@ -1574,7 +1575,9 @@ td {
 .dropdown .dropdown-menu .nav-header{padding-left:20px;padding-right:20px;}
 
 
-
+.dropdownbar {
+	padding-right: 15px;
+}
 
 
 .inline_component {
@@ -1613,7 +1616,7 @@ td {
   top: 5;
   left: 0;
   display: block;
-  width: 65%;
+  width: 70%;
   margin-bottom: 0; /* Override default `<label>` margin */
   line-height: 1.5;
   color: #808080;
@@ -1624,7 +1627,7 @@ td {
 }
 
 .inline_component input::-webkit-input-placeholder,
-.inline_component .input-group input::-webkit-input-placeholder {
+.inline_component .input-group input:-webkit-input-placeholder {
 	color: transparent;
 }
 
@@ -1764,7 +1767,7 @@ hr.style-eight {
     text-align: center;
 }
 hr.style-eight:after {
-    content: "§";
+    content: "?";
     display: inline-block;
     position: relative;
     top: -0.7em;

@@ -1510,11 +1510,16 @@ public class JFormPanelResponsive extends JFormControlResponsive  {
 		getControles().AddControl(oEdit,findByField(sCampo));
 		return oEdit;
 	}
-
 	public JFormImageCardResponsive AddImageCard(String zLabel, JWebIcon image,String labelLink,int zaction) throws Exception {
 		BizAction action = null;
 		if (zaction!=-1) 
 			action = getBaseWin().findAction(zaction);
+		if (action==null && zaction!=-1) {
+			JFormImageCardResponsive oEdit= new JFormImageCardResponsive();
+			oEdit.initialize();
+			oEdit.setVisible(false);
+			return oEdit;
+		}
 		return AddImageCard(zLabel,image,labelLink, action, zaction==-1);
 	}
 	public JFormImageCardResponsive AddImageCard(String zLabel, JWebIcon image,String labelLink,String zaction) throws Exception {

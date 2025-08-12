@@ -366,47 +366,47 @@ function affixObject(name) {
 	},onScroll);
 	$("#"+name).parent().css({ 'min-height':$("#"+name).height()+$("#"+name).offset().left});
 }
+
 function onScroll(e){
 	var name= e.data.object;
-	var obj=$("#"+name);
 	
-	if (obj.offset()==="undefined") return;
-  
-	if(obj.hasClass("affix")){
+	if ($("#"+name).offset()==="undefined") return;
+    if($("#"+name).hasClass("affix")){
         if($(document).scrollTop() <= e.data.oldtop) {
-            obj.removeClass("affix");
-            obj.css({ top:'' })
-            obj.css({ width:'' })
-            e.data.oldtop= obj.offset().top;
+            $("#"+name).removeClass("affix");
+            $("#"+name).css({ top:'' })
+            $("#"+name).css({ width:'' })
+            e.data.oldtop= $("#"+name).offset().top;
         }
+
+      
         return;
     }
-	var posObj=  obj.offset().top+obj.height();
 
-    if($(document).height()-50 <= posObj){
+    if($(document).height()-50 <= $("#"+name).offset().top+$("#"+name).height()){
        return;
     }
-
-    if(obj.hasClass("affix"))
+//    if($(document).scrollTop() <= e.data.oldtop)
+//        return;
+    if($("#"+name).hasClass("affix"))
     	return;
 
-    var posView= $(document).scrollTop()+window.innerHeight;
-	var posTop= obj.height()-window.innerHeight;
+
+	var posObj=  $("#"+name).offset().top+$("#"+name).height();
+	var posView= $(document).scrollTop()+window.innerHeight;
+	var posTop= $("#"+name).height()-window.innerHeight;
+
 	
-    if (window.innerHeight<posObj){ //objeto mas grande que la ventana, la referencia de ajuste es el bottom
-    	if (posObj<posView) {
+    if (posObj<posView) {
     		e.data.oldtop=$(document).scrollTop();
-    		var realAncho = obj.width();
-	        obj.addClass("affix");
-	        obj.css({ top: '-'+posTop+'px' })
-	        obj.css({ width: realAncho+'px' })
-    	}
+    		var realAncho = $("#"+name).width();
+        $("#"+name).addClass("affix");
+        $("#"+name).css({ top: '-'+posTop+'px' })
+        $("#"+name).css({ width: realAncho+'px' })
     }
-    else if($(document).scrollTop() > e.data.oldtop){ // si el objeto entra en la ventana, decido por el top
-        obj.addClass("affix");
-        obj.css({ top: '-'+posTop+'px' })
-        obj.css({ width: realAncho+'px' })
-    }
+//    if($(document).scrollTop() > e.data.oldtop){
+//        $("#"+name).addClass("affix");
+ //   }
 }
 
 function initializeIdiomaSelect2 () {
@@ -457,92 +457,108 @@ function format(state) {
     $(state.element).attr('data-real_id',rid);
     return  $("<SPAN><B>"+rid+"</B> "+state.text+"</SPAN>");
 }
-function inicializeSelect2(name, placeholder, max, zMin, withkey, multiple, showLupa, splitter, onlykey, onlydescr) {
-    console.log("[Select2] >>> Inicializando:", name);
+function inicializeSelect2(name,placeholder,max,min,withkey,multiple,showLupa) {
+	initializeIdiomaSelect2();
+	anchors.options.placement = 'left';
+	anchors.add('.container h1, .container h2, .container h3, .container h4, .container h5');
+    var allowClear = (typeof showLupa === 'undefined') ? false:!showLupa;
 
-    initializeIdiomaSelect2();
+	$.fn.select2.defaults.set( "theme", "bootstrap" );
 
-    var allowClear = (typeof showLupa === 'undefined') ? false : !showLupa;
-    var min = zMin;
-    if (min == 0) min = 1;
-
-    var $select = $("#" + name);
-    if ($select.length === 0) {
-        console.warn("[Select2] No se encontró el elemento con id:", name);
-        return;
-    }
-
-    var $wrapper = $select.closest('.form-group, .input-group, div');
-    $wrapper.css('position', 'relative');
-
-    var baseConfig = {
-        allowClear: allowClear,
-        placeholder: placeholder,
-        language: "es",
-        maximumSelectionLength: max,
-        minimumInputLength: min,
-        containerCssClass: ':all:',
-        width: '100%',            // ✅ siempre ocupa todo el padre
-        dropdownParent: $wrapper, // ✅ anclado al padre para evitar scroll issues
-        ajax: {
-            url: "do-comboResponsiveFormLovAction",
-            dataType: 'json',
-            delay: 1000,
-            data: function (params) {
-                var parameters = responsiveFillDataListJSON(name, params.term, onlykey, false);
-                return parameters;
-            },
-            cache: true
-        }
-    };
-
-    if (withkey == 1) {
-        baseConfig.templateResult = function (result) {
-            return format(result, false);
-        };
-        baseConfig.templateSelection = function (selection) {
-            return format(selection, false);
-        };
-    }
-
-    $select.select2(baseConfig);
-		var $select = $("#"+name);
-		var $rendered = $select.next('.select2').find('.select2-selection__rendered');
-		
-		var anchoPadre = $select.closest('.form-group, .input-group').width();
-		var relativo = anchoPadre *2; // 80% del padre
-		
-		$rendered.css({
-		    width: relativo + 'px',
-		    maxWidth: '100%'
+	if (withkey==1) {
+		$( "#"+name).select2( {
+			width: null,
+			allowClear: allowClear,
+			placeholder: placeholder,
+			language: "es",
+	      templateResult: function (result) {
+	        return format(result);
+	      },
+	      templateSelection: function (selection) {
+	        return format(selection);
+	      },
+	      
+			maximumSelectionLength: max,
+			minimumInputLength: min,
+	
+			containerCssClass: ':all:',
+			ajax: {
+				url: "do-comboResponsiveFormLovAction",
+				dataType: 'json',
+				delay: 250,
+				data: function (params) {
+					return responsiveFillDataListJSON( name,params.term);
+				},
+				cache: true
+			}
 		});
+	} else {
+		$( "#"+name).select2( {
+			width: null,
+			allowClear: allowClear,
+			placeholder: placeholder,
+			language: "es",
+			maximumSelectionLength: max,
+			minimumInputLength: min,
+	
+			containerCssClass: ':all:',
+			ajax: {
+				url: "do-comboResponsiveFormLovAction",
+				dataType: 'json',
+				delay: 250,
+				data: function (params) {
+					return responsiveFillDataListJSON( name,params.term);
+				},
+				cache: true
+			}
+		});
+	}	
+	$( "#"+name).off("select2:unselect")
+	$( "#"+name).off("select2:select")
+	$( "#"+name).off("select2:open")
 
-    // Mantener eventos originales
-    $("#" + name).on("select2:open", function () {
-        if ($(this).parents("[class*='has-']").length) {
-            var classNames = $(this).parents("[class*='has-']")[0].className.split(/\s+/);
-            for (var i = 0; i < classNames.length; ++i) {
-                if (classNames[i].match("has-")) {
-                    $("body > .select2-container").addClass(classNames[i]);
-                }
-            }
-        }
-    });
+	$( "#"+name).on( "select2:open", function() {
+		if ( $( this ).parents( "[class*='has-']" ).length ) {
+			var classNames = $( this ).parents( "[class*='has-']" )[ 0 ].className.split( /\s+/ );
 
-    $select.on("select2:select", function () {
-        $select.select2("close");
-        refreshResponsiveFormLov(name);
-    });
+			for ( var i = 0; i < classNames.length; ++i ) {
+				if ( classNames[ i ].match( "has-" ) ) {
+					$( "body > .select2-container" ).addClass( classNames[ i ] );
+				}
+			}
+		}
+	});
+	if (multiple) {
+	  	$( "#"+name).on("select2:unselect", function(e) {
+	  		$( "#"+name).select2("close");
+	  		refreshResponsiveFormLov(name);
+	  	});
+	}
+	$( "#"+name).on("select2:select", function(e) {
+  		$(  "#"+name ).select2("close");
+  		refreshResponsiveFormLov(name);
+  	});	
+  	$(  "#"+name ).parent().find(".select2-selection--single").on("keydown", function(e) {
+  		var x = e.which || e.keyCode; 
+		if (x>=37 && x<=40 ) {
+			var out= gaOnKey(event);
+			return true;
+		}
+  		if (x!=32 &&  e.key.match(/^[\d\w]$/i)) {
+//  			var event = $.Event("keydown", { which: 32,keyCode: 32 });
+//	  		$(this).trigger( event );
+//				$(".select2-search__field").val(String.fromCharCode(e.which));
+//				$( "#"+name ).val(String.fromCharCode(e.which));
+//				$( "#"+name ).trigger('change.select2');
+			  var $select = $(  "#"+name );
+			  select2_search($select, String.fromCharCode(e.which));
 
-    if (multiple) {
-        $select.on("select2:unselect", function () {
-            $select.select2("close");
-            refreshResponsiveFormLov(name);
-        });
-    }
+  		} 
+  		
+  	});	
+
+
 }
-
-
 
 function select2_search ($el, term) {
   $el.select2('open');
@@ -1323,7 +1339,7 @@ function dropdownWinLovfillDataListJSON (comp,objectOwner,objectAction,provider)
 	var search = componentesearch.val();
 
 	var cfg = {ajaxContainer: comp,
-			dg_dictionary: document.navform.dg_dictionary.value,
+			dg_dictionary: sessionStorage.getItem('dictionary'),
 			subsession: document.navform.subsession.value,
 			src_uri: document.navform.src_uri.value,
 			src_sbmt: document.navform.src_sbmt.value,

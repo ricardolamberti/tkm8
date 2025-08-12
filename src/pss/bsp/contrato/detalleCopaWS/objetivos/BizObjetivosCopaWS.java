@@ -3,7 +3,6 @@ package pss.bsp.contrato.detalleCopaWS.objetivos;
 import java.util.Calendar;
 
 import pss.bsp.contrato.detalle.BizDetalle;
-import pss.core.services.fields.JBoolean;
 import pss.core.services.fields.JFloat;
 import pss.core.services.fields.JHtml;
 import pss.core.services.fields.JIntervalDate;

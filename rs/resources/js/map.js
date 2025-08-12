@@ -306,7 +306,7 @@
 //			mapa[pos][1]=detalle;
 			geocoder.geocode(request, function(results, status) {
 				addAddressToMap(results, status,map,titulo,icono);
-			}); //geocode hace la conversión a un punto, y su segundo par�metro es una Función de callback
+			}); //geocode hace la conversi�n a un punto, y su segundo par�metro es una funci�n de callback
 		}
 		
 //		function getMapa(name) {

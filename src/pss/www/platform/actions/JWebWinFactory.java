@@ -761,7 +761,8 @@ public class JWebWinFactory {
 			if (idOwner != null && !idOwner.isEmpty()) {
 				dict.put("o", idOwner);
 			}
-
+			dict.put("p", zAction.getForceProviderName());
+			
 			if (zAction.hasSubmit()) {
 				JAct submit = zAction.getObjSubmit();
 				if (submit != null && submit.hasResult()) {
@@ -788,10 +789,12 @@ public class JWebWinFactory {
 
 			String ownerKey = dict.containsKey("o") ? dict.get("o") : dict.get("owner");
 			String id = dict.containsKey("i") ? dict.get("i") : dict.get("actionid");
+			String prov = dict.containsKey("p") ? dict.get("p") : dict.get("forceProveiderName");
 
 			JBaseWin win = (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(ownerKey);
 
 			action = win.findActionByUniqueId(id);
+			action.setForceProviderName(prov);
 
 			String resultKey = dict.containsKey("r") ? dict.get("r") : dict.get("result");
 			if (resultKey != null) {

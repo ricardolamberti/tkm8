@@ -166,7 +166,7 @@
 	</xsl:template>
 
 
-	</xsl:template>
+	
 	<xsl:template match="page/help/helpbox"/>
 	<xsl:template match="page/help">
 		<div id ="help_zone">

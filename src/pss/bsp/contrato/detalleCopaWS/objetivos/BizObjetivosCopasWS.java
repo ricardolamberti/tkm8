@@ -6,7 +6,6 @@ import java.util.StringTokenizer;
 
 import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.bsp.contrato.detalle.BizDetalle;
-import pss.bsp.contrato.detalle.nivel.BizNivel;
 import pss.bsp.interfaces.copa.cabecera.BizCopaCabecera;
 import pss.common.regions.company.BizCompany;
 import pss.common.security.BizUsuario;
@@ -14,7 +13,6 @@ import pss.core.data.interfaces.sentences.JBaseRegistro;
 import pss.core.services.fields.JIntervalDate;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JDateTools;
-import pss.core.tools.JTools;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JOrderedMap;

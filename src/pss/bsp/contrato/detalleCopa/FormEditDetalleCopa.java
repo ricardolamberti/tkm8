@@ -46,8 +46,8 @@ public class FormEditDetalleCopa extends JBaseForm {
         AddItemEdit("Tour code excluidos", CHAR, OPT, "tourcode_excluded").setSizeColumns(4);
         AddItemEdit("Clases excluidas", CHAR, OPT, "class_excluded").setSizeColumns(4);
         AddItemEdit("Mercados", CHAR, OPT, "mercados")
-            .setPlaceHolder("Los mercados se dividen con coma, Ej: EZEMIA,@ARNYC,@AR@US")
-            .setSizeColumns(4);
+        	.setSizeColumns(4)
+        	.setPlaceHolder("Los mercados se dividen con coma, Ej: EZEMIA,@ARNYC,@AR@US");
 
         AddItemEdit("Evaluación al fin del contrato", CHAR, OPT, "conclusion").SetReadOnly(true);
 

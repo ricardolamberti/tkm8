@@ -148,7 +148,11 @@
 		<xsl:when test="icon/@source='responsive'">
  	       <i>
  	       		<xsl:if test="@name"><xsl:attribute name="id"><xsl:value-of select="@name"/></xsl:attribute></xsl:if>
- 	            <xsl:attribute name="class"><xsl:value-of select="icon/@file"/></xsl:attribute>
+ 	            <xsl:attribute name="class">
+ 	            	<xsl:value-of select="icon/@file"/>
+ 	            	<xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text>
+ 	            	<xsl:value-of select="icon/@class_image"/>
+ 	            </xsl:attribute>
 				<xsl:if test="not($style_attr='') and not($style_attr='null')">
 					<xsl:attribute name="style">
 						<xsl:value-of select="$style_attr"/>

@@ -282,7 +282,7 @@
 									</xsl:if>
 
 									<xsl:choose>
-										<xsl:when test="not(title/.='SINGRUPOCOLUMNA') and not(title/.='SINGRUPO')">
+										<xsl:when test="not(title/.='SINGRUPOCOLUMNA')">
 												<Data ss:Type="String">
 													<xsl:value-of select="title/." />
 												</Data>
