@@ -666,7 +666,7 @@ public class JRecords<TRecord extends JRecord> extends JBaseRecord {
 				PssLogger.logError(e);
 				throw new Exception("FILA "+fila+": "+e.getMessage());
 			}
-  	}
+  	} 
   	// faltantes
   	JIterator<JRecord> itr = map.getValueIterator();
   	while (itr.hasMoreElements()) {

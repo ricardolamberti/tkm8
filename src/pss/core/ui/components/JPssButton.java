@@ -1,96 +1,219 @@
 package pss.core.ui.components;
 
 import java.awt.Color;
-import java.awt.Container;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.Rectangle;
-import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusEvent;
+import java.util.Iterator;
 
 import javax.swing.JButton;
+import javax.swing.SwingConstants;
+import javax.swing.Timer;
+import javax.swing.UIManager;
 
-/**
- * Simplified JPssButton that no longer extends {@link JButton}. It now wraps a
- * Swing {@link JButton} instance and exposes a minimal set of setters and
- * getters required by the application. All state previously stored in the
- * superclass is now handled locally through these delegating methods.
- */
-public class JPssButton implements Cloneable {
+import pss.common.regions.multilanguage.JLanguage;
+import pss.core.tools.JPair;
+import pss.core.tools.collections.JCollectionFactory;
+import pss.core.tools.collections.JList;
+import pss.core.tools.collections.JMap;
+import pss.core.tools.collections.JOrderedMap;
+import pss.core.tools.collections.JStringTokenizer;
 
-    private final JButton button;
-    private String id;
-    private Object object;
-    private String inputKey;
+public class JPssButton extends JButton implements Cloneable {
 
-    public JPssButton() {
-        this.button = new JButton();
-        this.button.setRolloverEnabled(true);
-        this.button.setOpaque(false);
-        this.button.setBorder(null);
-        this.button.setBorderPainted(false);
-        this.button.setContentAreaFilled(false);
-        this.button.setFocusPainted(false);
+  //
+  //  STATIC VARIABLES
+  //
+  // status constants
+  public static final int STATUS_UNPRESSED = 1; // 0...00000001
+  public static final int STATUS_PRESSED = 2; // 0...00000010
+  public static final int STATUS_UNPRESSED_ROLLOVER = 4; // 0...00000100
+  public static final int STATUS_PRESSED_ROLLOVER = 8; // 0...00001000
+  public static final int STATUS_UNPRESSED_DISABLED = 16; // 0...00010000
+  public static final int STATUS_PRESSED_DISABLED = 32; // 0...00100000
+  // combinations
+  public static final int STATUS_UNPRESSED_ALL = STATUS_UNPRESSED | STATUS_UNPRESSED_ROLLOVER | STATUS_UNPRESSED_DISABLED;
+  public static final int STATUS_PRESSED_ALL = STATUS_PRESSED | STATUS_PRESSED_ROLLOVER | STATUS_PRESSED_DISABLED;
+  public static final int STATUS_DISABLED_ALL = STATUS_UNPRESSED_DISABLED | STATUS_PRESSED_DISABLED;
+  public static final int STATUS_ALL = STATUS_UNPRESSED | STATUS_PRESSED | STATUS_UNPRESSED_ROLLOVER | STATUS_PRESSED_ROLLOVER | STATUS_UNPRESSED_DISABLED | STATUS_PRESSED_DISABLED;
+  // default styled text id
+  public static final String DEFAULT_TEXT_ID = "id_text_default";
+  //
+  //  INSTANCE VARIABLES
+  //
+  // internal variables
+  private JOrderedMap<String, StyledText> texts = JCollectionFactory.createOrderedMap();
+  private int status;
+  // used internally to paint faster
+  private Dimension textDim;
+  private Rectangle labelRect;
+  private JList<JPair> textsToPaint;
+  private StringBuffer formingLineBuffer;
+  private StringBuffer truncatedTextBuffer;
+  private JList<JPair> allSplittedTexts;
+  private JList<String> currSplittedTexts;
+  private boolean canPaintFaster = false;
+  private Timer clickTimer;
+  // input events flags
+  private boolean hasFocus = false;
+  private boolean mouseOver = false;
+  private boolean pressed = false;
+  private boolean enterPressedHere;
+  private Component speedKeyOwner;
+  // bean properties
+  private boolean antialiasing;
+//  private ImageIcon unpressedBackground;
+//  private ImageIcon pressedBackground;
+//  private ImageIcon unpressedRolloverBackground;
+//  private ImageIcon pressedRolloverBackground;
+//  private ImageIcon unpressedDisabledBackground;
+//  private ImageIcon pressedDisabledBackground;
+//  private KeyStroke speedKey;
+  private int textIconGap = 0;
+  private boolean painted = true;
+  private boolean showText = true;
+  private int pressedOffset = 0;
+  private boolean clickOnEnter = true;
+  private boolean showFrontImage = false;
+  // client properties
+  private String id;
+  private Object object;
+  private String inputKey;
+//  private ImageIcon frontImage;
+//  private Point frontImagePoint = new Point(0,0);
+
+  //
+  //  CONSTRUCTORS
+  //
+
+  public JPssButton() {
+    // properties
+//    this.unpressedBackground = null;
+//    this.pressedBackground = null;
+//    this.unpressedRolloverBackground = null;
+//    this.pressedRolloverBackground = null;
+//    this.unpressedDisabledBackground = null;
+//    this.pressedDisabledBackground = null;
+    this.textIconGap = ((Integer) UIManager.get("Button.textIconGap")).intValue();
+    // defaults
+    this.setRolloverEnabled(true);
+    this.setOpaque(false);
+    this.setBorder(null);
+    this.setBorderPainted(false);
+    this.setContentAreaFilled(false);
+    this.setFocusPainted(false);
+
+    try {this.initialize(false);} catch (Exception ex){}
+  }
+  public void initialize() throws Exception {
+    initialize(true);
+  }
+
+  private void initialize(boolean withRepaint) throws Exception {
+    // internal variables
+    this.status = STATUS_UNPRESSED;
+    this.mouseOver = false;
+    this.hasFocus = false;
+    this.pressed = false;
+    this.setSelected(false);
+    if (withRepaint)
+      updateStatus();
+  }
+  
+  //
+  //  METHODS
+  //
+  // overridden methods
+  /**
+   * This method is called by the superclass when a change event occurrs.
+   */
+  @Override
+	protected void fireStateChanged() {
+    super.fireStateChanged();
+    this.setPressed(this.getModel().isPressed());
+  }
+
+  @Override
+	public void processFocusEvent(FocusEvent e) {
+    super.processFocusEvent(e);
+    switch (e.getID()) {
+      case FocusEvent.FOCUS_GAINED:
+        this.setFocused(true);
+        break;
+      case FocusEvent.FOCUS_LOST:
+        this.setFocused(false);
+        break;
+    }
+  }
+
+  //////////////////////////////////////////////////////////////////////
+  //  all the following is a workaround for an issue found in the
+  //  HE POS toolbar when the mouse was pressed several times at once
+  //  on the same region of the screen, causing an "Operation in
+  //  progress" message to be shown to the user;
+  //  toolbar buttons should call setAvoidInvasiveClicks(true) to
+  //  have this handled properly;
+  //
+  //  THIS IS NOT A SOLUTION, BUT JUST A WORKAROUND, AND SHOULD NOT
+  //  BE USED IN EXTENSION; A BETTER WAY TO SOLVE THIS SHOULD BE FOUND.
+  //  Leo Pronzolino.
+  //
+  //  -- FROM HERE
+  /*
+  private static class MouseHit {
+    private long mouseReleaseTime = -1;
+    private boolean bLastPressIgnored = false;
+    private Point location = new Point(0,0);
+    private JPssButton button;
+
+    private static Point getAbsoluteLocation(MouseEvent e) {
+      // if the component is not showing, return null
+      Component c = e.getComponent();
+      Point oNewLoc;
+      synchronized (c.getTreeLock()) {
+        if (c.isShowing()) {
+          oNewLoc = c.getLocationOnScreen();
+        } else {
+          oNewLoc = null;
+        }
+      }
+      if (oNewLoc != null) {
+        Point oEvLoc = e.getPoint();
+        oNewLoc.x += oEvLoc.x;
+        oNewLoc.y += oEvLoc.y;
+      }
+      return oNewLoc;
+    }
+    
+    private boolean isNear(Point newEventLoc) {
+      // the max allowed diff to consider the event is in
+      // the same zone of the screen
+      int maxDiff = 20; // pixels
+      // calcualte the diffs
+      int diffX = Math.abs(this.location.x - newEventLoc.x);
+      int diffY = Math.abs(this.location.y - newEventLoc.y);
+      // then answer !
+      return (diffX <= maxDiff) && (diffY <= maxDiff);
     }
 
-    /** Returns the underlying Swing component. */
-    public JButton getComponent() {
-        return this.button;
+    private synchronized void onRelease(MouseEvent e, JPssButton theButton) {
+      if ( ! this.bLastPressIgnored) {
+        this.mouseReleaseTime = System.currentTimeMillis();
+        Point oNewLoc = getAbsoluteLocation(e);
+        if ( oNewLoc != null && !this.isNear(oNewLoc) ) {
+          this.location.x = oNewLoc.x;
+          this.location.y = oNewLoc.y;
+          JDebugPrint.logDebug("XXXXX JPssButton - RELEASED: " + this.location);
+        }
+      }
     }
 
-<<<<<<< HEAD
-    // -----------------------------------------------------------------
-    // Delegated setters/getters that previously belonged to JButton
-    // -----------------------------------------------------------------
-    public void setText(String text) { this.button.setText(text); }
-    public String getText() { return this.button.getText(); }
-    public String getLabel() { return this.button.getText(); }
-
-    public void setPreferredSize(Dimension d) { this.button.setPreferredSize(d); }
-    public void setSize(int w, int h) { this.button.setSize(w, h); }
-    public Dimension getSize() { return this.button.getSize(); }
-    public int getX() { return this.button.getX(); }
-    public int getY() { return this.button.getY(); }
-    public Rectangle getBounds() { return this.button.getBounds(); }
-
-    public void setVisible(boolean visible) { this.button.setVisible(visible); }
-    public boolean isVisible() { return this.button.isVisible(); }
-    public Container getParent() { return this.button.getParent(); }
-
-    public void setEnabled(boolean enabled) { this.button.setEnabled(enabled); }
-    public boolean isEnabled() { return this.button.isEnabled(); }
-
-    public void setSelected(boolean selected) { this.button.getModel().setSelected(selected); }
-    public boolean isSelected() { return this.button.getModel().isSelected(); }
-
-    public void setFocusable(boolean focusable) { this.button.setFocusable(focusable); }
-    public void setHorizontalAlignment(int align) { this.button.setHorizontalAlignment(align); }
-    public void setHorizontalTextPosition(int textPosition) { this.button.setHorizontalTextPosition(textPosition); }
-    public void setVerticalAlignment(int align) { this.button.setVerticalAlignment(align); }
-    public void setVerticalTextPosition(int textPosition) { this.button.setVerticalTextPosition(textPosition); }
-
-    public void setForeground(Color c) { this.button.setForeground(c); }
-    public Color getForeground() { return this.button.getForeground(); }
-    public void setBackground(Color c) { this.button.setBackground(c); }
-    public Color getBackground() { return this.button.getBackground(); }
-    public void setFont(Font f) { this.button.setFont(f); }
-    public Font getFont() { return this.button.getFont(); }
-    public void setToolTipText(String text) { this.button.setToolTipText(text); }
-
-    public void addActionListener(ActionListener l) { this.button.addActionListener(l); }
-    public void doClick() { this.button.doClick(); }
-
-    // -----------------------------------------------------------------
-    // Local properties previously handled directly on the JPssButton
-    // -----------------------------------------------------------------
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
-
-    public Object getObject() { return object; }
-    public void setObject(Object object) { this.object = object; }
-
-    public String getInputKey() { return inputKey; }
-    public void setInputKey(String inputKey) { this.inputKey = inputKey; }
-=======
     private synchronized boolean onPressed(MouseEvent e, JPssButton theButton) {
       boolean bConsumedHere = false;
       boolean bChangeButton = true;
@@ -517,60 +640,14 @@ public class JPssButton implements Cloneable {
     return this.hasMultipleTexts() && this.isShowText();
   }
 
-  private void updateTextsToPaint() {
-    if (this.textsToPaint != null) {
-      this.textsToPaint.removeAllElements();
-      Iterator<StyledText> styledTextsIt = this.texts.valueIterator();
-      while (styledTextsIt.hasNext()) {
-        StyledText text = styledTextsIt.next();
-        Iterator<Style> stylesIt = text.styleByStatus.valueIterator();
-        boolean styleFound = false;
-        while (stylesIt.hasNext() && !styleFound) {
-          Style style = stylesIt.next();
-          if ((styleFound = style.appliesTo(this.status))) {
-            this.textsToPaint.addElement(new JPair(text.text, style));
-          }
-        }
-      }
-    }
-  }
+
 
   /**
    * Calculates the dimension of all the texts together and answers a List of
    * pairs of Strings and Styles, for each text line to be printed in the
    * button. The list of lines depends on the button status.
    */
-  private JList<JPair> splitTextsAndSetDimension(Dimension dimension, int maxTextWidth, boolean hasToPaintText, JList<JPair> zTextsToPaint) {
-    if (this.allSplittedTexts == null || zTextsToPaint == null) { return null; }
-    this.allSplittedTexts.removeAllElements();
-    dimension.width = 0;
-    dimension.height = 0;
-    if (hasToPaintText && !zTextsToPaint.isEmpty()) {
-      Iterator<JPair> pairsIt = zTextsToPaint.iterator();
-      while (pairsIt.hasNext()) {
-        JPair pair = pairsIt.next();
-        String text = (String) pair.fisrtObject;
-        Style style = (Style) pair.secondObject;
-        FontMetrics fm = this.getFontMetrics(style.getFont());
-        if (style.isWordWrap()) {
-          JList<String> splitted = this.splitTextAndSetDimension(dimension, text, maxTextWidth, fm);
-          if (splitted != null) {
-            Iterator<String> splittedTextsIt = splitted.iterator();
-            while (splittedTextsIt.hasNext()) {
-              String splittedText = splittedTextsIt.next();
-              this.allSplittedTexts.addElement(new JPair(splittedText, style));
-            }
-          }
-        } else {
-          String truncatedText = this.truncateTextAndSetDimension(dimension, text, maxTextWidth, fm);
-          if (truncatedText != null) {
-            this.allSplittedTexts.addElement(new JPair(truncatedText, style));
-          }
-        }
-      }
-    }
-    return this.allSplittedTexts;
-  }
+
 
   private String truncateTextAndSetDimension(Dimension dimension, String text, int maxTextWidth, FontMetrics fm) {
     if (fm == null || text == null) { return null; }
@@ -596,34 +673,6 @@ public class JPssButton implements Cloneable {
     return this.truncatedTextBuffer.toString();
   }
 
-  private JList<String> splitTextAndSetDimension(Dimension dimension, String text, int maxTextWidth, FontMetrics fm) {
-    if (this.currSplittedTexts == null || fm == null || text == null) { return null; }
-    this.currSplittedTexts.removeAllElements();
-    int textHeight = this.textHeight(fm.getAscent(), fm.getDescent());
-    text = text.replace('\t', ' ');
-    JStringTokenizer paragraphTokens = JCollectionFactory.createStringTokenizer(text, '\n');
-    while (paragraphTokens.hasMoreTokens()) {
-      String paragraph = paragraphTokens.nextToken().trim();
-      JStringTokenizer wordTokens = JCollectionFactory.createStringTokenizer(paragraph, ' ');
-      formingLineBuffer.setLength(0);
-      int formingLineWidth = 0;
-      while (wordTokens.hasMoreTokens()) {
-        String word = wordTokens.nextToken().trim();
-        int wordWidth = fm.stringWidth(word);
-        if ((formingLineWidth + wordWidth) > maxTextWidth) {
-          this.addWrappedTextLineAndSetDimension(formingLineBuffer.toString(), this.currSplittedTexts, dimension, fm, textHeight);
-          formingLineBuffer.setLength(0);
-          formingLineWidth = 0;
-        }
-        formingLineBuffer.append(word).append(' ');
-        formingLineWidth += (wordWidth + fm.charWidth(' '));
-      }
-      if (formingLineWidth > 0) {
-        this.addWrappedTextLineAndSetDimension(formingLineBuffer.toString(), this.currSplittedTexts, dimension, fm, textHeight);
-      }
-    }
-    return this.currSplittedTexts;
-  }
 
   private void addWrappedTextLineAndSetDimension(String lineToAdd, JList<String> linesList, Dimension dimension, FontMetrics fm, int textHeight) {
     String newLine = lineToAdd.trim();
@@ -717,28 +766,7 @@ public class JPssButton implements Cloneable {
 //  }
 
   private void updateStatus() {
-    if (this.isEnabled()) {
-      if (this.isSelected() || this.pressed) {
-        if (this.mouseOver || this.hasFocus) {
-          this.setStatus(STATUS_PRESSED_ROLLOVER);
-        } else {
-          this.setStatus(STATUS_PRESSED);
-        }
-      } else {
-        if (this.mouseOver || this.hasFocus) {
-          this.setStatus(STATUS_UNPRESSED_ROLLOVER);
-        } else {
-          this.setStatus(STATUS_UNPRESSED);
-        }
-      }
-    } else {
-      if (this.isSelected() || pressed) {
-        this.setStatus(STATUS_PRESSED_DISABLED);
-      } else {
-        this.setStatus(STATUS_UNPRESSED_DISABLED);
-      }
-    }
-    this.updateTextsToPaint();
+
   }
 
   private static boolean areEqual(Object zObject1, Object zObject2) {
@@ -767,25 +795,6 @@ public class JPssButton implements Cloneable {
   }
 
   private void createTextPaintingNeededObjects() {
-    if (!this.canPaintFaster) {
-      this.textDim = new Dimension();
-      this.labelRect = new Rectangle();
-      if (this.hasToPaintText()) {
-        this.textsToPaint = JCollectionFactory.createList(3);
-        this.formingLineBuffer = new StringBuffer(20);
-        this.truncatedTextBuffer = new StringBuffer(20);
-        this.allSplittedTexts = JCollectionFactory.createList(5);
-        this.currSplittedTexts = JCollectionFactory.createList(3);
-        this.updateTextsToPaint();
-      } else {
-        this.textsToPaint = null;
-        this.formingLineBuffer = null;
-        this.truncatedTextBuffer = null;
-        this.allSplittedTexts = null;
-        this.currSplittedTexts = null;
-      }
-      this.canPaintFaster = true;
-    }
   }
 
   /*****************************************************************************
@@ -816,7 +825,7 @@ public class JPssButton implements Cloneable {
 //  }
 
   /*****************************************************************************
-   * LEO DEL ORTO COMENT� ALGO!!!! Return true if the button has an object
+   * LEO DEL ORTO COMENTÄ ALGO!!!! Return true if the button has an object
    ****************************************************************************/
   public boolean hasObject() {
     return (this.object == null) ? false : true;
@@ -1095,8 +1104,7 @@ public class JPssButton implements Cloneable {
     //
     // internal methods
     private void updateParent() {
-      repaint();
-      updateTextsToPaint();
+  
     }
 
     // API
@@ -1221,11 +1229,7 @@ public class JPssButton implements Cloneable {
     }
 
     public void setApplyStatus(int zApplyStatus) {
-      if (this.applyStatus != zApplyStatus) {
-        this.applyStatus = zApplyStatus;
-        this.updateParent();
-        updateTextsToPaint();
-      }
+
     }
   }
 
@@ -1294,6 +1298,4 @@ public class JPssButton implements Cloneable {
 	public String toString() {
     return this.getId() + " - " + this.getText();
   }
->>>>>>> b3281718 (Merge inicial: unifico historias)
 }
-

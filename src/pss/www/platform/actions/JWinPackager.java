@@ -268,16 +268,16 @@ public class JWinPackager {
 			return;
 		JRecords recs = (JRecords<JRecord>) actionOwner;
 		recs.setStatic(true);
-                for (String element : serializableWin.elements) {
-                        if (element.startsWith(JWebRequest.IN_REC_PREFIX)) {
-                                recs.getStaticItems().addElement(getRegisterObjectRecTemp(element.substring(JWebRequest.IN_REC_PREFIX.length())));
-                        } else {
-                                Serializable obj = JWebActionFactory.getCurrentRequest().getRegisterObject(element);
-                                if (obj instanceof JBaseRecord) {
-                                        recs.getStaticItems().addElement((JBaseRecord) obj);
-                                }
-                        }
-                }
+		for (String element : serializableWin.elements) {
+			if (element.startsWith(JWebRequest.IN_REC_PREFIX)) {
+				recs.getStaticItems().addElement(getRegisterObjectRecTemp(element.substring(JWebRequest.IN_REC_PREFIX.length())));
+			} else {
+				Serializable obj = JWebActionFactory.getCurrentRequest().getRegisterObject(element);
+				if (obj instanceof JBaseRecord) {
+					recs.getStaticItems().addElement((JBaseRecord) obj);
+				}
+			}
+		}
 
 	}
 
@@ -292,20 +292,20 @@ public class JWinPackager {
 			String fieldKey = entry.getKey();
 			String propValue = entry.getValue();
 
-                        if (fieldKey.startsWith("REC_")) {
-                                JObject<?> obj = ((JRecord) actionOwner).getProp(fieldKey.substring(4));
-                                if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
-                                        obj.setValue(getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length())));
-                                } else {
-                                        obj.setValue((JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue));
-                                }
-                        } else if (fieldKey.startsWith("RECS_")) {
-                                JObject<?> obj = ((JRecord) actionOwner).getProp(fieldKey.substring(5));
-                                if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
-                                        obj.setValue(getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length())));
-                                } else {
-                                        obj.setValue((JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue));
-                                }
+			if (fieldKey.startsWith("REC_")) {
+				JObject<?> obj = ((JRecord) actionOwner).getProp(fieldKey.substring(4));
+				if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
+					obj.setValue(getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length())));
+				} else {
+					obj.setValue((JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue));
+				}
+			} else if (fieldKey.startsWith("RECS_")) {
+				JObject<?> obj = ((JRecord) actionOwner).getProp(fieldKey.substring(5));
+				if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
+					obj.setValue(getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length())));
+				} else {
+					obj.setValue((JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue));
+				}
 			} else if (fieldKey.startsWith("UID_")) {
 				JObject<?> obj = ((JRecord) actionOwner).getProp(fieldKey.substring(4));
 				obj.setUniqueId(propValue);
@@ -322,29 +322,29 @@ public class JWinPackager {
 				} catch (NoSuchFieldException | IllegalAccessException e) {
 					System.err.println("Error al asignar campo OTH: " + fieldName + " -> " + e.getMessage());
 				}
-                        } else if (fieldKey.startsWith("SREC_")) {
-                                Field field = currentClass.getDeclaredField(fieldKey.substring(5));
-                                field.setAccessible(true);
-                                JBaseRecord obj;
-                                if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
-                                        obj = getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length()));
-                                } else {
-                                        obj = (JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue);
-                                }
-                                field.set(actionOwner, obj);
-                        } else if (fieldKey.startsWith("SRECS_")) {
-                                Field field = currentClass.getDeclaredField(fieldKey.substring(6));
-                                field.setAccessible(true);
-                                JBaseRecord obj;
-                                if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
-                                        obj = getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length()));
-                                } else {
-                                        obj = (JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue);
-                                }
-                                field.set(actionOwner, obj);
-                        } else if (fieldKey.startsWith("SER_")) {
-                                String fieldName = fieldKey.substring(4);
-                                try {
+			} else if (fieldKey.startsWith("SREC_")) {
+				Field field = currentClass.getDeclaredField(fieldKey.substring(5));
+				field.setAccessible(true);
+				JBaseRecord obj;
+				if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
+					obj = getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length()));
+				} else {
+					obj = (JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue);
+				}
+				field.set(actionOwner, obj);
+			} else if (fieldKey.startsWith("SRECS_")) {
+				Field field = currentClass.getDeclaredField(fieldKey.substring(6));
+				field.setAccessible(true);
+				JBaseRecord obj;
+				if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
+					obj = getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length()));
+				} else {
+					obj = (JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue);
+				}
+				field.set(actionOwner, obj);
+			} else if (fieldKey.startsWith("SER_")) {
+				String fieldName = fieldKey.substring(4);
+				try {
 					Field field = currentClass.getDeclaredField(fieldName);
 					field.setAccessible(true);
 

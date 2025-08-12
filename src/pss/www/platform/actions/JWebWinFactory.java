@@ -20,12 +20,12 @@ import pss.core.tools.PssLogger;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JList;
-import pss.core.ui.components.JPssLabelWinLov;
 import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
+import pss.core.win.submits.JActDrop;
 import pss.core.win.submits.JActFieldSwapWins;
 import pss.www.platform.actions.requestBundle.JWebActionData;
 import pss.www.platform.actions.requestBundle.JWebActionDataField;
@@ -684,7 +684,7 @@ public class JWebWinFactory {
 				continue;
 			if (record == null)
 				continue;
-			JObject<?> prop = record.getPropDeep( field.getName(), false);
+			JObject<?> prop = record.getPropDeep(field.getName(), false);
 			if (prop == null) {
 				record.addExtraData(field.getName(), field.getValue());
 				continue;
@@ -694,7 +694,7 @@ public class JWebWinFactory {
 
 			String value = field.getValue();
 			JBaseWin obj = extractRegisterObjectFromValue(value);
-	
+
 			if (prop.isRecord()) {
 				if (obj != null && obj instanceof JWin)
 					prop.setValue(record.getPropValue(field.getName(), prop, ((JWin) obj).getRecord()));
@@ -709,11 +709,12 @@ public class JWebWinFactory {
 
 	public JBaseWin extractRegisterObjectFromValue(String value) throws Exception {
 		JBaseWin obj = null;
-		if (!value.startsWith(JWebRequest.OBJ_PREFIX)) return obj;
+		if (!value.startsWith(JWebRequest.OBJ_PREFIX))
+			return obj;
 		if (value.startsWith(JWebRequest.IN_TEMP_PREFIX)) {
-			obj = (JBaseWin)packager.getRegisterObjectTemp(value.substring(JWebRequest.IN_TEMP_PREFIX.length()));
+			obj = (JBaseWin) packager.getRegisterObjectTemp(value.substring(JWebRequest.IN_TEMP_PREFIX.length()));
 		} else {
-			obj = (JBaseWin)JWebActionFactory.getCurrentRequest().getRegisterObject(value);
+			obj = (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(value);
 		}
 		return obj;
 	}
@@ -761,15 +762,15 @@ public class JWebWinFactory {
 			}
 			dict.put("p", zAction.getForceProviderName());
 
-                        if (zAction.hasSubmit()) {
-                                JAct submit = zAction.getObjSubmit();
-                                if (submit != null) {
-                                        dict.put("s", submit.serialize());
-                                }
-                        }
-                }
-                return JWebActionFactory.getCurrentRequest().serializeRegisterMapJSON(dict);
-        }
+			if (zAction.hasSubmit()) {
+				JAct submit = zAction.getObjSubmit();
+				if (submit != null) {
+					dict.put("s", submit.serialize());
+				}
+			}
+		}
+		return JWebActionFactory.getCurrentRequest().serializeRegisterMapJSON(dict);
+	}
 
 	public BizAction convertURLToAction(String sAction) throws Exception {
 		Map<String, String> dict = JWebActionFactory.getCurrentRequest().deserializeRegisterMapJSON(sAction);
@@ -794,20 +795,20 @@ public class JWebWinFactory {
 			action = win.findActionByUniqueId(id);
 			action.setForceProviderName(prov);
 
-                        String submitData = dict.containsKey("s") ? dict.get("s") : dict.get("submit");
-                        if (submitData != null) {
-                                JAct submit = JAct.deserialize(submitData);
-                                action.setObjSubmit(submit);
-                        } else {
-                                String resultKey = dict.containsKey("r") ? dict.get("r") : dict.get("result");
-                                if (resultKey != null) {
-                                        JBaseWin result = (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(resultKey);
-                                        action.getObjSubmit().setResult(result);
-                                }
-                        }
-                }
-                return action;
-        }
+			String submitData = dict.containsKey("s") ? dict.get("s") : dict.get("submit");
+			if (submitData != null) {
+				JAct submit = JAct.deserialize(submitData);
+				action.setObjSubmit(submit);
+			} else {
+				String resultKey = dict.containsKey("r") ? dict.get("r") : dict.get("result");
+				if (resultKey != null) {
+					JBaseWin result = (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(resultKey);
+					action.getObjSubmit().setResult(result);
+				}
+			}
+		}
+		return action;
+	}
 
 	private String winStamp(JBaseWin win) throws Exception {
 		boolean readed = win.isWin() && ((JWin) win).getRecord().wasDbRead();

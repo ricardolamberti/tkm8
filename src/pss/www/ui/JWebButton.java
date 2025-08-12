@@ -30,7 +30,7 @@ public class JWebButton  extends JWebAbstractActionView  implements JWebControlI
 
         public static JWebButton create(JWebViewComposite parent, JPssButton zComp, JFormButton zControl) throws Exception {
                 JWebButton webButton=new JWebButton();
-                webButton.takeAttributesForm(parent,zComp.getComponent());
+                webButton.takeAttributesForm(parent,zComp);
                 webButton.takeAttributesFormControl(zControl);
                 webButton.setResponsive(zControl.isResponsive());
                 webButton.setSize(zComp.getSize().width, zComp.getSize().height);

@@ -25,8 +25,8 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import javax.swing.BorderFactory;
-import javax.swing.JComponent;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -68,7 +68,7 @@ public class JPssDateChooser extends JComponent {
 	private int model = DATE;
 	
   private JFormattedTextField field;
-  private JPssButton button;
+  private JButton button;
   private JSpinner monthSpinner;
   private JSpinner yearSpinner;
   private JPanel monthGridPanel;
@@ -152,7 +152,7 @@ public class JPssDateChooser extends JComponent {
     
     this.setLayout(new BorderLayout(0,0));
     this.add(field, BorderLayout.CENTER);
-    this.add(button.getComponent(), BorderLayout.EAST);
+    this.add(button, BorderLayout.EAST);
 
     button.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {

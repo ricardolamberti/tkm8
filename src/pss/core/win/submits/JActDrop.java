@@ -73,7 +73,12 @@ public class JActDrop extends JAct {
 	public JBaseWin getDropListener() {
 		return oDropListener;
 	}
-  public boolean desactiveReread(JAct action) throws Exception {
+	
+  public void setDropListener(JBaseWin oDropListener) {
+		this.oDropListener = oDropListener;
+	}
+
+	public boolean desactiveReread(JAct action) throws Exception {
   	return false;//!hasIdControlListener();
   }
   

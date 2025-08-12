@@ -766,8 +766,6 @@ public class JWebRequest {
 		}
 		String payload = serializeObject(zObject);
 		String id = IN_POINTER_PREFIX + sha256(JTools.stringToByteArray(payload));
-//		if (reuseIfPresent(id) != null)
-//			return id;
 		addRegisteredObject(id, payload);
 		return id;
 	}
