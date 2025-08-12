@@ -17,6 +17,11 @@ public class JActSubmit extends JAct {
 	 */
 	private static final long serialVersionUID = -3316292953453369454L;
 
+	public JActSubmit() {
+		super();
+	}
+
+
 	public JActSubmit(JBaseWin zResult, int zActionId) {
 		super(zResult, zActionId);
 	}

@@ -16,6 +16,11 @@ public class JActDelete extends JAct {
 	 */
 	private static final long serialVersionUID = 2942000940720499429L;
 
+	public JActDelete() {
+		super();
+	}
+
+
 	public JActDelete(JBaseWin zResult, int zActionId) {
 		super(zResult, zActionId);
 	}

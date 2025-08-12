@@ -15,6 +15,11 @@ public class JActNewSubmit extends JAct {
 	 * 
 	 */
 	private static final long serialVersionUID = 5580988789646653029L;
+
+	public JActNewSubmit() {
+		super();
+	}
+
 	
 	public JActNewSubmit(JBaseWin zResult, int zActionId, boolean zKeepForm) {
 		super(zResult, zActionId);
@@ -27,7 +32,7 @@ public class JActNewSubmit extends JAct {
 	
 //	@Override
 //	public void Do() throws Exception {
-//		if (!UITools.showConfirmation("Confirmación", "¿Está seguro?"))
+//		if (!UITools.showConfirmation("ConfirmaciÃ³n", "Â¿EstÃ¡ seguro?"))
 //			return;
 //		this.submit();
 //	}	

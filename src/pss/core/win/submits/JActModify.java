@@ -13,6 +13,10 @@ import pss.core.winUI.forms.JBaseForm;
  * </p>
  */
 public abstract class JActModify extends JAct {
+	public JActModify() {
+		super();
+	}
+
 
 
 	/**

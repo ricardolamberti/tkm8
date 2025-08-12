@@ -12,6 +12,11 @@ public class JActChildForm extends JActModify {
  */
 private static final long serialVersionUID = 2799749949633327989L;
 
+	public JActChildForm() {
+		super();
+	}
+
+
 public JActChildForm(JWin zparent, JWin zResult, int zActionId) {
 	super(zResult, zActionId);
 	historyAction=true;

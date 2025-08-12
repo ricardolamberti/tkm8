@@ -21,6 +21,11 @@ public class JActUpdate extends JActModify {
 	 */
 	private static final long serialVersionUID = 2799749949633327989L;
 
+	public JActUpdate() {
+		super();
+	}
+
+
 	public JActUpdate(JWin zResult, int zActionId) {
 		super(zResult, zActionId);
 		historyAction=true;

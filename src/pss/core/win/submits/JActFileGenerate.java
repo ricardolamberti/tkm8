@@ -10,6 +10,11 @@ public class JActFileGenerate extends JActSubmit {
 	 * 
 	 */
 	private static final long serialVersionUID = -8671110613347096283L;
+
+	public JActFileGenerate() {
+		super();
+	}
+
 	private String fileName;
 //	private String pathProvider;
 	
