@@ -49,6 +49,12 @@ import pss.www.platform.actions.requestBundle.JWebActionData;
 import pss.www.platform.content.generators.JXMLContent;
 import pss.www.ui.controller.JWebFormControl;
 
+/**
+ * Responsive web matrix window capable of rendering {@link JWinMatrix}
+ * structures in a browser. The class coordinates building the matrix
+ * representation and provides helper methods used by the responsive
+ * framework.
+ */
 public class JWebWinMatrixResponsive  extends JWebWinGenericResponsive implements JAbsolutelyNamedWebViewComponent, JWebActionOwnerProvider, JWebControlInterface {
 
 	protected JWinMatrix winMatrix = null;
@@ -1012,14 +1018,26 @@ public class JWebWinMatrixResponsive  extends JWebWinGenericResponsive implement
 		return map;
 	}	
 	
-	void calculateMatrix() throws Exception {
-		new WebMatrixCalculo().calcule();
-	}
-	
-	class WebMatrixCalculo {
-  	SortedMap<String,JFilaMatrix> mapMatriz = new TreeMap<String, JFilaMatrix>();
-  	SortedMap<String,JFilaMatrix> mapFilas = new TreeMap<String, JFilaMatrix>();
-  	SortedMap<String,JColumnaMatrix> mapColumnas = new TreeMap<String, JColumnaMatrix>();
+       /**
+        * Builds the internal matrix structures by delegating to
+        * {@link WebMatrixCalculo}. This method prepares the data so it can be
+        * rendered by the responsive view.
+        *
+        * @throws Exception if an error occurs during matrix calculation
+        */
+       void calculateMatrix() throws Exception {
+               new WebMatrixCalculo().calcule();
+       }
+
+       /**
+        * Helper class responsible for walking through the window's records and
+        * assembling the row and column structures of the matrix. It keeps track
+        * of totals, groups and other intermediate data required for rendering.
+        */
+       class WebMatrixCalculo {
+               SortedMap<String,JFilaMatrix> mapMatriz = new TreeMap<String, JFilaMatrix>();
+               SortedMap<String,JFilaMatrix> mapFilas = new TreeMap<String, JFilaMatrix>();
+               SortedMap<String,JColumnaMatrix> mapColumnas = new TreeMap<String, JColumnaMatrix>();
 		JMap<String, JOrdenEjeMatrix> gruposEjes = JCollectionFactory.createOrderedMap();
 		JMap<Long, JOrdenEjeMatrix> localColumnaGruposEjes = JCollectionFactory.createOrderedMap();
 		JMap<Long, JOrdenEjeMatrix> localFilaGruposEjes = JCollectionFactory.createOrderedMap();
@@ -1734,8 +1752,14 @@ public class JWebWinMatrixResponsive  extends JWebWinGenericResponsive implement
 			}
 		}
 		
-		void calcule() throws Exception {
-			columnas = JCollectionFactory.createOrderedMap();
+                /**
+                 * Executes the matrix building process. It iterates over the
+                 * available records, processes grouping information and fills
+                 * rows and columns along with totals and ranking data required
+                 * by the responsive matrix view.
+                 */
+                void calcule() throws Exception {
+                        columnas = JCollectionFactory.createOrderedMap();
 			matrix = JCollectionFactory.createOrderedMap();
 			if (winMatrix.GetEjesMatrix()==null) return;
 			long limiteMax = BizUsuario.getUsr().getObjPreferencias().getMaxMatrix();
