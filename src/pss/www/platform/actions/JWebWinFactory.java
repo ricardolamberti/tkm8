@@ -761,19 +761,15 @@ public class JWebWinFactory {
 			}
 			dict.put("p", zAction.getForceProviderName());
 
-			if (zAction.hasSubmit()) {
-				JAct submit = zAction.getObjSubmit();
-				if (submit != null && submit.hasResult()) {
-					String idResult = JWebActionFactory.getCurrentRequest().registerObjectObj(zAction.getResult());
-					// String resultPacked = packer.baseWinToPack(submit.getResult());
-					if (idResult != null && !idResult.isEmpty()) {
-						dict.put("r", idResult);
-					}
-				}
-			}
-		}
-		return JWebActionFactory.getCurrentRequest().serializeRegisterMapJSON(dict);
-	}
+                        if (zAction.hasSubmit()) {
+                                JAct submit = zAction.getObjSubmit();
+                                if (submit != null) {
+                                        dict.put("s", submit.serialize());
+                                }
+                        }
+                }
+                return JWebActionFactory.getCurrentRequest().serializeRegisterMapJSON(dict);
+        }
 
 	public BizAction convertURLToAction(String sAction) throws Exception {
 		Map<String, String> dict = JWebActionFactory.getCurrentRequest().deserializeRegisterMapJSON(sAction);
@@ -798,14 +794,20 @@ public class JWebWinFactory {
 			action = win.findActionByUniqueId(id);
 			action.setForceProviderName(prov);
 
-			String resultKey = dict.containsKey("r") ? dict.get("r") : dict.get("result");
-			if (resultKey != null) {
-				JBaseWin result = (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(resultKey);
-				action.getObjSubmit().setResult(result);
-			}
-		}
-		return action;
-	}
+                        String submitData = dict.containsKey("s") ? dict.get("s") : dict.get("submit");
+                        if (submitData != null) {
+                                JAct submit = JAct.deserialize(submitData);
+                                action.setObjSubmit(submit);
+                        } else {
+                                String resultKey = dict.containsKey("r") ? dict.get("r") : dict.get("result");
+                                if (resultKey != null) {
+                                        JBaseWin result = (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(resultKey);
+                                        action.getObjSubmit().setResult(result);
+                                }
+                        }
+                }
+                return action;
+        }
 
 	private String winStamp(JBaseWin win) throws Exception {
 		boolean readed = win.isWin() && ((JWin) win).getRecord().wasDbRead();
