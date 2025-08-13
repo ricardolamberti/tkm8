@@ -11,8 +11,8 @@ public class JActFieldSwapWins extends JActWins {
 	}
 
 
-	JWins selecteds;
-	JWins options;
+        transient JWins selecteds;
+        transient JWins options;
 	String fieldKeySource;
 	String fieldKeyOptions;
  

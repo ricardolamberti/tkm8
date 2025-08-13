@@ -750,37 +750,68 @@ public class JWebWinFactory {
 		if (id != null)
 			dict.put("i", id);
 
-		if (zAction.needsFullSerialization()) {
-			byte[] serialized = JTools.stringToByteVector(JWebActionFactory.getCurrentRequest().serializeObject(zAction));
-			dict.put("a", JWinPackager.b64url(JWinPackager.deflate(serialized)));
-		} else {
-			// pack in
-			// JWinPackager packer = new JWinPackager(null);
-			String idOwner = JWebActionFactory.getCurrentRequest().registerObjectObj(zAction.getObjOwner());
-			if (idOwner != null && !idOwner.isEmpty()) {
-				dict.put("o", idOwner);
-			}
-			dict.put("p", zAction.getForceProviderName());
+                if (zAction.needsFullSerialization()) {
+                        JBaseWin owner = zAction.getObjOwner();
+                        if (owner != null) {
+                                String idOwner = JWebActionFactory.getCurrentRequest().registerObjectObj(owner);
+                                if (idOwner != null && !idOwner.isEmpty()) {
+                                        dict.put("o", idOwner);
+                                }
+                        }
+                        if (zAction.hasSubmit()) {
+                                JAct submit = zAction.getObjSubmit();
+                                if (submit != null) {
+                                        String idSubmit = JWebActionFactory.getCurrentRequest().registerObjectObj(submit);
+                                        if (idSubmit != null && !idSubmit.isEmpty()) {
+                                                dict.put("s", idSubmit);
+                                        }
+                                }
+                        }
+                        byte[] serialized = JTools
+                                        .stringToByteVector(JWebActionFactory.getCurrentRequest().serializeObject(zAction));
+                        dict.put("a", JWinPackager.b64url(JWinPackager.deflate(serialized)));
+                } else {
+                        // pack in
+                        // JWinPackager packer = new JWinPackager(null);
+                        String idOwner = JWebActionFactory.getCurrentRequest().registerObjectObj(zAction.getObjOwner());
+                        if (idOwner != null && !idOwner.isEmpty()) {
+                                dict.put("o", idOwner);
+                        }
+                        dict.put("p", zAction.getForceProviderName());
 
-			if (zAction.hasSubmit()) {
-				JAct submit = zAction.getObjSubmit();
-				if (submit != null) {
-					dict.put("s", submit.serialize());
-				}
-			}
-		}
-		return JWebActionFactory.getCurrentRequest().serializeRegisterMapJSON(dict);
-	}
+                        if (zAction.hasSubmit()) {
+                                JAct submit = zAction.getObjSubmit();
+                                if (submit != null) {
+                                        dict.put("s", submit.serialize());
+                                }
+                        }
+                }
+                return JWebActionFactory.getCurrentRequest().serializeRegisterMapJSON(dict);
+        }
 
 	public BizAction convertURLToAction(String sAction) throws Exception {
 		Map<String, String> dict = JWebActionFactory.getCurrentRequest().deserializeRegisterMapJSON(sAction);
 		BizAction action;
 
-		if (dict.containsKey("ay") || dict.containsKey("action")) {
-			String data = dict.containsKey("a") ? dict.get("a") : dict.get("action");
-			byte[] bytes = dict.containsKey("a") ? JWinPackager.inflate(JWinPackager.b64urlDecode(data)) : Base64.getDecoder().decode(data);
-			action = (BizAction) JWebActionFactory.getCurrentRequest().deserializeObject(JTools.byteVectorToString(bytes));
-		} else {
+                if (dict.containsKey("ay") || dict.containsKey("action")) {
+                        String data = dict.containsKey("a") ? dict.get("a") : dict.get("action");
+                        byte[] bytes = dict.containsKey("a") ? JWinPackager.inflate(JWinPackager.b64urlDecode(data))
+                                        : Base64.getDecoder().decode(data);
+                        action = (BizAction) JWebActionFactory.getCurrentRequest()
+                                        .deserializeObject(JTools.byteVectorToString(bytes));
+
+                        String ownerKey = dict.get("o");
+                        if (ownerKey != null) {
+                                JBaseWin owner = (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(ownerKey);
+                                action.setObjOwner(owner);
+                        }
+                        String submitKey = dict.get("s");
+                        if (submitKey != null) {
+                                JAct submit = (JAct) JWebActionFactory.getCurrentRequest().getRegisterObject(submitKey);
+                                if (submit != null)
+                                        action.setObjSubmit(submit);
+                        }
+                } else {
 
 			String ownerKey = dict.containsKey("o") ? dict.get("o") : dict.get("owner");
 			String id = dict.containsKey("i") ? dict.get("i") : dict.get("actionid");

@@ -14,8 +14,8 @@ public class JActFieldWins extends JActWins {
 	}
 
 
-	JWin winSource;
-	String field;
+        transient JWin winSource;
+        String field;
   Class clase;
   
 
