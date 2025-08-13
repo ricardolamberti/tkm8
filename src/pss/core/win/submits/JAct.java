@@ -601,11 +601,13 @@ public abstract class JAct implements Cloneable, Serializable {
 	/**
 	 * Serializes this {@link JAct} including all serializable members.
 	 * <p>
-	 * {@link JBaseWin} and {@link BizAction} instances are registered using
-	 * {@link JWebActionFactory#getCurrentRequest()#registerObjectObj} to avoid
-	 * sending the whole object over the wire. Other serializable members are
-	 * encoded using {@link JWebActionFactory#getCurrentRequest()#serializeObject}.
-	 * Nested {@code JAct} instances are serialized recursively.
+         * {@link JBaseWin} instances are registered using
+         * {@link JWebActionFactory#getCurrentRequest()#registerWinObjectObj} to avoid
+         * sending the whole object over the wire. {@link BizAction} members and
+         * nested {@code JAct} instances are serialized recursively. Any other
+         * serializable member is stored through
+         * {@link JWebActionFactory#getCurrentRequest()#registerObjectObj} so the
+         * serialized data is added to the request via {@code addRegisteredObject}.
 	 * </p>
 	 *
 	 * @return a JSON string representing this action.
@@ -626,16 +628,19 @@ public abstract class JAct implements Cloneable, Serializable {
 				if (value == null)
 					continue;
 				String key = f.getName();
-				if (value instanceof JAct) {
-					map.put(key, "A:" + ((JAct) value).serialize());
-				} else if (value instanceof JBaseWin || value instanceof BizAction) {
-					String id = JWebActionFactory.getCurrentRequest().registerObjectObj((Serializable) value);
-					if (id != null && !id.isEmpty())
-						map.put(key, "R:" + id);
-				} else if (value instanceof Serializable) {
-					String ser = JWebActionFactory.getCurrentRequest().serializeObject((Serializable) value);
-					map.put(key, "S:" + ser);
-				}
+                                if (value instanceof JAct) {
+                                        map.put(key, "A:" + ((JAct) value).serialize());
+                                } else if (value instanceof BizAction) {
+                                        map.put(key, "B:" + ((BizAction) value).serialize());
+                                } else if (value instanceof JBaseWin) {
+                                        String id = JWebActionFactory.getCurrentRequest().registerWinObjectObj((JBaseWin) value);
+                                        if (id != null && !id.isEmpty())
+                                                map.put(key, "W:" + id);
+                                } else if (value instanceof Serializable) {
+                                        String id = JWebActionFactory.getCurrentRequest().registerObjectObj((Serializable) value);
+                                        if (id != null && !id.isEmpty())
+                                                map.put(key, "S:" + id);
+                                }
 			}
 			clazz = clazz.getSuperclass();
 		}
@@ -663,13 +668,13 @@ public abstract class JAct implements Cloneable, Serializable {
 				if (value == null)
 					continue;
 				f.setAccessible(true);
-				if (value.startsWith("A:")) {
-					f.set(act, JAct.deserialize(value.substring(2)));
-				} else if (value.startsWith("R:")) {
-					f.set(act, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
-				} else if (value.startsWith("S:")) {
-					f.set(act, JWebActionFactory.getCurrentRequest().deserializeObject(value.substring(2)));
-				}
+                                if (value.startsWith("A:")) {
+                                        f.set(act, JAct.deserialize(value.substring(2)));
+                                } else if (value.startsWith("B:")) {
+                                        f.set(act, BizAction.deserialize(value.substring(2)));
+                                } else if (value.startsWith("W:") || value.startsWith("S:")) {
+                                        f.set(act, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
+                                }
 			}
 			clazz = clazz.getSuperclass();
 		}

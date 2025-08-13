@@ -2,11 +2,8 @@ package pss.www.platform.actions;
 
 import java.io.Serializable;
 import java.lang.ref.SoftReference;
-import java.util.Base64;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 
@@ -744,55 +741,17 @@ public class JWebWinFactory {
 
 	}
 
-	public String convertActionToURL(BizAction zAction) throws Exception {
-		Map<String, String> dict = new HashMap<>();
-		String id = zAction.getIdAction();
-		if (id != null)
-			dict.put("i", id);
+        public String convertActionToURL(BizAction zAction) throws Exception {
+                String json = zAction.serialize();
+                byte[] packed = JWinPackager.deflate(JTools.stringToByteArray(json));
+                return JWinPackager.b64url(packed);
+        }
 
-		JBaseWin owner = zAction.getObjOwner();
-		if (owner != null) {
-			String idOwner = JWebActionFactory.getCurrentRequest().registerObjectObj(owner);
-			if (idOwner != null && !idOwner.isEmpty()) {
-				dict.put("o", idOwner);
-			}
-		}
-		if (zAction.hasSubmit()) {
-			JAct submit = zAction.getObjSubmit();
-			if (submit != null) {
-				String idSubmit = submit.serialize();
-				if (idSubmit != null && !idSubmit.isEmpty()) {
-					dict.put("s", idSubmit);
-				}
-			}
-		}
-		byte[] serialized = JTools.stringToByteVector(JWebActionFactory.getCurrentRequest().serializeObject(zAction));
-		dict.put("a", JWinPackager.b64url(JWinPackager.deflate(serialized)));
-
-		return JWebActionFactory.getCurrentRequest().serializeRegisterMapJSON(dict);
-	}
-
-	public BizAction convertURLToAction(String sAction) throws Exception {
-		Map<String, String> dict = JWebActionFactory.getCurrentRequest().deserializeRegisterMapJSON(sAction);
-		BizAction action;
-
-		String data = dict.containsKey("a") ? dict.get("a") : dict.get("action");
-		byte[] bytes = dict.containsKey("a") ? JWinPackager.inflate(JWinPackager.b64urlDecode(data)) : Base64.getDecoder().decode(data);
-		action = (BizAction) JWebActionFactory.getCurrentRequest().deserializeObject(JTools.byteVectorToString(bytes));
-
-		String ownerKey = dict.get("o");
-		if (ownerKey != null) {
-			JBaseWin owner = (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(ownerKey);
-			action.setObjOwner(owner);
-		}
-		String submitKey = dict.get("s");
-		if (submitKey != null) {
-			JAct submit = action.getObjSubmit();
-			if (submit != null)
-				submit.deserialize(submitKey);
-		}
-		return action;
-	}
+        public BizAction convertURLToAction(String sAction) throws Exception {
+                byte[] bytes = JWinPackager.inflate(JWinPackager.b64urlDecode(sAction));
+                String json = JTools.byteVectorToString(bytes);
+                return BizAction.deserialize(json);
+        }
 
 	private String winStamp(JBaseWin win) throws Exception {
 		boolean readed = win.isWin() && ((JWin) win).getRecord().wasDbRead();
