@@ -822,6 +822,9 @@ public class JWebWinFactory {
 		return rec.getUniqueId() + "|" + rec.GetVision() + "|" + readed + "|" + filters;
 	}
 
+	public JBaseWin URLTobaseWin(String key) throws Exception {
+		return packager.getRegisterObjectTemp(key);
+	}
 	public String baseWinToURL(JBaseWin zOwner) throws Exception {
 		final String key = "win:" + winStamp(zOwner);
 		DistCache cache = CacheProvider.get();

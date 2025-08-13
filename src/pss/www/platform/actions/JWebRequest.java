@@ -35,8 +35,6 @@ import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JMap;
 import pss.core.win.JBaseWin;
 import pss.core.win.submits.JAct;
-import pss.www.platform.cache.CacheProvider;
-import pss.www.platform.cache.DistCache;
 import pss.www.platform.actions.requestBundle.JWebActionData;
 import pss.www.platform.actions.requestBundle.JWebActionDataBundle;
 import pss.www.platform.applications.JWebApplication;
@@ -44,6 +42,7 @@ import pss.www.platform.applications.JWebApplicationSession;
 import pss.www.platform.applications.JWebHistoryManager;
 import pss.www.platform.applications.JWebHistoryManager.JLocalHistoryManager;
 import pss.www.platform.applications.JWebServer;
+import pss.www.platform.cache.CacheProvider;
 import pss.www.ui.controller.JFrontDoorUICoordinator;
 import pss.www.ui.processing.JWebActionRequestProcessor;
 import pss.www.ui.processing.JWebUICoordinator;
@@ -778,7 +777,7 @@ public class JWebRequest {
 //		}
 		String id = zObject.getUniqueId() != null ? zObject.getUniqueId() : UUID.randomUUID().toString();
 		if (isLargeObject(zObject)) {
-			CacheProvider.get().putBytes(id, serializeObjectToBytes(zObject), CACHE_EXPIRE_SECONDS);
+			CacheProvider.get().putBytes(id, JTools.stringToByteArray( new JWinPackager(null).baseWinToJSON(zObject)), CACHE_EXPIRE_SECONDS);
 			PssLogger.logInfo("cacheado : ["+id+"]");
 			String out = OUT_CACHE_PREFIX + id;
 			addRegisteredObject(id, out);
@@ -799,7 +798,7 @@ public class JWebRequest {
 //		if (reuseIfPresent(key) != null)
 //			return key;
 		if (isLargeObject(zObject)) {
-			CacheProvider.get().putBytes(key, serializeObjectToBytes(zObject), CACHE_EXPIRE_SECONDS);
+			CacheProvider.get().putBytes(key, JTools.stringToByteArray( new JWinPackager(null).baseRecToJSON(zObject)), CACHE_EXPIRE_SECONDS);
 			addRegisteredObject(key, OUT_CACHE_PREFIX + key);
 			return key;
 		}
