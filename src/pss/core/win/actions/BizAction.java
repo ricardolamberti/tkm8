@@ -37,7 +37,7 @@ import pss.www.platform.actions.JWebActionFactory;
  */
 public class BizAction extends JRecord {
 
-	private JBaseWin owner = null;
+        private transient JBaseWin owner = null;
 	public int pId = 0;
 	public String sOwner = null;
 	public JString pCompany = new JString();
@@ -355,8 +355,8 @@ public class BizAction extends JRecord {
 	public final static int DROP = 4;
 	public final static int REPORT = 5;
 
-	private JAct submit = null;
-	private transient JAct oActionAutorizada = null;
+        private transient JAct submit = null;
+        private transient JAct oActionAutorizada = null;
 
 	// private JAct oActionListener = null;
 

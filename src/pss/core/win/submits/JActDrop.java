@@ -15,10 +15,10 @@ public class JActDrop extends JAct {
 		super();
 	}
 
-	private JBaseWin oDropListener;
+        private transient JBaseWin oDropListener;
 
 
-	private JAct nextAction;
+        private transient JAct nextAction;
 	private boolean dropControlId;
 
 	public JActDrop(JBaseWin zResult, JBaseWin listener, int actionId) {

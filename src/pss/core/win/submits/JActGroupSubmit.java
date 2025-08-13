@@ -9,7 +9,7 @@ public class JActGroupSubmit extends JAct {
 	}
 
 	
-	JAct actSubmit;
+        transient JAct actSubmit;
 	
 	public JActGroupSubmit(JWins zResult) {
 		super(zResult);

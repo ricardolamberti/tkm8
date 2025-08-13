@@ -17,8 +17,8 @@ public class JActMultiSubmit extends JAct {
 		super();
 	}
 
-	JList<JAct> actionsList = null; 
-	JAct nextAction=null;
+        transient JList<JAct> actionsList = null;
+        transient JAct nextAction=null;
 	
 	public JActMultiSubmit(JWins zResult) {
 		super(zResult, -1);

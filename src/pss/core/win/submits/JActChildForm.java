@@ -6,7 +6,7 @@ import pss.core.winUI.forms.JBaseForm;
 public class JActChildForm extends JActModify {
 	
 //private JBaseForm form;
-	JWin parent;
+        transient JWin parent;
 /**
  * 
  */

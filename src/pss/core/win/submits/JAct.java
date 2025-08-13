@@ -40,10 +40,10 @@ public abstract class JAct implements Cloneable, Serializable {
 	private String sName;
 	private int actionId;
 	private String actionUniqueId;
-	private JMessageInfo message;
-	private JBaseWin result;
-	private BizAction actionSource;
-	private JAct actionNext = null;
+        private JMessageInfo message;
+        private transient JBaseWin result;
+        private BizAction actionSource;
+        private transient JAct actionNext = null;
 	private boolean web = false;
 	protected boolean historyAction = true;
 	protected boolean historyTarget = false;
