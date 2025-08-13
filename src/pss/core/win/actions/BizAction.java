@@ -1195,13 +1195,20 @@ public class BizAction extends JRecord {
 					map.put(key, "A:" + ((JAct) value).serialize());
 				} else if (value instanceof BizAction) {
 					map.put(key, "B:" + ((BizAction) value).serialize());
-				} else if (value instanceof JBaseWin) {
-					String id = JWebActionFactory.getCurrentRequest().registerWinObjectObj((JBaseWin) value);
-					if (id != null && !id.isEmpty())
-						map.put(key, "W:" + id);
-				} else if (value instanceof Serializable) {
-					map.put(key, "V:" + serializeValue((Serializable) value));
-				}
+                                } else if (value instanceof JBaseWin) {
+                                        String id = JWebActionFactory.getCurrentRequest().registerWinObjectObj((JBaseWin) value);
+                                        if (id != null && !id.isEmpty())
+                                                map.put(key, "W:" + id);
+                                } else if (value instanceof Serializable) {
+                                        if (value.getClass().isArray()) {
+                                                String id = JWebActionFactory.getCurrentRequest()
+                                                                .registerObjectObj((Serializable) value);
+                                                if (id != null && !id.isEmpty())
+                                                        map.put(key, "S:" + id);
+                                        } else {
+                                                map.put(key, "V:" + serializeValue((Serializable) value));
+                                        }
+                                }
 			}
 			clazz = clazz.getSuperclass();
 		}
