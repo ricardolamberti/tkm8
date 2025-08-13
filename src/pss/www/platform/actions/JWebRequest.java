@@ -797,22 +797,24 @@ public class JWebRequest {
 	return id;
 	}
 
-	public synchronized String registerRecObjectObj(JBaseRecord zObject) throws Exception {
-		if (zObject == null)
-			return null;
-		String key = zObject.getUniqueId();
-//		if (reuseIfPresent(key) != null)
-//			return key;
-		if (isLargeObject(zObject)) {
-                        CacheProvider.get().putBytes(key, JTools.stringToByteArray( new JWinPackager(null).baseRecToJSON(zObject)), CACHE_EXPIRE_SECONDS);
-                        addRegisteredObject(key, OUT_CACHE_REC_PREFIX + key);
-                        return key;
+        public synchronized String registerRecObjectObj(JBaseRecord zObject) throws Exception {
+                if (zObject == null)
+                        return null;
+                String key = zObject.getUniqueId() + "_rec";
+
+                // Si el packager está serializando este mismo rec, devolvemos referencia directa
+                if (JWinPackager.isSerializingKey(key)) {
+                        return IN_REC_PREFIX + key;
                 }
-		String packed = new JWinPackager(null).baseRecToJSON(zObject);
-		String payload = IN_REC_PREFIX + packed;
-		addRegisteredObject(key, payload);
-		return key;
-	}
+
+                // Camino normal: obtener el "encoded" (Base64(deflate(json))) y cachearlo bajo 'key'
+                String encoded = new JWinPackager(JWebActionFactory.getFactory()).baseRecToJSON(zObject);
+                try {
+                        CacheProvider.get().putBytes(key, JTools.stringToByteArray(encoded), 0);
+                } catch (Exception ignore) {
+                }
+                return IN_REC_PREFIX + key;
+        }
 
 	
         public Serializable getRegisterObject(String key) {
