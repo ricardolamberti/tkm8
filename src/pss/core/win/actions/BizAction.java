@@ -1228,7 +1228,7 @@ public class BizAction extends JRecord {
 					f.set(action, BizAction.deserialize(value.substring(2)));
 				} else if (value.startsWith("W:") || value.startsWith("S:")) {
 					f.set(action, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
-				}else if (value.startsWith("V:") || value.startsWith("S:")) {
+				}else if (value.startsWith("V:") ) {
 					f.set(action, value.substring(2));
 				}
 			}
