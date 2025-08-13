@@ -503,26 +503,29 @@ public class JWinPackager {
 		serializableWin.properties = new HashMap<String, String>();
 		if (rec instanceof JRecord) {
 			JMap<String, JObject<?>> props = ((JRecord) rec).getProperties();
-			JIterator<String> it = props.getKeyIterator();
-			while (it.hasMoreElements()) {
-				String key = it.nextElement();
-				JObject prop = props.getElement(key);
-				if (prop.getUniqueId() != null)
-					serializableWin.properties.put("UID_" + key, prop.getUniqueId());
+			if (props!=null) {
+				JIterator<String> it = props.getKeyIterator();
+				while (it.hasMoreElements()) {
+					String key = it.nextElement();
+					JObject prop = props.getElement(key);
+					if (prop.getUniqueId() != null)
+						serializableWin.properties.put("UID_" + key, prop.getUniqueId());
 
-				if (prop.isRecord() && prop.getInternalVal() != null) {
-					serializableWin.properties.put("REC_" + key, JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecord) prop.getInternalVal()));
-				}
-				if (prop.isRecords() && prop.getInternalVal() != null) {
-					serializableWin.properties.put("RECS_" + key, JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecords) prop.getInternalVal()));
+					if (prop.isRecord() && prop.getInternalVal() != null) {
+						serializableWin.properties.put("REC_" + key, JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecord) prop.getInternalVal()));
+					}
+					if (prop.isRecords() && prop.getInternalVal() != null) {
+						serializableWin.properties.put("RECS_" + key, JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecords) prop.getInternalVal()));
 
-				}
-				if (!prop.hasValue())
-					continue;
-				if (serializableWin.readed)
-					continue;
-				serializableWin.properties.put("PROP_" + key, prop.toRawString());
+					}
+					if (!prop.hasValue())
+						continue;
+					if (serializableWin.readed)
+						continue;
+					serializableWin.properties.put("PROP_" + key, prop.toRawString());
+				}			
 			}
+
 		}
 		if (!onlyProperties) {
 			Class<?> currentClass = rec.getClass();
@@ -531,6 +534,8 @@ public class JWinPackager {
 			for (Field field : fields) {
 				field.setAccessible(true);
 				if (Modifier.isTransient(field.getModifiers()))
+					continue;
+				if (Modifier.isFinal(field.getModifiers()))
 					continue;
 
 				String fieldName = field.getName();

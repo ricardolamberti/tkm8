@@ -741,17 +741,17 @@ public class JWebWinFactory {
 
 	}
 
-        public String convertActionToURL(BizAction zAction) throws Exception {
-                String json = zAction.serialize();
-                byte[] packed = JWinPackager.deflate(JTools.stringToByteArray(json));
-                return JWinPackager.b64url(packed);
-        }
+	public String convertActionToURL(BizAction zAction) throws Exception {
+		String json = zAction.serialize();
+		byte[] packed = JWinPackager.deflate(JTools.stringToByteArray(json));
+		return JWinPackager.b64url(packed);
+	}
 
-        public BizAction convertURLToAction(String sAction) throws Exception {
-                byte[] bytes = JWinPackager.inflate(JWinPackager.b64urlDecode(sAction));
-                String json = JTools.byteVectorToString(bytes);
-                return BizAction.deserialize(json);
-        }
+	public BizAction convertURLToAction(String sAction) throws Exception {
+		byte[] bytes = JWinPackager.inflate(JWinPackager.b64urlDecode(sAction));
+		String json = JTools.byteVectorToString(bytes);
+		return BizAction.deserialize(json);
+	}
 
 	private String winStamp(JBaseWin win) throws Exception {
 		boolean readed = win.isWin() && ((JWin) win).getRecord().wasDbRead();

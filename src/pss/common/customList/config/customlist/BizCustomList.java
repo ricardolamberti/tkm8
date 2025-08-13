@@ -604,6 +604,7 @@ public class BizCustomList extends JRecord implements IActionData {
    * Default read() method
    */
   public boolean read( String zCompany, long zListId ) throws Exception { 
+  	if ((pCompany.isNull() || pCompany.isEmpty()) && zListId==0) return false;
     addFilter( "company",  zCompany ); 
     addFilter( "list_id",  zListId ); 
     return read(); 

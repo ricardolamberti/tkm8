@@ -41,7 +41,7 @@ import pss.www.platform.actions.JWebActionFactory;
  */
 public class BizAction extends JRecord {
 
-        private transient JBaseWin owner = null;
+	private transient JBaseWin owner = null;
 	public int pId = 0;
 	public String sOwner = null;
 	public JString pCompany = new JString();
@@ -359,8 +359,8 @@ public class BizAction extends JRecord {
 	public final static int DROP = 4;
 	public final static int REPORT = 5;
 
-        private JAct submit = null;
-        private JAct oActionAutorizada = null;
+	private JAct submit = null;
+	private JAct oActionAutorizada = null;
 
 	// private JAct oActionListener = null;
 
@@ -1128,7 +1128,7 @@ public class BizAction extends JRecord {
 		if (JWebActionFactory.getCurrentRequest().getLevel() > 1)
 			action += "__l" + JWebActionFactory.getCurrentRequest().getLevel();
 
-		return forceProviderName="p_" + action + (row != null ? "_" + row : "");
+		return forceProviderName = "p_" + action + (row != null ? "_" + row : "");
 	}
 
 	public void setObjFilterMap(JFilterMap f) {
@@ -1172,69 +1172,69 @@ public class BizAction extends JRecord {
 		this.foreground = v;
 	}
 
-        public String getForeground() {
-                return this.foreground;
-        }
+	public String getForeground() {
+		return this.foreground;
+	}
 
-        public String serialize() throws Exception {
-                Map<String, String> map = new HashMap<>();
-                map.put("class", getClass().getName());
+	public String serialize() throws Exception {
+		Map<String, String> map = new HashMap<>();
+		map.put("class", getClass().getName());
 
-                Class<?> clazz = getClass();
-                while (clazz != null && BizAction.class.isAssignableFrom(clazz)) {
-                        for (Field f : clazz.getDeclaredFields()) {
-                                if (Modifier.isStatic(f.getModifiers()))
-                                        continue;
-                                f.setAccessible(true);
-                                Object value = f.get(this);
-                                if (value == null)
-                                        continue;
-                                String key = f.getName();
-                                if (value instanceof JAct) {
-                                        map.put(key, "A:" + ((JAct) value).serialize());
-                                } else if (value instanceof BizAction) {
-                                        map.put(key, "B:" + ((BizAction) value).serialize());
-                                } else if (value instanceof JBaseWin) {
-                                        String id = JWebActionFactory.getCurrentRequest().registerWinObjectObj((JBaseWin) value);
-                                        if (id != null && !id.isEmpty())
-                                                map.put(key, "W:" + id);
-                                } else if (value instanceof Serializable) {
-                                        String id = JWebActionFactory.getCurrentRequest().registerObjectObj((Serializable) value);
-                                        if (id != null && !id.isEmpty())
-                                                map.put(key, "S:" + id);
-                                }
-                        }
-                        clazz = clazz.getSuperclass();
-                }
-                return JWebActionFactory.getCurrentRequest().serializeRegisterMapJSON(map);
-        }
+		Class<?> clazz = getClass();
+		while (clazz != null && BizAction.class.isAssignableFrom(clazz)) {
+			for (Field f : clazz.getDeclaredFields()) {
+				if (Modifier.isStatic(f.getModifiers()))
+					continue;
+				f.setAccessible(true);
+				Object value = f.get(this);
+				if (value == null)
+					continue;
+				String key = f.getName();
+				if (value instanceof JAct) {
+					map.put(key, "A:" + ((JAct) value).serialize());
+				} else if (value instanceof BizAction) {
+					map.put(key, "B:" + ((BizAction) value).serialize());
+				} else if (value instanceof JBaseWin) {
+					String id = JWebActionFactory.getCurrentRequest().registerWinObjectObj((JBaseWin) value);
+					if (id != null && !id.isEmpty())
+						map.put(key, "W:" + id);
+				} else if (value instanceof Serializable) {
+					map.put(key, "V:"+ value);
+				}
+			}
+			clazz = clazz.getSuperclass();
+		}
+		return JWebActionFactory.getCurrentRequest().serializeRegisterMapJSON(map);
+	}
 
-        public static BizAction deserialize(String data) throws Exception {
-                Map<String, String> map = JWebActionFactory.getCurrentRequest().deserializeRegisterMapJSON(data);
-                String clazzName = map.get("class");
-                Class<?> clazz = Class.forName(clazzName);
-                BizAction action = (BizAction) clazz.newInstance();
+	public static BizAction deserialize(String data) throws Exception {
+		Map<String, String> map = JWebActionFactory.getCurrentRequest().deserializeRegisterMapJSON(data);
+		String clazzName = map.get("class");
+		Class<?> clazz = Class.forName(clazzName);
+		BizAction action = (BizAction) clazz.newInstance();
 
-                while (clazz != null && BizAction.class.isAssignableFrom(clazz)) {
-                        for (Field f : clazz.getDeclaredFields()) {
-                                if (Modifier.isStatic(f.getModifiers()))
-                                        continue;
-                                String key = f.getName();
-                                String value = map.get(key);
-                                if (value == null)
-                                        continue;
-                                f.setAccessible(true);
-                                if (value.startsWith("A:")) {
-                                        f.set(action, JAct.deserialize(value.substring(2)));
-                                } else if (value.startsWith("B:")) {
-                                        f.set(action, BizAction.deserialize(value.substring(2)));
-                                } else if (value.startsWith("W:") || value.startsWith("S:")) {
-                                        f.set(action, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
-                                }
-                        }
-                        clazz = clazz.getSuperclass();
-                }
-                return action;
-        }
+		while (clazz != null && BizAction.class.isAssignableFrom(clazz)) {
+			for (Field f : clazz.getDeclaredFields()) {
+				if (Modifier.isStatic(f.getModifiers()))
+					continue;
+				String key = f.getName();
+				String value = map.get(key);
+				if (value == null)
+					continue;
+				f.setAccessible(true);
+				if (value.startsWith("A:")) {
+					f.set(action, JAct.deserialize(value.substring(2)));
+				} else if (value.startsWith("B:")) {
+					f.set(action, BizAction.deserialize(value.substring(2)));
+				} else if (value.startsWith("W:") || value.startsWith("S:")) {
+					f.set(action, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
+				}else if (value.startsWith("V:") || value.startsWith("S:")) {
+					f.set(action, value.substring(2));
+				}
+			}
+			clazz = clazz.getSuperclass();
+		}
+		return action;
+	}
 
 }
