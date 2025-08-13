@@ -1199,20 +1199,20 @@ public class BizAction extends JRecord {
 					String id = JWebActionFactory.getCurrentRequest().registerWinObjectObj((JBaseWin) value);
 					if (id != null && !id.isEmpty())
 						map.put(key, "W:" + id);
-                                } else if (value instanceof Serializable) {
-                                        map.put(key, "V:" + serializeValue((Serializable) value));
-                                }
+				} else if (value instanceof Serializable) {
+					map.put(key, "V:" + serializeValue((Serializable) value));
+				}
 			}
 			clazz = clazz.getSuperclass();
 		}
 		return JWebActionFactory.getCurrentRequest().serializeRegisterMapJSON(map);
 	}
 
-        public static BizAction deserialize(String data) throws Exception {
-                Map<String, String> map = JWebActionFactory.getCurrentRequest().deserializeRegisterMapJSON(data);
-                String clazzName = map.get("class");
-                Class<?> clazz = Class.forName(clazzName);
-                BizAction action = (BizAction) clazz.newInstance();
+	public static BizAction deserialize(String data) throws Exception {
+		Map<String, String> map = JWebActionFactory.getCurrentRequest().deserializeRegisterMapJSON(data);
+		String clazzName = map.get("class");
+		Class<?> clazz = Class.forName(clazzName);
+		BizAction action = (BizAction) clazz.newInstance();
 
 		while (clazz != null && BizAction.class.isAssignableFrom(clazz)) {
 			for (Field f : clazz.getDeclaredFields()) {
@@ -1223,50 +1223,60 @@ public class BizAction extends JRecord {
 				if (value == null)
 					continue;
 				f.setAccessible(true);
-                                if (value.startsWith("A:")) {
-                                        f.set(action, JAct.deserialize(value.substring(2)));
-                                } else if (value.startsWith("B:")) {
-                                        f.set(action, BizAction.deserialize(value.substring(2)));
-                                } else if (value.startsWith("W:") || value.startsWith("S:")) {
-                                        f.set(action, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
-                                } else if (value.startsWith("V:")) {
-                                        f.set(action, deserializeValue(f, value.substring(2)));
-                                }
-                        }
-                        clazz = clazz.getSuperclass();
-                }
-                return action;
-        }
+				if (value.startsWith("A:")) {
+					f.set(action, JAct.deserialize(value.substring(2)));
+				} else if (value.startsWith("B:")) {
+					f.set(action, BizAction.deserialize(value.substring(2)));
+				} else if (value.startsWith("W:") || value.startsWith("S:")) {
+					f.set(action, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
+				} else if (value.startsWith("V:")) {
+					f.set(action, deserializeValue(f, value.substring(2)));
+				}
+			}
+			clazz = clazz.getSuperclass();
+		}
+		return action;
+	}
 
-        private static String serializeValue(Serializable value) {
-                if (value instanceof Date) {
-                        return "D:" + ((Date) value).getTime();
-                }
-                return String.valueOf(value);
-        }
+	private static String serializeValue(Serializable value) {
+		if (value instanceof Date) {
+			return "D:" + ((Date) value).getTime();
+		}
+		return String.valueOf(value);
+	}
 
-        @SuppressWarnings({ "unchecked", "rawtypes" })
-        private static Object deserializeValue(Field f, String raw) throws Exception {
-                if (raw.startsWith("D:")) {
-                        return new Date(Long.parseLong(raw.substring(2)));
-                }
-                Class<?> type = f.getType();
-                if (JObject.class.isAssignableFrom(type)) {
-                        JObject obj = (JObject) type.newInstance();
-                        obj.setValue(raw);
-                        return obj;
-                }
-                if (type == String.class) return raw;
-                if (type == Integer.class || type == int.class) return Integer.valueOf(raw);
-                if (type == Long.class || type == long.class) return Long.valueOf(raw);
-                if (type == Boolean.class || type == boolean.class) return Boolean.valueOf(raw);
-                if (type == Double.class || type == double.class) return Double.valueOf(raw);
-                if (type == Float.class || type == float.class) return Float.valueOf(raw);
-                if (type == Short.class || type == short.class) return Short.valueOf(raw);
-                if (type == Byte.class || type == byte.class) return Byte.valueOf(raw);
-                if (type.isEnum()) return Enum.valueOf((Class) type, raw);
-                if (Date.class.isAssignableFrom(type)) return new Date(Long.parseLong(raw));
-                return raw;
-        }
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private static Object deserializeValue(Field f, String raw) throws Exception {
+		if (raw.startsWith("D:")) {
+			return new Date(Long.parseLong(raw.substring(2)));
+		}
+		Class<?> type = f.getType();
+		if (JObject.class.isAssignableFrom(type)) {
+			JObject obj = (JObject) type.newInstance();
+			obj.setValue(raw);
+			return obj;
+		}
+		if (type == String.class)
+			return raw;
+		if (type == Integer.class || type == int.class)
+			return Integer.valueOf(raw);
+		if (type == Long.class || type == long.class)
+			return Long.valueOf(raw);
+		if (type == Boolean.class || type == boolean.class)
+			return Boolean.valueOf(raw);
+		if (type == Double.class || type == double.class)
+			return Double.valueOf(raw);
+		if (type == Float.class || type == float.class)
+			return Float.valueOf(raw);
+		if (type == Short.class || type == short.class)
+			return Short.valueOf(raw);
+		if (type == Byte.class || type == byte.class)
+			return Byte.valueOf(raw);
+		if (type.isEnum())
+			return Enum.valueOf((Class) type, raw);
+		if (Date.class.isAssignableFrom(type))
+			return new Date(Long.parseLong(raw));
+		return raw;
+	}
 
 }
