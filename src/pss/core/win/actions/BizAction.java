@@ -355,8 +355,8 @@ public class BizAction extends JRecord {
 	public final static int DROP = 4;
 	public final static int REPORT = 5;
 
-        private transient JAct submit = null;
-        private transient JAct oActionAutorizada = null;
+        private JAct submit = null;
+        private JAct oActionAutorizada = null;
 
 	// private JAct oActionListener = null;
 

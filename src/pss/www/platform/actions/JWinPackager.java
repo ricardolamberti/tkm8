@@ -32,21 +32,20 @@ import pss.www.platform.cache.CacheProvider;
 
 public class JWinPackager {
 
-       // Evita recursión al serializar recs anidados
-       private static final ThreadLocal<java.util.Set<String>> SERIALIZING_KEYS =
-                       ThreadLocal.withInitial(java.util.HashSet::new);
+	// Evita recursión al serializar recs anidados
+	private static final ThreadLocal<java.util.Set<String>> SERIALIZING_KEYS = ThreadLocal.withInitial(java.util.HashSet::new);
 
-       static boolean isSerializingKey(String key) {
-               return SERIALIZING_KEYS.get().contains(key);
-       }
+	static boolean isSerializingKey(String key) {
+		return SERIALIZING_KEYS.get().contains(key);
+	}
 
-       private static void markSerializingKey(String key) {
-               SERIALIZING_KEYS.get().add(key);
-       }
+	private static void markSerializingKey(String key) {
+		SERIALIZING_KEYS.get().add(key);
+	}
 
-       private static void unmarkSerializingKey(String key) {
-               SERIALIZING_KEYS.get().remove(key);
-       }
+	private static void unmarkSerializingKey(String key) {
+		SERIALIZING_KEYS.get().remove(key);
+	}
 
 	private final JWebWinFactory factory;
 	private final ObjectMapper objectMapper = new ObjectMapper();
@@ -115,45 +114,45 @@ public class JWinPackager {
 		}
 	}
 
-       public JBaseRecord getRegisterObjectRecTemp(String zKey) throws Exception {
-               try {
-                       // 1) Intentar como referencia de cache (clave directa)
-                       byte[] data = null;
-                       try {
-                               data = CacheProvider.get().getBytes(zKey);
-                       } catch (Exception ignore) {
-                       }
-                       if (data != null) {
-                               String encoded = JTools.byteVectorToString(data); // encoded = Base64(deflate(json))
-                               byte[] decoded = Base64.getDecoder().decode(encoded);
-                               String json;
-                               try {
-                                       json = new String(inflate(decoded), StandardCharsets.UTF_8);
-                               } catch (Exception ex2) {
-                                       json = JTools.byteVectorToString(decoded);
-                               }
-                               return createRecFromJson(json, null);
-                       }
+	public JBaseRecord getRegisterObjectRecTemp(String zKey) throws Exception {
+		try {
+			// 1) Intentar como referencia de cache (clave directa)
+			byte[] data = null;
+			try {
+				data = CacheProvider.get().getBytes(zKey);
+			} catch (Exception ignore) {
+			}
+			if (data != null) {
+				String encoded = JTools.byteVectorToString(data); // encoded = Base64(deflate(json))
+				byte[] decoded = Base64.getDecoder().decode(encoded);
+				String json;
+				try {
+					json = new String(inflate(decoded), StandardCharsets.UTF_8);
+				} catch (Exception ex2) {
+					json = JTools.byteVectorToString(decoded);
+				}
+				return createRecFromJson(json, null);
+			}
 
-                       // 2) Intentar como "pack" (url-safe b64 + deflate)
-                       return createRecFromPack(zKey, null);
-               } catch (Exception e) {
-                       // 3) Fallback legacy: distintos decoders y sin compresión
-                       byte[] decoded;
-                       try {
-                               decoded = java.util.Base64.getUrlDecoder().decode(zKey);
-                       } catch (IllegalArgumentException ex) {
-                               decoded = java.util.Base64.getDecoder().decode(zKey);
-                       }
-                       String json;
-                       try {
-                               json = new String(inflate(decoded), StandardCharsets.UTF_8);
-                       } catch (Exception ex2) {
-                               json = JTools.byteVectorToString(decoded);
-                       }
-                       return createRecFromJson(json, null);
-               }
-       }
+			// 2) Intentar como "pack" (url-safe b64 + deflate)
+			return createRecFromPack(zKey, null);
+		} catch (Exception e) {
+			// 3) Fallback legacy: distintos decoders y sin compresión
+			byte[] decoded;
+			try {
+				decoded = java.util.Base64.getUrlDecoder().decode(zKey);
+			} catch (IllegalArgumentException ex) {
+				decoded = java.util.Base64.getDecoder().decode(zKey);
+			}
+			String json;
+			try {
+				json = new String(inflate(decoded), StandardCharsets.UTF_8);
+			} catch (Exception ex2) {
+				json = JTools.byteVectorToString(decoded);
+			}
+			return createRecFromJson(json, null);
+		}
+	}
 
 	private boolean okFilter(JBaseRecord baseRec, String filter) throws Exception {
 		if (!(baseRec instanceof JRecord))
@@ -161,10 +160,10 @@ public class JWinPackager {
 		return ((JRecord) baseRec).getFixedProp(filter).isKey();
 	}
 
-       public String serializeWinToJson(JBaseWin win) throws Exception {
-               JSerializableBaseWin serializableWin = prepareSerializableWin(win);
-               return objectMapper.writeValueAsString(serializableWin);
-       }
+	public String serializeWinToJson(JBaseWin win) throws Exception {
+		JSerializableBaseWin serializableWin = prepareSerializableWin(win);
+		return objectMapper.writeValueAsString(serializableWin);
+	}
 
 	private String serializeRecToJson(JBaseRecord rec) throws Exception {
 		JSerializableBaseWin serializableWin = prepareSerializableRec(rec, false);
@@ -188,36 +187,37 @@ public class JWinPackager {
 		return encoded;
 	}
 
-       public String baseRecToJSON(JBaseRecord rec) throws Exception {
-               String key = rec.getUniqueId() + "_rec";
+	public String baseRecToJSON(JBaseRecord rec) throws Exception {
+		String key = rec.getUniqueId() + "_rec";
 
-               // 1) cache hit
-               String cached = null;
-               try {
-                       byte[] data = CacheProvider.get().getBytes(key);
-                       if (data != null)
-                               cached = JTools.byteVectorToString(data);
-               } catch (Exception ignore) {
-               }
-               if (cached != null)
-                       return cached;
+		// 1) cache hit
+		String cached = null;
+		try {
+			byte[] data = CacheProvider.get().getBytes(key);
+			if (data != null)
+				cached = JTools.byteVectorToString(data);
+		} catch (Exception ignore) {
+		}
+		if (cached != null)
+			return cached;
 
-               // 2) Si ya estamos serializando este mismo rec, devolvemos SOLO referencia (evita recursión)
-               if (isSerializingKey(key)) {
-                       return key; // referencia; se resolverá por cache en el receptor (ver getRegisterObjectRecTemp)
-               }
+		// 2) Si ya estamos serializando este mismo rec, devolvemos SOLO referencia
+		// (evita recursión)
+		if (isSerializingKey(key)) {
+			return key; // referencia; se resolverá por cache en el receptor (ver
+									// getRegisterObjectRecTemp)
+		}
 
-               markSerializingKey(key);
-               try {
-                       String json = serializeRecToJson(rec);
-                       String encoded = Base64.getEncoder()
-                                       .encodeToString(deflate(json.getBytes(StandardCharsets.UTF_8)));
-                       CacheProvider.get().putBytes(key, JTools.stringToByteArray(encoded), 0);
-                       return encoded;
-               } finally {
-                       unmarkSerializingKey(key);
-               }
-       }
+		markSerializingKey(key);
+		try {
+			String json = serializeRecToJson(rec);
+			String encoded = Base64.getEncoder().encodeToString(deflate(json.getBytes(StandardCharsets.UTF_8)));
+			CacheProvider.get().putBytes(key, JTools.stringToByteArray(encoded), 0);
+			return encoded;
+		} finally {
+			unmarkSerializingKey(key);
+		}
+	}
 
 	private static String packJson(String json) throws Exception {
 		byte[] raw = JTools.stringToByteArray(json);
