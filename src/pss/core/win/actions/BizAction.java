@@ -1207,20 +1207,22 @@ public class BizAction extends JRecord {
 					map.put(key, "A:" + ((JAct) value).serialize());
 				} else if (value instanceof BizAction) {
 					map.put(key, "B:" + ((BizAction) value).serialize());
-	                        } else if (value instanceof JBaseWin) {
-	                                String id = JWebActionFactory.getCurrentRequest().registerWinObjectObj((JBaseWin) value);
-	                                if (id != null && !id.isEmpty())
-	                                        map.put(key, "W:" + id);
-	                        } else if (value instanceof Serializable) {
-	                                if (value.getClass().isArray()) {
-	                                        String id = JWebActionFactory.getCurrentRequest()
-	                                                        .registerObjectObj((Serializable) value);
-	                                        if (id != null && !id.isEmpty())
-	                                                map.put(key, "S:" + id);
-	                                } else {
-	                                        map.put(key, "V:" + serializeValue((Serializable) value));
-	                                }
-	                        }
+				} else if (value instanceof JBaseWin) {
+					String id = JWebActionFactory.getCurrentRequest().registerWinObjectObj((JBaseWin) value);
+					if (id != null && !id.isEmpty())
+						map.put(key, "W:" + id);
+				} else if (value instanceof JFilterMap) {
+					map.put(key, "F:" + ((JFilterMap)value).serialize());
+									
+				} else if (value instanceof Serializable) {
+					if (value.getClass().isArray()) {
+						String id = JWebActionFactory.getCurrentRequest().registerObjectObj((Serializable) value);
+						if (id != null && !id.isEmpty())
+							map.put(key, "S:" + id);
+					} else {
+						map.put(key, "V:" + serializeValue((Serializable) value));
+					}
+				}
 			}
 			clazz = clazz.getSuperclass();
 		}
@@ -1248,6 +1250,8 @@ public class BizAction extends JRecord {
 					f.set(action, BizAction.deserialize(value.substring(2)));
 				} else if (value.startsWith("W:") || value.startsWith("S:")) {
 					f.set(action, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
+				} else if (value.startsWith("F:")) {
+					f.set(action, JFilterMap.unserialize(value.substring(2)));
 				} else if (value.startsWith("V:")) {
 					f.set(action, deserializeValue(f, value.substring(2)));
 				}
