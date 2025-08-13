@@ -2,6 +2,10 @@ package pss.core.win.actions;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.Map;
 
 import pss.common.security.BizOperacion;
 import pss.common.security.BizOperacionRol;
@@ -1168,8 +1172,69 @@ public class BizAction extends JRecord {
 		this.foreground = v;
 	}
 
-	public String getForeground() {
-		return this.foreground;
-	}
+        public String getForeground() {
+                return this.foreground;
+        }
+
+        public String serialize() throws Exception {
+                Map<String, String> map = new HashMap<>();
+                map.put("class", getClass().getName());
+
+                Class<?> clazz = getClass();
+                while (clazz != null && BizAction.class.isAssignableFrom(clazz)) {
+                        for (Field f : clazz.getDeclaredFields()) {
+                                if (Modifier.isStatic(f.getModifiers()))
+                                        continue;
+                                f.setAccessible(true);
+                                Object value = f.get(this);
+                                if (value == null)
+                                        continue;
+                                String key = f.getName();
+                                if (value instanceof JAct) {
+                                        map.put(key, "A:" + ((JAct) value).serialize());
+                                } else if (value instanceof BizAction) {
+                                        map.put(key, "B:" + ((BizAction) value).serialize());
+                                } else if (value instanceof JBaseWin) {
+                                        String id = JWebActionFactory.getCurrentRequest().registerWinObjectObj((JBaseWin) value);
+                                        if (id != null && !id.isEmpty())
+                                                map.put(key, "W:" + id);
+                                } else if (value instanceof Serializable) {
+                                        String id = JWebActionFactory.getCurrentRequest().registerObjectObj((Serializable) value);
+                                        if (id != null && !id.isEmpty())
+                                                map.put(key, "S:" + id);
+                                }
+                        }
+                        clazz = clazz.getSuperclass();
+                }
+                return JWebActionFactory.getCurrentRequest().serializeRegisterMapJSON(map);
+        }
+
+        public static BizAction deserialize(String data) throws Exception {
+                Map<String, String> map = JWebActionFactory.getCurrentRequest().deserializeRegisterMapJSON(data);
+                String clazzName = map.get("class");
+                Class<?> clazz = Class.forName(clazzName);
+                BizAction action = (BizAction) clazz.newInstance();
+
+                while (clazz != null && BizAction.class.isAssignableFrom(clazz)) {
+                        for (Field f : clazz.getDeclaredFields()) {
+                                if (Modifier.isStatic(f.getModifiers()))
+                                        continue;
+                                String key = f.getName();
+                                String value = map.get(key);
+                                if (value == null)
+                                        continue;
+                                f.setAccessible(true);
+                                if (value.startsWith("A:")) {
+                                        f.set(action, JAct.deserialize(value.substring(2)));
+                                } else if (value.startsWith("B:")) {
+                                        f.set(action, BizAction.deserialize(value.substring(2)));
+                                } else if (value.startsWith("W:") || value.startsWith("S:")) {
+                                        f.set(action, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
+                                }
+                        }
+                        clazz = clazz.getSuperclass();
+                }
+                return action;
+        }
 
 }
