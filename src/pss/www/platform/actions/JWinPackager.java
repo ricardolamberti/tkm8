@@ -125,10 +125,10 @@ public class JWinPackager {
 		return ((JRecord) baseRec).getFixedProp(filter).isKey();
 	}
 
-	private String serializeWinToJson(JBaseWin win) throws Exception {
-		JSerializableBaseWin serializableWin = prepareSerializableWin(win);
-		return objectMapper.writeValueAsString(serializableWin);
-	}
+       public String serializeWinToJson(JBaseWin win) throws Exception {
+               JSerializableBaseWin serializableWin = prepareSerializableWin(win);
+               return objectMapper.writeValueAsString(serializableWin);
+       }
 
 	private String serializeRecToJson(JBaseRecord rec) throws Exception {
 		JSerializableBaseWin serializableWin = prepareSerializableRec(rec, false);

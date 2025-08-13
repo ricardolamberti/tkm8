@@ -72,12 +72,15 @@ public class JWebRequest {
 	private JWebHistoryManager oHistoryManager;
 
 	// Cache for large or server-only objects
-	public static final String OUT_CACHE_PREFIX = "cache:";
-	public static final String OUT_INDIRECT_PREFIX = "obj_i:";
-	public static final String OUT_TEMP_PREFIX = "obj_t:";
-	public static final String OUT_REC_PREFIX = "obj_rec:";
-	public static final String OBJ_PREFIX = "obj_";
-	public static final String IN_TEMP_PREFIX = OBJ_PREFIX+"t_";
+        public static final String OUT_CACHE_PREFIX = "cache:";
+        public static final String OUT_CACHE_WIN_PREFIX = OUT_CACHE_PREFIX + "w:";
+        public static final String OUT_CACHE_REC_PREFIX = OUT_CACHE_PREFIX + "r:";
+        public static final String OUT_CACHE_OBJ_PREFIX = OUT_CACHE_PREFIX + "o:";
+        public static final String OUT_INDIRECT_PREFIX = "obj_i:";
+        public static final String OUT_TEMP_PREFIX = "obj_t:";
+        public static final String OUT_REC_PREFIX = "obj_rec:";
+        public static final String OBJ_PREFIX = "obj_";
+        public static final String IN_TEMP_PREFIX = OBJ_PREFIX+"t_";
 	public static final String IN_REC_PREFIX = OBJ_PREFIX+"rec_";
 	public static final String IN_CACHED_PREFIX = OBJ_PREFIX+"c_";
 	public static final String IN_POINTER_PREFIX = OBJ_PREFIX+"p_";
@@ -757,12 +760,12 @@ public class JWebRequest {
 	public synchronized String registerObjectObj(Serializable zObject, boolean temp) throws Exception {
 		if (zObject instanceof JBaseWin)
 			return registerWinObjectObj((JBaseWin) zObject);
-		if (isLargeObject(zObject)) {
-			String id = IN_CACHED_PREFIX + UUID.randomUUID().toString();
-			CacheProvider.get().putBytes(id, serializeObjectToBytes(zObject), CACHE_EXPIRE_SECONDS);
-			addRegisteredObject(id, OUT_CACHE_PREFIX + id);
-			return id;
-		}
+                if (isLargeObject(zObject)) {
+                        String id = IN_CACHED_PREFIX + UUID.randomUUID().toString();
+                        CacheProvider.get().putBytes(id, serializeObjectToBytes(zObject), CACHE_EXPIRE_SECONDS);
+                        addRegisteredObject(id, OUT_CACHE_OBJ_PREFIX + id);
+                        return id;
+                }
 		String payload = serializeObject(zObject);
 		String id = IN_POINTER_PREFIX + sha256(JTools.stringToByteArray(payload));
 		addRegisteredObject(id, payload);
@@ -775,20 +778,23 @@ public class JWebRequest {
 //		if (zObject.getUniqueId() != null && objectsCreated.containsKey(zObject.getUniqueId())) {
 //			return zObject.getUniqueId();
 //		}
-		String id = zObject.getUniqueId() != null ? zObject.getUniqueId() : UUID.randomUUID().toString();
-		if (isLargeObject(zObject)) {
-			CacheProvider.get().putBytes(id, JTools.stringToByteArray( new JWinPackager(null).baseWinToJSON(zObject)), CACHE_EXPIRE_SECONDS);
-			PssLogger.logInfo("cacheado : ["+id+"]");
-			String out = OUT_CACHE_PREFIX + id;
-			addRegisteredObject(id, out);
+	String id = zObject.getUniqueId() != null ? zObject.getUniqueId() : UUID.randomUUID().toString();
+	JWinPackager packager = new JWinPackager(null);
+	String json = packager.serializeWinToJson(zObject);
+	if (isLargeObject(zObject)) {
+		String encoded = Base64.getEncoder().encodeToString(JWinPackager.deflate(JTools.stringToByteArray(json)));
+		CacheProvider.get().putBytes(id, JTools.stringToByteArray(encoded), CACHE_EXPIRE_SECONDS);
+		PssLogger.logInfo("cacheado : ["+id+"]");
+                String out = OUT_CACHE_WIN_PREFIX + id;
+                addRegisteredObject(id, out);
 	//		objectsCreated.put(id, out);
-			return id;
-		}
-		String packed = new JWinPackager(null).baseWinToJSON(zObject);
-		String out = IN_TEMP_PREFIX + packed;
-		addRegisteredObject(id, out);
-	//	objectsCreated.put(id, out);
 		return id;
+	}
+	String packed = JWinPackager.b64url(JWinPackager.deflate(JTools.stringToByteArray(json)));
+	String out = IN_TEMP_PREFIX + packed;
+	addRegisteredObject(id, out);
+	//	objectsCreated.put(id, out);
+	return id;
 	}
 
 	public synchronized String registerRecObjectObj(JBaseRecord zObject) throws Exception {
@@ -798,57 +804,76 @@ public class JWebRequest {
 //		if (reuseIfPresent(key) != null)
 //			return key;
 		if (isLargeObject(zObject)) {
-			CacheProvider.get().putBytes(key, JTools.stringToByteArray( new JWinPackager(null).baseRecToJSON(zObject)), CACHE_EXPIRE_SECONDS);
-			addRegisteredObject(key, OUT_CACHE_PREFIX + key);
-			return key;
-		}
+                        CacheProvider.get().putBytes(key, JTools.stringToByteArray( new JWinPackager(null).baseRecToJSON(zObject)), CACHE_EXPIRE_SECONDS);
+                        addRegisteredObject(key, OUT_CACHE_REC_PREFIX + key);
+                        return key;
+                }
 		String packed = new JWinPackager(null).baseRecToJSON(zObject);
 		String payload = IN_REC_PREFIX + packed;
 		addRegisteredObject(key, payload);
 		return key;
 	}
 
-	public Serializable getRegisterObject(String key) {
-		String obj = getRegisteredObject(key);
-		if (obj == null) {
-			PssLogger.logError("Falta objeto");
-			return null;
-		}
-		try {
-			if (obj.startsWith(OUT_CACHE_PREFIX)) {
-				byte[] data = CacheProvider.get().getBytes(obj.substring(OUT_CACHE_PREFIX.length()));
-				return (Serializable) deserializeObjectFromBytes(data);
-			}
-			if (obj.startsWith(OUT_INDIRECT_PREFIX)) {
-				return (Serializable) getRegisterObject(obj.substring(OUT_INDIRECT_PREFIX.length()));
-			}
+	
+        public Serializable getRegisterObject(String key) {
+                String obj = getRegisteredObject(key);
+                if (obj == null) {
+                        PssLogger.logError("Falta objeto");
+                        return null;
+                }
+                try {
+                        if (obj.startsWith(OUT_CACHE_WIN_PREFIX)) {
+                                byte[] data = CacheProvider.get().getBytes(obj.substring(OUT_CACHE_WIN_PREFIX.length()));
+                                if (data == null)
+                                        return null;
+                                String encoded = JTools.byteVectorToString(data);
+                                byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(encoded));
+                                String json = JTools.byteVectorToString(raw);
+                                return new JWinPackager(new JWebWinFactory(null)).jsonToBaseWin(json);
+                        }
+                        if (obj.startsWith(OUT_CACHE_REC_PREFIX)) {
+                                byte[] data = CacheProvider.get().getBytes(obj.substring(OUT_CACHE_REC_PREFIX.length()));
+                                if (data == null)
+                                        return null;
+                                String encoded = JTools.byteVectorToString(data);
+                                byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(encoded));
+                                String json = JTools.byteVectorToString(raw);
+                                return new JWinPackager(new JWebWinFactory(null)).jsonToBaseRec(json);
+                        }
+                        if (obj.startsWith(OUT_CACHE_OBJ_PREFIX)) {
+                                byte[] data = CacheProvider.get().getBytes(obj.substring(OUT_CACHE_OBJ_PREFIX.length()));
+                                if (data == null)
+                                        return null;
+                                return (Serializable) deserializeObjectFromBytes(data);
+                        }
+                        if (obj.startsWith(OUT_INDIRECT_PREFIX)) {
+                                return (Serializable) getRegisterObject(obj.substring(OUT_INDIRECT_PREFIX.length()));
+                        }
 
-			if (obj.startsWith(OUT_TEMP_PREFIX)) {
-				return (Serializable) fetchFromCache(obj.substring(OUT_TEMP_PREFIX.length()));
-			}
-			if (obj.startsWith(OUT_REC_PREFIX)) {
-				return (Serializable) fetchFromCache(obj.substring(OUT_REC_PREFIX.length()));
-			}
-			if (obj.startsWith(IN_TEMP_PREFIX)) {
-				String payload = obj.substring(IN_TEMP_PREFIX.length());
-				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
-				String json = JTools.byteVectorToString(raw);
-				return new JWinPackager(new JWebWinFactory(null)).jsonToBaseWin(json);
-			}
-			if (obj.startsWith(IN_REC_PREFIX)) {
-				String payload = obj.substring(IN_REC_PREFIX.length());
-				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
-				String json = JTools.byteVectorToString(raw);
-				return new JWinPackager(new JWebWinFactory(null)).jsonToBaseRec(json);
-			}
-//			if (obj.startsWith("uuid_"))
-//				PssLogger.logInfo("obj = " + obj);
-			return deserializeObject(obj);
-		} catch (Exception e) {
-			PssLogger.logError(e);
-			return null;
-		}
-	}
+                        if (obj.startsWith(OUT_TEMP_PREFIX)) {
+                                return (Serializable) fetchFromCache(obj.substring(OUT_TEMP_PREFIX.length()));
+                        }
+                        if (obj.startsWith(OUT_REC_PREFIX)) {
+                                return (Serializable) fetchFromCache(obj.substring(OUT_REC_PREFIX.length()));
+                        }
+                        if (obj.startsWith(IN_TEMP_PREFIX)) {
+                                String payload = obj.substring(IN_TEMP_PREFIX.length());
+                                byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
+                                String json = JTools.byteVectorToString(raw);
+                                return new JWinPackager(new JWebWinFactory(null)).jsonToBaseWin(json);
+                        }
+                        if (obj.startsWith(IN_REC_PREFIX)) {
+                                String payload = obj.substring(IN_REC_PREFIX.length());
+                                byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
+                                String json = JTools.byteVectorToString(raw);
+                                return new JWinPackager(new JWebWinFactory(null)).jsonToBaseRec(json);
+                        }
+                        return deserializeObject(obj);
+                } catch (Exception e) {
+                        PssLogger.logError(e);
+                        return null;
+                }
+        }
 
 	public synchronized String registerObject(JBaseWin zBaseWin) throws Exception {
 		if (zBaseWin == null)
@@ -888,13 +913,19 @@ public class JWebRequest {
 		for (String k : rr.evict) {
 			String val = getRegisteredObject(k);
 			if (val != null) {
-				if (val.startsWith(OUT_CACHE_PREFIX)) {
-					CacheProvider.get().delete(val.substring(OUT_CACHE_PREFIX.length()));
-				} else if (val.startsWith(OUT_TEMP_PREFIX)) {
-					invalidateHandle(val.substring(OUT_TEMP_PREFIX.length()));
-				} else if (val.startsWith(OUT_REC_PREFIX)) {
-					invalidateHandle(val.substring(OUT_REC_PREFIX.length()));
-				}
+                               if (val.startsWith(OUT_CACHE_WIN_PREFIX)) {
+                                       CacheProvider.get().delete(val.substring(OUT_CACHE_WIN_PREFIX.length()));
+                               } else if (val.startsWith(OUT_CACHE_REC_PREFIX)) {
+                                       CacheProvider.get().delete(val.substring(OUT_CACHE_REC_PREFIX.length()));
+                               } else if (val.startsWith(OUT_CACHE_OBJ_PREFIX)) {
+                                       CacheProvider.get().delete(val.substring(OUT_CACHE_OBJ_PREFIX.length()));
+                               } else if (val.startsWith(OUT_CACHE_PREFIX)) {
+                                       CacheProvider.get().delete(val.substring(OUT_CACHE_PREFIX.length()));
+                               } else if (val.startsWith(OUT_TEMP_PREFIX)) {
+                                       invalidateHandle(val.substring(OUT_TEMP_PREFIX.length()));
+                               } else if (val.startsWith(OUT_REC_PREFIX)) {
+                                       invalidateHandle(val.substring(OUT_REC_PREFIX.length()));
+                               }
 			}
 		}
 		pack.localHistoryManager = getHistoryManager().serializeHistoryManager();
