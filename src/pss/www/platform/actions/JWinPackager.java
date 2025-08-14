@@ -54,9 +54,26 @@ public class JWinPackager {
 		return Base64.getUrlEncoder().withoutPadding().encodeToString(data);
 	}
 
-	public static byte[] b64urlDecode(String data) {
-		return Base64.getUrlDecoder().decode(data);
-	}
+       /**
+        * Decodes a Base64 string that may be encoded using either the URL-safe
+        * alphabet ("-" and "_") or the standard alphabet ("+" and "/").
+        *
+        * <p>Historically some parts of the system produced Base64 strings with
+        * the standard alphabet while consumers expected URL-safe encoding.  This
+        * method first attempts to decode using the URL-safe decoder and, if the
+        * input contains characters outside that alphabet (e.g. "+"), it falls
+        * back to the standard decoder.  This prevents {@link
+        * IllegalArgumentException} such as "Illegal base64 character 2b" when
+        * encountering legacy data.</p>
+        */
+       public static byte[] b64urlDecode(String data) {
+               try {
+                       return Base64.getUrlDecoder().decode(data);
+               } catch (IllegalArgumentException ex) {
+                       // Fallback for legacy data encoded with the standard Base64 alphabet
+                       return Base64.getDecoder().decode(data);
+               }
+       }
 
 	public static byte[] deflate(byte[] input) {
 		Deflater deflater = new Deflater();
