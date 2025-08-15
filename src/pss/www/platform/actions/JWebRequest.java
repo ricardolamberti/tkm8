@@ -40,6 +40,7 @@ import pss.tools.debug.CoreExtractor;
 import pss.tools.debug.GraphSnapshot;
 import pss.tools.debug.GraphSnapshotConfig;
 import pss.tools.debug.SnapshotDumper;
+import pss.tools.debug.DebugSnapRegistry;
 import pss.www.platform.actions.requestBundle.JWebActionData;
 import pss.www.platform.actions.requestBundle.JWebActionDataBundle;
 import pss.www.platform.applications.JWebApplication;
@@ -126,130 +127,47 @@ public class JWebRequest {
 	// debug snapshot storage
 	private GraphSnapshot.Snapshot debugSnapshotBefore;
 
-	// ===== DEBUG SNAPSHOT =====
-	private transient DebugSnap debugSnap; // null si está desactivado
-	private transient String debugRequestId;
+        // ===== DEBUG SNAPSHOT =====
+        private transient boolean debugSnapBegun;
+        private transient String debugRequestId;
 
-	private static boolean snapEnabled() {
-	  return Boolean.parseBoolean(System.getProperty("pss.debug.snap.enabled","true"));
-	}
+        private static boolean snapEnabled() {
+          return Boolean.parseBoolean(System.getProperty("pss.debug.snap.enabled","false"));
+        }
 
-	private static boolean snapFailOnDiff() {
-	  return Boolean.parseBoolean(System.getProperty("pss.debug.snap.failOnDiff","true"));
-	}
+        private static boolean snapFailOnDiff() {
+          return Boolean.parseBoolean(System.getProperty("pss.debug.snap.failOnDiff","false"));
+        }
 
 	private static int snapMaxLines() {
 		return Integer.getInteger("pss.debug.snap.max", 200);
 	}
 
-	private void ensureSnapInit() {
-		if (!snapEnabled())
-			return;
-		if (debugSnap == null)
-			debugSnap = new DebugSnap();
-		if (debugRequestId == null)
-			debugRequestId = String.valueOf(System.currentTimeMillis());
-	}
+        private String ensureReqId() {
+                if (debugRequestId != null)
+                        return debugRequestId;
+                Object attr = oServletRequest.getAttribute("pss.debug.reqId");
+                if (attr instanceof String) {
+                        debugRequestId = (String) attr;
+                        return debugRequestId;
+                }
+                String hdr = oServletRequest.getHeader("X-Req-Id");
+                debugRequestId = (hdr != null && !hdr.isEmpty()) ? hdr : String.valueOf(System.nanoTime());
+                oServletRequest.setAttribute("pss.debug.reqId", debugRequestId);
+                return debugRequestId;
+        }
 
-	private static final class DebugSnap {
-		static final String STORAGE_POINTER = "POINTER";
-		static final String STORAGE_CACHE = "CACHE";
+        private void ensureSnapInit() {
+                if (!snapEnabled())
+                        return;
+                String reqId = ensureReqId();
+                if (!debugSnapBegun) {
+                        DebugSnapRegistry.begin(reqId);
+                        debugSnapBegun = true;
+                }
+                DebugSnapRegistry.touch(reqId);
+        }
 
-		static final class Entry {
-			final String id;
-			final String type;
-			final String storage;
-			final String hash;
-
-			Entry(String id, String type, String storage, String hash) {
-				this.id = id;
-				this.type = type;
-				this.storage = storage;
-				this.hash = hash;
-			}
-		}
-
-		final java.util.Map<String, Entry> pre = new java.util.LinkedHashMap<>();
-		final java.util.Map<String, Entry> post = new java.util.LinkedHashMap<>();
-
-		static String sha256(byte[] data) {
-			try {
-				java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
-				byte[] d = md.digest(data);
-				StringBuilder sb = new StringBuilder();
-				for (byte b : d)
-					sb.append(String.format("%02x", b));
-				return sb.toString();
-			} catch (Exception e) {
-				return "sha256-error:" + e.getMessage();
-			}
-		}
-
-		static String sha256(String s) {
-			return sha256(s.getBytes(java.nio.charset.StandardCharsets.UTF_8));
-		}
-
-		void addPrePointer(String id, String type, String payloadStr) {
-			pre.put(id, new Entry(id, type, STORAGE_POINTER, sha256(payloadStr)));
-		}
-
-		void addPreCache(String id, String type, byte[] payloadBytes) {
-			pre.put(id, new Entry(id, type, STORAGE_CACHE, sha256(payloadBytes)));
-		}
-
-		void addPostPointer(String id, String type, String payloadStr) {
-			post.put(id, new Entry(id, type, STORAGE_POINTER, sha256(payloadStr)));
-		}
-
-		void addPostCache(String id, String type, byte[] payloadBytes) {
-			post.put(id, new Entry(id, type, STORAGE_CACHE, sha256(payloadBytes)));
-		}
-
-		String diff(int maxLines) {
-			StringBuilder sb = new StringBuilder();
-			int emitted = 0;
-
-			for (String id : pre.keySet()) {
-				if (!post.containsKey(id)) {
-					if (emitted++ < maxLines)
-						sb.append("- Falta en POST: ").append(id).append("\n");
-				}
-			}
-			for (String id : post.keySet()) {
-				if (!pre.containsKey(id)) {
-					if (emitted++ < maxLines)
-						sb.append("+ Extra en POST: ").append(id).append("\n");
-				}
-			}
-
-			for (String id : pre.keySet()) {
-				Entry a = pre.get(id);
-				Entry b = post.get(id);
-				if (b == null)
-					continue;
-
-				if (!a.type.equals(b.type)) {
-					if (emitted++ < maxLines)
-						sb.append("~ Tipo difiere ").append(id).append(": ").append(a.type).append(" != ").append(b.type).append("\n");
-				}
-				if (!a.storage.equals(b.storage)) {
-					if (emitted++ < maxLines)
-						sb.append("~ Storage difiere ").append(id).append(": ").append(a.storage).append(" != ").append(b.storage).append("\n");
-				}
-				if (!a.hash.equals(b.hash)) {
-					if (emitted++ < maxLines)
-						sb.append("~ PayloadHash difiere ").append(id).append(": ").append(a.hash).append(" != ").append(b.hash).append("\n");
-				}
-				if (emitted >= maxLines) {
-					sb.append("... (más)\n");
-					break;
-				}
-			}
-			if (emitted == 0)
-				sb.append("SNAP OK: mapas e hashes coinciden.\n");
-			return sb.toString();
-		}
-	}
 
 	public JWebRequest(Request zServletRequest, JWebActionRequestProcessor zProcessor) {
 		language = zServletRequest.getLocale().getLanguage();
@@ -320,13 +238,16 @@ public class JWebRequest {
 		this.oObjectMap = zMap;
 	}
 
-	public void addModelObject(String zKey, Object zObject) {
-		this.oObjectMap.put(zKey, zObject);
-	}
+        public void addModelObject(String zKey, Object zObject) {
+                if (this.oObjectMap == null) {
+                        this.oObjectMap = new HashMap<String, Object>();
+                }
+                this.oObjectMap.put(zKey, zObject);
+        }
 
-	public Object getModelObject(String zKey) {
-		return this.oObjectMap.get(zKey);
-	}
+        public Object getModelObject(String zKey) {
+                return this.oObjectMap == null ? null : this.oObjectMap.get(zKey);
+        }
 
 	public String getRequestid() {
 		return requestid;
@@ -696,17 +617,17 @@ public class JWebRequest {
 		return !isArgumentEmpty(getTableProvider());
 	}
 
-	public boolean isArgumentEmpty(String zRequestArgument) {
-		if (zRequestArgument == null)
-			return true;
-		if (zRequestArgument.toUpperCase().equals("NULL"))
-			return true;
-		if (zRequestArgument.toUpperCase().equals("UNDEFINED"))
-			return true;
-		if (zRequestArgument.trim().length() == 0)
-			return true;
-		return false;
-	}
+        public boolean isArgumentEmpty(String zRequestArgument) {
+                if (zRequestArgument == null)
+                        return true;
+                if ("NULL".equalsIgnoreCase(zRequestArgument))
+                        return true;
+                if ("UNDEFINED".equalsIgnoreCase(zRequestArgument))
+                        return true;
+                if (zRequestArgument.trim().isEmpty())
+                        return true;
+                return false;
+        }
 
 	public boolean hasContainerDimension() throws Exception {
 		String height = getArgument(JWebActionFactory.ACTION_DATA_PREFIX + "container_height");
@@ -895,26 +816,28 @@ public class JWebRequest {
 		
 		if (zObject instanceof JBaseWin)
 			return registerWinObjectObj((JBaseWin) zObject);
-		if (isLargeObject(zObject)) {
-			String id = IN_CACHED_PREFIX + UUID.randomUUID().toString();
-			byte[] bytes = serializeObjectToBytes(zObject);
-			CacheProvider.get().putBytes(id, bytes, CACHE_EXPIRE_SECONDS);
-			addRegisteredObject(id, OUT_CACHE_OBJ_PREFIX + id);
-			// FOTO A (CACHE)
-			if (debugSnap != null) {
-				debugSnap.addPreCache(id, zObject.getClass().getName(), bytes);
-			}
-			return id;
-		}
-		String payload = serializeObject(zObject);
-		String id = IN_POINTER_PREFIX + sha256(JTools.stringToByteArray(payload));
-		addRegisteredObject(id, payload);
+                if (isLargeObject(zObject)) {
+                        String id = IN_CACHED_PREFIX + UUID.randomUUID().toString();
+                        byte[] bytes = serializeObjectToBytes(zObject);
+                        CacheProvider.get().putBytes(id, bytes, CACHE_EXPIRE_SECONDS);
+                        addRegisteredObject(id, OUT_CACHE_OBJ_PREFIX + id);
+                        // FOTO A (CACHE)
+                        DebugSnapRegistry.DebugSnap snap = DebugSnapRegistry.get(debugRequestId);
+                        if (snap != null) {
+                                snap.addPreCache(id, zObject.getClass().getName(), bytes);
+                        }
+                        return id;
+                }
+                String payload = serializeObject(zObject);
+                String id = IN_POINTER_PREFIX + sha256(JTools.stringToByteArray(payload));
+                addRegisteredObject(id, payload);
 
-		// FOTO A (POINTER)
-		if (debugSnap != null) {
-			debugSnap.addPrePointer(id, zObject.getClass().getName(), payload);
-		}
-		return id;
+                // FOTO A (POINTER)
+                DebugSnapRegistry.DebugSnap snap = DebugSnapRegistry.get(debugRequestId);
+                if (snap != null) {
+                        snap.addPrePointer(id, zObject.getClass().getName(), payload);
+                }
+                return id;
 	}
 
 	Map<String, Serializable> objectsCreated = new HashMap<String, Serializable>();
@@ -977,53 +900,42 @@ public class JWebRequest {
 		return IN_REC_PREFIX + key;
 	}
 
-	public void savePostSnapshot() {
-		if (debugSnap == null)
-			return;
-		try {
-			java.util.Map<String, Object> objCreated = getObjectCreated();
-			if (objCreated == null)
-				return;
+        public void savePostSnapshot() {
+                if (!debugSnapBegun)
+                        return;
+                DebugSnapRegistry.DebugSnap snap = DebugSnapRegistry.get(debugRequestId);
+                if (snap == null)
+                        return;
+                DebugSnapRegistry.touch(debugRequestId);
+                try {
+                        java.util.Map<String, Object> objCreated = getObjectCreated();
+                        if (objCreated == null)
+                                return;
 
-			for (java.util.Map.Entry<String, Object> e : objCreated.entrySet()) {
-				String id = e.getKey();
-				Object obj = e.getValue();
-				if (obj == null)
-					continue;
+                        for (java.util.Map.Entry<String, Object> e : objCreated.entrySet()) {
+                                String id = e.getKey();
+                                Object obj = e.getValue();
+                                if (obj == null)
+                                        continue;
 
-				boolean isPointer = id != null && id.startsWith(IN_POINTER_PREFIX);
-				boolean isCache = id != null && id.startsWith(IN_CACHED_PREFIX);
+                                boolean isPointer = id != null && id.startsWith(IN_POINTER_PREFIX);
+                                boolean isCache = id != null && id.startsWith(IN_CACHED_PREFIX);
 
-				if (isPointer) {
-					String payload = serializeObject((java.io.Serializable) obj);
-					debugSnap.addPostPointer(id, obj.getClass().getName(), payload);
-				} else if (isCache) {
-					byte[] bytes = serializeObjectToBytes((java.io.Serializable) obj);
-					debugSnap.addPostCache(id, obj.getClass().getName(), bytes);
-				} else {
-					String payload = serializeObject((java.io.Serializable) obj);
-					debugSnap.addPostPointer(id, obj.getClass().getName(), payload);
-				}
-			}
-		}catch (Exception e) {
-			PssLogger.logError(ex, "[SNAP] error en post snap: " + ex.getMessage());
-		}
-	}
-		public void debugCompareSnapshotsAfterRebuild() {
-				
-			String diff = debugSnap.diff(snapMaxLines());
-			if (diff.startsWith("SNAP OK")) {
-				PssLogger.logInfo("[SNAP] OK req=" + debugRequestId + " :: " + diff.trim());
-			} else {
-				PssLogger.logInfo("[SNAP] DIFF req=" + debugRequestId + " ::\n" + diff);
-				if (snapFailOnDiff()) {
-					throw new IllegalStateException("Snapshot mismatch (req=" + debugRequestId + ")");
-				}
-			}
-		} catch (Exception ex) {
-			PssLogger.logError(ex, "[SNAP] error en comparacion: " + ex.getMessage());
-		}
-	}
+                                if (isPointer) {
+                                        String payload = serializeObject((java.io.Serializable) obj);
+                                        snap.addPostPointer(id, obj.getClass().getName(), payload);
+                                } else if (isCache) {
+                                        byte[] bytes = serializeObjectToBytes((java.io.Serializable) obj);
+                                        snap.addPostCache(id, obj.getClass().getName(), bytes);
+                                } else {
+                                        String payload = serializeObject((java.io.Serializable) obj);
+                                        snap.addPostPointer(id, obj.getClass().getName(), payload);
+                                }
+                        }
+                } catch (Exception e) {
+                        PssLogger.logError(e, "[SNAP] error en post snap: " + e.getMessage());
+                }
+        }
 
 	public Serializable getRegisterObject(String key) {
 		Serializable objOut = getObjectCreated(key);
@@ -1108,14 +1020,18 @@ public class JWebRequest {
 		public java.util.List<String> evict = new java.util.ArrayList<>();
 	}
 
-	public ReconcileResult reconcileDictionaries() {
-		ReconcileResult rr = new ReconcileResult();
-		Map<String, String> oldMap = getRegisteredObjectsOld();
-		Map<String, String> newMap = getRegisteredObjectsNew();
-		rr.keep.addAll(newMap.keySet());
-
-		return rr;
-	}
+        public ReconcileResult reconcileDictionaries() {
+                ReconcileResult rr = new ReconcileResult();
+                Map<String, String> oldMap = getRegisteredObjectsOld();
+                Map<String, String> newMap = getRegisteredObjectsNew();
+                rr.keep.addAll(newMap.keySet());
+                for (String k : oldMap.keySet()) {
+                        if (!newMap.containsKey(k)) {
+                                rr.evict.add(k);
+                        }
+                }
+                return rr;
+        }
 	
 	public void endResolver() throws Exception {
 		if (objectsCreated.size()>0)
@@ -1150,9 +1066,24 @@ public class JWebRequest {
 		pack.localRegisteredObject = getRegisteredObjectsNew();
 		pack.localNameDictionay = getNameDictionary();
 		
-		savePostSnapshot();
-		return serializeRegisterJSON(pack);
-	}
+                savePostSnapshot();
+                if (snapEnabled()) {
+                        String reqId = debugSnapBegun ? debugRequestId
+                                        : (String) oServletRequest.getAttribute("pss.debug.reqId");
+                        String diff = DebugSnapRegistry.finish(reqId, snapMaxLines());
+                        if (diff != null) {
+                                if (diff.startsWith("SNAP OK")) {
+                                        PssLogger.logInfo("[SNAP] OK req=" + reqId + " :: " + diff.trim());
+                                } else {
+                                        PssLogger.logInfo("[SNAP] DIFF req=" + reqId + " ::\n" + diff);
+                                        if (snapFailOnDiff()) {
+                                                throw new IllegalStateException("Snapshot mismatch (req=" + reqId + ")");
+                                        }
+                                }
+                        }
+                }
+                return serializeRegisterJSON(pack);
+        }
 
 	private void invalidateHandle(String handle) {
 		try {
@@ -1239,11 +1170,9 @@ public class JWebRequest {
 			app.getStadistics().addInfoSession(getSession());
 	
 
-			debugCompareSnapshotsAfterRebuild();
-
-		} catch (Exception e) {
-			PssLogger.logError(e);
-		}
+                } catch (Exception e) {
+                        PssLogger.logError(e);
+                }
 
 	}
 
@@ -1277,53 +1206,49 @@ public class JWebRequest {
 		return map;
 	}
 
-	public static String serializeObject(Serializable obj) throws IOException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ObjectOutputStream oos = new ObjectOutputStream(baos);
-		oos.writeObject(obj);
-		oos.close();
-		return Base64.getEncoder().encodeToString(baos.toByteArray());
-	}
+        public static String serializeObject(Serializable obj) throws IOException {
+                try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+                        oos.writeObject(obj);
+                        return Base64.getEncoder().encodeToString(baos.toByteArray());
+                }
+        }
 
-	public static byte[] serializeObjectToBytes(Serializable obj) throws IOException {
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		ObjectOutputStream oos = new ObjectOutputStream(baos);
-		oos.writeObject(obj);
-		oos.close();
-		return baos.toByteArray();
-	}
+        public static byte[] serializeObjectToBytes(Serializable obj) throws IOException {
+                try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                ObjectOutputStream oos = new ObjectOutputStream(baos)) {
+                        oos.writeObject(obj);
+                        return baos.toByteArray();
+                }
+        }
 
-	public static Serializable deserializeObject(String serializedObj) {
-		try {
-			if (serializedObj == null)
-				return null;
-			byte[] data = Base64.getDecoder().decode(serializedObj);
-			ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
-			Serializable obj = (Serializable) ois.readObject();
-			ois.close();
-			return obj;
-		} catch (ClassNotFoundException e) {
-			PssLogger.logError(e);
-			e.printStackTrace();
-		} catch (IOException e) {
-			PssLogger.logError(e);
-		}
-		return null;
-	}
+        public static Serializable deserializeObject(String serializedObj) {
+                try {
+                        if (serializedObj == null)
+                                return null;
+                        byte[] data = Base64.getDecoder().decode(serializedObj);
+                        try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data))) {
+                                return (Serializable) ois.readObject();
+                        }
+                } catch (ClassNotFoundException e) {
+                        PssLogger.logError(e);
+                        e.printStackTrace();
+                } catch (IOException e) {
+                        PssLogger.logError(e);
+                }
+                return null;
+        }
 
-	public static Serializable deserializeObjectFromBytes(byte[] data) {
-		if (data == null)
-			return null;
-		try {
-			ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data));
-			Serializable obj = (Serializable) ois.readObject();
-			ois.close();
-			return obj;
-		} catch (Exception e) {
-			PssLogger.logError(e);
-			return null;
-		}
-	}
+        public static Serializable deserializeObjectFromBytes(byte[] data) {
+                if (data == null)
+                        return null;
+                try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data))) {
+                        return (Serializable) ois.readObject();
+                } catch (Exception e) {
+                        PssLogger.logError(e);
+                        return null;
+                }
+        }
 
 //	public static String baseWinToSession(JBaseWin zOwner) throws Exception {
 ////	  if (!zOwner.canConvertToURL()) return serializeObject(zOwner);
