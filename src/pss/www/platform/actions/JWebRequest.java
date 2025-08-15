@@ -126,6 +126,136 @@ public class JWebRequest {
         // debug snapshot storage
         private GraphSnapshot.Snapshot debugSnapshotBefore;
 
+        // ===== DEBUG SNAPSHOT =====
+        private transient DebugSnap debugSnap; // null si está desactivado
+        private transient String debugRequestId;
+
+        private static boolean snapEnabled() {
+                return Boolean.getBoolean("pss.debug.snap.enabled");
+        }
+
+        private static boolean snapFailOnDiff() {
+                return Boolean.getBoolean("pss.debug.snap.failOnDiff");
+        }
+
+        private static int snapMaxLines() {
+                return Integer.getInteger("pss.debug.snap.max", 200);
+        }
+
+        private void ensureSnapInit() {
+                if (!snapEnabled())
+                        return;
+                if (debugSnap == null)
+                        debugSnap = new DebugSnap();
+                if (debugRequestId == null)
+                        debugRequestId = String.valueOf(System.currentTimeMillis());
+        }
+
+        private static final class DebugSnap {
+                static final String STORAGE_POINTER = "POINTER";
+                static final String STORAGE_CACHE = "CACHE";
+
+                static final class Entry {
+                        final String id;
+                        final String type;
+                        final String storage;
+                        final String hash;
+
+                        Entry(String id, String type, String storage, String hash) {
+                                this.id = id;
+                                this.type = type;
+                                this.storage = storage;
+                                this.hash = hash;
+                        }
+                }
+
+                final java.util.Map<String, Entry> pre = new java.util.LinkedHashMap<>();
+                final java.util.Map<String, Entry> post = new java.util.LinkedHashMap<>();
+
+                static String sha256(byte[] data) {
+                        try {
+                                java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+                                byte[] d = md.digest(data);
+                                StringBuilder sb = new StringBuilder();
+                                for (byte b : d)
+                                        sb.append(String.format("%02x", b));
+                                return sb.toString();
+                        } catch (Exception e) {
+                                return "sha256-error:" + e.getMessage();
+                        }
+                }
+
+                static String sha256(String s) {
+                        return sha256(s.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                }
+
+                void addPrePointer(String id, String type, String payloadStr) {
+                        pre.put(id, new Entry(id, type, STORAGE_POINTER, sha256(payloadStr)));
+                }
+
+                void addPreCache(String id, String type, byte[] payloadBytes) {
+                        pre.put(id, new Entry(id, type, STORAGE_CACHE, sha256(payloadBytes)));
+                }
+
+                void addPostPointer(String id, String type, String payloadStr) {
+                        post.put(id, new Entry(id, type, STORAGE_POINTER, sha256(payloadStr)));
+                }
+
+                void addPostCache(String id, String type, byte[] payloadBytes) {
+                        post.put(id, new Entry(id, type, STORAGE_CACHE, sha256(payloadBytes)));
+                }
+
+                String diff(int maxLines) {
+                        StringBuilder sb = new StringBuilder();
+                        int emitted = 0;
+
+                        for (String id : pre.keySet()) {
+                                if (!post.containsKey(id)) {
+                                        if (emitted++ < maxLines)
+                                                sb.append("- Falta en POST: ").append(id).append("\n");
+                                }
+                        }
+                        for (String id : post.keySet()) {
+                                if (!pre.containsKey(id)) {
+                                        if (emitted++ < maxLines)
+                                                sb.append("+ Extra en POST: ").append(id).append("\n");
+                                }
+                        }
+
+                        for (String id : pre.keySet()) {
+                                Entry a = pre.get(id);
+                                Entry b = post.get(id);
+                                if (b == null)
+                                        continue;
+
+                                if (!a.type.equals(b.type)) {
+                                        if (emitted++ < maxLines)
+                                                sb.append("~ Tipo difiere ").append(id).append(": ")
+                                                                .append(a.type).append(" != ").append(b.type).append("\n");
+                                }
+                                if (!a.storage.equals(b.storage)) {
+                                        if (emitted++ < maxLines)
+                                                sb.append("~ Storage difiere ").append(id).append(": ")
+                                                                .append(a.storage).append(" != ").append(b.storage)
+                                                                .append("\n");
+                                }
+                                if (!a.hash.equals(b.hash)) {
+                                        if (emitted++ < maxLines)
+                                                sb.append("~ PayloadHash difiere ").append(id).append(": ")
+                                                                .append(a.hash).append(" != ").append(b.hash)
+                                                                .append("\n");
+                                }
+                                if (emitted >= maxLines) {
+                                        sb.append("... (más)\n");
+                                        break;
+                                }
+                        }
+                        if (emitted == 0)
+                                sb.append("SNAP OK: mapas e hashes coinciden.\n");
+                        return sb.toString();
+                }
+        }
+
 	public JWebRequest(Request zServletRequest, JWebActionRequestProcessor zProcessor) {
 		language = zServletRequest.getLocale().getLanguage();
 		this.oServletRequest = zServletRequest;
@@ -761,24 +891,36 @@ public class JWebRequest {
 		return registerObjectObj(zObject, false);
 	}
 
-	public synchronized String registerObjectTemp(Serializable zObject) throws Exception {
-		return registerObjectObj(zObject, true);
-	}
+        public synchronized String registerObjectTemp(Serializable zObject) throws Exception {
+                return registerObjectObj(zObject, true);
+        }
 
-	public synchronized String registerObjectObj(Serializable zObject, boolean temp) throws Exception {
-		if (zObject instanceof JBaseWin)
-			return registerWinObjectObj((JBaseWin) zObject);
-		if (isLargeObject(zObject)) {
-			String id = IN_CACHED_PREFIX + UUID.randomUUID().toString();
-			CacheProvider.get().putBytes(id, serializeObjectToBytes(zObject), CACHE_EXPIRE_SECONDS);
-			addRegisteredObject(id, OUT_CACHE_OBJ_PREFIX + id);
-			return id;
-		}
-		String payload = serializeObject(zObject);
-		String id = IN_POINTER_PREFIX + sha256(JTools.stringToByteArray(payload));
-		addRegisteredObject(id, payload);
-		return id;
-	}
+        public synchronized String registerObjectObj(Serializable zObject, boolean temp) throws Exception {
+                ensureSnapInit(); // no hace nada si está apagado
+                if (zObject instanceof JBaseWin)
+                        return registerWinObjectObj((JBaseWin) zObject);
+                if (isLargeObject(zObject)) {
+                        String id = IN_CACHED_PREFIX + UUID.randomUUID().toString();
+                        byte[] bytes = serializeObjectToBytes(zObject);
+                        CacheProvider.get().putBytes(id, bytes, CACHE_EXPIRE_SECONDS);
+                        addRegisteredObject(id, OUT_CACHE_OBJ_PREFIX + id);
+
+                        // FOTO A (CACHE)
+                        if (debugSnap != null) {
+                                debugSnap.addPreCache(id, zObject.getClass().getName(), bytes);
+                        }
+                        return id;
+                }
+                String payload = serializeObject(zObject);
+                String id = IN_POINTER_PREFIX + sha256(JTools.stringToByteArray(payload));
+                addRegisteredObject(id, payload);
+
+                // FOTO A (POINTER)
+                if (debugSnap != null) {
+                        debugSnap.addPrePointer(id, zObject.getClass().getName(), payload);
+                }
+                return id;
+        }
 	Map<String, Serializable> objectsCreated = new HashMap<String, Serializable>();
 
 	
@@ -787,9 +929,13 @@ public class JWebRequest {
 			PssLogger.logInfo("log point");
 		objectsCreated.put(key,obj);
 	}
-	public Serializable getObjectCreated(String key)  {
-		return objectsCreated.get(key);
-	}
+        public Serializable getObjectCreated(String key)  {
+                return objectsCreated.get(key);
+        }
+
+        public java.util.Map<String, Object> getObjectCreated() {
+                return new java.util.LinkedHashMap<String, Object>(objectsCreated);
+        }
 //	Map<String, String> objectsCreated = new HashMap<String, String>();
 
 	public synchronized String registerWinObjectObj(JBaseWin zObject) throws Exception {
@@ -834,10 +980,53 @@ public class JWebRequest {
 			CacheProvider.get().putBytes(key, JTools.stringToByteArray(encoded), 0);
 		} catch (Exception ignore) {
 		}
-		if (encoded.startsWith("-")) 
-			PssLogger.logInfo("log point");
-		return IN_REC_PREFIX + key;
-	}
+                if (encoded.startsWith("-"))
+                        PssLogger.logInfo("log point");
+                return IN_REC_PREFIX + key;
+        }
+
+        public void debugCompareSnapshotsAfterRebuild() {
+                if (debugSnap == null)
+                        return;
+                try {
+                        java.util.Map<String, Object> objCreated = getObjectCreated();
+                        if (objCreated == null)
+                                return;
+
+                        for (java.util.Map.Entry<String, Object> e : objCreated.entrySet()) {
+                                String id = e.getKey();
+                                Object obj = e.getValue();
+                                if (obj == null)
+                                        continue;
+
+                                boolean isPointer = id != null && id.startsWith(IN_POINTER_PREFIX);
+                                boolean isCache = id != null && id.startsWith(IN_CACHED_PREFIX);
+
+                                if (isPointer) {
+                                        String payload = serializeObject((java.io.Serializable) obj);
+                                        debugSnap.addPostPointer(id, obj.getClass().getName(), payload);
+                                } else if (isCache) {
+                                        byte[] bytes = serializeObjectToBytes((java.io.Serializable) obj);
+                                        debugSnap.addPostCache(id, obj.getClass().getName(), bytes);
+                                } else {
+                                        String payload = serializeObject((java.io.Serializable) obj);
+                                        debugSnap.addPostPointer(id, obj.getClass().getName(), payload);
+                                }
+                        }
+
+                        String diff = debugSnap.diff(snapMaxLines());
+                        if (diff.startsWith("SNAP OK")) {
+                                PssLogger.logInfo("[SNAP] OK req=" + debugRequestId + " :: " + diff.trim());
+                        } else {
+                                PssLogger.logWarn("[SNAP] DIFF req=" + debugRequestId + " ::\n" + diff);
+                                if (snapFailOnDiff()) {
+                                        throw new IllegalStateException("Snapshot mismatch (req=" + debugRequestId + ")");
+                                }
+                        }
+                } catch (Exception ex) {
+                        PssLogger.logError("[SNAP] error en comparacion: " + ex.getMessage(), ex);
+                }
+        }
 
 	public Serializable getRegisterObject(String key)  {
 		Serializable objOut= getObjectCreated(key);
@@ -1067,11 +1256,13 @@ public class JWebRequest {
                                 }
                         }
                 }
-		} catch (Exception e) {
-			PssLogger.logError(e);
-		}
 
-	}
+                debugCompareSnapshotsAfterRebuild();
+                } catch (Exception e) {
+                        PssLogger.logError(e);
+                }
+
+        }
 
 	public String serializeRegisterMapJSON(Map<String, String> pack) {
 		Gson gson = new Gson();
