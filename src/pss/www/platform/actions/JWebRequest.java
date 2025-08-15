@@ -36,6 +36,10 @@ import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JMap;
 import pss.core.win.JBaseWin;
 import pss.core.win.submits.JAct;
+import pss.tools.debug.CoreExtractor;
+import pss.tools.debug.GraphSnapshot;
+import pss.tools.debug.GraphSnapshotConfig;
+import pss.tools.debug.SnapshotDumper;
 import pss.www.platform.actions.requestBundle.JWebActionData;
 import pss.www.platform.actions.requestBundle.JWebActionDataBundle;
 import pss.www.platform.applications.JWebApplication;
@@ -118,6 +122,9 @@ public class JWebRequest {
 
 	// the data which came from the request
 	private JWebActionDataBundle oDataBundle;
+
+        // debug snapshot storage
+        private GraphSnapshot.Snapshot debugSnapshotBefore;
 
 	public JWebRequest(Request zServletRequest, JWebActionRequestProcessor zProcessor) {
 		language = zServletRequest.getLocale().getLanguage();
@@ -947,6 +954,16 @@ public class JWebRequest {
 		pack.localHistoryManager = getHistoryManager().serializeHistoryManager();
 		pack.localRegisteredObject = getRegisteredObjectsNew();
 		pack.localNameDictionay = getNameDictionary();
+                if (GraphSnapshotConfig.enabled()) {
+                        if (this.requestid == null) {
+                                this.requestid = String.valueOf(System.currentTimeMillis());
+                        }
+                        GraphSnapshot.Snapshot snapA = GraphSnapshot.take("before-serialize", objectsCreated.values(), new CoreExtractor());
+                        this.debugSnapshotBefore = snapA;
+                        String req = this.requestid;
+                        PssLogger.logInfo("[SNAP] before-serialize hash=" + snapA.graphHash + " req=" + req);
+                        SnapshotDumper.dump(snapA, req);
+                }
 		return serializeRegisterJSON(pack);
 	}
 
@@ -1033,6 +1050,23 @@ public class JWebRequest {
 
 			JWebApplication app = JWebServer.getInstance().getWebApplication(null);
 			app.getStadistics().addInfoSession(getSession());
+                if (GraphSnapshotConfig.enabled()) {
+                        String req = this.requestid != null ? this.requestid : String.valueOf(System.currentTimeMillis());
+                        GraphSnapshot.Snapshot snapB = GraphSnapshot.take("after-reconstruct", objectsCreated.values(), new CoreExtractor());
+                        PssLogger.logInfo("[SNAP] after-reconstruct hash=" + snapB.graphHash + " req=" + req);
+                        SnapshotDumper.dump(snapB, req);
+                        if (this.debugSnapshotBefore != null) {
+                                String diff = GraphSnapshot.diff(this.debugSnapshotBefore, snapB, GraphSnapshotConfig.maxDiffLines());
+                                if (!this.debugSnapshotBefore.graphHash.equals(snapB.graphHash)) {
+                                        PssLogger.logWarn("[SNAP-DIFF] req=" + req + "\n" + diff);
+                                        if (GraphSnapshotConfig.failOnDiff()) {
+                                                throw new IllegalStateException("Graph mismatch on reconstruction (req=" + req + ")");
+                                        }
+                                } else {
+                                        PssLogger.logInfo("[SNAP-DIFF] grafos idénticos req=" + req + " hash=" + snapB.graphHash);
+                                }
+                        }
+                }
 		} catch (Exception e) {
 			PssLogger.logError(e);
 		}
