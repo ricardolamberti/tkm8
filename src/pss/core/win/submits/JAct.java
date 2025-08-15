@@ -672,7 +672,9 @@ public abstract class JAct implements Cloneable, Serializable {
 					f.set(act, JAct.deserialize(value.substring(2)));
 				} else if (value.startsWith("B:")) {
 					f.set(act, BizAction.deserialize(value.substring(2)));
-				} else if (value.startsWith("W:") || value.startsWith("S:")) {
+				} else if (value.startsWith("W:")) {
+					f.set(act, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
+				}	else if (value.startsWith("S:")) {
 					f.set(act, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
 				}
 			}

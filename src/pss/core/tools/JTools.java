@@ -4762,7 +4762,21 @@ public static int crc16(byte[] bytes) throws Exception {
 		byte[] bytes = bs.toByteArray(); // devuelve byte[]
 		return JTools.byteVectorToString(bytes);
 	}
-
+	public static byte[] serializeBytes(Serializable object) throws Exception {
+		ByteArrayOutputStream bs = new ByteArrayOutputStream();
+		ObjectOutputStream os = new ObjectOutputStream(bs);
+		os.writeObject(object);
+		os.close();
+		byte[] bytes = bs.toByteArray(); // devuelve byte[]
+		return (bytes);
+	}
+	public static Serializable unserializeBytes(byte[]  cadena) throws Exception {
+		ByteArrayInputStream bs = new ByteArrayInputStream(cadena);
+		ObjectInputStream is = new ObjectInputStream(bs);
+		Serializable object = (Serializable) is.readObject();
+		is.close();
+		return object;
+	}
 	public static String normalizeDouble(String val) {
 		String con = JTools.getNumberEmbeddedWithDecSigned(val);
 		if (con.indexOf(',') == -1)

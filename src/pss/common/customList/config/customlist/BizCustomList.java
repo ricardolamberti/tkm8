@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.apache.commons.lang.CharEncoding;
+import org.codehaus.janino.Java.SuperclassMethodInvocation;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ibm.icu.util.StringTokenizer;
@@ -185,6 +186,21 @@ public class BizCustomList extends JRecord implements IActionData {
 		public void preset() throws Exception {
 			setValue(getObjAllCampos());
 		}
+//		public JRecords getRawValue() throws Exception {
+//			return super.getRawValue();
+//		}
+//		public void setValue(JRecords zVal) {
+//			super.setValue(zVal);
+//		};
+//		public void setValue(Object zVal) {
+//			super.setValue(zVal);
+//		};
+//		public void setValue(String zVal) throws Exception {
+//			super.setValue(zVal);
+//		};
+//		public void setValueFormUI(String zVal) throws Exception {
+//			super.setValueFormUI(zVal);
+//		};
 	};
 	private JObjBDs pFiltros = new JObjBDs() {
 		public void preset() throws Exception {

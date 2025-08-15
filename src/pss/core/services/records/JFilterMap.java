@@ -1,6 +1,7 @@
 package pss.core.services.records;
 
 import java.io.Serializable;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -9,6 +10,7 @@ import pss.core.tools.JTools;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JMap;
+import pss.www.platform.actions.JWinPackager;
 
 
 public class JFilterMap implements Serializable {
@@ -118,14 +120,14 @@ public class JFilterMap implements Serializable {
 			if (obj instanceof Serializable)
 				map.put(key, (Serializable)obj);
 		}
-		return JTools.AsciiToHex(JTools.serialize(map));
+		return Base64.getEncoder().encodeToString(JWinPackager.deflate(JTools.serializeBytes(map)));
 	}
 	
 	static public JFilterMap unserialize(String cadena) throws Exception {
 		JFilterMap map = new JFilterMap();
 		map.filterMap = JCollectionFactory.createOrderedMap();
 		if (!cadena.equals(""))
-			map.filterMap.setMap((HashMap)JTools.unserialize(JTools.HexToAscii(cadena)));
+			map.filterMap.setMap((HashMap)JTools.unserializeBytes(JWinPackager.inflate(JWinPackager.b64urlDecode((cadena)))));
 		return map;
 	}
 

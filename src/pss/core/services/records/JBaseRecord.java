@@ -40,8 +40,8 @@ import pss.core.tools.collections.JMap;
 /**
  * Base del acceso a los datos.
  * 
- * Contiene la estructura de los datos. El modelo de acceso a los datos estático
- * o dinámico.
+ * Contiene la estructura de los datos. El modelo de acceso a los datos estï¿½tico
+ * o dinï¿½mico.
  * 
  * SubClases: JRecord, JRecords
  * 
@@ -55,7 +55,7 @@ public class JBaseRecord implements Serializable {
 	private String uniqueID = UUID.randomUUID().toString();
   
 	public String getUniqueId() {
-		return uniqueID;
+		return "rec_"+uniqueID;
 	}
 
 	public void setUniqueId(String uniqueID) {
@@ -914,13 +914,23 @@ public class JBaseRecord implements Serializable {
 	protected Element serialize(Element zRoot) throws Exception {
 		return null;
 	}
-
-	public void unSerialize(String zData) throws Exception {
+	
+	public  void  unSerialize(String zData) throws Exception {
 		Element oRoot = JXMLElementFactory.getInstance().createElementFromString(zData);
 		this.unSerializeRoot(oRoot);
 	}
 
 	public void unSerializeRoot(Element zRoot) throws Exception {
+	
+	}
+
+	public  Serializable  unSerializeObject(String zData) throws Exception {
+		Element oRoot = JXMLElementFactory.getInstance().createElementFromString(zData);
+		return this.unSerializeRootObject(oRoot);
+	}
+
+	public Serializable unSerializeRootObject(Element zRoot) throws Exception {
+		return this;
 	}
 
 	public boolean exists() throws Exception {

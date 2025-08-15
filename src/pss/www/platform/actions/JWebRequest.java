@@ -27,6 +27,7 @@ import org.apache.cocoon.environment.Request;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import pss.common.customList.config.field.campo.BizCampos;
 import pss.core.services.records.JBaseRecord;
 import pss.core.tools.JTools;
 import pss.core.tools.PssLogger;
@@ -771,7 +772,17 @@ public class JWebRequest {
 		addRegisteredObject(id, payload);
 		return id;
 	}
+	Map<String, Serializable> objectsCreated = new HashMap<String, Serializable>();
 
+	
+	public void addObjectCreated(String key, Serializable obj)  {
+		if (obj instanceof BizCampos)
+			PssLogger.logInfo("log point");
+		objectsCreated.put(key,obj);
+	}
+	public Serializable getObjectCreated(String key)  {
+		return objectsCreated.get(key);
+	}
 //	Map<String, String> objectsCreated = new HashMap<String, String>();
 
 	public synchronized String registerWinObjectObj(JBaseWin zObject) throws Exception {
@@ -787,6 +798,7 @@ public class JWebRequest {
 			PssLogger.logInfo("cacheado : [" + id + "]");
 			String out = OUT_CACHE_WIN_PREFIX + id;
 			addRegisteredObject(id, out);
+
 			// objectsCreated.put(id, out);
 			return id;
 		}
@@ -797,10 +809,10 @@ public class JWebRequest {
 		return id;
 	}
 
-	public synchronized String registerRecObjectObj(JBaseRecord zObject) throws Exception {
+	public synchronized String registerRecObjectObj(JBaseRecord zObject, String clase) throws Exception {
 		if (zObject == null)
 			return null;
-		String key = zObject.getUniqueId() + "_rec";
+		String key = zObject.getUniqueId();
 
 		// Si el packager está serializando este mismo rec, devolvemos referencia
 		// directa
@@ -810,21 +822,28 @@ public class JWebRequest {
 
 		// Camino normal: obtener el "encoded" (Base64(deflate(json))) y cachearlo bajo
 		// 'key'
-		String encoded = new JWinPackager(null).baseRecToJSON(zObject);
+		String encoded = new JWinPackager(null).baseRecToJSON(zObject, clase);
 		try {
 			CacheProvider.get().putBytes(key, JTools.stringToByteArray(encoded), 0);
 		} catch (Exception ignore) {
 		}
+		if (encoded.startsWith("-")) 
+			PssLogger.logInfo("log point");
 		return IN_REC_PREFIX + key;
 	}
 
-	public Serializable getRegisterObject(String key) {
+	public Serializable getRegisterObject(String key)  {
+		Serializable objOut= getObjectCreated(key);
+		if (objOut!=null) {
+			return objOut;
+		}
+			
 		String obj = getRegisteredObject(key);
 		if (obj == null) {
 			PssLogger.logError("Falta objeto");
 			return null;
 		}
-		try {
+			try {
 			if (obj.startsWith(OUT_CACHE_WIN_PREFIX)) {
 				byte[] data = CacheProvider.get().getBytes(obj.substring(OUT_CACHE_WIN_PREFIX.length()));
 				if (data == null)
@@ -832,46 +851,40 @@ public class JWebRequest {
 				String encoded = JTools.byteVectorToString(data);
 				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(encoded));
 				String json = JTools.byteVectorToString(raw);
-				return new JWinPackager(new JWebWinFactory(null)).jsonToBaseWin(json);
-			}
-			if (obj.startsWith(OUT_CACHE_REC_PREFIX)) {
+				objOut= new JWinPackager(new JWebWinFactory(null)).jsonToBaseWin(json);
+			}	else if (obj.startsWith(OUT_CACHE_REC_PREFIX)) {
 				byte[] data = CacheProvider.get().getBytes(obj.substring(OUT_CACHE_REC_PREFIX.length()));
 				if (data == null)
 					return null;
 				String encoded = JTools.byteVectorToString(data);
 				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(encoded));
 				String json = JTools.byteVectorToString(raw);
-				return new JWinPackager(new JWebWinFactory(null)).jsonToBaseRec(json);
-			}
-			if (obj.startsWith(OUT_CACHE_OBJ_PREFIX)) {
+				objOut= new JWinPackager(new JWebWinFactory(null)).jsonToBaseRec(json);
+			} else 	if (obj.startsWith(OUT_CACHE_OBJ_PREFIX)) {
 				byte[] data = CacheProvider.get().getBytes(obj.substring(OUT_CACHE_OBJ_PREFIX.length()));
 				if (data == null)
 					return null;
 				return (Serializable) deserializeObjectFromBytes(data);
-			}
-			if (obj.startsWith(OUT_INDIRECT_PREFIX)) {
-				return (Serializable) getRegisterObject(obj.substring(OUT_INDIRECT_PREFIX.length()));
-			}
-
-			if (obj.startsWith(OUT_TEMP_PREFIX)) {
-				return (Serializable) fetchFromCache(obj.substring(OUT_TEMP_PREFIX.length()));
-			}
-			if (obj.startsWith(OUT_REC_PREFIX)) {
-				return (Serializable) fetchFromCache(obj.substring(OUT_REC_PREFIX.length()));
-			}
-			if (obj.startsWith(IN_TEMP_PREFIX)) {
+			} else if (obj.startsWith(OUT_INDIRECT_PREFIX)) {
+				objOut= (Serializable) getRegisterObject(obj.substring(OUT_INDIRECT_PREFIX.length()));
+			} else if (obj.startsWith(OUT_TEMP_PREFIX)) {
+				objOut= (Serializable) fetchFromCache(obj.substring(OUT_TEMP_PREFIX.length()));
+			} else if (obj.startsWith(OUT_REC_PREFIX)) {
+				objOut = (Serializable) fetchFromCache(obj.substring(OUT_REC_PREFIX.length()));
+			} else if (obj.startsWith(IN_TEMP_PREFIX)) {
 				String payload = obj.substring(IN_TEMP_PREFIX.length());
 				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
 				String json = JTools.byteVectorToString(raw);
-				return new JWinPackager(new JWebWinFactory(null)).jsonToBaseWin(json);
-			}
-			if (obj.startsWith(IN_REC_PREFIX)) {
+				objOut= new JWinPackager(new JWebWinFactory(null)).jsonToBaseWin(json);
+			} else if(obj.startsWith(IN_REC_PREFIX)) {
 				String payload = obj.substring(IN_REC_PREFIX.length());
 				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
 				String json = JTools.byteVectorToString(raw);
-				return new JWinPackager(new JWebWinFactory(null)).jsonToBaseRec(json);
-			}
-			return deserializeObject(obj);
+				objOut= new JWinPackager(new JWebWinFactory(null)).jsonToBaseRec(json);
+			} else
+				objOut = deserializeObject(obj);
+			addObjectCreated(key, objOut);
+			return objOut;
 		} catch (Exception e) {
 			PssLogger.logError(e);
 			return null;

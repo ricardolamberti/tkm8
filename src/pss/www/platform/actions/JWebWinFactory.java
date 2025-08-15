@@ -40,8 +40,6 @@ public class JWebWinFactory {
 
 	IControlToBD controToBD;
 
-	TreeMap<String, SoftReference<JBaseWin>> winRefference = new TreeMap<String, SoftReference<JBaseWin>>();
-	TreeMap<String, SoftReference<JBaseRecord>> recRefference = new TreeMap<String, SoftReference<JBaseRecord>>();
 
 	private final JWinPackager packager = new JWinPackager(this);
 
@@ -49,34 +47,7 @@ public class JWebWinFactory {
 		return packager;
 	}
 
-	public TreeMap<String, SoftReference<JBaseWin>> getWinRefference() {
-		return winRefference;
-	}
-
-	public void forget() {
-		winRefference = new TreeMap<String, SoftReference<JBaseWin>>();
-	}
-
-	public TreeMap<String, SoftReference<JBaseRecord>> getRecRefference() {
-		return recRefference;
-	}
-
-	public void setRecRefference(TreeMap<String, SoftReference<JBaseRecord>> recRefference) {
-		this.recRefference = recRefference;
-	}
-
-	public void cleanRefference() {
-		Iterator<String> it = winRefference.keySet().iterator();
-		while (it.hasNext()) {
-			String key = it.next();
-			SoftReference<JBaseWin> swin = winRefference.get(key);
-			if (swin != null) {
-				if (swin.get() != null)
-					continue;
-			}
-			it.remove();
-		}
-	}
+	
 
 	public void fillHistory() throws Exception {
 		JWebHistoryManager hm = JWebActionFactory.getCurrentRequest().getHistoryManager();
@@ -88,7 +59,6 @@ public class JWebWinFactory {
 			while (it.hasNext()) {
 				String shp = it.next();
 				JHistoryProvider hp = hist.getProviders().get(shp);
-				rememberAct(hp.getAction());
 			}
 		}
 
@@ -203,57 +173,9 @@ public class JWebWinFactory {
 		return null;
 	}
 
-	public void rememberAct(BizAction action) throws Exception {
-		JBaseWin owner = action.getObjOwner();
-		if (owner != null)
-			rememberWin(owner.getUniqueId(), owner);
+	
 
-		if (action.hasSubmit()) {
-			JAct act = action.getObjSubmit();
-			if (act.GetBWin() != null)
-				rememberWin(act.GetBWin().getUniqueId(), act.GetBWin());
-			if (act.hasResult())
-				rememberWin(act.getResult().getUniqueId(), act.getResult());
-		}
-	}
-
-	public void rememberWin(String uniqueId, JBaseWin win) throws Exception {
-		if (!winRefference.containsKey(uniqueId)) {
-			winRefference.put(uniqueId, new SoftReference<JBaseWin>(win));
-		}
-	}
-
-	public void rememberRec(String uniqueId, JBaseRecord rec) throws Exception {
-		if (!winRefference.containsKey(uniqueId)) {
-			recRefference.put(uniqueId, new SoftReference<JBaseRecord>(rec));
-		}
-	}
-
-	public JBaseWin getRememberWin(String uniqueId) throws Exception {
-		if (winRefference.containsKey(uniqueId)) {
-			SoftReference<JBaseWin> swin = winRefference.get(uniqueId);
-			if (swin == null)
-				return null;
-			JBaseWin win = swin.get();
-			if (win == null)
-				return null;
-			return win;
-		}
-		return null;
-	}
-
-	public JBaseRecord getRememberRec(String uniqueId) throws Exception {
-		if (recRefference.containsKey(uniqueId)) {
-			SoftReference<JBaseRecord> srec = recRefference.get(uniqueId);
-			if (srec == null)
-				return null;
-			JBaseRecord rec = srec.get();
-			if (rec == null)
-				return null;
-			return rec;
-		}
-		return null;
-	}
+	
 
 	private JWebActionData getExtraFormData() throws Exception {
 		return JWebActionFactory.getCurrentRequest().getData("extra_form_data");
@@ -780,13 +702,13 @@ public class JWebWinFactory {
 		return packed;
 	}
 
-	public String baseRecToURL(JBaseRecord rec) throws Exception {
+	public String baseRecToURL(JBaseRecord rec,String clase) throws Exception {
 		final String key = "rec:" + recStamp(rec);
 		DistCache cache = CacheProvider.get();
 		byte[] cached = cache.getBytes(key);
 		if (cached != null)
 			return JTools.byteVectorToString(cached);
-		String packed = packager.baseRecToPack(rec);
+		String packed = packager.baseRecToPack(rec,clase);
 		cache.putBytes(key, JTools.stringToByteArray(packed), 0);
 		return packed;
 	}

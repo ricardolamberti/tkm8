@@ -822,6 +822,14 @@
 						<xsl:if test="@dataparent">
 							<xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text>collapse </xsl:if>
 					</xsl:attribute>
+					<xsl:if test="@foreground or @background or @width">
+						<xsl:attribute name="style">
+							<xsl:if test="@width">width:<xsl:value-of select="@width"/>;min-width:<xsl:value-of select="@width"/>;</xsl:if>
+							<xsl:if test="@foreground">color:<xsl:value-of select="@foreground"/>;</xsl:if>
+							<xsl:if test="@background">background-color:<xsl:value-of select="@background"/>;</xsl:if>
+						</xsl:attribute>
+					</xsl:if>
+
 					<xsl:if test="@dataparent">
 						<xsl:attribute name="data-parent">#<xsl:value-of select="@dataparent"/>
 						</xsl:attribute>
@@ -975,70 +983,74 @@
 		<script>showExpandedFieldset('<xsl:value-of select="@name"/>'); <xsl:if test="@onstart-collapse='true'">toogleExpandedFieldset('<xsl:value-of select="@name"/>'); </xsl:if>
 		</script>
 	</xsl:template>
-	<xsl:template match="column_responsive">
-		<xsl:choose>
-			<xsl:when test="@zoomtofit">
-				<div>
-					<xsl:if test="@zoomtofit">
-						<xsl:attribute name="id">
-							<xsl:value-of select="@zoomtofit"/>_father</xsl:attribute>
-					</xsl:if>
-					<xsl:attribute name="class">
-						<xsl:value-of select="@size_responsive"/>
-						<xsl:if test="@only-expanded">
-							<xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text>collapsable</xsl:if>
-						<xsl:if test="@only-collapsed">
-							<xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text>nocollapsable</xsl:if>
-					</xsl:attribute>
-					<div>
-						<xsl:attribute name="id">
-							<xsl:value-of select="@zoomtofit"/>_size</xsl:attribute>
-						<xsl:attribute name="style">display:inline-block;width:<xsl:value-of select="@zoomtofit_width"/>px; </xsl:attribute>
-						<div>
-							<xsl:call-template name="basic_generate_component_responsive"/>
-						</div>
-					</div>
-				</div>
-				<script>zoomToFitHorizontal('<xsl:value-of select="@zoomtofit"/>_father','<xsl:value-of select="@zoomtofit"/>_size'); $(window).off('<xsl:value-of select="@zoomtofit"/>_father'); $(window).resize('<xsl:value-of select="@zoomtofit"/>_father',function(){ zoomToFitHorizontal('<xsl:value-of select="@zoomtofit"/>_father','<xsl:value-of select="@zoomtofit"/>_size'); }); </script>
-			</xsl:when>
-			<xsl:when test="@tobottom">
-				<div>
-					<xsl:attribute name="class">
-						<xsl:value-of select="@size_responsive"/>
-						<xsl:if test="@only-expanded">
-							<xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text>collapsable</xsl:if>
-						<xsl:if test="@only-collapsed">
-							<xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text>nocollapsable</xsl:if>
-					</xsl:attribute>
-					<div>
-						<xsl:attribute name="class">to-bottom-header</xsl:attribute>
-						<xsl:attribute name="style">width:100%;height:100%;</xsl:attribute>
-						<div>
-							<xsl:call-template name="basic_generate_component_responsive">
-								<xsl:with-param name="specialClass">to-bottom</xsl:with-param>
-							</xsl:call-template>
-						</div>
-					</div>
-				</div>
-			</xsl:when>
-			<xsl:otherwise>
-				<div>
-					<xsl:attribute name="class">
-						<xsl:value-of select="@size_responsive"/>
-						<xsl:if test="@only-expanded">
-							<xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text>collapsable</xsl:if>
-					</xsl:attribute>
-					<div>
+<xsl:template match="column_responsive">
+   	<xsl:choose>
+		<xsl:when test="@zoomtofit">
+			<div>
+				<xsl:if test="@zoomtofit">
+			   		<xsl:attribute name="id"><xsl:value-of select="@zoomtofit"/>_father</xsl:attribute>    
+				</xsl:if>
+		   		<xsl:attribute name="class"><xsl:value-of select="@size_responsive"></xsl:value-of>
+		   		  	<xsl:if test="@only-expanded"><xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text>collapsable</xsl:if>
+					<xsl:if test="@only-collapsed"><xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text>nocollapsable</xsl:if>		   		
+		   		</xsl:attribute>  
+		        <div>
+			   		<xsl:attribute name="id"><xsl:value-of select="@zoomtofit"/>_size</xsl:attribute>    
+			   		<xsl:attribute name="style">
+			   			display:inline-block;width:<xsl:value-of select="@zoomtofit_width"/>px;
+			   		</xsl:attribute>    				
+			   		<div>
 						<xsl:call-template name="basic_generate_component_responsive"/>
-					</div>
-				</div>
-			</xsl:otherwise>
-		</xsl:choose>
-		<xsl:if test="@onCalculate and @isCalculeOthersFields">
-			<script>
-				<xsl:value-of select="@onCalculate"/>; </script>
-		</xsl:if>
-	</xsl:template>
+			   		</div>  
+		   		</div>  
+		  	</div>
+			<script >
+			   zoomToFitHorizontal('<xsl:value-of select="@zoomtofit"/>_father','<xsl:value-of select="@zoomtofit"/>_size');
+			   $(window).off('<xsl:value-of select="@zoomtofit"/>_father');
+			   $(window).resize('<xsl:value-of select="@zoomtofit"/>_father',function(){
+			 		zoomToFitHorizontal('<xsl:value-of select="@zoomtofit"/>_father','<xsl:value-of select="@zoomtofit"/>_size');
+			   });
+			</script>
+									
+		</xsl:when>
+		<xsl:when test="@tobottom">
+		  	<div>
+		   		<xsl:attribute name="class"><xsl:value-of select="@size_responsive"/>
+		   		  	<xsl:if test="@only-expanded"><xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text>collapsable</xsl:if>
+					<xsl:if test="@only-collapsed"><xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text>nocollapsable</xsl:if>
+		   		</xsl:attribute>  
+			   	<div>
+			   		<xsl:attribute name="class">to-bottom-header</xsl:attribute>  
+					<xsl:attribute name="style">width:100%;height:100%;</xsl:attribute>
+			   		<div>
+						<xsl:call-template name="basic_generate_component_responsive">
+							<xsl:with-param name="specialClass">to-bottom</xsl:with-param>
+						</xsl:call-template>
+			   		</div>
+		   		</div>  
+		  	</div>
+		</xsl:when>
+		<xsl:otherwise>
+		  	<div>
+		   		<xsl:attribute name="class"><xsl:value-of select="@size_responsive"></xsl:value-of>
+		   		  	<xsl:if test="@only-expanded"><xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text>collapsable</xsl:if>
+		   		</xsl:attribute>  
+		   		<div>
+					<xsl:call-template name="basic_generate_component_responsive">
+<!-- 						<xsl:with-param name="style_attr">width:100%;</xsl:with-param> -->
+					</xsl:call-template>
+		   		</div>  
+		  	</div>
+		
+		</xsl:otherwise>
+	</xsl:choose>
+	<xsl:if test="@onCalculate and @isCalculeOthersFields">
+		 <script>
+			<xsl:value-of select="@onCalculate"/>;
+		</script>
+	</xsl:if>
+</xsl:template>
+
 	<xsl:template match="tabpanel_responsive">
 		<xsl:variable name="fullname">dgf_<xsl:value-of select="@form_name"/>_fd-<xsl:value-of select="@name"/>
 		</xsl:variable>

@@ -89,7 +89,7 @@ public class GuiCustomList extends JWin implements IContenidoCarpeta{
   	return 10003; 
   }
   public String GetTitle()   throws Exception { 
-  	return GetcDato().getDescripcion().equals("")?"Lista DiN°mica":GetcDato().getDescripcion(); 
+  	return GetcDato().getDescripcion().equals("")?"Lista Dinámica":GetcDato().getDescripcion(); 
   	
   }
   public Class<? extends JBaseForm> getFormBase() throws Exception { 

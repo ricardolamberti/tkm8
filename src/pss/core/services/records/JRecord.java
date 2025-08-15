@@ -1612,6 +1612,7 @@ public class JRecord extends JBaseRecord implements Comparable<Object>,JPurgeInt
 	public Element serializeContent(String tag, Element zRoot, boolean all)
 			throws Exception {
 		Element row = zRoot.getOwnerDocument().createElement(tag);
+		row.setAttribute("__clase", this.getClass().getName());
 		JMap<String, JProperty> oFProp = this.getFixedProperties();
 		Iterator<JProperty> oEnum = oFProp.valueIterator();
 		while (oEnum.hasNext()) {
@@ -1635,7 +1636,6 @@ public class JRecord extends JBaseRecord implements Comparable<Object>,JPurgeInt
 
 	public void DeserializarElement(Element zRow) throws Exception {
 		// String Valor, Campo;
-
 		NamedNodeMap oProps = zRow.getAttributes();
 		int len = oProps.getLength();
 		for (int i = 0; i < len; i++) {
@@ -1646,6 +1646,27 @@ public class JRecord extends JBaseRecord implements Comparable<Object>,JPurgeInt
 		}
 	}
 
+	@Override
+	public Serializable unSerializeRootObject(Element zRoot) throws Exception {
+		Element eRow = (Element) zRoot.getElementsByTagName("row").item(0);
+		return this.DeserializarElementObject(eRow);
+	}
+
+	public Serializable DeserializarElementObject(Element zRow) throws Exception {
+		// String Valor, Campo;
+		JRecord rec = this;
+		if (zRow.getAttribute("__clase")!=null)
+			rec = (JRecord) Class.forName(zRow.getAttribute("__clase")).newInstance();
+		NamedNodeMap oProps = zRow.getAttributes();
+		int len = oProps.getLength();
+		for (int i = 0; i < len; i++) {
+			String sProp = oProps.item(i).getNodeName();
+			String sValor = zRow.getAttribute(sProp);
+			rec.getProp(sProp).setValue(sValor);
+	//		PssLogger.logInfo("----->"+sProp+"="+sValor);
+		}
+		return rec;
+	}
 	@SuppressWarnings("unchecked")
 	public int compareTo(Object other) {
 		int iCompRc;

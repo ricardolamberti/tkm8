@@ -1847,7 +1847,7 @@ public class BizCampo extends BizField implements ICampo,IItem  {
 	
   public boolean hasFunction() throws Exception {
 		
-		if (getObjCustomList().isLista()&&!BizFuncion.activeFunctionInLista(pFuncion.getValue())) {
+		if (this.getObjCustomList().isLista()&&!BizFuncion.activeFunctionInLista(pFuncion.getValue())) {
 				return false;
 		}
 		return this.pFuncion.isNotNull() || this.pPorcentaje.getValue() || this.getCampo().equals(FUNTION_FORMULA);

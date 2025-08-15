@@ -535,8 +535,9 @@ public class JRecords<TRecord extends JRecord> extends JBaseRecord {
 	@Override
 	public Element serialize(Element zRoot) throws Exception {
 		Element eTabla = zRoot.getOwnerDocument().createElement("tabla");
+		eTabla.setAttribute("clase", this.getClass().getName());
 		eTabla.setAttribute("clase_base", this.getBasedClass().getName());
-		eTabla.setAttribute("static", this.isStatic()?"S":"N");
+	  eTabla.setAttribute("static", this.isStatic()?"S":"N");
 
 		this.firstRecord();
 		while (this.nextRecord()) {
@@ -545,11 +546,36 @@ public class JRecords<TRecord extends JRecord> extends JBaseRecord {
 		}
 		return eTabla;
 	}
-
+	
 	@Override
 	public void unSerializeRoot(Element zRoot) throws Exception {
 		Element eTabla = (Element) zRoot.getElementsByTagName("tabla").item(0);
-		this.DeserializarElement(eTabla);
+		this.DeserializarElementObject(eTabla);
+	}
+
+	@Override
+	public Serializable unSerializeRootObject(Element zRoot) throws Exception {
+		Element eTabla = (Element) zRoot.getElementsByTagName("tabla").item(0);
+		return this.DeserializarElementObject(eTabla);
+	}
+
+	@SuppressWarnings("unchecked")
+	public Serializable DeserializarElementObject(Element zTabla) throws Exception {
+		String sClase = zTabla.getAttribute("clase");
+		String sClaseBase = zTabla.getAttribute("clase_base");
+		String sStatic = zTabla.getAttribute("static");
+		JRecords base = (JRecords) Class.forName(sClase).newInstance();
+		base.setRecordRef((Class<TRecord>)Class.forName(sClaseBase));
+		base.setStatic(sStatic.equals("S")?true:false);
+		NodeList oRows = zTabla.getElementsByTagName("row");
+		int len = oRows.getLength();
+		for (int i = 0; i < len; i++) {
+			Element oRow = (Element) oRows.item(i);
+			TRecord oBD = (TRecord) Class.forName(sClaseBase).newInstance();
+			oBD.DeserializarElement(oRow);
+			base.addItem(oBD);
+		}
+		return base;
 	}
 
 	@SuppressWarnings("unchecked")

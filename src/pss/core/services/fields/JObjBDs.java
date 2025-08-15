@@ -1,5 +1,7 @@
 package pss.core.services.fields;
 
+import pss.core.services.records.JBaseRecord;
+
 /**
  * An object which holds a <code>JBDs</code> object.<br>
  * It uses objects of class <code>JBDs</code> to store the value in its
@@ -51,9 +53,8 @@ public class JObjBDs<TRecord extends JRecord> extends JObject<JRecords<TRecord>>
 	@Override
 	public void setValue( String zVal ) throws Exception {
   	if (zVal.equals("") ) return;
-    super.setValue( getObjectClass().newInstance() );
-    ((JRecords<TRecord>)getObjectValue()).unSerialize(zVal);
-  }
+    super.setValue( ((JBaseRecord)(getObjectClass().newInstance())).unSerializeObject(zVal));
+   }
 
   @Override
 	public String getObjectType() { return JObject.JBDS; }
