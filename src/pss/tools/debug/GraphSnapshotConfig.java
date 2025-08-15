@@ -10,7 +10,7 @@ public final class GraphSnapshotConfig {
 
     /** Whether the snapshot feature is enabled. */
     public static boolean enabled() {
-        return Boolean.getBoolean("pss.debug.graphsnapshot.enabled");
+        return true;// Boolean.getBoolean("pss.debug.graphsnapshot.enabled");
     }
 
     /** Maximum number of diff lines to log. */
@@ -20,12 +20,12 @@ public final class GraphSnapshotConfig {
 
     /** If true an exception will be thrown when the graphs differ. */
     public static boolean failOnDiff() {
-        return Boolean.getBoolean("pss.debug.graphsnapshot.failOnDiff");
+        return true;/ Boolean.getBoolean("pss.debug.graphsnapshot.failOnDiff");
     }
 
     /** Directory where snapshots will be dumped as JSON files. */
     public static String dumpDir() {
-        return System.getProperty("pss.debug.graphsnapshot.dir", "logs/snapshots");
+        return System.getProperty("pss.debug.graphsnapshot.dir", "/dev/logs/snapshots");
     }
 }
 

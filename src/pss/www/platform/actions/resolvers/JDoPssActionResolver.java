@@ -610,11 +610,14 @@ public class JDoPssActionResolver extends JIndoorsActionResolver implements ICon
 		return p.get("range") != null;
 	}
 
-	private void endResolver() throws Exception {
+	protected void endResolver() throws Exception {
+		this.getRequest().endResolver();
+
 		if (this.getSession() == null)
 			return;
 		if (BizUsuario.getUsr() == null)
 			return;
+
 		BizUserHistory last = this.getSession().getStadistic(getRequest().getIdRequestJS());
 		if (last == null)
 			return;

@@ -24,8 +24,9 @@ public class JWebHistoryManager implements Serializable {
   private static final int HISTORY_SIZE = 20;
 
   private JList<JHistory> oActionHistory;
-//  private JAct lastSubmit;
   private JHistory homePage;
+
+//private JAct lastSubmit;
 //  private transient WeakReference<JWebApplicationSession> weakSession;
   
 //  JWebApplicationSession getSession() throws Exception {

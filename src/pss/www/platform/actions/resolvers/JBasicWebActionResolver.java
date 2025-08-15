@@ -488,10 +488,15 @@ public abstract class JBasicWebActionResolver extends AbstractAction implements 
 		if (this.getSession()!=null && addDictionaryInfo( )) {
 			JWebActionFactory.getCurrentRequest().winRegisteredObjects(getWinFactory(), false,true);
 //			this.addObjectToResult("__dictionary", JWebActionFactory.getCurrentRequest().getPack());
-	}
+		}
+		this.endResolver();
+
 		return this.goOn();
 	}
 
+	private void endResolver() throws Exception {
+		this.getRequest().endResolver();
+	}
 	protected abstract String getBaseActionName();
 
 	protected String getCharacterEncoding() {
