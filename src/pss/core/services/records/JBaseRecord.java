@@ -55,7 +55,8 @@ public class JBaseRecord implements Serializable {
 	private String uniqueID = UUID.randomUUID().toString();
   
 	public String getUniqueId() {
-		return "rec_"+uniqueID;
+		return uniqueID.startsWith("rec_") ?uniqueID:"rec_"+uniqueID;
+
 	}
 
 	public void setUniqueId(String uniqueID) {

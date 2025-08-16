@@ -165,7 +165,7 @@ public class JWinPackager {
 		return objectMapper.writeValueAsString(serializableWin);
 	}
 
-	private String serializeRecToJson(JBaseRecord rec, String clase) throws Exception {
+	public String serializeRecToJson(JBaseRecord rec, String clase) throws Exception {
 		JSerializableBaseWin serializableWin = prepareSerializableRec(rec, false, clase);
 		return objectMapper.writeValueAsString(serializableWin);
 	}

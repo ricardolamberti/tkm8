@@ -1453,7 +1453,7 @@ public abstract class JBaseWin implements IInMemory,Transferable,Serializable {
 	}
 
 	public String getUniqueId() throws Exception {
-		return "win_"+ uniqueID;
+		return uniqueID.startsWith("win_") ?uniqueID:"win_"+uniqueID;
 	}
 	
 	// funciones que se disparan en el recorrido, de la generacion de la grilla, se habilitan los siguientes metodos para hacer calculos y no tener que hacer dos recorridas
