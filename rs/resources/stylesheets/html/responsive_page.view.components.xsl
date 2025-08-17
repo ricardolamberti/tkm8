@@ -775,29 +775,27 @@
 		<script>$( function() { $("#<xsl:value-of select="@id"/>_move").css( {"top":"<xsl:value-of select="@cv_posy"/>px", "left":"<xsl:value-of select="@cv_posx"/>px","width":"<xsl:value-of select="@cv_width"/>px", "height":"<xsl:value-of select="@cv_height"/>px"}); $("#<xsl:value-of select="@id"/>_resize").resizable(); $("#<xsl:value-of select="@id"/>_move").draggable({ scroll: true, containment: "parent" }); }); }); </script>
 	</xsl:template>
 	<xsl:template match="table_responsive">
-		<div>
-			<xsl:if test="@label_lateral">
+	 	<div>
+		 	<xsl:if test="@label_lateral">
 				<label>
-					<xsl:if test="@label_class">
-						<xsl:attribute name="class">
-							<xsl:value-of select="@label_class"/>
-						</xsl:attribute>
-					</xsl:if>
-					<xsl:value-of select="@label_lateral"/>
+		 			  <xsl:if test="@label_class"><xsl:attribute name="class"><xsl:value-of select="@label_class"/></xsl:attribute></xsl:if>
+				      <xsl:value-of select="@label_lateral"></xsl:value-of>
 				</label>
 			</xsl:if>
-			<input type="hidden">
-				<xsl:attribute name="id">
-					<xsl:value-of select="@id"/>
-				</xsl:attribute>
-				<xsl:attribute name="value">
-					<xsl:value-of select="@active"/>
-				</xsl:attribute>
+		  <input type="hidden">
+				<xsl:attribute name="id"><xsl:value-of select="@id"/></xsl:attribute>
+				<xsl:attribute name="value"><xsl:value-of select="@active"/></xsl:attribute>
 			</input>
-			<div>
-				<xsl:call-template name="basic_generate_component_responsive"/>
-			</div>
-			<script>registerMeta('<xsl:value-of select="@id"/>',['<xsl:value-of select="@id"/>']); selectExpandTab('<xsl:value-of select="@id"/>'); </script>
+			
+		  <div>
+		   		  <xsl:call-template name="basic_generate_component_responsive">
+		   		  	 <xsl:with-param name="specialClass">expand_responsive</xsl:with-param>
+				  </xsl:call-template>
+				</div>
+			<script>
+				registerMeta('<xsl:value-of select="@id"/>',['<xsl:value-of select="@id"/>']);
+				selectExpandTab('<xsl:value-of select="@id"/>');
+			</script>
 		</div>
 	</xsl:template>
 	<xsl:template match="fieldset_responsive">

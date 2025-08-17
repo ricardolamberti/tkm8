@@ -201,6 +201,11 @@ public class JBaseRecord implements Serializable {
 	public boolean isTableIncludedInGeneration() {
 		return true;
 	}
+	
+	public boolean serializeOnlyProperties() throws Exception {
+		return true;
+	}
+
 
 	public String GetTable() throws Exception {
 		return this.getStructure().getTable();

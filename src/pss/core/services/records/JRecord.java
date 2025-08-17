@@ -78,10 +78,10 @@ public class JRecord extends JBaseRecord implements Comparable<Object>,JPurgeInt
 	public final static int RECORD = 0x06;
 	public final static int RECORDS = 0x07;
 
-	protected JMap<String, JObject<?>> hProperties;
+	protected transient JMap<String, JObject<?>> hProperties;
 	protected transient JMap<String, JProperty> hFixedProperties;
 	protected transient JMap<String, IControl> hControlProperties;
-	private JMap<String,String> extraData;
+	private transient JMap<String,String> extraData;
 	// protected JMap<String, JIndex> hIndexes = null;
 	protected transient JDBClassIndexes hIndexes = null;
 	protected transient JRelations relations = null;

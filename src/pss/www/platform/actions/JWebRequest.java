@@ -824,15 +824,15 @@ public class JWebRequest {
 		return id;
 	}
 
-	public synchronized String registerRecObjectObj(JBaseRecord zObject, String clase) throws Exception {
+	public synchronized String registerRecObjectObj(JBaseRecord zObject, boolean onlyProperties) throws Exception {
 		String id = zObject.getUniqueId() != null ? zObject.getUniqueId() : UUID.randomUUID().toString();
 		if ( getObjectSerialized(id))
 			return id;
 		addObjectSerialized(id);
 		String out = null;
 		JWinPackager packager = new JWinPackager(null);
-		String json = packager.serializeRecToJson(zObject,clase);
-		PssLogger.logDebug("JSON-->["+clase+"]["+id+"] "+json);
+		String json = packager.serializeRecToJson(zObject,onlyProperties);
+		PssLogger.logDebug("JSON-->["+zObject.getClass().getName()+"]["+id+"] "+json);
 		if (isLargeObject(zObject)) {
 			String encoded = Base64.getEncoder().encodeToString(JWinPackager.deflate(JTools.stringToByteArray(json)));
 			CacheProvider.get().putBytes(id, JTools.stringToByteArray(encoded), CACHE_EXPIRE_SECONDS);

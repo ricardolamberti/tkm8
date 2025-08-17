@@ -29,25 +29,12 @@ import pss.core.tools.collections.JList;
 import pss.core.tools.collections.JMap;
 import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
+import pss.core.win.JWins;
 import pss.core.win.submits.JAct;
 import pss.www.platform.cache.CacheProvider;
 
 public class JWinPackager {
 
-	// Evita recursión al serializar recs anidados
-	private static final ThreadLocal<java.util.Set<String>> SERIALIZING_KEYS = ThreadLocal.withInitial(java.util.HashSet::new);
-
-	static boolean isSerializingKey(String key) {
-		return SERIALIZING_KEYS.get().contains(key);
-	}
-
-	private static void markSerializingKey(String key) {
-		SERIALIZING_KEYS.get().add(key);
-	}
-
-	private static void unmarkSerializingKey(String key) {
-		SERIALIZING_KEYS.get().remove(key);
-	}
 
 	private final JWebWinFactory factory;
 	private final ObjectMapper objectMapper = new ObjectMapper();
@@ -56,26 +43,27 @@ public class JWinPackager {
 		return Base64.getUrlEncoder().withoutPadding().encodeToString(data);
 	}
 
-       /**
-        * Decodes a Base64 string that may be encoded using either the URL-safe
-        * alphabet ("-" and "_") or the standard alphabet ("+" and "/").
-        *
-        * <p>Historically some parts of the system produced Base64 strings with
-        * the standard alphabet while consumers expected URL-safe encoding.  This
-        * method first attempts to decode using the URL-safe decoder and, if the
-        * input contains characters outside that alphabet (e.g. "+"), it falls
-        * back to the standard decoder.  This prevents {@link
-        * IllegalArgumentException} such as "Illegal base64 character 2b" when
-        * encountering legacy data.</p>
-        */
-       public static byte[] b64urlDecode(String data) {
-               try {
-                       return Base64.getUrlDecoder().decode(data);
-               } catch (IllegalArgumentException ex) {
-                       // Fallback for legacy data encoded with the standard Base64 alphabet
-                       return Base64.getDecoder().decode(data);
-               }
-       }
+	/**
+	 * Decodes a Base64 string that may be encoded using either the URL-safe
+	 * alphabet ("-" and "_") or the standard alphabet ("+" and "/").
+	 *
+	 * <p>
+	 * Historically some parts of the system produced Base64 strings with the
+	 * standard alphabet while consumers expected URL-safe encoding. This method
+	 * first attempts to decode using the URL-safe decoder and, if the input
+	 * contains characters outside that alphabet (e.g. "+"), it falls back to the
+	 * standard decoder. This prevents {@link IllegalArgumentException} such as
+	 * "Illegal base64 character 2b" when encountering legacy data.
+	 * </p>
+	 */
+	public static byte[] b64urlDecode(String data) {
+		try {
+			return Base64.getUrlDecoder().decode(data);
+		} catch (IllegalArgumentException ex) {
+			// Fallback for legacy data encoded with the standard Base64 alphabet
+			return Base64.getDecoder().decode(data);
+		}
+	}
 
 	public static byte[] deflate(byte[] input) {
 		Deflater deflater = new Deflater();
@@ -128,7 +116,7 @@ public class JWinPackager {
 				json = new String(inflate(decoded), StandardCharsets.UTF_8);
 			} catch (Exception ex2) {
 				throw ex2;
-	//			json = JTools.byteVectorToString(decoded);
+				// json = JTools.byteVectorToString(decoded);
 			}
 			return createWinFromJson(json, null);
 		}
@@ -161,12 +149,12 @@ public class JWinPackager {
 	}
 
 	public String serializeWinToJson(JBaseWin win) throws Exception {
-		JSerializableBaseWin serializableWin = prepareSerializableWin(win);
+		JSerializableBase serializableWin = prepareSerializableWin(win);
 		return objectMapper.writeValueAsString(serializableWin);
 	}
 
-	public String serializeRecToJson(JBaseRecord rec, String clase) throws Exception {
-		JSerializableBaseWin serializableWin = prepareSerializableRec(rec, false, clase);
+	public String serializeRecToJson(JBaseRecord rec, boolean onlyProperies) throws Exception {
+		JSerializableBase serializableWin = prepareSerializableRec(rec, onlyProperies);
 		return objectMapper.writeValueAsString(serializableWin);
 	}
 
@@ -187,37 +175,37 @@ public class JWinPackager {
 		return encoded;
 	}
 
-	public String baseRecToJSON(JBaseRecord rec, String clase) throws Exception {
-		String key = rec.getUniqueId() + "_rec";
-
-		// 1) cache hit
-		String cached = null;
-		try {
-			byte[] data = CacheProvider.get().getBytes(key);
-			if (data != null)
-				cached = JTools.byteVectorToString(data);
-		} catch (Exception ignore) {
-		}
-		if (cached != null)
-			return cached;
-
-		// 2) Si ya estamos serializando este mismo rec, devolvemos SOLO referencia
-		// (evita recursión)
-		if (isSerializingKey(key)) {
-			return key; // referencia; se resolverá por cache en el receptor (ver
-									// getRegisterObjectRecTemp)
-		}
-
-		markSerializingKey(key);
-		try {
-			String json = serializeRecToJson(rec,clase);
-			String encoded = packJson(json);
-			CacheProvider.get().putBytes(key, JTools.stringToByteArray(encoded), 0);
-			return encoded;
-		} finally {
-			unmarkSerializingKey(key);
-		}
-	}
+//	public String baseRecToJSON(JBaseRecord rec, String clase) throws Exception {
+//		String key = rec.getUniqueId() + "_rec";
+//
+//		// 1) cache hit
+//		String cached = null;
+//		try {
+//			byte[] data = CacheProvider.get().getBytes(key);
+//			if (data != null)
+//				cached = JTools.byteVectorToString(data);
+//		} catch (Exception ignore) {
+//		}
+//		if (cached != null)
+//			return cached;
+//
+//		// 2) Si ya estamos serializando este mismo rec, devolvemos SOLO referencia
+//		// (evita recursión)
+//		if (isSerializingKey(key)) {
+//			return key; // referencia; se resolverá por cache en el receptor (ver
+//									// getRegisterObjectRecTemp)
+//		}
+//
+//		markSerializingKey(key);
+//		try {
+//			String json = serializeRecToJson(rec, clase);
+//			String encoded = packJson(json);
+//			CacheProvider.get().putBytes(key, JTools.stringToByteArray(encoded), 0);
+//			return encoded;
+//		} finally {
+//			unmarkSerializingKey(key);
+//		}
+//	}
 
 	private static String packJson(String json) throws Exception {
 		byte[] raw = JTools.stringToByteArray(json);
@@ -233,8 +221,8 @@ public class JWinPackager {
 		return packJson(serializeWinToJson(win));
 	}
 
-	public String baseRecToPack(JBaseRecord rec, String clase) throws Exception {
-		return packJson(serializeRecToJson(rec,clase));
+	public String baseRecToPack(JBaseRecord rec) throws Exception {
+		return packJson(serializeRecToJson(rec,false));
 	}
 
 	public JBaseWin jsonToBaseWin(String json) throws Exception {
@@ -261,39 +249,35 @@ public class JWinPackager {
 		String json = unpackToJson(packed);
 		return createRecFromJson(json, id);
 	}
-	
-	
 
 	public JBaseWin createWinFromJson(String json, String id) throws Exception {
-		JSerializableBaseWin dto = (JSerializableBaseWin) deserializeObject(json, JSerializableBaseWin.class);
+		JSerializableBase dto = (JSerializableBase) deserializeObject(json, JSerializableBase.class);
 		String sUniqueId = (id != null) ? id : dto.uniqueId;
-		if (dto.cls.indexOf("CustomList")!=-1) {
+		if (dto.cls.indexOf("CustomList") != -1) {
 			PssLogger.logInfo("log point");
-			
+
 		}
-			
+
 		JBaseWin actionOwner = getOrCreateWin(dto.cls, sUniqueId);
+		actionOwner.SetBaseDato((JBaseRecord)JWebActionFactory.getCurrentRequest().getRegisterObject(dto.record));
 		actionOwner.setUniqueID(sUniqueId);
-		actionOwner.SetVision(dto.vision);
+		actionOwner.SetVision(dto.vision==null?"":dto.vision);
 		if (actionOwner.isWin())
 			((JWin) actionOwner).getRecord().setDatosLeidos(dto.readed);
-		assignFilters(dto, actionOwner.GetBaseDato());
-		assignProps(dto, actionOwner.GetBaseDato());
 		if (dto.drop != null)
-			actionOwner.setDropListener(this.createWinFromPack(JTools.byteVectorToString(java.util.Base64.getDecoder().decode(dto.drop)), null));
+			actionOwner.setDropListener((JBaseWin)JWebActionFactory.getCurrentRequest().getRegisterObject(dto.drop));
 		if (dto.dropControl != null)
-			actionOwner.setDropControlIdListener((JAct) JWebActionFactory.getCurrentRequest().deserializeObject(JTools.byteVectorToString(java.util.Base64.getDecoder().decode(dto.dropControl))));
+			actionOwner.setDropControlIdListener(JAct.deserialize(dto.dropControl));
 		return actionOwner;
 	}
 
 	public JBaseRecord createRecFromJson(String json, String id) throws Exception {
-		PssLogger.logInfo("JSON ["+json+"] id ["+id+"]");
-		
-			
-		JSerializableBaseWin dto = (JSerializableBaseWin) deserializeObject(json, JSerializableBaseWin.class);
+		PssLogger.logInfo("JSON [" + json + "] id [" + id + "]");
+
+		JSerializableBase dto = (JSerializableBase) deserializeObject(json, JSerializableBase.class);
 		String sUniqueId = (id != null) ? id : dto.uniqueId;
 		JBaseRecord actionOwner = getOrCreateRec(dto.cls, sUniqueId);
-		actionOwner.SetVision(dto.vision);
+		actionOwner.SetVision(dto.vision==null?"":dto.vision);
 		if (actionOwner instanceof JRecord)
 			((JRecord) actionOwner).setDatosLeidos(dto.readed);
 		if (actionOwner instanceof JRecords)
@@ -326,103 +310,142 @@ public class JWinPackager {
 		return createRecFromJson(json, id);
 	}
 
-	private void assignElements(JSerializableBaseWin serializableWin, JBaseRecord actionOwner) throws Exception {
+	private void assignElements(JSerializableBase serializableWin, JBaseRecord actionOwner) throws Exception {
 		if (!(actionOwner instanceof JRecords) || serializableWin.elements == null)
 			return;
 		JRecords recs = (JRecords<JRecord>) actionOwner;
 		recs.setStatic(true);
 		for (String element : serializableWin.elements) {
-			if (element.startsWith(JWebRequest.IN_REC_PREFIX)) {
-				recs.getStaticItems().addElement(getRegisterObjectRecTemp(element.substring(JWebRequest.IN_REC_PREFIX.length())));
-			} else {
+	
 				Serializable obj = JWebActionFactory.getCurrentRequest().getRegisterObject(element);
 				if (obj instanceof JBaseRecord) {
 					recs.getStaticItems().addElement((JBaseRecord) obj);
-				}
+				
 			}
 		}
 
 	}
 
-	private void assignProps(JSerializableBaseWin serializableWin, JBaseRecord actionOwner) throws Exception {
+	private static Field findField(Class<?> type, String name) {
+		Class<?> c = type;
+		while (c != null && c != Object.class) {
+			try {
+				Field f = c.getDeclaredField(name);
+				f.setAccessible(true);
+				return f;
+			} catch (NoSuchFieldException ignore) {
+				c = c.getSuperclass();
+			}
+		}
+		return null;
+	}
+
+	private void assignProps(JSerializableBase serializableWin, JBaseRecord actionOwner) throws Exception {
 		if (!(actionOwner instanceof JRecord) || serializableWin.properties == null)
 			return;
 
-		Class<?> currentClass = actionOwner.getClass();
-		Field[] fields = currentClass.getDeclaredFields();
+		final Class<?> rootClass = actionOwner.getClass();
 
 		for (Map.Entry<String, String> entry : serializableWin.properties.entrySet()) {
-			String fieldKey = entry.getKey();
-			String propValue = entry.getValue();
-			if (fieldKey.toLowerCase().indexOf("campos")!=-1)
-				PssLogger.logInfo("log point2");
+			final String fieldKey = entry.getKey();
+			final String propValue = entry.getValue();
 
+			// ------- Props del modelo (JObject) -------
 			if (fieldKey.startsWith("REC_")) {
 				JObject<?> obj = ((JRecord) actionOwner).getProp(fieldKey.substring(4));
-				if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
-					obj.setValue(getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length())));
-				} else {
-					obj.setValue((JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue));
-				}
-			} else if (fieldKey.startsWith("RECS_")) {
+				obj.setValue((JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue));
+				continue;
+			}
+
+			if (fieldKey.startsWith("RECS_")) {
 				JObject<?> obj = ((JRecord) actionOwner).getProp(fieldKey.substring(5));
-				if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
-					obj.setValue(getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length())));
-				} else {
-					obj.setValue((JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue));
-				}
-			} else if (fieldKey.startsWith("UID_")) {
+				obj.setValue((JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue));
+				continue;
+			}
+
+			if (fieldKey.startsWith("UID_")) {
 				JObject<?> obj = ((JRecord) actionOwner).getProp(fieldKey.substring(4));
 				obj.setUniqueId(propValue);
-			} else if (fieldKey.startsWith("PROP_")) {
+				continue;
+			}
+
+			if (fieldKey.startsWith("PROP_")) {
 				JObject<?> obj = ((JRecord) actionOwner).getProp(fieldKey.substring(5));
 				obj.setValueFormUI(propValue);
-			} else if (fieldKey.startsWith("OTH_")) {
-				String fieldName = fieldKey.substring(4);
-				try {
-					Field field = currentClass.getDeclaredField(fieldName);
-					field.setAccessible(true);
-					Object value = convertToFieldType(field.getType(), propValue);
-					field.set(actionOwner, value);
-				} catch (NoSuchFieldException | IllegalAccessException e) {
-					System.err.println("Error al asignar campo OTH: " + fieldName + " -> " + e.getMessage());
-				}
-			} else if (fieldKey.startsWith("SREC_")) {
-				Field field = currentClass.getDeclaredField(fieldKey.substring(5));
-				field.setAccessible(true);
-				JBaseRecord obj;
-				if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
-					obj = getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length()));
-				} else {
-					obj = (JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue);
-				}
-				field.set(actionOwner, obj);
-			} else if (fieldKey.startsWith("SRECS_")) {
-				Field field = currentClass.getDeclaredField(fieldKey.substring(6));
-				field.setAccessible(true);
-				JBaseRecord obj;
-				if (propValue.startsWith(JWebRequest.IN_REC_PREFIX)) {
-					obj = getRegisterObjectRecTemp(propValue.substring(JWebRequest.IN_REC_PREFIX.length()));
-				} else {
-					obj = (JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue);
-				}
-				field.set(actionOwner, obj);
-			} else if (fieldKey.startsWith("SER_")) {
-				String fieldName = fieldKey.substring(4);
-				try {
-					Field field = currentClass.getDeclaredField(fieldName);
-					field.setAccessible(true);
-
-					String serializedData = propValue;
-					byte[] decodedBytes = Base64.getDecoder().decode(serializedData);
-					String jsonString = JTools.byteVectorToString(decodedBytes);
-					Serializable obj = (Serializable) JWebActionFactory.getCurrentRequest().deserializeObject(jsonString);
-
-					field.set(actionOwner, obj);
-				} catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
-					System.err.println("Error al asignar campo SER: " + fieldName + " -> " + e.getMessage());
-				}
+				continue;
 			}
+
+			// ------- Campos simples/record/records del objeto (incluye padres) -------
+			if (fieldKey.startsWith("OTH_")) {
+				final String fieldName = fieldKey.substring(4);
+				Field f = findField(rootClass, fieldName);
+				if (f == null) {
+					PssLogger.logInfo("assignProps OTH_: campo no encontrado: " + fieldName + " en " + rootClass.getName());
+					continue;
+				}
+				try {
+					Object value = convertToFieldType(f.getType(), propValue);
+					f.set(actionOwner, value);
+				} catch (Exception e) {
+					PssLogger.logError(e, "assignProps OTH_: error seteando " + fieldName);
+				}
+				continue;
+			}
+
+			if (fieldKey.startsWith("SREC_")) {
+				final String fieldName = fieldKey.substring(5);
+				Field f = findField(rootClass, fieldName);
+				if (f == null) {
+					PssLogger.logInfo("assignProps SREC_: campo no encontrado: " + fieldName + " en " + rootClass.getName());
+					continue;
+				}
+				try {
+					JBaseRecord obj;
+					obj = (JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue);
+					f.set(actionOwner, obj);
+				} catch (Exception e) {
+					PssLogger.logError(e, "assignProps SREC_: error seteando " + fieldName);
+				}
+				continue;
+			}
+
+			if (fieldKey.startsWith("SRECS_")) {
+				final String fieldName = fieldKey.substring(6);
+				Field f = findField(rootClass, fieldName);
+				if (f == null) {
+					PssLogger.logInfo("assignProps SRECS_: campo no encontrado: " + fieldName + " en " + rootClass.getName());
+					continue;
+				}
+				try {
+					JBaseRecord obj;
+					obj = (JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(propValue);
+					
+					f.set(actionOwner, obj);
+				} catch (Exception e) {
+					PssLogger.logError(e, "assignProps SRECS_: error seteando " + fieldName);
+				}
+				continue;
+			}
+
+			if (fieldKey.startsWith("SER_")) {
+				final String fieldName = fieldKey.substring(4);
+				Field f = findField(rootClass, fieldName);
+				if (f == null) {
+					PssLogger.logInfo("assignProps SER_: campo no encontrado: " + fieldName + " en " + rootClass.getName());
+					continue;
+				}
+				try {
+					// Alineado con la escritura: Base64 de BYTES, no string re-Base64
+					byte[] decoded = Base64.getDecoder().decode(propValue);
+					Serializable obj = JWebActionFactory.getCurrentRequest().deserializeObjectFromBytes(decoded);
+					f.set(actionOwner, obj);
+				} catch (Exception e) {
+					PssLogger.logError(e, "assignProps SER_: error seteando " + fieldName);
+				}
+				continue;
+			}
+
+			// Claves no reconocidas se ignoran de forma segura.
 		}
 	}
 
@@ -435,13 +458,15 @@ public class JWinPackager {
 			return Double.parseDouble(value);
 		} else if (fieldType == boolean.class || fieldType == Boolean.class) {
 			return Boolean.parseBoolean(value);
+		} else if (fieldType == boolean.class || fieldType == Byte.class) {
+			return Byte.parseByte(value);
 		} else if (fieldType == String.class) {
 			return value;
 		}
 		return value;
 	}
 
-	private void assignFilters(JSerializableBaseWin serializableWin, JBaseRecord actionOwner) throws Exception {
+	private void assignFilters(JSerializableBase serializableWin, JBaseRecord actionOwner) throws Exception {
 		if (serializableWin.filters == null)
 			return;
 
@@ -455,7 +480,7 @@ public class JWinPackager {
 	}
 
 	private JBaseRecord getOrCreateRec(String className, String uniqueId) throws Exception {
-		JBaseRecord rec = (JBaseRecord)JWebActionFactory.getCurrentRequest().getObjectCreated(uniqueId);
+		JBaseRecord rec = (JBaseRecord) JWebActionFactory.getCurrentRequest().getObjectCreated(uniqueId);
 		if (rec != null)
 			return rec;
 
@@ -473,7 +498,7 @@ public class JWinPackager {
 		if (ser instanceof BizCampos)
 			PssLogger.logInfo("log point");
 		else
-			win = (JBaseWin)ser;
+			win = (JBaseWin) ser;
 		if (win != null)
 			return win;
 
@@ -485,35 +510,39 @@ public class JWinPackager {
 		return newWin;
 	}
 
-	private JSerializableBaseWin prepareSerializableWin(JBaseWin win) throws Exception {
-		JSerializableBaseWin serializableWin = prepareSerializableRec(win.GetBaseDato(), win.canConvertToURL(), win.GetBaseDato().getClass().getName());
+	private JSerializableBase prepareSerializableWin(JBaseWin win) throws Exception {
+		JSerializableBase serializableWin = new JSerializableBase();
 		serializableWin.cls = win.getClass().getName();
 		serializableWin.uniqueId = win.getUniqueId();
-		if (serializableWin.cls.indexOf("Campos")!=-1)
+		serializableWin.record = JWebActionFactory.getCurrentRequest().registerRecObjectObj( win.GetBaseDato(), win.canConvertToURL());
+		if (serializableWin.cls.indexOf("Campos") != -1)
 			PssLogger.logInfo("log point");
 
 		if (win.hasDropListener()) {
-			serializableWin.drop = Base64.getEncoder().encodeToString(JTools.stringToByteArray(baseWinToPack(win.getDropListener())));
+			serializableWin.drop = JWebActionFactory.getCurrentRequest().registerWinObjectObj(win.getDropListener());
 		}
 		if (win.hasDropControlIdListener()) {
-			serializableWin.dropControl = Base64.getEncoder().encodeToString(JTools.stringToByteArray(JWebActionFactory.getCurrentRequest().serializeObject(win.getDropControlIdListener())));
+			serializableWin.dropControl = win.getDropControlIdListener().serialize();
 		}
 		return serializableWin;
 	}
 
-	private JSerializableBaseWin prepareSerializableRec(JBaseRecord rec, boolean onlyProperties, String clase) throws Exception {
-		JSerializableBaseWin serializableWin = new JSerializableBaseWin();
-		serializableWin.cls = clase!=null?clase:rec.getClass().getName();
+	// onlyProperties como parametro es por compatibilidad, asi puedo decidirlo siguiendo el canConvertToURL de jwin si lo hubiera
+	private JSerializableBase prepareSerializableRec(JBaseRecord rec, boolean onlyProperties) throws Exception {
+		JSerializableBase serializableRec = new JSerializableBase();
+		serializableRec.cls =  rec.getClass().getName();
+		boolean serializeOnlyProperties = false;//rec.serializeOnlyProperties() || onlyProperties;
 
-		if (serializableWin.cls.indexOf("Campos")!=-1)
+		if (serializableRec.cls.indexOf("Campos") != -1)
 			PssLogger.logInfo("log point");
-		if (serializableWin.cls.indexOf("JRecords")!=-1)
+		if (serializableRec.cls.indexOf("CustomList") != -1)
 			PssLogger.logInfo("log point");
-		serializableWin.uniqueId = rec.getUniqueId();
-		serializableWin.vision = rec.GetVision();
-		serializableWin.readed = rec instanceof JRecord && ((JRecord) rec).wasDbRead() && rec.isStatic();
-
-		serializableWin.filters = new ArrayList<SerializableFilter>();
+		serializableRec.uniqueId = rec.getUniqueId();
+		serializableRec.vision = rec.GetVision();
+		serializableRec.readed = rec instanceof JRecord && ((JRecord) rec).wasDbRead() && rec.isStatic();
+		serializableRec.recordClass = rec instanceof JRecords ? ((JRecords)rec).getBasedClass():null;
+		
+		serializableRec.filters = new ArrayList<SerializableFilter>();
 		JList<RFilter> filters = rec.getFilters();
 		if (filters != null && !filters.isEmpty()) {
 			JIterator<RFilter> iter = filters.getIterator();
@@ -522,100 +551,120 @@ public class JWinPackager {
 				filter = iter.nextElement();
 				if (filter.isDynamic())
 					continue;
-				serializableWin.filters.add(new SerializableFilter(filter.getField(), filter.getOperator(), filter.getValue()));
+				serializableRec.filters.add(new SerializableFilter(filter.getField(), filter.getOperator(), filter.getValue()));
 			}
 		}
 
-		serializableWin.properties = new HashMap<String, String>();
+		serializableRec.properties = new HashMap<String, String>();
 		if (rec instanceof JRecord) {
 			JMap<String, JObject<?>> props = ((JRecord) rec).getProperties();
-			if (props!=null) {
+			if (props != null) {
 				JIterator<String> it = props.getKeyIterator();
 				while (it.hasMoreElements()) {
 					String key = it.nextElement();
 					JObject prop = props.getElement(key);
 					if (prop.getUniqueId() != null)
-						serializableWin.properties.put("UID_" + key, prop.getUniqueId());
+						serializableRec.properties.put("UID_" + key, prop.getUniqueId());
 
-					if (prop.isRecord() && prop.getInternalVal() != null) {
-						JRecord recAux = (JRecord)prop.getInternalVal();
-						
-						serializableWin.properties.put("REC_" + key, JWebActionFactory.getCurrentRequest().registerRecObjectObj(recAux,recAux.getClass().getName()));
+					if (prop.isRecord()) {
+						if (prop.getInternalVal() != null) {
+							JRecord recAux = (JRecord) prop.getInternalVal();
+							serializableRec.properties.put("REC_" + key, JWebActionFactory.getCurrentRequest().registerRecObjectObj(recAux,false));					
+						}
+						continue;
 					}
-					if (prop.isRecords() && prop.getInternalVal() != null) {
-						Object recAux = prop.getInternalVal();	
-						String rexAuxName =  prop.getInternalVal().getClass().getName();
-						Object val = prop.getInternalVal();
-						System.out.println("declared=JRecords, runtime=" + val.getClass().getName()
-						    + (val instanceof JRecords ? ", basedClass=" + ((JRecords) val).getBasedClass() : ""));
-
-						if (key.equals("campos") && rexAuxName.indexOf("JRecords")!=-1)
-							PssLogger.logInfo("log point");
-						serializableWin.properties.put("RECS_" + key, JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecords)recAux,rexAuxName));
-
+					if (prop.isRecords()) {
+						if (prop.getInternalVal() != null) {
+							serializableRec.properties.put("RECS_" + key, JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecords) prop.getInternalVal(),false));
+							
+						}
+						continue;
 					}
 					if (!prop.hasValue())
 						continue;
-					if (serializableWin.readed)
+					if (serializableRec.readed)
 						continue;
-					serializableWin.properties.put("PROP_" + key, prop.toRawString());
-				}			
-			}
-
-		}
-		if (!onlyProperties) {
-			Class<?> currentClass = rec.getClass();
-			Field[] fields = currentClass.getDeclaredFields();
-
-			for (Field field : fields) {
-				field.setAccessible(true);
-				if (Modifier.isTransient(field.getModifiers()))
-					continue;
-				if (Modifier.isFinal(field.getModifiers()))
-					continue;
-
-				String fieldName = field.getName();
-				Object fieldValue = field.get(rec);
-
-				if (fieldValue == null)
-					continue;
-
-				if (fieldValue instanceof JObject) {
-					continue;
-				} else if (fieldValue instanceof JRecords) {
-					String serialized = JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecords) fieldValue,fieldValue.getClass().getName());
-					serializableWin.properties.put("SRECS_" + fieldName, serialized);
-				} else if (fieldValue instanceof JRecord) {
-					String serialized = JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecord) fieldValue,fieldValue.getClass().getName());
-					serializableWin.properties.put("SREC_" + fieldName, serialized);
-				} else if (fieldValue instanceof String || fieldValue.getClass().isPrimitive()) {
-					serializableWin.properties.put("OTH_" + fieldName, fieldValue.toString());
-				} else if (fieldValue instanceof Serializable) {
-					Serializable serObj = (Serializable) fieldValue;
-					serializableWin.properties.put("SER_" + fieldName, Base64.getEncoder().encodeToString(JTools.stringToByteArray(JWebActionFactory.getCurrentRequest().serializeObject(serObj))));
-				} else {
-					serializableWin.properties.put("OTH_" + fieldName, fieldValue.toString());
+					serializableRec.properties.put("PROP_" + key, prop.toRawString());
 				}
 			}
+
+		}
+		if (!serializeOnlyProperties) {
+			// Visitamos clase concreta y superclases hasta Object
+			Class<?> c = rec.getClass();
+			java.util.Set<String> seen = new java.util.HashSet<>(); // evita duplicados (prefiere campos de la clase hija)
+			while (c != null && c != Object.class && c != JRecord.class && c!= JWin.class  && c!= JWins.class  && c!= JRecords.class) {
+				Field[] fields = c.getDeclaredFields();
+				for (Field field : fields) {
+					// filtros: no queremos sintéticos, outer refs, serialVersionUID, static,
+					// transient, final
+					if (field.isSynthetic())
+						continue;
+					String fn = field.getName();
+					if (fn.startsWith("this$"))
+						continue;
+					if ("serialVersionUID".equals(fn))
+						continue;
+
+					int mods = field.getModifiers();
+					if (Modifier.isStatic(mods))
+						continue;
+					if (Modifier.isTransient(mods))
+						continue;
+					if (Modifier.isFinal(mods))
+						continue;
+
+					// si ya lo vimos en la clase hija, salteamos el del padre
+					if (!seen.add(fn))
+						continue;
+
+					field.setAccessible(true);
+					Object val = field.get(rec);
+					if (val == null)
+						continue;
+
+					if (val instanceof JObject) {
+						// se ignora: ya lo tratás en la sección de properties
+						continue;
+					} else if (val instanceof JRecords) {
+						String serialized = JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecords) val,false);
+						serializableRec.properties.put("SRECS_" + fn, serialized);
+					} else if (val instanceof JRecord) {
+						String serialized = JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecord) val,false);
+						serializableRec.properties.put("SREC_" + fn, serialized);
+					} else if (field.getType().isPrimitive() || val instanceof String) {
+						serializableRec.properties.put("OTH_" + fn, String.valueOf(val));
+					} else if (val instanceof Serializable) {
+						// serializamos a bytes y luego Base64 (sin doble Base64)
+						byte[] bytes = JWebActionFactory.getCurrentRequest().serializeObjectToBytes((Serializable) val);
+						String b64 = Base64.getEncoder().encodeToString(bytes);
+						serializableRec.properties.put("SER_" + fn, b64);
+					} else {
+						// fallback seguro
+						serializableRec.properties.put("OTH_" + fn, String.valueOf(val));
+					}
+				}
+				c = c.getSuperclass();
+			}
 		}
 
-		serializableWin.elements = null;
+		serializableRec.elements = null;
 		if (rec instanceof JRecords && rec.isStatic()) {
 			JRecords recs = (JRecords) rec;
-			serializableWin.recordClass = recs.getBasedClass();
-			serializableWin.elements = new ArrayList<String>();
+			serializableRec.recordClass = recs.getBasedClass();
+			serializableRec.elements = new ArrayList<String>();
 			JIterator<JRecord> it = recs.getStaticIterator();
 			while (it.hasMoreElements()) {
 				JRecord localrec = it.nextElement();
-				serializableWin.elements.add(JWebActionFactory.getCurrentRequest().registerRecObjectObj(localrec,localrec.getClass().getName()));
+				serializableRec.elements.add(JWebActionFactory.getCurrentRequest().registerRecObjectObj(localrec,false));
 
 			}
 		}
 
-		return serializableWin;
+		return serializableRec;
 	}
 
-	private JBaseWin convertToJBaseWin(JSerializableBaseWin serializableWin) throws Exception {
+	private JBaseWin convertToJBaseWin(JSerializableBase serializableWin) throws Exception {
 		JBaseWin win = (JBaseWin) Class.forName(serializableWin.cls).newInstance();
 		win.setUniqueID(serializableWin.uniqueId);
 		win.SetVision(serializableWin.vision);
@@ -640,7 +689,7 @@ public class JWinPackager {
 		return win;
 	}
 
-	public static class JSerializableBaseWin {
+	public static class JSerializableBase {
 		public boolean readed;
 		public String cls;
 		public String uniqueId;
@@ -648,12 +697,13 @@ public class JWinPackager {
 		public String drop;
 		public String dropControl;
 		public Class recordClass;
-
+		public String record;
+		
 		public List<SerializableFilter> filters;
 		public Map<String, String> properties;
 		public List<String> elements;
 
-		public JSerializableBaseWin() {
+		public JSerializableBase() {
 		}
 	}
 

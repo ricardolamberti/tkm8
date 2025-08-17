@@ -39,6 +39,17 @@ public class BizCampos extends JRecords<BizCampo> {
 		return filtroParent;
 	}
 
+	@Override
+		public BizCampo addItem(BizCampo record) throws Exception {
+			// TODO Auto-generated method stub
+			return super.addItem(record);
+		}
+	
+	@Override
+		public BizCampo addItem(BizCampo record, int pos) throws Exception {
+			// TODO Auto-generated method stub
+			return super.addItem(record, pos);
+		}
 
 	@Override
 	public BizCampo createItem(JBaseRegistro zSet) throws Exception {

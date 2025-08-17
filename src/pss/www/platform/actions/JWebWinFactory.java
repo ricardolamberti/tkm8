@@ -102,10 +102,10 @@ public class JWebWinFactory {
 		return actionOwner;
 	}
 
-	public JBaseRecord getBaseRecFromBundle(String zWinBundle, String id) throws Exception {
-		JBaseRecord actionOwner = getPackager().createRec(zWinBundle, id);
-		return actionOwner;
-	}
+//	public JBaseRecord getBaseRecFromBundle(String zWinBundle, String id) throws Exception {
+//		JBaseRecord actionOwner = getPackager().createRec(zWinBundle, id);
+//		return actionOwner;
+//	}
 
 	public String loadWinBundle() throws Exception {
 		return JWebActionFactory.getCurrentRequest().getArgument(JWebActionFactory.ACTION_DATA_PREFIX + "act_owner");
@@ -702,13 +702,13 @@ public class JWebWinFactory {
 		return packed;
 	}
 
-	public String baseRecToURL(JBaseRecord rec,String clase) throws Exception {
+	public String baseRecToURL(JBaseRecord rec) throws Exception {
 		final String key = "rec:" + recStamp(rec);
 		DistCache cache = CacheProvider.get();
 		byte[] cached = cache.getBytes(key);
 		if (cached != null)
 			return JTools.byteVectorToString(cached);
-		String packed = packager.baseRecToPack(rec,clase);
+		String packed = packager.baseRecToPack(rec);
 		cache.putBytes(key, JTools.stringToByteArray(packed), 0);
 		return packed;
 	}
