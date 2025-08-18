@@ -54,6 +54,6 @@ public interface JMap<K, E> extends Serializable {
 	
 	void MapToJMap(Map<K,E> m);
 
-	
+	Map toMap();
 	
 }

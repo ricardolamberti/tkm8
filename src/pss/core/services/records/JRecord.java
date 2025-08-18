@@ -1955,6 +1955,10 @@ public class JRecord extends JBaseRecord implements Comparable<Object>,JPurgeInt
 	}
 	
 	
+	public void setExtraData(JMap<String, String> extraData) {
+		this.extraData = extraData;
+	}
+
 	public static void addFixedPropertyMap(Class clase, String campo,
 			JProperty prop) throws Exception {
 		JMap<String, JProperty> map = JRecord.getFixedPropertyMap(clase);

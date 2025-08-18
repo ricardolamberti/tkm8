@@ -16,7 +16,6 @@ import java.util.zip.Inflater;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import pss.common.customList.config.field.campo.BizCampos;
 import pss.core.data.interfaces.structure.RFilter;
 import pss.core.services.fields.JObject;
 import pss.core.services.records.JBaseRecord;
@@ -24,6 +23,7 @@ import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JTools;
 import pss.core.tools.PssLogger;
+import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JList;
 import pss.core.tools.collections.JMap;
@@ -153,7 +153,7 @@ public class JWinPackager {
 		return objectMapper.writeValueAsString(serializableWin);
 	}
 
-	public String serializeRecToJson(JBaseRecord rec, boolean onlyProperies) throws Exception {
+	public String serializeRecToJson(JBaseRecord rec, Boolean onlyProperies) throws Exception {
 		JSerializableBase serializableWin = prepareSerializableRec(rec, onlyProperies);
 		return objectMapper.writeValueAsString(serializableWin);
 	}
@@ -222,7 +222,7 @@ public class JWinPackager {
 	}
 
 	public String baseRecToPack(JBaseRecord rec) throws Exception {
-		return packJson(serializeRecToJson(rec,false));
+		return packJson(serializeRecToJson(rec,null));
 	}
 
 	public JBaseWin jsonToBaseWin(String json) throws Exception {
@@ -253,15 +253,16 @@ public class JWinPackager {
 	public JBaseWin createWinFromJson(String json, String id) throws Exception {
 		JSerializableBase dto = (JSerializableBase) deserializeObject(json, JSerializableBase.class);
 		String sUniqueId = (id != null) ? id : dto.uniqueId;
-		if (dto.cls.indexOf("CustomList") != -1) {
-			PssLogger.logInfo("log point");
+		Serializable ser = JWebActionFactory.getCurrentRequest().getObjectCreated(sUniqueId);
+		if (ser != null)
+			return (JBaseWin) ser;
 
-		}
 
 		JBaseWin actionOwner = getOrCreateWin(dto.cls, sUniqueId);
 		actionOwner.SetBaseDato((JBaseRecord)JWebActionFactory.getCurrentRequest().getRegisterObject(dto.record));
 		actionOwner.setUniqueID(sUniqueId);
 		actionOwner.SetVision(dto.vision==null?"":dto.vision);
+		actionOwner.setParent(dto.parent==null?null:(JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(dto.parent));
 		if (actionOwner.isWin())
 			((JWin) actionOwner).getRecord().setDatosLeidos(dto.readed);
 		if (dto.drop != null)
@@ -272,16 +273,27 @@ public class JWinPackager {
 	}
 
 	public JBaseRecord createRecFromJson(String json, String id) throws Exception {
-		PssLogger.logInfo("JSON [" + json + "] id [" + id + "]");
-
 		JSerializableBase dto = (JSerializableBase) deserializeObject(json, JSerializableBase.class);
 		String sUniqueId = (id != null) ? id : dto.uniqueId;
+	if (dto.uniqueId.indexOf("rec_9a5ca46d-9ea6-47a1-a477-6bb8c5fe694c") != -1)
+			PssLogger.logInfo("log point");
+		JBaseRecord rec = (JBaseRecord) JWebActionFactory.getCurrentRequest().getObjectCreated(sUniqueId);
+		if (rec != null)
+			return rec;
+
+	
 		JBaseRecord actionOwner = getOrCreateRec(dto.cls, sUniqueId);
 		actionOwner.SetVision(dto.vision==null?"":dto.vision);
-		if (actionOwner instanceof JRecord)
+		actionOwner.setParent(dto.parent==null?null:(JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(dto.parent));
+		if (actionOwner instanceof JRecord) {
 			((JRecord) actionOwner).setDatosLeidos(dto.readed);
+			((JRecord) actionOwner).setRowId(dto.rowid);
+			((JRecord) actionOwner).setExtraData(dto.extraData==null?null: JCollectionFactory.createMap(dto.extraData));
+			
+		}
 		if (actionOwner instanceof JRecords)
 			((JRecords) actionOwner).setRecordRef(dto.recordClass);
+		
 		assignFilters(dto, actionOwner);
 		assignProps(dto, actionOwner);
 		assignElements(dto, actionOwner);
@@ -341,7 +353,7 @@ public class JWinPackager {
 	}
 
 	private void assignProps(JSerializableBase serializableWin, JBaseRecord actionOwner) throws Exception {
-		if (!(actionOwner instanceof JRecord) || serializableWin.properties == null)
+		if (serializableWin.properties == null)
 			return;
 
 		final Class<?> rootClass = actionOwner.getClass();
@@ -349,7 +361,9 @@ public class JWinPackager {
 		for (Map.Entry<String, String> entry : serializableWin.properties.entrySet()) {
 			final String fieldKey = entry.getKey();
 			final String propValue = entry.getValue();
-
+			if (fieldKey.indexOf("allCampos")!=-1)
+				PssLogger.logError("log point");
+			
 			// ------- Props del modelo (JObject) -------
 			if (fieldKey.startsWith("REC_")) {
 				JObject<?> obj = ((JRecord) actionOwner).getProp(fieldKey.substring(4));
@@ -480,9 +494,6 @@ public class JWinPackager {
 	}
 
 	private JBaseRecord getOrCreateRec(String className, String uniqueId) throws Exception {
-		JBaseRecord rec = (JBaseRecord) JWebActionFactory.getCurrentRequest().getObjectCreated(uniqueId);
-		if (rec != null)
-			return rec;
 
 		Class<?> clazz = Class.forName(className);
 		JBaseRecord newRec = (JBaseRecord) clazz.newInstance();
@@ -493,14 +504,6 @@ public class JWinPackager {
 	}
 
 	private JBaseWin getOrCreateWin(String className, String uniqueId) throws Exception {
-		Serializable ser = JWebActionFactory.getCurrentRequest().getObjectCreated(uniqueId);
-		JBaseWin win = null;
-		if (ser instanceof BizCampos)
-			PssLogger.logInfo("log point");
-		else
-			win = (JBaseWin) ser;
-		if (win != null)
-			return win;
 
 		Class<?> clazz = Class.forName(className);
 		JBaseWin newWin = (JBaseWin) clazz.newInstance();
@@ -515,6 +518,7 @@ public class JWinPackager {
 		serializableWin.cls = win.getClass().getName();
 		serializableWin.uniqueId = win.getUniqueId();
 		serializableWin.record = JWebActionFactory.getCurrentRequest().registerRecObjectObj( win.GetBaseDato(), win.canConvertToURL());
+		serializableWin.parent = win.getParent()==null?null:JWebActionFactory.getCurrentRequest().registerWinObjectObj( win.getParent());
 		if (serializableWin.cls.indexOf("Campos") != -1)
 			PssLogger.logInfo("log point");
 
@@ -528,12 +532,15 @@ public class JWinPackager {
 	}
 
 	// onlyProperties como parametro es por compatibilidad, asi puedo decidirlo siguiendo el canConvertToURL de jwin si lo hubiera
-	private JSerializableBase prepareSerializableRec(JBaseRecord rec, boolean onlyProperties) throws Exception {
+	private JSerializableBase prepareSerializableRec(JBaseRecord rec, Boolean onlyProperties) throws Exception {
 		JSerializableBase serializableRec = new JSerializableBase();
 		serializableRec.cls =  rec.getClass().getName();
-		boolean serializeOnlyProperties = false;//rec.serializeOnlyProperties() || onlyProperties;
+		boolean serializeOnlyProperties = rec.serializeOnlyProperties() && (onlyProperties!=null?onlyProperties.booleanValue():true);
+		
+		if (rec.getUniqueId().indexOf("rec_9a5ca46d-9ea6-47a1-a477-6bb8c5fe694c") != -1)
+			PssLogger.logInfo("log point");
 
-		if (serializableRec.cls.indexOf("Campos") != -1)
+		if (serializableRec.cls.indexOf("allCampos") != -1)
 			PssLogger.logInfo("log point");
 		if (serializableRec.cls.indexOf("CustomList") != -1)
 			PssLogger.logInfo("log point");
@@ -541,7 +548,9 @@ public class JWinPackager {
 		serializableRec.vision = rec.GetVision();
 		serializableRec.readed = rec instanceof JRecord && ((JRecord) rec).wasDbRead() && rec.isStatic();
 		serializableRec.recordClass = rec instanceof JRecords ? ((JRecords)rec).getBasedClass():null;
-		
+		serializableRec.rowid = rec instanceof JRecord ? ((JRecord)rec).getRowId():null;
+		serializableRec.extraData = rec instanceof JRecord  && ((JRecord)rec).getExtraData()!=null? ((JRecord)rec).getExtraData().toMap():null;
+		serializableRec.parent = rec.getParent()==null?null: JWebActionFactory.getCurrentRequest().registerRecObjectObj( rec.getParent(), null);
 		serializableRec.filters = new ArrayList<SerializableFilter>();
 		JList<RFilter> filters = rec.getFilters();
 		if (filters != null && !filters.isEmpty()) {
@@ -569,13 +578,13 @@ public class JWinPackager {
 					if (prop.isRecord()) {
 						if (prop.getInternalVal() != null) {
 							JRecord recAux = (JRecord) prop.getInternalVal();
-							serializableRec.properties.put("REC_" + key, JWebActionFactory.getCurrentRequest().registerRecObjectObj(recAux,false));					
+							serializableRec.properties.put("REC_" + key, JWebActionFactory.getCurrentRequest().registerRecObjectObj(recAux,null));					
 						}
 						continue;
 					}
 					if (prop.isRecords()) {
 						if (prop.getInternalVal() != null) {
-							serializableRec.properties.put("RECS_" + key, JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecords) prop.getInternalVal(),false));
+							serializableRec.properties.put("RECS_" + key, JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecords) prop.getInternalVal(),null));
 							
 						}
 						continue;
@@ -617,6 +626,9 @@ public class JWinPackager {
 					// si ya lo vimos en la clase hija, salteamos el del padre
 					if (!seen.add(fn))
 						continue;
+					if (fn.indexOf("allCampos")!=-1)
+						PssLogger.logError("log point");
+					
 
 					field.setAccessible(true);
 					Object val = field.get(rec);
@@ -627,10 +639,10 @@ public class JWinPackager {
 						// se ignora: ya lo tratás en la sección de properties
 						continue;
 					} else if (val instanceof JRecords) {
-						String serialized = JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecords) val,false);
+						String serialized = JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecords) val,null);
 						serializableRec.properties.put("SRECS_" + fn, serialized);
 					} else if (val instanceof JRecord) {
-						String serialized = JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecord) val,false);
+						String serialized = JWebActionFactory.getCurrentRequest().registerRecObjectObj((JRecord) val,null);
 						serializableRec.properties.put("SREC_" + fn, serialized);
 					} else if (field.getType().isPrimitive() || val instanceof String) {
 						serializableRec.properties.put("OTH_" + fn, String.valueOf(val));
@@ -664,30 +676,31 @@ public class JWinPackager {
 		return serializableRec;
 	}
 
-	private JBaseWin convertToJBaseWin(JSerializableBase serializableWin) throws Exception {
-		JBaseWin win = (JBaseWin) Class.forName(serializableWin.cls).newInstance();
-		win.setUniqueID(serializableWin.uniqueId);
-		win.SetVision(serializableWin.vision);
-
-		if (win.isWin()) {
-			((JWin) win).getRecord().setDatosLeidos(serializableWin.readed);
-		}
-
-		if (serializableWin.filters != null) {
-			for (SerializableFilter filter : serializableWin.filters) {
-				win.GetBaseDato().addFilter(filter.field, filter.value, filter.operator);
-			}
-		}
-
-		if (serializableWin.properties != null) {
-			for (Map.Entry<String, String> entry : serializableWin.properties.entrySet()) {
-				JObject<?> obj = ((JWin) win).getRecord().getProp(entry.getKey());
-				obj.setValue(entry.getValue());
-			}
-		}
-
-		return win;
-	}
+//	private JBaseWin convertToJBaseWin(JSerializableBase serializableWin) throws Exception {
+//		JBaseWin win = (JBaseWin) Class.forName(serializableWin.cls).newInstance();
+//		win.setUniqueID(serializableWin.uniqueId);
+//		win.SetVision(serializableWin.vision);
+//		win.setParent(serializableWin.parent);
+//
+//		if (win.isWin()) {
+//			((JWin) win).getRecord().setDatosLeidos(serializableWin.readed);
+//		}
+//
+//		if (serializableWin.filters != null) {
+//			for (SerializableFilter filter : serializableWin.filters) {
+//				win.GetBaseDato().addFilter(filter.field, filter.value, filter.operator);
+//			}
+//		}
+//
+//		if (serializableWin.properties != null) {
+//			for (Map.Entry<String, String> entry : serializableWin.properties.entrySet()) {
+//				JObject<?> obj = ((JWin) win).getRecord().getProp(entry.getKey());
+//				obj.setValue(entry.getValue());
+//			}
+//		}
+//
+//		return win;
+//	}
 
 	public static class JSerializableBase {
 		public boolean readed;
@@ -698,9 +711,12 @@ public class JWinPackager {
 		public String dropControl;
 		public Class recordClass;
 		public String record;
+		public String rowid;
+		public String parent;
 		
 		public List<SerializableFilter> filters;
 		public Map<String, String> properties;
+		public Map<String, String> extraData;
 		public List<String> elements;
 
 		public JSerializableBase() {

@@ -17,39 +17,42 @@ public class BizCampos extends JRecords<BizCampo> {
 	public BizCampos() throws Exception {
 	}
 
-	
 	@Override
 	public Class<BizCampo> getBasedClass() {
 		return BizCampo.class;
 	}
 
 	private BizCustomList customList;
+
 	public void setObjCustomList(BizCustomList zCustomList) throws Exception {
-		customList=zCustomList;
+		customList = zCustomList;
 	}
+
 	public BizCustomList getCustomList() {
 		return customList;
 	}
 
 	private BizCampo filtroParent;
+
 	public void setObjFiltroParent(BizCampo zParent) throws Exception {
-		filtroParent=zParent;
+		filtroParent = zParent;
 	}
+
 	public BizCampo getFiltroParent() {
 		return filtroParent;
 	}
 
 	@Override
-		public BizCampo addItem(BizCampo record) throws Exception {
-			// TODO Auto-generated method stub
-			return super.addItem(record);
-		}
-	
+	public BizCampo addItem(BizCampo record) throws Exception {
+		// TODO Auto-generated method stub
+		return super.addItem(record);
+	}
+
 	@Override
-		public BizCampo addItem(BizCampo record, int pos) throws Exception {
-			// TODO Auto-generated method stub
-			return super.addItem(record, pos);
-		}
+	public BizCampo addItem(BizCampo record, int pos) throws Exception {
+		// TODO Auto-generated method stub
+		return super.addItem(record, pos);
+	}
 
 	@Override
 	public BizCampo createItem(JBaseRegistro zSet) throws Exception {
@@ -58,9 +61,9 @@ public class BizCampos extends JRecords<BizCampo> {
 		c.setObjFiltroParent(filtroParent);
 		return c;
 	}
-	
-	public BizCampo buildNewRecord(JRecord parent,JRecord origen,String keyField,String keyFieldFuente,String keyFieldParent,String keyFieldFuenteParent, boolean table) throws Exception {
-		BizCampo campo=new BizCampo();
+
+	public BizCampo buildNewRecord(JRecord parent, JRecord origen, String keyField, String keyFieldFuente, String keyFieldParent, String keyFieldFuenteParent, boolean table) throws Exception {
+		BizCampo campo = new BizCampo();
 		if (parent instanceof BizCustomList) {
 			BizCustomList list = (BizCustomList) parent;
 			setObjCustomList(list);
@@ -69,79 +72,83 @@ public class BizCampos extends JRecords<BizCampo> {
 		} else if (parent instanceof BizCampo) {
 			BizCampoGallery campogal = (BizCampoGallery) origen;
 			campo = campogal.buildCampo(getCustomList());
-			campo.copyKeysProperties(parent,false);
+			campo.copyKeysProperties(parent, false);
 			campo.setNullToSecuencia();
 			campo.getProp(keyField).setValue(origen.getPropDeep(keyFieldFuente));
 			campo.setObjCustomList(this.getCustomList());
-			campo.setObjFiltroParent((BizCampo)parent);
+			campo.setObjFiltroParent((BizCampo) parent);
 			campo.processDrop(this.getCustomList());
 			campo.setOperacion(BizCampo.OPER_AND);
 		}
 		return campo;
 	}
-	
-	public void processFillRecords(JRecord parent,JRecords fuentes, String keyFieldFuente, String keyField, String keyFieldFuenteParent, String keyFieldParent, String parentField) throws Exception {
-	 	JMap<String,BizCampoGallery> map = fuentes.convertToHash(keyFieldFuente);
+
+	@Override
+	public boolean serializeOnlyProperties() throws Exception {
+		return false;
+	}
+
+	public void processFillRecords(JRecord parent, JRecords fuentes, String keyFieldFuente, String keyField, String keyFieldFuenteParent, String keyFieldParent, String parentField) throws Exception {
+		JMap<String, BizCampoGallery> map = fuentes.convertToHash(keyFieldFuente);
 //	 	JMap<String,BizCampoGallery> mapD = fuentes.convertToHash(keyFieldFuente);
 
-	 	JIterator<BizCampo> it = this.getStaticIterator();
-  	int fila=0;
-  	while (it.hasMoreElements()) {
-  		try {
+		JIterator<BizCampo> it = this.getStaticIterator();
+		int fila = 0;
+		while (it.hasMoreElements()) {
+			try {
 				fila++;
 				BizCampo destino = it.nextElement();
-				
+
 				String key = destino.getPropDeep(keyField).toString();
 				if (map.containsKey(key)) {
 					BizCampoGallery gal = map.getElement(key);
-					if (gal.getAttach()!=null && gal.getAttach().equals(destino)) {
+					if (gal.getAttach() != null && gal.getAttach().equals(destino)) {
 						map.removeElement(key);
 						continue; // ya existe
 					}
 				}
 			} catch (Exception e) {
 				PssLogger.logError(e);
-				throw new Exception("FILA "+fila+": "+e.getMessage());
+				throw new Exception("FILA " + fila + ": " + e.getMessage());
 			}
-  	}
-  	
-	 	JIterator<BizCampo> itd = this.getStaticIterator();
-  	int filad=0;
-  	while (itd.hasMoreElements()) {
-  		try {
+		}
+
+		JIterator<BizCampo> itd = this.getStaticIterator();
+		int filad = 0;
+		while (itd.hasMoreElements()) {
+			try {
 				filad++;
 				BizCampo destino = itd.nextElement();
-				boolean borrar=true;
+				boolean borrar = true;
 				String key = destino.getPropDeep(keyField).toString();
 				JIterator<BizCampoGallery> itg = fuentes.getStaticIterator();
 				while (itg.hasMoreElements()) {
 					BizCampoGallery gal = itg.nextElement();
-					if (gal.getAttach()!=null && gal.getAttach().equals(destino)) {
-						borrar=false;
+					if (gal.getAttach() != null && gal.getAttach().equals(destino)) {
+						borrar = false;
 						break; // ya existe
 					}
 				}
-				//remover
+				// remover
 				if (borrar)
 					itd.remove();
 			} catch (Exception e) {
 				PssLogger.logError(e);
-				throw new Exception("FILA "+filad+": "+e.getMessage());
+				throw new Exception("FILA " + filad + ": " + e.getMessage());
 			}
-  	}
-  	
+		}
 
-  	// faltantes
-  	JIterator<BizCampoGallery> itr = map.getValueIterator();
-  	while (itr.hasMoreElements()) {
-  		try {
-				JRecord origen = (JRecord)itr.nextElement();
-				BizCampo destino = this.buildNewRecord(parent,origen,keyField,keyFieldFuente,keyFieldParent,keyFieldFuenteParent);
+		// faltantes
+		JIterator<BizCampoGallery> itr = map.getValueIterator();
+		while (itr.hasMoreElements()) {
+			try {
+				JRecord origen = (JRecord) itr.nextElement();
+				BizCampo destino = this.buildNewRecord(parent, origen, keyField, keyFieldFuente, keyFieldParent, keyFieldFuenteParent);
 			} catch (Exception e) {
 				PssLogger.logError(e);
-				throw new Exception("FILA "+fila+": "+e.getMessage());
+				throw new Exception("FILA " + fila + ": " + e.getMessage());
 			}
-  	}
+		}
 //		if (parent!=null)
 //			parent.getProp(parentField).setValue(this);
 

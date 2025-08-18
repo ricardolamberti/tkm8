@@ -52,7 +52,7 @@ public class BizCampoGallery extends JRecord {
 			setValue(getCampoSerial());
 		};
 	};
-	private JRelation relacion;
+	private transient JRelation relacion;
 	public void setId(long value) throws Exception {
 		this.pId.setValue(value);
 	}

@@ -144,7 +144,9 @@ class JHashMap<K,E> implements JMap<K,E>, Serializable {
 			addElement(k, v);
 		}
 	}
-
+	public Map toMap() {
+		return oMap;
+	}
 
 	public void SortByValue (Comparator<K> vc) {
 		TreeMap<K,E> sortedMap = new TreeMap<K,E>(vc);

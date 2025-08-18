@@ -42,8 +42,9 @@
 				</xsl:attribute>
 				<script>
 					setUrlPrefix('<xsl:value-of select="$url_prefix" />') ;
-				</script>
-				
+					sessionStorage.setItem('dictionary', '<xsl:value-of select="url/@payload"/>');
+				</script>					
+		
 				<xsl:apply-templates select="*" />
 			</body>
 		</html>
