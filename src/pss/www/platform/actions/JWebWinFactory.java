@@ -7,6 +7,11 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
 import java.util.UUID;
+import java.util.Base64;
+import java.util.Arrays;
+import java.nio.charset.StandardCharsets;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 
 import pss.core.services.fields.JObjBDs;
 import pss.core.services.fields.JObject;
@@ -32,6 +37,7 @@ import pss.www.platform.applications.JHistoryProvider;
 import pss.www.platform.applications.JWebHistoryManager;
 import pss.www.platform.cache.CacheProvider;
 import pss.www.platform.cache.DistCache;
+import pss.www.platform.applications.JWebApplicationSession;
 
 public class JWebWinFactory {
 
@@ -710,19 +716,139 @@ public class JWebWinFactory {
 		cache.putBytes(key, JTools.stringToByteArray(packed), 0);
 		return packed;
 	}
-	public String dictionaryToURL(String dict) throws Exception {
-		final String key = "dict_"+UUID.randomUUID().toString();
-		DistCache cache = CacheProvider.get();
-		cache.putBytes(key, JTools.stringToByteArray(dict), 0);
-		return key;
-	}
-	public String URLToDictionary(String key) throws Exception {
-		DistCache cache = CacheProvider.get();
-		byte[] cached = cache.getBytes(key);
-		String dict=  JTools.byteVectorToString(cached);
-		cache.delete(key);
-		return dict;
-	}
+        @Deprecated
+        public String dictionaryToURL(String dict) throws Exception {
+                JWebRequest req = JWebActionFactory.getCurrentRequest();
+                return mintDictionaryToken(req, dict);
+        }
+
+        @Deprecated
+        public String URLToDictionary(String token) throws Exception {
+                byte[] data = resolveDictionaryFromToken(JWebActionFactory.getCurrentRequest(), token);
+                return JTools.byteVectorToString(data);
+        }
+
+        public String mintDictionaryToken(JWebRequest req, String dict) throws Exception {
+                final String dictId = java.util.UUID.randomUUID().toString();
+                final byte[] bytes = JTools.stringToByteArray(dict);
+
+                final DistCache cache = CacheProvider.get();
+                final int ttlSec = Integer.getInteger("pss.dict.ttlSeconds", 600);
+                cache.putBytes("DICT:" + dictId, bytes, ttlSec);
+
+                final String userId = getCurrentUserId(req);
+                final String pageId = getOrCreatePageId(req);
+                final long iat = System.currentTimeMillis();
+                final long exp = iat + (long) ttlSec * 1000L;
+
+                final String payload = String.join("|", dictId, userId, pageId, String.valueOf(iat), String.valueOf(exp));
+                final byte[] sig = hmacSha256(getDictSecret(), payload.getBytes(StandardCharsets.UTF_8));
+                final String token = "v1." + b64url(payload.getBytes(StandardCharsets.UTF_8)) + "." + b64url(sig);
+
+                final String curKey = "DICTCUR:" + userId + ":" + pageId;
+                String prev = cacheGetString(cache, curKey);
+                if (prev != null && !prev.equals(dictId)) {
+                        cacheRemove(cache, "DICT:" + prev);
+                }
+                cachePutString(cache, curKey, dictId, ttlSec);
+
+                return token;
+        }
+
+        public byte[] resolveDictionaryFromToken(JWebRequest req, String token) throws Exception {
+                if (token == null || token.isEmpty())
+                        throw new IllegalArgumentException("missing token");
+                String[] parts = token.split("\\.", 3);
+                if (parts.length != 3 || !"v1".equals(parts[0]))
+                        throw new IllegalArgumentException("bad token format");
+
+                byte[] payloadBytes = b64urlDecode(parts[1]);
+                byte[] sigBytes = b64urlDecode(parts[2]);
+
+                byte[] expected = hmacSha256(getDictSecret(), payloadBytes);
+                if (!java.util.Arrays.equals(expected, sigBytes)) {
+                        throw new SecurityException("invalid token signature");
+                }
+
+                String payload = new String(payloadBytes, StandardCharsets.UTF_8);
+                String[] f = payload.split("\\|");
+                if (f.length != 5)
+                        throw new IllegalArgumentException("bad payload");
+
+                String dictId = f[0];
+                String userId = f[1];
+                String pageId = f[2];
+                long iat = Long.parseLong(f[3]);
+                long exp = Long.parseLong(f[4]);
+
+                String currentUserId = getCurrentUserId(req);
+                if (!userId.equals(currentUserId))
+                        throw new SecurityException("user mismatch");
+
+                long now = System.currentTimeMillis();
+                if (now > exp)
+                        throw new SecurityException("token expired");
+
+                DistCache cache = CacheProvider.get();
+                String curKey = "DICTCUR:" + userId + ":" + pageId;
+                String currentDictId = cacheGetString(cache, curKey);
+                if (currentDictId == null || !currentDictId.equals(dictId)) {
+                        throw new SecurityException("stale dictionary token");
+                }
+
+                byte[] data = cache.getBytes("DICT:" + dictId);
+                if (data == null)
+                        throw new IllegalStateException("dictionary not found (evicted/expired)");
+                return data;
+        }
+
+        private static byte[] hmacSha256(String secret, byte[] data) throws Exception {
+                Mac mac = Mac.getInstance("HmacSHA256");
+                SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+                mac.init(keySpec);
+                return mac.doFinal(data);
+        }
+
+        private static String b64url(byte[] in) {
+                return Base64.getUrlEncoder().withoutPadding().encodeToString(in);
+        }
+
+        private static byte[] b64urlDecode(String s) {
+                return Base64.getUrlDecoder().decode(s);
+        }
+
+        private static String getDictSecret() {
+                String s = System.getProperty("pss.dict.secret");
+                if (s == null || s.isEmpty())
+                        throw new IllegalStateException("Missing system property pss.dict.secret");
+                return s;
+        }
+
+        private static String getCurrentUserId(JWebRequest req) {
+                JWebApplicationSession sess = req.getSession();
+                return (sess != null) ? sess.getSessionId() : "0";
+        }
+
+        private static String getOrCreatePageId(JWebRequest req) {
+                String pid = req.getRequestid();
+                return (pid != null && !pid.isEmpty()) ? pid : getCurrentUserId(req);
+        }
+
+        private static void cachePutString(DistCache cache, String key, String value, int ttlSec) throws Exception {
+                cache.putBytes(key, value.getBytes(StandardCharsets.UTF_8), ttlSec);
+        }
+
+        private static String cacheGetString(DistCache cache, String key) throws Exception {
+                byte[] b = cache.getBytes(key);
+                return b == null ? null : new String(b, StandardCharsets.UTF_8);
+        }
+
+        private static void cacheRemove(DistCache cache, String key) throws Exception {
+                try {
+                        cache.delete(key);
+                } catch (Throwable ignore) {
+                }
+        }
 
 	public void invalidateWinPack(JBaseWin win) throws Exception {
 		CacheProvider.get().delete("win:" + winStamp(win));

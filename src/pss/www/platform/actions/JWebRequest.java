@@ -747,11 +747,14 @@ public class JWebRequest {
 	}
 	
 	public String saveDictionary() throws Exception {
-	  return	new JWebWinFactory(null).dictionaryToURL(JWebActionFactory.getCurrentRequest().getPack().getRegisterObjectsSerialized());
-	}
-	public String retrieveDictionary(String key) throws Exception {
-	  return	new JWebWinFactory(null).URLToDictionary(key);
-	}
+                JWebRequest req = JWebActionFactory.getCurrentRequest();
+                String dictSerialized = req.getPack().getRegisterObjectsSerialized();
+                return new JWebWinFactory(null).mintDictionaryToken(req, dictSerialized);
+        }
+        public String retrieveDictionary(String token) throws Exception {
+                byte[] data = new JWebWinFactory(null).resolveDictionaryFromToken(this, token);
+                return JTools.byteVectorToString(data);
+        }
 
 	private boolean isLargeObject(Object obj) throws Exception {
 //		if (obj instanceof JBaseWin) {
