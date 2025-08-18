@@ -358,8 +358,8 @@ public class FormEditDetalleBackendRuta extends JBaseForm {
       YearMonth fin = inicio.plusYears(2); // Dos años adelante
 
       while (!inicio.isAfter(fin)) {
-          String clave = inicio.format(claveFormatter).toUpperCase(); // Clave en MAY�SCULAS
-          String valor = inicio.format(valorFormatter).toUpperCase(); // Valor en MAY�SCULAS
+          String clave = inicio.format(claveFormatter).toUpperCase(); // Clave en MAYÚSCULAS
+          String valor = inicio.format(valorFormatter).toUpperCase(); // Valor en MAYÚSCULAS
         	map.addElement(clave, valor );
       	
           inicio = inicio.plusMonths(1);

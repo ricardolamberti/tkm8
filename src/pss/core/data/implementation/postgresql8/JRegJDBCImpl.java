@@ -928,7 +928,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 
 	@Override
 	protected void checkSpecialErrors(SQLException zSQLExe) throws Exception {
-		if (zSQLExe.getMessage().indexOf("La conversi�n del tipo de datos char a datetime " + "produjo un valor datetime fuera de intervalo") != -1)
+		if (zSQLExe.getMessage().indexOf("La conversión del tipo de datos char a datetime " + "produjo un valor datetime fuera de intervalo") != -1)
 			JExcepcion.SendError("Fecha fuera de rango");
 		if ((zSQLExe.getMessage().indexOf("value larger than specified precision allows for this column") != -1))
 			JExcepcion.SendError("Importe fuera de rango");

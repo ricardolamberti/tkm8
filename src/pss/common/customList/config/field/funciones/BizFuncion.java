@@ -199,8 +199,8 @@ public class BizFuncion extends JRecord   {
 	public static JRecords<BizFuncion> getFuncionesNumericas() throws Exception {
 		JRecords<BizFuncion> recs=new JRecords<BizFuncion>(BizFuncion.class);
 		recs.setStatic(true);
-		recs.addItem(BizFuncion.createFuncion(BizField.FUNTION_MAX, "M�ximo", true, false));
-		recs.addItem(BizFuncion.createFuncion(BizField.FUNTION_MIN, "M�nimo", true, false));
+		recs.addItem(BizFuncion.createFuncion(BizField.FUNTION_MAX, "Máximo", true, false));
+		recs.addItem(BizFuncion.createFuncion(BizField.FUNTION_MIN, "Mínimo", true, false));
 		recs.addItem(BizFuncion.createFuncion(BizField.FUNTION_COUNT, "Cantidad", true, false));
 		recs.addItem(BizFuncion.createFuncion(BizField.FUNTION_SUM, "Suma", true, false));
 		recs.addItem(BizFuncion.createFuncion(BizField.FUNTION_AVR, "Promedio", true, false));

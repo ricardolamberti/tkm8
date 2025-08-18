@@ -67,7 +67,7 @@ public class GuiCarpeta extends JWin implements IContenidoCarpeta {
 //		createActionQuery(); 
 //		createActionUpdate();
 //		createActionDelete().setMulti(true);
-		this.addActionUpdate(1000, "Modificar").setHelp("Permite abrir el formulario de modificaci�n de "+GetTitle());
+		this.addActionUpdate(1000, "Modificar").setHelp("Permite abrir el formulario de modificación de "+GetTitle());
 		this.addActionDelete(1001, "Eliminar").setHelp("Permite eliminar un "+GetTitle()).setMulti(true);
 		addAction(18,  "Ver", null, 10076, false, false);
 		addAction(810, "Subir", null, 15056, true, true);

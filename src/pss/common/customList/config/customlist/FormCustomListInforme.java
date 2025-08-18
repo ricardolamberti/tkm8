@@ -58,7 +58,7 @@ public class FormCustomListInforme  extends JBaseForm {
 				}
 			}).setFirstOcur(true).setSizeColumns(2).setSizeColumns(1).setRefreshForm(true);
 			AddItemEdit("Descripción", CHAR, REQ, "description").setSizeColumns(11).SetValorDefault("Informe");
-			AddItemMultiple("Distribuci�n", CHAR, REQ, "distribution", new JControlCombo() {
+			AddItemMultiple("Distribución", CHAR, REQ, "distribution", new JControlCombo() {
 				public JWins getRecords(boolean one) throws Exception {
 					return getTypes(one);
 				}

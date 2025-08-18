@@ -27,7 +27,7 @@ public class GuiSegConfiguracion extends JWin {
   @Override
 	public int GetNroIcono()       throws Exception { return 909; }
   @Override
-	public String GetTitle()       throws Exception { return "Configuraci�n"; }
+	public String GetTitle()       throws Exception { return "Configuración"; }
   @Override
 	public Class<? extends JBaseForm> getFormBase()     throws Exception { return FormSegConfiguracion.class; }
   @Override
@@ -49,7 +49,7 @@ public class GuiSegConfiguracion extends JWin {
   	this.addAction(30, "Usuarios", null, 45, false, false);
   	this.addAction(40, "Matriz Funciones", null, 44, false, false);
   	this.addAction(50, "Ingresos", null, 53, false, false);
-  	this.addAction(60, "Seguridad Men�", null, 10035, true, true);
+  	this.addAction(60, "Seguridad Menú", null, 10035, true, true);
   	this.addAction(70, "Tipo Usuarios", null, 44, false, false);
   }
 
@@ -126,7 +126,7 @@ public class GuiSegConfiguracion extends JWin {
 		g.setActionMap(g.generateActionMenu(false, 0).GetSubAcciones());
 		return g.getObjWinProperty();
 		
-//		if (BizUsuario.getUsr().getCustomMenu().equals("")) throw new Exception("No se ha definido un men�");
+//		if (BizUsuario.getUsr().getCustomMenu().equals("")) throw new Exception("No se ha definido un menú");
 //		g.GetcDato().Read(BizUsuario.getUsr().getCustomMenu());
 //		GuiActions a = new GuiActions();
 //		a.setRecords(g.generateActionMenu(false, 0).GetSubAcciones());

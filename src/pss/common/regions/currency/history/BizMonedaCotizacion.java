@@ -124,8 +124,8 @@ public class BizMonedaCotizacion extends JRecord {
     this.addFixedItem( FIELD, "cotiz_contab", "Contable", true, true, 18,6);
     this.addFixedItem( FIELD, "usuario", "Usuario", true, false, 15 );
     this.addFixedItem( FIELD, "fecha_hora", "Fecha/Hora", true, true, 10 );
-    this.addFixedItem( VIRTUAL, "descr_cotiz", "Cotizaci�n", true, true, 30 );
-    this.addFixedItem( VIRTUAL, "cotiz_dolar", "Cotizaci�n", true, false, 500 );
+    this.addFixedItem( VIRTUAL, "descr_cotiz", "Cotización", true, true, 30 );
+    this.addFixedItem( VIRTUAL, "cotiz_dolar", "Cotización", true, false, 500 );
   }
   /**
    * Returns the table name

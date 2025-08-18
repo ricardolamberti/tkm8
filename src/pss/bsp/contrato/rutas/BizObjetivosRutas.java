@@ -217,7 +217,7 @@ public class BizObjetivosRutas extends JRecords<BizObjetivosRuta> {
 		setVolado(volado);
 		setVoladoAHoy(voladoAHoy);
 		double porc = JTools.rd((acum * 100.0) / (acum + premioExtra), 2);
-		conclusion = "Premios posibles al " + porc + "%, necesita vender " + tkt + " en las rutas espec�ficas tickets para maximizar la ganancia";
+		conclusion = "Premios posibles al " + porc + "%, necesita vender " + tkt + " en las rutas específicas tickets para maximizar la ganancia";
 		setConclusion(conclusion);
 		
 		this.Ordenar("-premio_estimado");

@@ -24,7 +24,7 @@ public class GuiModuloEvent extends GuiModulo {
 	@Override
 	public void createActionMap() throws Exception {
 
-		this.addAction(9000, "Confirmar vinculaci�n con Telegram", null, 5058, true, true, true, "Group");
+		this.addAction(9000, "Confirmar vinculación con Telegram", null, 5058, true, true, true, "Group");
 
 		this.loadDynamicActions(null);
 

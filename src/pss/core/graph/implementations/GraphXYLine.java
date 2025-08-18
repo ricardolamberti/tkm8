@@ -59,7 +59,7 @@ public class GraphXYLine  extends GraphMatrix {
         double ol = getTickMarkOutsideLength();
         double il = getTickMarkInsideLength();
         int y = (int)(Math.round(cursor-ol));
-        LineMetrics lineMetrics = g2.getFont().getLineMetrics("�pr", g2.getFontRenderContext());        
+        LineMetrics lineMetrics = g2.getFont().getLineMetrics("Apr", g2.getFontRenderContext());
         int h = (int) (lineMetrics.getHeight() + 6);
 
         List<ValueTick> ticks = refreshTicks(g2, state, dataArea, edge);
