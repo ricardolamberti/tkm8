@@ -132,7 +132,7 @@ public class JWebWinLOVResponsive extends JWebViewEditComponent implements JWebA
 			zContent.startNode("item");
 			String showId ="";
 			if (/*isUseCache() &&*/ oFormLov.GetWinSelect()!=null) {
-				String id = zContent.addObjectObj( oFormLov.GetWinSelect());
+				String id = zContent.( oFormLov.GetWinSelect());
 				zContent.setAttribute("id", id);
 //				zContent.setAttribute("real_id",  isUseID()?oFormLov.getValue():getKeyValue(oFormLov.GetWinSelect()));
 				showId= getKeyValue(oFormLov.GetWinSelect());
@@ -140,7 +140,7 @@ public class JWebWinLOVResponsive extends JWebViewEditComponent implements JWebA
 				zContent.setAttribute("id_name", JTools.getValidFilename(id));
 				
 			} else {
-				zContent.setAttribute("id", "");
+				zContent.setAttribute("id", "");addObjectObj
 				zContent.setAttribute("real_id", "");
 			}
 			zContent.setAttributeNLS("description", (oFormLov.isShowKey()?showId+" ":"") +oFormLov.getValueDescription());

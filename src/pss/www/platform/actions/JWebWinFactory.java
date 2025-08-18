@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
+import java.util.UUID;
 
 import pss.core.services.fields.JObjBDs;
 import pss.core.services.fields.JObject;
@@ -708,6 +709,19 @@ public class JWebWinFactory {
 		String packed = packager.baseRecToPack(rec);
 		cache.putBytes(key, JTools.stringToByteArray(packed), 0);
 		return packed;
+	}
+	public String dictionaryToURL(String dict) throws Exception {
+		final String key = "dict_"+UUID.randomUUID().toString();
+		DistCache cache = CacheProvider.get();
+		cache.putBytes(key, JTools.stringToByteArray(dict), 0);
+		return key;
+	}
+	public String URLToDictionary(String key) throws Exception {
+		DistCache cache = CacheProvider.get();
+		byte[] cached = cache.getBytes(key);
+		String dict=  JTools.byteVectorToString(cached);
+		cache.delete(key);
+		return dict;
 	}
 
 	public void invalidateWinPack(JBaseWin win) throws Exception {

@@ -22,6 +22,7 @@ import pss.core.tools.collections.JList;
 import pss.www.platform.actions.JWebAction;
 import pss.www.platform.actions.JWebActionFactory;
 import pss.www.platform.actions.JWebRequest;
+import pss.www.platform.actions.JWebWinFactory;
 import pss.www.platform.content.generators.JXMLContent;
 import pss.www.ui.processing.JXMLRepresentable;
 
@@ -211,8 +212,10 @@ public class JWebPage implements JXMLRepresentable, JWebViewsConstants {
 		zContent.startNode("url");
 		zContent.setAttribute("location", this.getSourceAction().asURL());
 		zContent.setAttribute("modal", this.getSourceAction().isOpenInModal());
-		zContent.setAttribute("payload", JWebActionFactory.getCurrentRequest().getPack().getRegisterObjectsSerialized());
+		// zContent.setAttribute("payload", JWebActionFactory.getCurrentRequest().getPack().getRegisterObjectsSerialized());
+		zContent.setAttribute("payload", JWebActionFactory.getCurrentRequest().saveDictionary());
 		zContent.endNode("url");	
+		
 		//
 		// SERIALIZE REGISTERED OBJECTS
 		//

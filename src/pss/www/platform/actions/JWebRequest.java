@@ -745,6 +745,13 @@ public class JWebRequest {
 		return oRegisteredRequest;
 
 	}
+	
+	public String saveDictionary() throws Exception {
+	  return	new JWebWinFactory(null).dictionaryToURL(JWebActionFactory.getCurrentRequest().getPack().getRegisterObjectsSerialized());
+	}
+	public String retrieveDictionary(String key) throws Exception {
+	  return	new JWebWinFactory(null).URLToDictionary(key);
+	}
 
 	private boolean isLargeObject(Object obj) throws Exception {
 //		if (obj instanceof JBaseWin) {
@@ -1067,10 +1074,10 @@ public class JWebRequest {
 				return;
 			restored = true;
 			getRegisteredObjectsNew().clear();
-			String dictionary = getPssIdDictionary();
-			if (dictionary == null || dictionary.isEmpty())
+			String dictionaryKey = getPssIdDictionary();
+			if (dictionaryKey == null || dictionaryKey.isEmpty())
 				return;
-			pack = (JWebRequestPackage) deserializeRegisterJSON(dictionary);
+			pack = (JWebRequestPackage) deserializeRegisterJSON(retrieveDictionary(dictionaryKey)); 
 			oNameDictionary = pack.localNameDictionay;
 			oRegisteredObjectsOld = pack.localRegisteredObject;
 			if (getHistoryManager().sizeHistory() == 0) {
