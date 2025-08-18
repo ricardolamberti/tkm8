@@ -376,7 +376,7 @@ public class BizCompany extends JMMRecord {
 	@Override
 	public void createFixedProperties() throws Exception {
 		this.addFixedItem(KEY, "company", "Empresa", true, true, 15);
-		this.addFixedItem(FIELD, "description", "Descripci�n", true, true, 150);
+		this.addFixedItem(FIELD, "description", "Descripción", true, true, 150);
 		this.addFixedItem(FIELD, "business", "Negocio", true, true, 15);
 		this.addFixedItem(FIELD, "taxid", "Id Tributario", true, false, 30);
 		this.addFixedItem(FIELD, "logo", "Logo", true, false, 250);
@@ -417,7 +417,7 @@ public class BizCompany extends JMMRecord {
 
 	public static String GetDescripcionReporte(String zCompany) throws Exception {
 		String sDesc="";
-		sDesc="Compa��a: ";
+		sDesc="Compañía: ";
 		if (zCompany.equals("")) sDesc+="< Todas >";
 		else {
 			BizCompany oCompany=new BizCompany();
@@ -664,7 +664,7 @@ public class BizCompany extends JMMRecord {
    	admin.Read(BizUsuario.C_ADMIN_USER);
    	
    	BizUsuario.SetGlobal(admin);
-   	JTools.sendMail(provisorio.getUsrMailSender(),getCompany(),"sys_email_verify","Verificaci�n de correo",sEmail,provisorio);
+   	JTools.sendMail(provisorio.getUsrMailSender(),getCompany(),"sys_email_verify","Verificación de correo",sEmail,provisorio);
    	BizUsuario.SetGlobal(null);
   }
   

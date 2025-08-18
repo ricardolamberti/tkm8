@@ -154,14 +154,14 @@ public class BizGraph extends JRecord {
     this.addFixedItem( FIELD, "title", "Titulo", true, false, 250);
     this.addFixedItem( FIELD, "type", "Tipo", true, true, 30);
     this.addFixedItem( FIELD, "modelo", "Modelo", true, true, 30);
-    this.addFixedItem( FIELD, "col_categoria", "Columan Categor�a", true, false, 18 );
+    this.addFixedItem( FIELD, "col_categoria", "Columna Categoría", true, false, 18 );
     this.addFixedItem( FIELD, "col_dataset", "Columna Dataset", true, false, 18 );
     this.addFixedItem( FIELD, "col_valor", "Columna Valor", true, false, 18	 );
     this.addFixedItem( FIELD, "col_valor2", "Columna Valor 2", true, false, 18	 );
     this.addFixedItem( FIELD, "col_valor3", "Columna Valor 3", true, false, 18	 );
     this.addFixedItem( FIELD, "col_valor4", "Columna Valor 4" , true, false, 18	 );
     this.addFixedItem( FIELD, "col_valor5", "Columna Valor 5", true, false, 18	 );
-    this.addFixedItem( VIRTUAL, "descr_type", "Tipo Gr�fico", true, false, 100 );
+    this.addFixedItem( VIRTUAL, "descr_type", "Tipo Gráfico", true, false, 100 );
   }
   
   /**

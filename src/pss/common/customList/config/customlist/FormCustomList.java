@@ -102,7 +102,7 @@ private static final long serialVersionUID = 1226426806993L;
     rowConf.AddItemCheck("Ver todo?", OPT, "showfull").setAlign(JFormCheckResponsive.LABEL_TOP).setSizeColumns(2).setRefreshForm(true).SetValorDefault(false);    
     rowConf.AddItemEdit( "Agrupar en otros", UINT, OPT, "limite" ).setSizeColumns(2).setRefreshForm(true).SetValorDefault(4);
 
-//    cm=AddItemFieldset("Parametrizaci�n");   
+//    cm=AddItemFieldset("Parametrización");   
     ia=AddItemFieldset("IA");   
     selTipo=AddItemFieldset("Tipos de gráficos");
     selTipo.setBackground(new Color(248,248,255));

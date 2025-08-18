@@ -985,7 +985,7 @@ public abstract class JBaseWin implements IInMemory,Transferable,Serializable {
 	 * 
 	 * jbaccion.toSAX(wrapper);
 	 * 
-	 * if (bRecursive) { if (jbaccion.hasSubActions()) { // Subacci�n jbaccion.GetSubAcciones().firstRecord(); while (jbaccion.GetSubAcciones().nextRecord()) { BizAction subaccion = (BizAction) jbaccion .GetSubAcciones().getRecord(); WebGenerarAcciones(wrapper, bRecursive, subaccion, bToolbar, bMenu, bWeb, zID); } }
+	 * if (bRecursive) { if (jbaccion.hasSubActions()) { // Subacción jbaccion.GetSubAcciones().firstRecord(); while (jbaccion.GetSubAcciones().nextRecord()) { BizAction subaccion = (BizAction) jbaccion .GetSubAcciones().getRecord(); WebGenerarAcciones(wrapper, bRecursive, subaccion, bToolbar, bMenu, bWeb, zID); } }
 	 * 
 	 * wrapper.endElement("item"); } } }
 	 */

@@ -187,12 +187,12 @@ public class BizMoneda extends JRecord {
 
 	@Override
 	public void createFixedProperties() throws Exception {
-		addFixedItem(KEY, "CODIGO", "C�digo", true, true, 3); // m�ximo 3 para usar codificaci�n ISO. EP
-		addFixedItem(FIELD, "DESCRIPCION", "Descripci�n", true, true, 30);
-		addFixedItem(VIRTUAL, "descripcion_view", "Descripci�n", true, true, 250);
-		addFixedItem(FIELD, "CONV_ISO", "C�digo ISO", true, false, 4);
-		addFixedItem(FIELD, "CONV_CRIND", "C�digo CRIND", true, false, 4);
-		addFixedItem(FIELD, "SIMBOLO", "S�mbolo", true, true, 3);
+		addFixedItem(KEY, "CODIGO", "Código", true, true, 3); // máximo 3 para usar codificación ISO. EP
+		addFixedItem(FIELD, "DESCRIPCION", "Descripción", true, true, 30);
+		addFixedItem(VIRTUAL, "descripcion_view", "Descripción", true, true, 250);
+		addFixedItem(FIELD, "CONV_ISO", "Código ISO", true, false, 4);
+		addFixedItem(FIELD, "CONV_CRIND", "Código CRIND", true, false, 4);
+		addFixedItem(FIELD, "SIMBOLO", "Símbolo", true, true, 3);
 		addFixedItem(FIELD, "currency_format", "Formato Moneda", true, true, 40, 0, "", "###,##0.00");
 		addFixedItem(FIELD, "fraction_digits", "fraction_digits", true, true, 2);
 		addFixedItem(FIELD, "optional_decimals", "Decimales adicionales", true, true, 2, 0, null, "1");
@@ -243,9 +243,9 @@ public class BizMoneda extends JRecord {
 	@Override
 	public void processDelete() throws Exception {
 //		if (JRecords.existsComplete("pss.erp.ctacte.BizCuentaMovDetalle", "moneda", pCodigo.getValue())) JExcepcion.SendError("No se puede eliminar una moneda que fue usado en movimientos de cuenta corriente");
-//		if (JRecords.existsComplete("pss.erp.cashDrawer.BizCajaValor", "moneda", pCodigo.getValue())) JExcepcion.SendError("No se puede eliminar una moneda que est� vinculada a un valor de caja");
+//		if (JRecords.existsComplete("pss.erp.cashDrawer.BizCajaValor", "moneda", pCodigo.getValue())) JExcepcion.SendError("No se puede eliminar una moneda que está vinculada a un valor de caja");
 		if (JRecords.existsComplete(BizMonedaPais.class, "moneda", pCodigo.getValue())) 
-			JExcepcion.SendError("No se puede eliminar una moneda que est� vinculada con un pais");
+			JExcepcion.SendError("No se puede eliminar una moneda que está vinculada con un pais");
 		if (JRecords.existsComplete(BizPais.class, "moneda_local", pCodigo.getValue())) 
 			JExcepcion.SendError("No se puede eliminar una moneda que es la moneda local de un pais");
 
@@ -344,9 +344,9 @@ public class BizMoneda extends JRecord {
 //	public static double convertRate(String pais, String monedaSource, String monedaTarget) throws Exception {
 //		if (monedaSource.equals(monedaTarget)) return 1d;
 //		double sourceCurrencyRate=BizMoneda.getCotizVenta(pais, monedaSource);
-//		if (sourceCurrencyRate==0d) JExcepcion.SendError("No existe cotizaci�n para la moneda: ^"+monedaSource);
+//		if (sourceCurrencyRate==0d) JExcepcion.SendError("No existe cotización para la moneda: ^"+monedaSource);
 //		double targetCurrencyRate=BizMoneda.getCotizVenta(pais, monedaTarget);
-//		if (targetCurrencyRate==0d) JExcepcion.SendError("No existe cotizaci�n para la moneda: ^"+monedaTarget);
+//		if (targetCurrencyRate==0d) JExcepcion.SendError("No existe cotización para la moneda: ^"+monedaTarget);
 //		return  sourceCurrencyRate/targetCurrencyRate;
 //	}
 
@@ -370,7 +370,7 @@ public class BizMoneda extends JRecord {
 			JExcepcion.SendError("Formato de moneda erroneo");
 		}
 		pFractionDigits.setValue(oFormat.getMinimumFractionDigits());
-		if (pFractionDigits.getValue()>4) JExcepcion.SendError("No se puede ingresar un formato con m�s de 4 d�gitos decimales");
+		if (pFractionDigits.getValue()>4) JExcepcion.SendError("No se puede ingresar un formato con más de 4 dígitos decimales");
 	}
 
 	public static String getCotizacionAsString(double ctz1, double ctz2) throws Exception {

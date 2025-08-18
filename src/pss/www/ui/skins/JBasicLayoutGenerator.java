@@ -909,7 +909,7 @@ public abstract class JBasicLayoutGenerator  implements ILayoutGenerator {
 		JWebViewZoneRow root = new JWebViewZoneRow();
 		root.setName(parent.getCompletePanelName());
 		root.setClassResponsive(parent.getClassResponsive());
-		parent.setClassResponsive(null);//ya use su tama�o original en la zone que lo incluye
+		parent.setClassResponsive(null);//ya use su tamaño original en la zone que lo incluye
 
 		if (parent.hasPreviewPanel()) {
 			panelWithPreview.setOrientation(JWebSplit.ORIENT_VERTICAL);
@@ -1540,7 +1540,7 @@ public abstract class JBasicLayoutGenerator  implements ILayoutGenerator {
 		return a;
 	}
 	public String getMessageConfirmLostData() throws Exception {
-		return JLanguage.translate("Se perder�n datos, contin�a?");
+		return JLanguage.translate("Se perderán datos, continúa?");
 	}
 	public String getMessageConfirm(String msgDefa,String extra) throws Exception {
 		Object params[]= {extra};

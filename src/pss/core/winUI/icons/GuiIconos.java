@@ -113,7 +113,7 @@ public class GuiIconos extends JWins {
   
   private synchronized void loadIconsFromDatabase() throws Exception {
 
-    PssLogger.logWait("Cargando tabla de �conos...");
+    PssLogger.logWait("Cargando tabla de íconos...");
     try {
     	this.cacheIcon(0,"Anular","Anular.gif",RESPONSIVE,"fa fa-times");
     	this.cacheIcon(1,"arbol","world.png", SIZE_BW_32x32|SIZE_32x32|RESPONSIVE,"fas fa-globe");   
@@ -206,7 +206,7 @@ public class GuiIconos extends JWins {
     	this.cacheIcon(89,"Tarjeta Inhabilitada","admiracion.png",SIZE_BW_32x32|SIZE_32x32|SIZE_60x60|SIZE_120x120|RESPONSIVE, "fas fa-exclamation-circle");
     	this.cacheIcon(90,"Clase","clase.gif",RESPONSIVE,"fa fa-ban");
     	this.cacheIcon(91,"Vincular Region","bolaverde.png");
-    	this.cacheIcon(92,"Enviar","enviar.gif");
+    	this.cacheIcon(92,"Enviar","envíar.gif");
     	this.cacheIcon(93,"Modulo Adhesion","manos.gif");
     	this.cacheIcon(94,"Unidad de Medida","rtl_impuesto.gif");
     	this.cacheIcon(95,"Tipos de unidades","atom.gif");
@@ -270,7 +270,7 @@ public class GuiIconos extends JWins {
     	this.cacheIcon(362,"TS_Tags","visa.gif");
     	this.cacheIcon(363,"Contingencia","contingencia.gif");
     	this.cacheIcon(364,"Normal","normal.gif");
-    	this.cacheIcon(365,"Da�ado","da�ado.gif");
+        this.cacheIcon(365,"Dañado","dañado.gif");
     	this.cacheIcon(366,"Sistemas","linux.gif");
     	this.cacheIcon(367,"Perdido","perdido.gif");
     	this.cacheIcon(368,"Disponible","carita.gif");
@@ -496,7 +496,7 @@ public class GuiIconos extends JWins {
     	this.cacheIcon(924,"Vista detalles","detailsviewicon.gif");
     	this.cacheIcon(925,"Vista lista","listviewicon.gif");
     	this.cacheIcon(926,"HTML","html.gif");
-    	this.cacheIcon(927,"HTML din�mico","dhtml.gif");
+    	this.cacheIcon(927,"HTML dinámico","dhtml.gif");
     	this.cacheIcon(928,"PDF","pdf.gif", RESPONSIVE, "far fa-file-pdf");
     	this.cacheIcon(929,"Ir al siguiente","aderecha.gif");
     	this.cacheIcon(930,"Ir al anterior","aizquierda.gif");
@@ -522,12 +522,12 @@ public class GuiIconos extends JWins {
     	this.cacheIcon(950,"brasil","brazil.gif");
     	this.cacheIcon(951,"estado: pendiente","status_pending.gif");
     	this.cacheIcon(952,"estado: esperando input","status_waitinput.gif");
-    	this.cacheIcon(953,"estado: esperando confirmaci�n","status_waitconf.gif");
+    	this.cacheIcon(953,"estado: esperando confirmación","status_waitconf.gif");
     	this.cacheIcon(954,"estado: cancelado","status_cancelled.gif");
     	this.cacheIcon(955,"estado: ejecutando","status_running.gif");
     	this.cacheIcon(956,"estado: terminado","status_done.gif");
     	this.cacheIcon(957,"estado: terminado con error","status_failed.gif");
-    	this.cacheIcon(958,"setup: ir a pr�ximo paso","setup_go_next.gif");
+    	this.cacheIcon(958,"setup: ir a próximo paso","setup_go_next.gif");
     	this.cacheIcon(959,"setup: ir a paso anteior","setup_go_back.gif");
     	this.cacheIcon(960,"setup: terminar","setup_finish.gif");
     	this.cacheIcon(961,"estado: salteado","status_skipped.gif");
@@ -543,8 +543,8 @@ public class GuiIconos extends JWins {
     	this.cacheIcon(971,"agregar columna","add_column.png",SIZE_BW_32x32|SIZE_32x32|SIZE_60x60|SIZE_120x120);
     	this.cacheIcon(972,"eliminar columna","drop_column.gif");
     	this.cacheIcon(973,"alterar tabla","alter_table.gif");
-    	this.cacheIcon(974,"agregar �ndice","add_index.gif");
-    	this.cacheIcon(975,"eliminar �ndice","drop_index.gif");
+    	this.cacheIcon(974,"agregar índice","add_index.gif");
+    	this.cacheIcon(975,"eliminar índice","drop_index.gif");
     	this.cacheIcon(976,"crear tabla","create_table.gif");
     	this.cacheIcon(977,"eliminar tabla","drop_table.gif");
     	this.cacheIcon(978,"truncar tabla","truncate_table.gif");
@@ -599,8 +599,8 @@ public class GuiIconos extends JWins {
     	this.cacheIcon(1119,"unexpand","min.png");
     	this.cacheIcon(1120,"up","up.png");
     	this.cacheIcon(1121,"down","down.png");
-    	this.cacheIcon(2001,"tramo a�reo","modificar.png",SIZE_BW_32x32|SIZE_32x32|SIZE_60x60|SIZE_120x120);
-    	this.cacheIcon(2002,"a�reo","aeroplane.gif");
+    	this.cacheIcon(2001,"tramo aéreo","modificar.png",SIZE_BW_32x32|SIZE_32x32|SIZE_60x60|SIZE_120x120);
+    	this.cacheIcon(2002,"aéreo","aeroplane.gif");
     	this.cacheIcon(2003,"air_ticket","modificar.png",SIZE_BW_32x32|SIZE_32x32|SIZE_60x60|SIZE_120x120);
     	this.cacheIcon(2004,"pnr","pnr.gif");
     	this.cacheIcon(2005,"Arbol","mundo_explorador.gif");
@@ -866,7 +866,7 @@ public class GuiIconos extends JWins {
     	this.cacheIcon(7008,"Bandera Taiwan","Flag_Taiwan.png");
     	this.cacheIcon(7009,"Bandera Sudafrica","Flag_Sudafrica.png");
     	this.cacheIcon(7010,"Bandera Uruguay","Flag_Uruguay.png");
-    	/* iconos con varios tama�os*/
+    	/* iconos con varios tamaños*/
     	this.cacheIcon(10000,"Documento","document.png",SIZE_BW_32x32|SIZE_32x32|SIZE_60x60|SIZE_120x120|RESPONSIVE,"fas fa-book" );      
     	this.cacheIcon(10001,"Agenda","agenda.png",SIZE_BW_32x32|SIZE_32x32|SIZE_60x60|SIZE_120x120);
     	this.cacheIcon(10002,"Pizarra","pizarra.png",SIZE_60x60);
@@ -1114,10 +1114,10 @@ public class GuiIconos extends JWins {
 
     	
 
-    	PssLogger.logInfo("Tabla de �conos cargada");
+    	PssLogger.logInfo("Tabla de íconos cargada");
       bIconsLoadedFromDB = true;
     } catch (Exception ex) {
-      PssLogger.logError(ex, "No se pudo cargar tabla de �conos");
+      PssLogger.logError(ex, "No se pudo cargar tabla de íconos");
       throw ex;
     }
 
@@ -1154,11 +1154,11 @@ public class GuiIconos extends JWins {
     return oIcon;
   }
   public GuiIcon buscarIcono( long size, int zNroIcono ) throws Exception {
-    // traigo el �cono de la tabla
+    // traigo el ícono de la tabla
     GuiIcon oIcon = this.getCachedIcon(size, zNroIcono );
     if (oIcon != null) return oIcon;
 
-    // si no estaba, busca uno fijo, que no est� en la base
+    // si no estaba, busca uno fijo, que no está en la base
     oIcon = GuiIcon.ConvertNroIcono(zNroIcono);
     if (oIcon == null) {
       oIcon = this.getCachedIcon(size, GuiIcon.DEFAULT_ICON );
@@ -1171,12 +1171,12 @@ public class GuiIconos extends JWins {
     }
     return oIcon;
   }
-  /* por compatibilidad solo un tama�o*/
+  /* por compatibilidad solo un tamaño*/
   public void cacheIcon(int zIconNumber, String zIcon, String zFile) throws Exception {
   	cacheIconSize(SIZE_DEFA,zIconNumber,zIcon,zFile,false);
   }
   
-  /* levanta el default y permite elgir si autodetectar los tama�os restantes (mas lento)*/
+  /* levanta el default y permite elegir si autodetectar los tamaños restantes (más lento)*/
   public void cacheIcon(int zIconNumber, String zIcon, String zFile,boolean autodetect) throws Exception {
   	cacheIconSize(SIZE_DEFA,zIconNumber,zIcon,zFile,false);
   	cacheIconSize(SIZE_32x32,zIconNumber,zIcon,zFile,autodetect);
@@ -1185,7 +1185,7 @@ public class GuiIconos extends JWins {
   	cacheIconSize(SIZE_BW_32x32,zIconNumber,zIcon,zFile,autodetect);
   }
   
-  /* sin autodetect de tama�os, se envia una mascara con los tama�os que se saben que estan*/ 
+  /* sin autodetect de tamaños, se envía una máscara con los tamaños que se saben que están*/ 
   public void cacheIcon(int zIconNumber, String zIcon, String zFile,long mask) throws Exception {
   	cacheIconSize(SIZE_DEFA,zIconNumber,zIcon,zFile,false);
   	if ((mask&SIZE_32x32)!=0) cacheIconSize(SIZE_32x32,zIconNumber,zIcon,zFile,false);

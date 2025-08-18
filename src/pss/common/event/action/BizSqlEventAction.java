@@ -645,7 +645,7 @@ public class BizSqlEventAction extends JRecord {
   }
   public String getMensajeAviso(JFilterMap a,BizSqlEventHistory hist) throws Exception {
   	if (isAccionDOWNLOAD()) {
-   		return URLEncoder.encode("Presione Aplicar y el archivo se descargar� a su dispositivo.","ISO-8859-1").replace("+", "%20");
+   		return URLEncoder.encode("Presione Aplicar y el archivo se descargará a su dispositivo.","ISO-8859-1").replace("+", "%20");
    	}
   	if (isAccionURL()) {
    		return getObjSqlEvent().getCorreoAviso(a,this,hist);

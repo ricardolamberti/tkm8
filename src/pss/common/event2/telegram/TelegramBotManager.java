@@ -436,13 +436,13 @@ public class TelegramBotManager {
 			if (processCMD(chatId, msg) == false) {
 				if (devMode) {
 					sendMessage(chatId,
-							"Comandos v�lidos:\n\n" + "/register 'mail' - Registra el mail para soporte por telegram\n" + "/confirm 'pin recibido por mail' - Confirma la registraci�n del mail\n"
+							"Comandos válidos:\n\n" + "/register 'mail' - Registra el mail para soporte por telegram\n" + "/confirm 'pin recibido por mail' - Confirma la registración del mail\n"
 									+ "/unregister 'mail' - Desregistra el mail\n" + "/getlog 'nombre del log a bajar' - Permite bajar un log del headoffice\n"
-									+ "/getsuper - Clave d�namica para el headoffice\n"
+									+ "/getsuper - Clave dinámica para el headoffice\n"
 									+ "/reset 'servicio' - Reinicia un servicio\n");
 				} else
-					sendMessage(chatId, "Comandos v�lidos:\n\n" + "/register 'usuario headoffice' - Registra un usuario del headoffice para recibir alertas y mensajes por telegram\n"
-							+ "/confirm 'usuario headoffice' - Confirma la registraci�n de un usuario del headoffice\n" + "/unregister 'usuario headoffice' - Desregistra un usuario del headoffice\n");
+					sendMessage(chatId, "Comandos válidos:\n\n" + "/register 'usuario headoffice' - Registra un usuario del headoffice para recibir alertas y mensajes por telegram\n"
+							+ "/confirm 'usuario headoffice' - Confirma la registración de un usuario del headoffice\n" + "/unregister 'usuario headoffice' - Desregistra un usuario del headoffice\n");
 			}
 
 		} catch (Exception eee) {
@@ -535,10 +535,10 @@ public class TelegramBotManager {
 		tc.update();
 
 		if (devMode) {
-			sendMessage(chatId, "El usuario " + tc.getUserid() + " confirmo su registraci�n.");
+			sendMessage(chatId, "El usuario " + tc.getUserid() + " confirmo su registración.");
 		} else
 			sendMessage(chatId, "El usuario " + user
-					+ " confirmo su registraci�n. Para terminar el proceso debe loguearse al headoffice dentro de los pr�ximos 10 minutos y confirmar la vinculaci�n de su usuario con Telegram.");
+					+ " confirmo su registración. Para terminar el proceso debe loguearse al headoffice dentro de los próximos 10 minutos y confirmar la vinculación de su usuario con Telegram.");
 	}
 
 	private boolean devMode = false;
@@ -569,14 +569,14 @@ public class TelegramBotManager {
 			tc.delete();
 		}
 
-		String confMsg = "Confirme la registraci�n con el comando: /confirm 'usuario headoffice'";
+		String confMsg = "Confirme la registración con el comando: /confirm 'usuario headoffice'";
 
 		tc.setChannelId(chatId + "");
 		tc.setUserid(user);
 		long pin = (long) (Math.random() * ((999999 - 100000) + 1)) + 100000;
 		if (devMode) {
 			sendMail(user, pin);
-			confMsg = "Confirme la registraci�n con el comando: /confirm 'pin recibido por mail'";
+			confMsg = "Confirme la registración con el comando: /confirm 'pin recibido por mail'";
 			tc.setCompany("DEFAULT");
 		} else {
 			tc.setCompany(usr.getCompany());
@@ -608,7 +608,7 @@ public class TelegramBotManager {
 				ms.setMailTo(mail);
 				// ms.setMailBCC(cfg.getMailBcc());
 
-				ms.send("Telegram Registraci�n", "Su pin de registraci�n es : " + pin);
+				ms.send("Telegram Registración", "Su pin de registración es : " + pin);
 			}
 		} catch (Exception eee) {
 
@@ -629,9 +629,9 @@ public class TelegramBotManager {
 		if (tc.read()) {
 			return tc;
 		}
-		String msg = "Ud no se encuentra registrado. Comando registraci�n: /register 'usuario headoffice'";
+		String msg = "Ud no se encuentra registrado. Comando registración: /register 'usuario headoffice'";
 		if (devMode)
-			msg = "Ud no se encuentra registrado. Comando registraci�n: /register 'mail'";
+			msg = "Ud no se encuentra registrado. Comando registración: /register 'mail'";
 			
 		bot.execute(new SendMessage(chatId, msg));
 		return null;

@@ -698,7 +698,7 @@ public class JFormPanelResponsive extends JFormControlResponsive  {
 		oButton.setData(data);
 		if (action!=null && ok) {
 			if (this.isActionRestricted(action)) 
-				JExcepcion.SendError("Acci�n no permitida");
+                               JExcepcion.SendError("Acción no permitida");
 			BizAction oAction = action;
 			oButton.setAction(oAction);	
 			oButton.setSubmit(submit);
@@ -2174,7 +2174,7 @@ public class JFormPanelResponsive extends JFormControlResponsive  {
 			return AddItemTab(zId,null);
 		}
 		
-		// Additem de un JWins a un JTabbedPane a trav�s de una acci�n
+               // Additem de un JWins a un JTabbedPane a través de una acción
 		public JFormLista AddItemTab(int zId,String title) throws Exception {
 			BizAction oAction = getBaseWin().findAction(zId);
 			if (title==null && oAction!=null) title=this.getBaseWin().getDescrAction(oAction);

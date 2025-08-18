@@ -125,7 +125,7 @@ public class BizBSPCarpeta extends BizCarpeta implements IActionData {
   public BizCarpeta addReporteDetallado(BizContrato contrato) throws Exception {
   	BizCarpeta carp = new BizCarpeta();
  		carp.setCompany(BizUsuario.getUsr().getCompany());
- 		carp.setDescripcion("Situaci�n contrato "+contrato.getDescripcion());
+ 		carp.setDescripcion("Situación contrato "+contrato.getDescripcion());
  		carp.setClase(GuiContrato.class.getName());
  		carp.setListado(contrato.getId());
  		carp.setKey(contrato.getDescripcion());

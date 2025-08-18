@@ -385,7 +385,7 @@ public abstract class Graph implements Serializable {
 	
 	public static JMap<String, String> getGraphModelos(String tipo) throws Exception {
 		JMap<String, String> map = JCollectionFactory.createMap();
-		map.addElement("A", "Autom�tico");
+               map.addElement("A", "Automático");
 		if (tipo.toLowerCase().indexOf("linedy")==-1)
 			map.addElement(ModelGrid.class.getSimpleName(), "Grilla");
 		if (tipo.toLowerCase().indexOf("linedy")!=-1)

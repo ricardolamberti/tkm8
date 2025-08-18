@@ -284,7 +284,7 @@ public class Manager {
 
 					String mail = "<br></br>"
 							+ "<br></br>"
-							+ "*** Este es un mail autom�tico, NO RESPONDER ***"
+							+ "*** Este es un mail automático, NO RESPONDER ***"
 							+ "<br></br>" + "<br></br>";
 					mail += "";
 
@@ -297,7 +297,7 @@ public class Manager {
 
 					mail += "</table>";
 
-					String body = "Instalaci�n para ID: <b>"
+					String body = "Instalación para ID: <b>"
 							+ idgds.toUpperCase()
 							+ "</b> y desde su PC/servidor: <b>" + lastServer
 							+ "</b>";
@@ -310,7 +310,7 @@ public class Manager {
 					if (hasTickets)		
 						mail += "Alerta de Desconexión" + "</td></tr>";
 					else
-						mail += "Alerta de No Recepci�n de Boletos" + "</td></tr>";
+						mail += "Alerta de No Recepción de Boletos" + "</td></tr>";
 						
 					mail += "<tr style=\"border: 1px solid black;border-collapse: collapse;\"><td style=\"border: 1px solid black;border-collapse: collapse;padding: 5px;\"><b>Fecha Desde</b></td><td style=\"padding: 5px;\"> "
 							+ lastEcho + "</td></tr>";
@@ -335,7 +335,7 @@ public class Manager {
 							+ "<br></br>"
 							+ "- Si nada ha sufrido cambios, por favor reiniciar la computadora y no apagarla durante 24 horas."
 							+ "<tr></tr>" + " " + "<tr></tr>" + "<tr></tr>"
-							+ "- Si tiene servicio de soporte tecnico pedir el reincio el servicio de windows \"pss ftp client\". Si el problema subsiste, seguir� recibiendo estos mails"
+							+ "- Si tiene servicio de soporte tecnico pedir el reincio el servicio de windows \"pss ftp client\". Si el problema subsiste, seguirá recibiendo estos mails"
 							+ "<tr></tr>" + " " + "<tr></tr>" + "<tr></tr>"
 							+ "<br></br>" + "<br></br>"
 							+ "<b>Ticketmining Team</b>" + "<br></br>"
