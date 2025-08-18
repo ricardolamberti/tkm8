@@ -283,7 +283,7 @@ public class JTools {
 		return !a.equalsIgnoreCase(b);
 	}
 
-	/* Convierte el documento PDF a imagen con un tama�o grande */
+	/* Convierte el documento PDF a imagen con un tamaño grande */
 	public static String convertirPDF2Img(String pathIn, String pdf, String pathOut, String outFile) {
 		try {
 			PDDocument document = null;
@@ -340,7 +340,7 @@ public class JTools {
 	public static String quitarExcluidas(String s, String[] excluidas, long palabraMaxTama) {
 		if (excluidas == null)
 			return s;
-		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'�()[]+-=_,- ");
+		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'?()[]+-=_,- ");
 		String sw[] = new String[100];
 		int ls = 0, lt = 0;
 		while (ssw.hasMoreTokens()) {
@@ -371,8 +371,8 @@ public class JTools {
 	}
 
 	public static double editDistanceWords2(String s, String t, double distance) {
-		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'�()[]+-=_,- ");
-		StringTokenizer stw = new StringTokenizer(t, ".,;\"'�()[]+-=_,- ");
+		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'?()[]+-=_,- ");
+		StringTokenizer stw = new StringTokenizer(t, ".,;\"'?()[]+-=_,- ");
 		String sw[] = new String[100];
 		String tw[] = new String[100];
 		int ls = 0, lt = 0;
@@ -423,8 +423,8 @@ public class JTools {
 	}
 
 	public static double editDistanceWords(String s, String t, double distance) {
-		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'�()[]+-=_,- ");
-		StringTokenizer stw = new StringTokenizer(t, ".,;\"'�()[]+-=_,- ");
+		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'?()[]+-=_,- ");
+		StringTokenizer stw = new StringTokenizer(t, ".,;\"'?()[]+-=_,- ");
 		String sw[] = new String[100];
 		String tw[] = new String[100];
 		int ls = 0, lt = 0;
@@ -587,7 +587,7 @@ public class JTools {
 	}
 
 	public static String[] getWords(String s) {
-		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'�()[]+-=_,- ");
+		StringTokenizer ssw = new StringTokenizer(s, ".,;\"'?()[]+-=_,- ");
 		String sw[] = new String[ssw.countTokens()];
 		int ls = 0;
 		while (ssw.hasMoreTokens()) {
@@ -860,11 +860,11 @@ public class JTools {
 		name = name.replace("%20", " ");
 		name = name.replace("%28", "(");
 		name = name.replace("%29", ")");
-		name = name.replace("%E1", "�");
-		name = name.replace("%E9", "�");
-		name = name.replace("%ED", "�");
-		name = name.replace("%F3", "�");
-		name = name.replace("%FA", "�");
+		name = name.replace("%E1", "á");
+		name = name.replace("%E9", "é");
+		name = name.replace("%ED", "í");
+		name = name.replace("%F3", "ó");
+		name = name.replace("%FA", "ú");
 		name = name.replace("%3F", "?");
 		name = name.replace("%40", "@");
 		return name;
@@ -1286,7 +1286,7 @@ public class JTools {
 			bResult = false;
 		}
 		if (bException && !bResult) {
-			JExcepcion.SendError("Dato hexa inv�lido: " + zStr);
+			JExcepcion.SendError("Dato hexa inválido: " + zStr);
 		}
 		return bResult;
 	}
@@ -1306,7 +1306,7 @@ public class JTools {
 			bResult = false;
 		}
 		if (bException && !bResult) {
-			JExcepcion.SendError("Dato binario inv�lido: " + zStr);
+			JExcepcion.SendError("Dato binario inválido: " + zStr);
 		}
 		return bResult;
 	}
@@ -1412,7 +1412,7 @@ public class JTools {
 		// Si el cliente espera exception la disparo
 		// -------------------------------------------
 		if (zException && !bRc)
-			JExcepcion.SendError("Formato de fecha inv�lida: " + zStr);
+			JExcepcion.SendError("Formato de fecha inválida: " + zStr);
 
 		// --------------------
 		// Seteo la respuesta
@@ -2276,33 +2276,33 @@ public class JTools {
 	}
 
 	public static char replaceForeignChar(char msg) {
-		if (msg == '�')
+		if (msg == 'á')
 			return 'a';
-		if (msg == '�')
+		if (msg == 'é')
 			return 'e';
-		if (msg == '�')
+		if (msg == 'í')
 			return 'i';
-		if (msg == '�')
+		if (msg == 'ó')
 			return 'o';
-		if (msg == '�')
+		if (msg == 'ú')
 			return 'u';
-		if (msg == '�')
+		if (msg == 'Á')
 			return 'A';
-		if (msg == '�')
+		if (msg == 'É')
 			return 'E';
-		if (msg == '�')
+		if (msg == 'Í')
 			return 'I';
-		if (msg == '�')
+		if (msg == 'Ó')
 			return 'O';
-		if (msg == '�')
+		if (msg == 'Ú')
 			return 'U';
-		if (msg == '�')
+		if (msg == 'ñ')
 			return 'n';
-		if (msg == '�')
+		if (msg == 'Ñ')
 			return 'N';
-		if (msg == '�')
+		if (msg == '¿')
 			return ' ';
-		if (msg == '�')
+		if (msg == '¡')
 			return ' ';
 		// if (msg=='\'') return ' ';
 		return msg;
@@ -2324,33 +2324,33 @@ public class JTools {
 	}
 
 	public static char convertForeignChar(char msg) {
-		if (msg == '�')
+		if (msg == 'á')
 			return 160;
-		if (msg == '�')
+		if (msg == 'é')
 			return 130;
-		if (msg == '�')
+		if (msg == 'í')
 			return 161;
-		if (msg == '�')
+		if (msg == 'ó')
 			return 162;
-		if (msg == '�')
+		if (msg == 'ú')
 			return 163;
-		if (msg == '�')
+		if (msg == 'Á')
 			return 'A';
-		if (msg == '�')
+		if (msg == 'É')
 			return 'E';
-		if (msg == '�')
+		if (msg == 'Í')
 			return 'I';
-		if (msg == '�')
+		if (msg == 'Ó')
 			return 'O';
-		if (msg == '�')
+		if (msg == 'Ú')
 			return 'U';
-		if (msg == '�')
+		if (msg == 'ñ')
 			return 164;
-		if (msg == '�')
+		if (msg == 'Ñ')
 			return 165;
-		if (msg == '�')
+		if (msg == '¿')
 			return ' ';
-		if (msg == '�')
+		if (msg == '¡')
 			return ' ';
 		return msg;
 	}
@@ -2379,7 +2379,7 @@ public class JTools {
 	}
 
 	/*************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************
-	 * Dado un a�o y un mes, obtiene el dia maximo del mes en cuestion Mes de 1 a 12
+	 * Dado un año y un mes, obtiene el dia maximo del mes en cuestion Mes de 1 a 12
 	 ************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 	public static int getMaxMonthDays(int iYear, int iMonth) {
 		boolean bBisciesto = ((iYear % 4) == 0);
@@ -2984,8 +2984,8 @@ public class JTools {
 		}
 		return sRet.toString();
 	}
-	// Se busca obtener el n�mero existente dentro de en un string alfanum�rico
-	// Se usa particularmente para obtener la parte num�rica del nodo
+	// Se busca obtener el número existente dentro de en un string alfanumérico
+	// Se usa particularmente para obtener la parte numérica del nodo
 	public static String getNumberEmbedded(String sAlfaNumeric) throws Exception {
 		char cAlfa[] = sAlfaNumeric.toCharArray();
 		StringBuffer sRet = new StringBuffer();
@@ -3136,7 +3136,7 @@ public class JTools {
 		String s = sRet.toString().toLowerCase().replace("numero", "");
 		s = s.replace("nro.", "");
 		s = s.replace("nro", "");
-		s = s.replace("n�", "");
+		s = s.replace("nº", "");
 		s = s.replace(" n ", "");
 		return s.trim();
 	}
@@ -3146,7 +3146,7 @@ public class JTools {
 		for (int i = cAlfa.length - 1; i >= 0; i--) {
 			if (cAlfa[i] == ' ' && sRet.length() > 0)
 				break;
-			if (cAlfa[i] == '�' && sRet.length() > 0)
+			if (cAlfa[i] == 'º' && sRet.length() > 0)
 				break;
 			if (JTools.isAlpha("" + cAlfa[i]) && sRet.length() > 0)
 				break;
@@ -3186,18 +3186,18 @@ public class JTools {
 	 */
 	public static String replaceForeignCharsForWeb(String zValue) {
 		StringBuffer buff = new StringBuffer(zValue);
-		buff = replaceForeignCharsForWebAcute(buff, "�", "a");
-		buff = replaceForeignCharsForWebAcute(buff, "�", "e");
-		buff = replaceForeignCharsForWebAcute(buff, "�", "i");
-		buff = replaceForeignCharsForWebAcute(buff, "�", "o");
-		buff = replaceForeignCharsForWebAcute(buff, "�", "u");
-		buff = replaceForeignCharsForWebAcute(buff, "�", "A");
-		buff = replaceForeignCharsForWebAcute(buff, "�", "E");
-		buff = replaceForeignCharsForWebAcute(buff, "�", "I");
-		buff = replaceForeignCharsForWebAcute(buff, "�", "O");
-		buff = replaceForeignCharsForWebAcute(buff, "�", "U");
-		buff = replaceForeignCharsForWebTilde(buff, "�", "n");
-		buff = replaceForeignCharsForWebTilde(buff, "�", "N");
+		buff = replaceForeignCharsForWebAcute(buff, "á", "a");
+		buff = replaceForeignCharsForWebAcute(buff, "é", "e");
+		buff = replaceForeignCharsForWebAcute(buff, "í", "i");
+		buff = replaceForeignCharsForWebAcute(buff, "ó", "o");
+		buff = replaceForeignCharsForWebAcute(buff, "ú", "u");
+		buff = replaceForeignCharsForWebAcute(buff, "Á", "A");
+		buff = replaceForeignCharsForWebAcute(buff, "É", "E");
+		buff = replaceForeignCharsForWebAcute(buff, "Í", "I");
+		buff = replaceForeignCharsForWebAcute(buff, "Ó", "O");
+		buff = replaceForeignCharsForWebAcute(buff, "Ú", "U");
+		buff = replaceForeignCharsForWebTilde(buff, "ñ", "n");
+		buff = replaceForeignCharsForWebTilde(buff, "Ñ", "N");
 		buff = replaceForeignCharsForWeb(buff, "'", "middot");
 		return buff.toString();
 	}
@@ -3223,21 +3223,21 @@ public class JTools {
 		return zValue;
 	}
 	public static String replaceWebForForeignChars(String value) {
-		StringBuffer zValue = new StringBuffer(value);
-		zValue = replaceWebForForeignChars(zValue, "&aacute;", "�");
-		zValue = replaceWebForForeignChars(zValue, "&eacute;", "�");
-		zValue = replaceWebForForeignChars(zValue, "&iacute;", "�");
-		zValue = replaceWebForForeignChars(zValue, "&oacute;", "�");
-		zValue = replaceWebForForeignChars(zValue, "&uacute;", "�");
-		zValue = replaceWebForForeignChars(zValue, "&Aacute;", "�");
-		zValue = replaceWebForForeignChars(zValue, "&Eacute;", "�");
-		zValue = replaceWebForForeignChars(zValue, "&Iacute;", "�");
-		zValue = replaceWebForForeignChars(zValue, "&Oacute;", "�");
-		zValue = replaceWebForForeignChars(zValue, "&Uacute;", "�");
-		zValue = replaceWebForForeignChars(zValue, "&ntilde;", "�");
-		zValue = replaceWebForForeignChars(zValue, "&Ntilde;", "�");
-		zValue = replaceWebForForeignChars(zValue, "&middot;", "'");
-		return zValue.toString();
+                StringBuffer zValue = new StringBuffer(value);
+                zValue = replaceWebForForeignChars(zValue, "&aacute;", "á");
+                zValue = replaceWebForForeignChars(zValue, "&eacute;", "é");
+                zValue = replaceWebForForeignChars(zValue, "&iacute;", "í");
+                zValue = replaceWebForForeignChars(zValue, "&oacute;", "ó");
+                zValue = replaceWebForForeignChars(zValue, "&uacute;", "ú");
+                zValue = replaceWebForForeignChars(zValue, "&Aacute;", "Á");
+                zValue = replaceWebForForeignChars(zValue, "&Eacute;", "É");
+                zValue = replaceWebForForeignChars(zValue, "&Iacute;", "Í");
+                zValue = replaceWebForForeignChars(zValue, "&Oacute;", "Ó");
+                zValue = replaceWebForForeignChars(zValue, "&Uacute;", "Ú");
+                zValue = replaceWebForForeignChars(zValue, "&ntilde;", "ñ");
+                zValue = replaceWebForForeignChars(zValue, "&Ntilde;", "Ñ");
+                zValue = replaceWebForForeignChars(zValue, "&middot;", "'");
+                return zValue.toString();
 	}
 	private static StringBuffer replaceWebForForeignChars(StringBuffer zValue, String zSearch, String zReplace) {
 		int pos = 0;
@@ -4174,20 +4174,20 @@ public class JTools {
 	public static String limpiarSimbolos(String texto) throws Exception {
 		StringBuilder out = new StringBuilder();
 		for (int c = 0; c < texto.length(); c++) {
-			if (texto.charAt(c) == '�' && texto.charAt(c) == '�')
+			if (texto.charAt(c) == 'Á' && texto.charAt(c) == 'á')
 				out.append('A');
-			else if (texto.charAt(c) == '�' || texto.charAt(c) == '�')
+			else if (texto.charAt(c) == 'É' || texto.charAt(c) == 'é')
 				out.append('E');
 //			else if (texto.charAt(c)=='S' || texto.charAt(c)=='Z' || texto.charAt(c)=='X') out.append('S');
-			else if (texto.charAt(c) == '�' || texto.charAt(c) == '�')
+			else if (texto.charAt(c) == 'Í' || texto.charAt(c) == 'í')
 				out.append('I');
-			else if (texto.charAt(c) == '�' || texto.charAt(c) == '�')
+			else if (texto.charAt(c) == 'Ó' || texto.charAt(c) == 'ó')
 				out.append('O');
-			else if (texto.charAt(c) == '�' || texto.charAt(c) == '�' || texto.charAt(c) == '�'
-					|| texto.charAt(c) == '�')
+			else if (texto.charAt(c) == 'Ú' || texto.charAt(c) == 'ú' || texto.charAt(c) == 'Ü'
+					|| texto.charAt(c) == 'ü')
 				out.append('U');
 //			else if (texto.charAt(c)=='Y' || texto.charAt(c)=='y') out.append('I');
-			else if (texto.charAt(c) == '�' || texto.charAt(c) == '�')
+			else if (texto.charAt(c) == 'Ñ' || texto.charAt(c) == 'ñ')
 				out.append('N');
 			else if (texto.charAt(c) == 'B' || texto.charAt(c) == 'b')
 				out.append('V');
@@ -4261,19 +4261,19 @@ public class JTools {
 //		line = line.replace("'", "&apos;");
 //		line = line.replace("\"", "&quot;");
 		line = line.replace("\\", "\\\\");
-		line = line.replace("�", "&aacute;");
-		line = line.replace("�", "&eacute;");
-		line = line.replace("�", "&iacute;");
-		line = line.replace("�", "&oacute;");
-		line = line.replace("�", "&uacute;");
-		line = line.replace("�", "&ntilde;");
-		line = line.replace("�", "&Aacute;");
-		line = line.replace("�", "&Eacute;");
-		line = line.replace("�", "&Iacute;");
-		line = line.replace("�", "&Oacute;");
-		line = line.replace("�", "&Uacute;");
-		line = line.replace("�", "&ntilde;");
-		line = line.replace("�", "&Ntilde;");
+                line = line.replace("á", "&aacute;");
+                line = line.replace("é", "&eacute;");
+                line = line.replace("í", "&iacute;");
+                line = line.replace("ó", "&oacute;");
+                line = line.replace("ú", "&uacute;");
+                line = line.replace("ñ", "&ntilde;");
+                line = line.replace("Á", "&Aacute;");
+                line = line.replace("É", "&Eacute;");
+                line = line.replace("Í", "&Iacute;");
+                line = line.replace("Ó", "&Oacute;");
+                line = line.replace("Ú", "&Uacute;");
+                line = line.replace("ñ", "&ntilde;");
+                line = line.replace("Ñ", "&Ntilde;");
 
 		return line;
 	}
@@ -4287,19 +4287,6 @@ public class JTools {
 //		line = line.replace("'", "&apos;");
 //		line = line.replace("\"", "&quot;");
 //		line = line.replace("\\", "\\\\");
-//		line = line.replace("�", "&aacute;");
-//		line = line.replace("�", "&eacute;");
-//		line = line.replace("�", "&iacute;");
-//		line = line.replace("�", "&oacute;");
-//		line = line.replace("�", "&uacute;");
-//		line = line.replace("�", "&ntilde;");
-//		line = line.replace("�", "&Aacute;");
-//		line = line.replace("�", "&Eacute;");
-//		line = line.replace("�", "&Iacute;");
-//		line = line.replace("�", "&Oacute;");
-//		line = line.replace("�", "&Uacute;");
-//		line = line.replace("�", "&ntilde;");
-//		line = line.replace("�", "&Ntilde;");
 
 //		return line;
 	}
@@ -4313,29 +4300,7 @@ public class JTools {
 		line = line.replace("\"", "&quot;");
 		line = line.replace("'", "&apos;");
 		line = line.replace("\\", "\\\\");
-//		line = line.replace("�", "&aacute;");
-//		line = line.replace("�", "&eacute;");
-//		line = line.replace("�", "&iacute;");
-//		line = line.replace("�", "&oacute;");
-//		line = line.replace("�", "&uacute;");
-//		line = line.replace("�", "&ntilde;");
-//		line = line.replace("�", "&Aacute;");
-//		line = line.replace("�", "&Eacute;");
-//		line = line.replace("�", "&Iacute;");
-//		line = line.replace("�", "&Oacute;");
-//		line = line.replace("�", "&Uacute;");
 
-//		line = line.replace("�", "&aacute;");
-//		line = line.replace("�", "&eacute;");
-//		line = line.replace("�", "&iacute;");
-//		line = line.replace("�", "&oacute;");
-//		line = line.replace("�", "&uacute;");
-//		line = line.replace("�", "&ntilde;");
-//		line = line.replace("�", "&Aacute;");
-//		line = line.replace("�", "&Eacute;");
-//		line = line.replace("�", "&Iacute;");
-//		line = line.replace("�", "&Oacute;");
-//		line = line.replace("�", "&Uacute;");
 
 		return line;
 	}
@@ -4970,7 +4935,7 @@ public static int crc16(byte[] bytes) throws Exception {
 
   public static String encriptarAES(String textoPlano, String skey, String siv) {
       try {
-          // Crear IV y clave de encriptaci�n
+          // Crear IV y clave de encriptación
           IvParameterSpec iv = new IvParameterSpec(siv.getBytes(StandardCharsets.UTF_8));
           SecretKeySpec skeySpec = new SecretKeySpec(skey.getBytes(StandardCharsets.UTF_8), "AES");
 
@@ -4981,7 +4946,7 @@ public static int crc16(byte[] bytes) throws Exception {
           // Encriptar texto plano
           byte[] encrypted = cipher.doFinal(textoPlano.getBytes(StandardCharsets.UTF_8));
 
-          // Convertir a Base64 para su representaci�n legible
+          // Convertir a Base64 para su representación legible
           return Base64.getEncoder().encodeToString(encrypted);
       } catch (Exception ex) {
           ex.printStackTrace();
@@ -4991,7 +4956,7 @@ public static int crc16(byte[] bytes) throws Exception {
 
   public static String desencriptarAES(String textoEncriptado, String skey, String siv) {
       try {
-          // Crear IV y clave de desencriptaci�n
+          // Crear IV y clave de desencriptación
           IvParameterSpec iv = new IvParameterSpec(siv.getBytes(StandardCharsets.UTF_8));
           SecretKeySpec skeySpec = new SecretKeySpec(skey.getBytes(StandardCharsets.UTF_8), "AES");
 
