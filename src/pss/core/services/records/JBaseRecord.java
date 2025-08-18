@@ -40,8 +40,8 @@ import pss.www.platform.actions.JWebRequest;
 /**
  * Base del acceso a los datos.
  * 
- * Contiene la estructura de los datos. El modelo de acceso a los datos est�tico
- * o din�mico.
+ * Contiene la estructura de los datos. El modelo de acceso a los datos estático
+ * o dinámico.
  * 
  * SubClases: JRecord, JRecords
  * 

@@ -19,7 +19,7 @@ public class GuiPersonaBSPs extends GuiPersonas {
 	 @Override
 		public void createActionMap() throws Exception {
 	    addActionNew( 1, "Nueva P.Física", KeyEvent.VK_F2 );
-	    addActionNew( 2, "Nueva P.Jur�dica" ,KeyEvent.VK_F3);
+	    addActionNew( 2, "Nueva P.Jurídica" ,KeyEvent.VK_F3);
 	}
 
   @Override

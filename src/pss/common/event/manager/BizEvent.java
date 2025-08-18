@@ -263,11 +263,11 @@ public class BizEvent extends JRecord {
 		this.addFixedItem(KEY, "id_event", "Id", false, false, 18);
 		this.addFixedItem(FIELD, "module", "Modulo", true, true, 50);
 		this.addFixedItem(FIELD, "company", "Company", true, true, 50);
-		this.addFixedItem(FIELD, "event_code", "C�digo", true, true, 5);
+		this.addFixedItem(FIELD, "event_code", "Código", true, true, 5);
 		this.addFixedItem(FIELD, "uniqueid", "Clave", true, false, 50);
 		this.addFixedItem(FIELD, "sender_user", "Sender Usuario", true, false, 50);
 		this.addFixedItem(FIELD, "sender_node", "Sender Nodo", true, false, 50);
-		this.addFixedItem(FIELD, "title", "T�tulo", true, false, 250);
+		this.addFixedItem(FIELD, "title", "Título", true, false, 250);
 		this.addFixedItem(FIELD, "info", "Info", true, false, 4000);
 		this.addFixedItem(FIELD, "event_datetime", "Fecha/Hora", true, true, 10);
 
@@ -280,7 +280,7 @@ public class BizEvent extends JRecord {
 		this.addFixedItem(VIRTUAL, "event_type", "Evento", true, true, 50);
 		this.addFixedItem(VIRTUAL, "descr_node", "Nodo", true, true, 200);
 		this.addFixedItem(VIRTUAL, "descr_company", "Empresa", true, true, 50);
-		this.addFixedItem(VIRTUAL, "descr_action", "Acci�n", true, true, 50);
+		this.addFixedItem(VIRTUAL, "descr_action", "Acción", true, true, 50);
 		this.addFixedItem(VIRTUAL, "descr_event_code", "Evento", true, true, 50);
 	}
 

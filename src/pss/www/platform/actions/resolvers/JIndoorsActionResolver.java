@@ -87,14 +87,14 @@ public abstract class JIndoorsActionResolver extends JBasicWebActionResolver {
       				request.setAttribute("session", session);
 							return super.act(redirector, resolver, objectModel, source, parameters);
 						} catch (Exception e) {
-							// Token inv�lido
+							// Token inválido
 							PssLogger.logError(e);
 							response.setStatus(HttpResponse.SC_UNAUTHORIZED);
 							throw new AuthenticationException("Acceso no Autorizado");
          }
       }
 
-      // Si no hay token, tambi�n denegar acceso
+      // Si no hay token, también denegar acceso
       response.setStatus(HttpResponse.SC_UNAUTHORIZED);
 			throw new AuthenticationException("Acceso no Autorizado");
   }

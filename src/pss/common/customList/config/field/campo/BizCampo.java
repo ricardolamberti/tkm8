@@ -889,14 +889,14 @@ public class BizCampo extends BizField implements ICampo,IItem  {
 		this.addFixedItem(FIELD, "secuencia_old", "Record Owner old ", false, false, 18);
 		this.addFixedItem(FIELD, "record_owner", "Record Owner", true, false, 250);
 		this.addFixedItem(FIELD, "record_source", "Record Source", true, false, 250);
-		this.addFixedItem(FIELD, "rel_id", "Relaci�n", true, false, 20);
+		this.addFixedItem(FIELD, "rel_id", "Relación", true, false, 20);
 		this.addFixedItem(FIELD, "campo", "Campo", true, false, 100);
 		this.addFixedItem(FIELD, "orden_orden", "Orden orden", true, false, 18);
 		this.addFixedItem(FIELD, "orden_ascdesc", "Orden ascdesc", true, false, 10);
 		this.addFixedItem(FIELD, "orden_limite", "Orden limite", true, false, 18);
 		this.addFixedItem(FIELD, "nombre_columna", "Nombre Columna", true, false, 200);
 		this.addFixedItem(FIELD, "formato", "Formato", true, false, 10);
-		this.addFixedItem(FIELD, "formato_param", "Formato Par�metro", true, false, 1000);
+		this.addFixedItem(FIELD, "formato_param", "Formato Parámetro", true, false, 1000);
 		this.addFixedItem(FIELD, "funcion", "Función", true, false, 100);
 		this.addFixedItem(FIELD, "porcentaje", "Porcentaje", true, false, 1);
 		this.addFixedItem(FIELD, "ambito_porcentaje", "Ambito Porcentaje", true, false, 1000);
@@ -937,7 +937,7 @@ public class BizCampo extends BizField implements ICampo,IItem  {
 		this.addFixedItem(FIELD, "porc_diferencia", "Porcentaje diferencia", true, false, 1);
 		this.addFixedItem(FIELD, "campo_diferencia", "Campo diferencia", true, false, 100);
 		this.addFixedItem(FIELD, "corte_control", "Corte control", true, false, 1);
-		this.addFixedItem(VIRTUAL, "descr_orientacion", "Orientaci�n", true, true, 100);
+		this.addFixedItem(VIRTUAL, "descr_orientacion", "Orientación", true, true, 100);
 		this.addFixedItem(VIRTUAL, "campo_function", "campo funcion", true, true, 1000);
 		this.addFixedItem(VIRTUAL, "campo_serial", "campo_serial", true, true, 1000);
 		this.addFixedItem(VIRTUAL, "rol_descripcion", "rol descripcion", true, false, 1000);

@@ -347,11 +347,11 @@ public class BizLoginTrace extends JRecord {
 		
 		if (this.isAutoLogin()) {
 			user=BizUsuario.createUserAutoLogin();
-			if (user==null) JExcepcion.SendError(getMessage("Usuario Inv�lido"));
+			if (user==null) JExcepcion.SendError(getMessage("Usuario Inválido"));
 			return user;
 		} 
 		
-		JExcepcion.SendError(getMessage("Usuario Inv�lido"));
+		JExcepcion.SendError(getMessage("Usuario Inválido"));
 		return null;
 	}
 

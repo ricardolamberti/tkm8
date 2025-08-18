@@ -986,7 +986,7 @@ public abstract class JBaseWin implements IInMemory,Transferable,Serializable {
 	 * 
 	 * jbaccion.toSAX(wrapper);
 	 * 
-	 * if (bRecursive) { if (jbaccion.hasSubActions()) { // Subacci�n jbaccion.GetSubAcciones().firstRecord(); while (jbaccion.GetSubAcciones().nextRecord()) { BizAction subaccion = (BizAction) jbaccion .GetSubAcciones().getRecord(); WebGenerarAcciones(wrapper, bRecursive, subaccion, bToolbar, bMenu, bWeb, zID); } }
+	 * if (bRecursive) { if (jbaccion.hasSubActions()) { // Subacción jbaccion.GetSubAcciones().firstRecord(); while (jbaccion.GetSubAcciones().nextRecord()) { BizAction subaccion = (BizAction) jbaccion .GetSubAcciones().getRecord(); WebGenerarAcciones(wrapper, bRecursive, subaccion, bToolbar, bMenu, bWeb, zID); } }
 	 * 
 	 * wrapper.endElement("item"); } } }
 	 */
@@ -1199,7 +1199,7 @@ public abstract class JBaseWin implements IInMemory,Transferable,Serializable {
 			arguments="dg_export=serializer=htmlfull,object=win_list_x,range=all,preserve=T,history=N&dg_win_list_nav=name_op1=export,with_preview_op1=N,embedded_op1=false,toolbar_op1=none,&";
 		else if (builderArguments.equals("excel")) {
 			arguments="dg_export=serializer=excel,object=win_list_x,range=all,preserve=T,history=N";
-			excelArgs ="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>";
+                       excelArgs ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
 		}
 		else if (builderArguments.equals("csv"))
 			arguments="dg_export=serializer=csv,object=win_list_x,range=all,preserve=T,history=N";
@@ -1238,7 +1238,7 @@ public abstract class JBaseWin implements IInMemory,Transferable,Serializable {
 		StringBuffer buffer = new StringBuffer();
 		BufferedReader in=null;
     try {
-				InputStreamReader isr = new InputStreamReader(url.openStream(), "ISO-8859-1");
+                               InputStreamReader isr = new InputStreamReader(url.openStream(), "UTF-8");
 				in = new BufferedReader(isr);
 				while ((inputLine = in.readLine()) != null) {
 					 if (builderArguments.equals("excel")) 

@@ -243,7 +243,7 @@ public class BizBSPConfig extends JRecord  {
   	action.setClassevento(BizBSPCompany.class.getCanonicalName());
   	action.setTipoPeriodicidad(BizSqlEventAction.MENSUAL);
   	action.setUltimoDia(true);
-  	action.setDescripcion("Informe Peri�dico");
+  	action.setDescripcion("Informe Periódico");
   	action.setAction(BizSqlEventAction.EMAIL);
   	action.setCorreo("default");
   	if (action.isNullIdPlantilla()) {

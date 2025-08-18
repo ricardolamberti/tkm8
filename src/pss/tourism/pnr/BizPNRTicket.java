@@ -2757,7 +2757,7 @@ public class BizPNRTicket extends JRecord implements IConciliable {
 		this.addFixedItem(FIELD, "rch_rmk", "Reason code hotel(Remark)", true, false, 100);
 		this.addFixedItem(FIELD, "vendedor", "Vendedor", true, false, 20);
 		this.addFixedItem(FIELD, "centro_costos", "Centro Costos", true, false, 20);
-		this.addFixedItem(FIELD, "observacion", "Observaci�n", true, false, 100);
+		this.addFixedItem(FIELD, "observacion", "Observación", true, false, 100);
 		this.addFixedItem(FIELD, "nombre_tarjeta", "Tarjeta", true, false, 50);
 		this.addFixedItem(FIELD, "monto_tarjeta", "Monto Tarjeta", true, false, 18, 4);
 		this.addFixedItem(FIELD, "numero_tarjeta", "Número Tarjeta", true, false, 30).setHide(true);
@@ -3571,7 +3571,7 @@ public class BizPNRTicket extends JRecord implements IConciliable {
 		rels.addCamposMailing(BizMailingPersona.CCOSTO, "centro_costos", BizPNRTicket.class.getName(), "0", "=");
 		rels.addCamposMailing(BizMailingPersona.CLIENTE_REDUCIDO, "customer_id_reducido", BizPNRTicket.class.getName(), "0", "=");
 
-		rels.setChatSpec("Si se vende un boleto de, por ejemplo, $1000 y luego hay un cambio de fecha de viaje y se requiere cobrar $100 extra, se emitir� un boleto de "+
+		rels.setChatSpec("Si se vende un boleto de, por ejemplo, $1000 y luego hay un cambio de fecha de viaje y se requiere cobrar $100 extra, se emitirá un boleto de "+
 		  " de 'Boleto, Tarifas, Tarifa (Moneda local), Neto facturada (local)' = $1000,'Boleto, Tarifas, Tarifa (Moneda local), Tarifa (local)' = $1000 "
 		  + "(anteriores reemisiones mas esta) "
 		  + "y 'Boleto, Reemitido?'=true; y otro ticket con 'Boleto, Tarifas, Tarifa (Moneda local), Neto facturada (local)' = $100, "
@@ -6057,7 +6057,7 @@ private String extractYearFromFilename(String filename) {
 	//FARETYPE_B B privada via cad 35
 	//FARETYPE_C C privada c acct code
 	//FARETYPE_U U no hay identif pero es tarifa negociada
-	//FARETYPE_SPACE Blanco � Tarifa P�blica
+	//FARETYPE_SPACE Blanco → Tarifa Pública
 	
 	static JMap<String, String> objTipoTarifas;
 	public static JMap<String, String> getTipoTarifas() throws Exception {
@@ -6067,7 +6067,7 @@ private String extractYearFromFilename(String filename) {
 		map.addElement("FARETYPE_B", "B privada via cad 35" );
 		map.addElement("FARETYPE_C", "C privada c acct code" );
 		map.addElement("FARETYPE_U", "U tarifa negociada" );
-		map.addElement("FARETYPE_SPACE", "Tarifa P�blica" );
+		map.addElement("FARETYPE_SPACE", "Tarifa Pública" );
 		return objTipoTarifas= map;
 	}
 	

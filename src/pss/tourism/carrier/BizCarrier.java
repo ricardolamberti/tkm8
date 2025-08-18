@@ -209,7 +209,7 @@ public class BizCarrier extends JRecord {
 	
 	@Override
 	public String getRecordName() throws Exception {
-		return "Linea A�rea";
+		return "Línea Aérea";
 	}
 	
 }
