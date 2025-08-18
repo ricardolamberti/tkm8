@@ -10,7 +10,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.ls.DOMImplementationLS;
 import org.w3c.dom.ls.LSSerializer;
 
-import pss.common.customList.config.relation.JRelations;
 import pss.core.data.interfaces.connections.JBDatos;
 import pss.core.data.interfaces.sentences.JBaseRegistro;
 import pss.core.data.interfaces.structure.IOrderByControl;
@@ -36,6 +35,7 @@ import pss.core.tools.XML.JXMLElementFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JList;
 import pss.core.tools.collections.JMap;
+import pss.www.platform.actions.JWebRequest;
 
 /**
  * Base del acceso a los datos.
@@ -55,7 +55,7 @@ public class JBaseRecord implements Serializable {
 	private String uniqueID = UUID.randomUUID().toString();
   
 	public String getUniqueId() {
-		return uniqueID.startsWith("rec_") ?uniqueID:"rec_"+uniqueID;
+		return uniqueID.startsWith(JWebRequest.OBJ_PREFIX+"rec_") ?uniqueID:JWebRequest.OBJ_PREFIX+"rec_"+uniqueID;
 
 	}
 

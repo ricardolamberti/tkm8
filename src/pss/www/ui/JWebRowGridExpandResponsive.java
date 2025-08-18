@@ -384,7 +384,7 @@ public class JWebRowGridExpandResponsive  extends JWebPanelResponsive implements
 	@Override
 	protected void containerToXML(JXMLContent zContent) throws Exception {
 		this.iRegisteredObjectId = zContent.addObject(this.getWinName(), this.getWin());
-		String objectContext = zContent.addObject(""+getTable().getWin().hashCode(), getTable().getWin());
+		String objectContext = zContent.addObject(""+getTable().getWin().getUniqueId(), getTable().getWin());
 		
 		if (this.oActionBar!=null) 
 			this.oActionBar.addActionsFor(this.getWin(), this.iRegisteredObjectId, null, true, true, false, isModal(),objectContext);

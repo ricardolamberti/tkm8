@@ -29,6 +29,7 @@ import pss.core.tools.collections.JList;
 import pss.core.tools.collections.JMap;
 import pss.core.win.JWin;
 import pss.core.win.submits.JAct;
+import pss.www.platform.actions.JWebRequest;
 import pss.www.platform.actions.requestBundle.JWebActionData;
 import pss.www.platform.actions.requestBundle.JWebActionDataField;
 import pss.www.platform.applications.JHistory;
@@ -185,7 +186,7 @@ public abstract class JIndoorsActionResolver extends JBasicWebActionResolver {
 				JWebActionDataField filter=iter.nextElement();
 	//			if (filter.getName().endsWith("_time") || filter.getName().endsWith("_date")) continue;
 				JWin win =null;
-				if (filter.getValue().startsWith("obj_")) 
+				if (filter.getValue().startsWith(JWebRequest.OBJ_PREFIX)) 
 					win = (JWin)this.getRequest().getRegisterObject(filter.getValue());
 				if (win!=null)
 					fm.addFilterMap(filter.getName(), win);

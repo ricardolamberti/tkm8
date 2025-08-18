@@ -630,11 +630,8 @@ public class JWebWinFactory {
 		JBaseWin obj = null;
 		if (!value.startsWith(JWebRequest.OBJ_PREFIX))
 			return obj;
-		if (value.startsWith(JWebRequest.IN_TEMP_PREFIX)) {
-			obj = (JBaseWin) packager.getRegisterObjectTemp(value.substring(JWebRequest.IN_TEMP_PREFIX.length()));
-		} else {
-			obj = (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(value);
-		}
+		obj = (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(value);
+		
 		return obj;
 	}
 

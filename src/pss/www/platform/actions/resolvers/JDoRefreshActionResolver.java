@@ -13,6 +13,7 @@ import pss.core.tools.JMessageInfo;
 import pss.core.tools.collections.JIterator;
 import pss.core.win.actions.BizAction;
 import pss.www.platform.actions.JWebActionFactory;
+import pss.www.platform.actions.JWebRequest;
 import pss.www.platform.actions.requestBundle.JWebActionData;
 import pss.www.platform.actions.requestBundle.JWebActionDataField;
 import pss.www.platform.actions.results.JWebActionResult;
@@ -77,7 +78,7 @@ public class JDoRefreshActionResolver extends JDoAjaxActionResolver {
 			while (iter.hasMoreElements()) {
 				JWebActionDataField filter=iter.nextElement();
 				if (filter.getName().endsWith("_time") || filter.getName().endsWith("_date")) continue;
-				if (filter.getValue().startsWith("obj_")) {
+				if (filter.getValue().startsWith(JWebRequest.OBJ_PREFIX)) {
 					Serializable obj = this.getRequest().getRegisterObject(filter.getValue());
 					action.addFilterMap(filter.getName(), obj);
 					continue;

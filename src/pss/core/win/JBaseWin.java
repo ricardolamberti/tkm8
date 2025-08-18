@@ -34,6 +34,7 @@ import pss.core.winUI.icons.BizIcon;
 import pss.core.winUI.icons.GuiIcon;
 import pss.core.winUI.icons.GuiIconos;
 import pss.www.platform.actions.JWebActionFactory;
+import pss.www.platform.actions.JWebRequest;
 import pss.www.platform.actions.resolvers.JDoInternalRequestResolver;
 
 public abstract class JBaseWin implements IInMemory,Transferable,Serializable {
@@ -1453,7 +1454,7 @@ public abstract class JBaseWin implements IInMemory,Transferable,Serializable {
 	}
 
 	public String getUniqueId() throws Exception {
-		return uniqueID.startsWith("win_") ?uniqueID:"win_"+uniqueID;
+		return uniqueID.startsWith(JWebRequest.OBJ_PREFIX+"win_") ?uniqueID:JWebRequest.OBJ_PREFIX+"win_"+uniqueID;
 	}
 	
 	// funciones que se disparan en el recorrido, de la generacion de la grilla, se habilitan los siguientes metodos para hacer calculos y no tener que hacer dos recorridas
