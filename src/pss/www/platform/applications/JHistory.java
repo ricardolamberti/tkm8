@@ -155,66 +155,14 @@ public class JHistory implements Serializable {
 		this.firstProvider=null;
 	}
 
-        public void clearAllSubmits() throws Exception {
-                Iterator<JHistoryProvider> iter = this.providers.values().iterator();
-                while (iter.hasNext()) {
-                        JHistoryProvider p = iter.next();
-                        if (!p.refreshOnSubmit()) continue;
-                        p.getAction().clearSubmit();
-                }
-        }
-
-        // --- lazy serialization helpers ---
-        public String serializeShallow() throws Exception {
-                StringBuilder sb = new StringBuilder();
-                sb.append(isModal ? "1" : "0");
-                sb.append('|');
-                if (providers != null) {
-                        boolean first = true;
-                        for (String k : providers.keySet()) {
-                                if (!first) sb.append(',');
-                                sb.append(k);
-                                first = false;
-                        }
-                }
-                sb.append('|');
-                if (firstProvider != null && firstProvider.getAction() != null)
-                        sb.append(firstProvider.getAction().getProviderName());
-                sb.append('|');
-                if (providersWithinLevel != null) {
-                        boolean first = true;
-                        for (java.util.Map.Entry<String, String> e : providersWithinLevel.entrySet()) {
-                                if (!first) sb.append(',');
-                                sb.append(e.getKey()).append('=').append(e.getValue());
-                                first = false;
-                        }
-                }
-                return sb.toString();
-        }
-
-        public void unSerializeShallow(String data) throws Exception {
-                if (data == null) return;
-                String[] parts = data.split("\\|", -1);
-                if (parts.length > 0) this.isModal = "1".equals(parts[0]);
-                if (parts.length > 1 && !parts[1].isEmpty()) {
-                        this.providers = new LinkedHashMap<String, JHistoryProvider>();
-                        for (String k : parts[1].split(",")) {
-                                if (!k.isEmpty()) this.providers.put(k, null);
-                        }
-                }
-                if (parts.length > 3 && !parts[3].isEmpty()) {
-                        this.providersWithinLevel = new LinkedHashMap<String, String>();
-                        for (String kv : parts[3].split(",")) {
-                                int p = kv.indexOf('=');
-                                if (p > 0) this.providersWithinLevel.put(kv.substring(0, p), kv.substring(p + 1));
-                        }
-                }
-        }
-
-        public java.util.Set<String> getProviderKeysFromShallow() {
-                if (providers == null) return java.util.Collections.emptySet();
-                return providers.keySet();
-        }
+	public void clearAllSubmits() throws Exception {
+		Iterator<JHistoryProvider> iter = this.providers.values().iterator();
+		while (iter.hasNext()) {
+			JHistoryProvider p = iter.next();
+			if (!p.refreshOnSubmit()) continue;
+			p.getAction().clearSubmit();
+		}
+	}
 	public void leaveHistory() throws Exception {
 		this.markInHistory(false);
 	}

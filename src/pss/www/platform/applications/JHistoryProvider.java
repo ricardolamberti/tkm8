@@ -187,25 +187,8 @@ public class JHistoryProvider implements Serializable {
 		this.getAction().setSubmitedByUser(this.isNavSubmitedByUser());
 	}
 	
-        public boolean isNavSubmitedByUser() throws Exception {
-                if (!this.hasNavigation()) return false;
-                return this.getNavigation().get("button_search")!=null;
-        }
-
-        // --- lazy serialization helpers ---
-        public String serializeShallow() throws Exception {
-                StringBuilder sb = new StringBuilder();
-                sb.append(selectedItem == null ? "" : selectedItem);
-                sb.append('|').append(scroller == null ? "" : scroller);
-                sb.append('|').append(multiSelectName == null ? "" : multiSelectName);
-                return sb.toString();
-        }
-
-        public void unSerializeShallow(String data) throws Exception {
-                if (data == null) return;
-                String[] parts = data.split("\\|", -1);
-                if (parts.length > 0) this.selectedItem = parts[0];
-                if (parts.length > 1) this.scroller = parts[1];
-                if (parts.length > 2) this.multiSelectName = parts[2];
-        }
+	public boolean isNavSubmitedByUser() throws Exception {
+		if (!this.hasNavigation()) return false;
+		return this.getNavigation().get("button_search")!=null;
+	}
 }

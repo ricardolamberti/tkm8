@@ -68,9 +68,6 @@ import pss.www.platform.users.history.BizUserHistory;
  */
 public class JDoPssActionResolver extends JIndoorsActionResolver implements IControlToBD {
 
-        private static final JDoPssActionResolver INSTANCE = new JDoPssActionResolver();
-        public static JDoPssActionResolver get() { return INSTANCE; }
-
 	boolean resetRegisteredObjects = true;
 	boolean bNoSubmit = false;
 	boolean bBack = false;
