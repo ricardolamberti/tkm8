@@ -733,24 +733,33 @@ public class JWebWinFactory {
                 final byte[] bytes = JTools.stringToByteArray(dict);
 
                 final DistCache cache = CacheProvider.get();
-                final int ttlSec = Integer.getInteger("pss.dict.ttlSeconds", 600);
-                cache.putBytes("DICT:" + dictId, bytes, ttlSec);
+                final int ttlSec = dictTtlSec();
+                cache.putBytes(dictKey(dictId), bytes, ttlSec);
 
                 final String userId = getCurrentUserId(req);
                 final String pageId = getOrCreatePageId(req);
                 final long iat = System.currentTimeMillis();
-                final long exp = iat + (long) ttlSec * 600000L;
+                final long exp = iat + (long) ttlSec * 1000L;
 
                 final String payload = String.join("|", dictId, userId, pageId, String.valueOf(iat), String.valueOf(exp));
                 final byte[] sig = hmacSha256(getDictSecret(), payload.getBytes(StandardCharsets.UTF_8));
                 final String token = "v1." + b64url(payload.getBytes(StandardCharsets.UTF_8)) + "." + b64url(sig);
 
                 final String curKey = "DICTCUR:" + userId + ":" + pageId;
-                String prev = cacheGetString(cache, curKey);
-                if (prev != null && !prev.equals(dictId)) {
-                        cacheRemove(cache, "DICT:" + prev);
-                }
                 cachePutString(cache, curKey, dictId, ttlSec);
+
+                final String iKey = idxKey(userId, pageId);
+                java.util.List<DictIdxEntry> idx = readIndex(cache, iKey);
+                idx.add(new DictIdxEntry(iat, dictId));
+                int max = dictMaxHistory();
+                if (idx.size() > max) {
+                        int toRemove = idx.size() - max;
+                        for (int i = 0; i < toRemove; i++) {
+                                cacheRemove(cache, dictKey(idx.get(i).id));
+                        }
+                        idx = new java.util.ArrayList<>(idx.subList(toRemove, idx.size()));
+                }
+                writeIndex(cache, iKey, idx, ttlSec);
 
                 return token;
         }
@@ -796,10 +805,66 @@ public class JWebWinFactory {
                         throw new SecurityException("stale dictionary token");
                 }
 
-                byte[] data = cache.getBytes("DICT:" + dictId);
+                byte[] data = cache.getBytes(dictKey(dictId));
                 if (data == null)
                         throw new IllegalStateException("dictionary not found (evicted/expired)");
                 return data;
+        }
+
+        /** Purgar por TOKEN: elimina todos los diccionarios anteriores para (userId,pageId) del token. */
+        public int purgeOlderDictionariesByToken(JWebRequest req, String token) throws Exception {
+                if (token == null || token.isEmpty())
+                        throw new IllegalArgumentException("missing token");
+                String[] parts = token.split("\\.", 3);
+                if (parts.length != 3 || !"v1".equals(parts[0]))
+                        throw new IllegalArgumentException("bad token format");
+                String payload = new String(b64urlDecode(parts[1]), java.nio.charset.StandardCharsets.UTF_8);
+                String[] f = payload.split("\\|");
+                if (f.length != 5)
+                        throw new IllegalArgumentException("bad payload");
+                String dictId = f[0];
+                String userId = f[1];
+                String pageId = f[2];
+                if (!getCurrentUserId(req).equals(userId))
+                        throw new SecurityException("user mismatch");
+                return purgeOlderDictionariesInternal(userId, pageId, dictId);
+        }
+
+        /** Purgar por dictId con pageId conocido (usa user actual). */
+        public int purgeOlderDictionaries(JWebRequest req, String pageId, String dictId) throws Exception {
+                return purgeOlderDictionariesInternal(getCurrentUserId(req), pageId, dictId);
+        }
+
+        /** Implementación: borra DICT:<id> anteriores al 'cutId' y reescribe DICTIDX. */
+        private int purgeOlderDictionariesInternal(String userId, String pageId, String cutDictId) throws Exception {
+                DistCache cache = CacheProvider.get();
+                String iKey = idxKey(userId, pageId);
+                java.util.List<DictIdxEntry> idx = readIndex(cache, iKey);
+                if (idx.isEmpty())
+                        return 0;
+                int cut = -1;
+                for (int i = 0; i < idx.size(); i++) {
+                        if (idx.get(i).id.equals(cutDictId)) {
+                                cut = i;
+                                break;
+                        }
+                }
+                if (cut <= 0)
+                        return 0;
+                int removed = 0;
+                for (int i = 0; i < cut; i++) {
+                        cacheRemove(cache, dictKey(idx.get(i).id));
+                        removed++;
+                }
+                java.util.List<DictIdxEntry> newIdx = new java.util.ArrayList<>(idx.subList(cut, idx.size()));
+                writeIndex(cache, iKey, newIdx, dictTtlSec());
+                String curKey = "DICTCUR:" + userId + ":" + pageId;
+                String last = newIdx.get(newIdx.size() - 1).id;
+                String cur = cacheGetString(cache, curKey);
+                if (cur == null || !cur.equals(last)) {
+                        cachePutString(cache, curKey, last, dictTtlSec());
+                }
+                return removed;
         }
 
         private static byte[] hmacSha256(String secret, byte[] data) throws Exception {
@@ -824,6 +889,14 @@ public class JWebWinFactory {
                 return s;
         }
 
+        private static int dictTtlSec() {
+                return Integer.getInteger("pss.dict.ttlSeconds", 600);
+        }
+
+        private static int dictMaxHistory() {
+                return Integer.getInteger("pss.dict.maxHistory", 50);
+        }
+
         private static String getCurrentUserId(JWebRequest req) {
                 JWebApplicationSession sess = req.getSession();
                 return (sess != null) ? sess.getSessionId() : "0";
@@ -832,6 +905,53 @@ public class JWebWinFactory {
         private static String getOrCreatePageId(JWebRequest req) {
                 String pid = req.getRequestid();
                 return (pid != null && !pid.isEmpty()) ? pid : getCurrentUserId(req);
+        }
+
+        private static String idxKey(String userId, String pageId) {
+                return "DICTIDX:" + userId + ":" + pageId;
+        }
+
+        private static String dictKey(String dictId) {
+                return "DICT:" + dictId;
+        }
+
+        private static final class DictIdxEntry {
+                final long iat;
+                final String id;
+
+                DictIdxEntry(long iat, String id) {
+                        this.iat = iat;
+                        this.id = id;
+                }
+        }
+
+        private static java.util.List<DictIdxEntry> readIndex(DistCache cache, String key) throws Exception {
+                byte[] b = cache.getBytes(key);
+                java.util.List<DictIdxEntry> out = new java.util.ArrayList<>();
+                if (b == null)
+                        return out;
+                String s = new String(b, java.nio.charset.StandardCharsets.UTF_8);
+                for (String line : s.split("\\R")) {
+                        line = line.trim();
+                        if (line.isEmpty())
+                                continue;
+                        int sp = line.indexOf(' ');
+                        if (sp <= 0)
+                                continue;
+                        long iat = Long.parseLong(line.substring(0, sp));
+                        String id = line.substring(sp + 1);
+                        out.add(new DictIdxEntry(iat, id));
+                }
+                out.sort((a, b2) -> Long.compare(a.iat, b2.iat));
+                return out;
+        }
+
+        private static void writeIndex(DistCache cache, String key, java.util.List<DictIdxEntry> idx, int ttlSec)
+                        throws Exception {
+                StringBuilder sb = new StringBuilder();
+                for (DictIdxEntry e : idx)
+                        sb.append(e.iat).append(' ').append(e.id).append('\n');
+                cache.putBytes(key, sb.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8), ttlSec);
         }
 
         private static void cachePutString(DistCache cache, String key, String value, int ttlSec) throws Exception {
