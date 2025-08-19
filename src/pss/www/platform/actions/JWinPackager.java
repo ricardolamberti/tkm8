@@ -15,6 +15,8 @@ import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import pss.core.data.interfaces.structure.RFilter;
 import pss.core.services.fields.JObject;
@@ -36,8 +38,10 @@ import pss.www.platform.cache.CacheProvider;
 public class JWinPackager {
 
 
-	private final JWebWinFactory factory;
-	private final ObjectMapper objectMapper = new ObjectMapper();
+        private final JWebWinFactory factory;
+        private final ObjectMapper objectMapper = new ObjectMapper()
+                        .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                        .configure(SerializationFeature.WRITE_NULL_MAP_VALUES, false);
 
 	public static String b64url(byte[] data) {
 		return Base64.getUrlEncoder().withoutPadding().encodeToString(data);
