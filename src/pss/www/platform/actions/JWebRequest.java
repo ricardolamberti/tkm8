@@ -45,6 +45,12 @@ import pss.www.platform.applications.JWebHistoryManager;
 import pss.www.platform.applications.JWebHistoryManager.JLocalHistoryManager;
 import pss.www.platform.applications.JWebServer;
 import pss.www.platform.cache.CacheProvider;
+import pss.www.platform.actions.resolvers.JDoPssActionResolver;
+import pss.history.DistCacheHistoryStore;
+import pss.history.HistoryChunker;
+import pss.history.HistoryEnvelope;
+import pss.history.HistoryJson;
+import pss.history.LazyJWebHistoryManager;
 import pss.www.ui.controller.JFrontDoorUICoordinator;
 import pss.www.ui.processing.JWebActionRequestProcessor;
 import pss.www.ui.processing.JWebUICoordinator;
@@ -706,15 +712,19 @@ public class JWebRequest {
 		return null;
 	}
 
-	private static String sha256(byte[] data) throws Exception {
-		MessageDigest md = MessageDigest.getInstance("SHA-256");
-		byte[] digest = md.digest(data);
-		StringBuilder sb = new StringBuilder();
-		for (byte b : digest) {
-			sb.append(String.format("%02x", b));
-		}
-		return sb.toString();
-	}
+        private static String sha256(byte[] data) throws Exception {
+                MessageDigest md = MessageDigest.getInstance("SHA-256");
+                byte[] digest = md.digest(data);
+                StringBuilder sb = new StringBuilder();
+                for (byte b : digest) {
+                        sb.append(String.format("%02x", b));
+                }
+                return sb.toString();
+        }
+
+        private static String base64Url(byte[] data) {
+                return Base64.getUrlEncoder().withoutPadding().encodeToString(data);
+        }
 
 	private Object fetchFromCache(String handle) {
 		try {
@@ -778,19 +788,28 @@ public class JWebRequest {
 
 	public synchronized String registerObjectObj(Serializable zObject, boolean temp) throws Exception {
 
-		if (zObject instanceof JBaseWin)
-			return registerWinObjectObj((JBaseWin) zObject);
-		if (isLargeObject(zObject)) {
-			String id = IN_CACHED_PREFIX + UUID.randomUUID().toString();
-			byte[] bytes = serializeObjectToBytes(zObject);
-			CacheProvider.get().putBytes(id, bytes, CACHE_EXPIRE_SECONDS);
-			addRegisteredObject(id, OUT_CACHE_OBJ_PREFIX + id);
+                if (zObject instanceof JBaseWin)
+                        return registerWinObjectObj((JBaseWin) zObject);
+                if (historyLazyEnabled() && (zObject instanceof JWebHistoryManager)) {
+                        HistoryEnvelope env = HistoryChunker.saveChunked((JWebHistoryManager) zObject,
+                                        new DistCacheHistoryStore(), historyTtlSec());
+                        String json = HistoryJson.toJson(env);
+                        String payload = "LAZY_HM:" + base64Url(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                        String id = IN_POINTER_PREFIX + sha256(JTools.stringToByteArray(payload));
+                        addRegisteredObject(id, payload);
+                        return id;
+                }
+                if (isLargeObject(zObject)) {
+                        String id = IN_CACHED_PREFIX + UUID.randomUUID().toString();
+                        byte[] bytes = serializeObjectToBytes(zObject);
+                        CacheProvider.get().putBytes(id, bytes, CACHE_EXPIRE_SECONDS);
+                        addRegisteredObject(id, OUT_CACHE_OBJ_PREFIX + id);
 
 			return id;
 		}
-		String payload = serializeObject(zObject);
-		String id = IN_POINTER_PREFIX + sha256(JTools.stringToByteArray(payload));
-		addRegisteredObject(id, payload);
+                String payload = serializeObject(zObject);
+                String id = IN_POINTER_PREFIX + sha256(JTools.stringToByteArray(payload));
+                addRegisteredObject(id, payload);
 
 
 		return id;
@@ -928,11 +947,16 @@ public class JWebRequest {
 				String json = JTools.byteVectorToString(raw);
 				PssLogger.logInfo("Reconstuir JSON: ["+key+"]"+json);
 				objOut = new JWinPackager(new JWebWinFactory(null)).jsonToBaseRec(json);
-			} else {
-				PssLogger.logInfo("Reconstuir JSON: ["+key+"]"+obj);
+                        } else if (obj.startsWith("LAZY_HM:")) {
+                                String b64 = obj.substring("LAZY_HM:".length());
+                                String json = new String(Base64.getUrlDecoder().decode(b64), java.nio.charset.StandardCharsets.UTF_8);
+                                HistoryEnvelope env = HistoryJson.fromJson(json);
+                                objOut = LazyJWebHistoryManager.load(new DistCacheHistoryStore(), env, JDoPssActionResolver.get());
+                        } else {
+                                PssLogger.logInfo("Reconstuir JSON: ["+key+"]"+obj);
 
-				objOut = deserializeObject(obj);
-			}
+                                objOut = deserializeObject(obj);
+                        }
 			addObjectCreated(key, objOut);
 			return objOut;
 		} catch (Exception e) {
@@ -1160,16 +1184,19 @@ public class JWebRequest {
 		return null;
 	}
 
-	public static Serializable deserializeObjectFromBytes(byte[] data) {
-		if (data == null)
-			return null;
-		try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data))) {
-			return (Serializable) ois.readObject();
-		} catch (Exception e) {
-			PssLogger.logError(e);
-			return null;
-		}
-	}
+        public static Serializable deserializeObjectFromBytes(byte[] data) {
+                if (data == null)
+                        return null;
+                try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data))) {
+                        return (Serializable) ois.readObject();
+                } catch (Exception e) {
+                        PssLogger.logError(e);
+                        return null;
+                }
+        }
+
+        private static boolean historyLazyEnabled() { return Boolean.getBoolean("pss.history.lazy.enabled"); }
+        private static int historyTtlSec() { return Integer.getInteger("pss.history.ttlSeconds", 600); }
 
 //	public static String baseWinToSession(JBaseWin zOwner) throws Exception {
 ////	  if (!zOwner.canConvertToURL()) return serializeObject(zOwner);
