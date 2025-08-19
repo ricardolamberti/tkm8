@@ -65,7 +65,7 @@ public class JLoginView extends JWebView implements IActionPerform, ILoginPage {
 	@Override
 	protected void build() throws Exception {
 
-		// this.setTitle("Inicio de sesión");
+		// this.setTitle("Inicio de sesiï¿½n");
 		// this.setIcon(JWebIcon.getPssIcon(GuiIcon.LOGIN_ICON));
 		analizeIniConfiguration();
 
@@ -81,7 +81,7 @@ public class JLoginView extends JWebView implements IActionPerform, ILoginPage {
 		JWebDivResponsive formDiv = new JWebDivResponsive();
 		JWebDivResponsive formDiv2 = new JWebDivResponsive();
 		JWebImageResponsive imagen = new JWebImageResponsive(JPssImage.SOURCE_PSS, "logos/" + BizPssConfig.getPssConfig().getLogo(), null);
-		JWebHResponsive title = new JWebHResponsive(3, getMessage("Inicio de sesión"));
+		JWebHResponsive title = new JWebHResponsive(3, getMessage("Inicio de sesiï¿½n"));
 		JWebFieldsetResponsive fieldset = new JWebFieldsetResponsive();
 		JWebForm oForm = new JWebForm();
 		panel.setClassResponsive("login-panel panel panel-default");
@@ -181,14 +181,14 @@ public class JLoginView extends JWebView implements IActionPerform, ILoginPage {
 			HttpURLConnection http = (HttpURLConnection) new URL(url).openConnection();
 			http.setDoOutput(true);
 			http.setRequestMethod("POST");
-			http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");
+			http.setRequestProperty("Content-Type", "application/x-www-form-urlencoded; charset=ISO-8859-1");
 			OutputStream out = http.getOutputStream();
-			out.write(params.getBytes("UTF-8"));
+			out.write(params.getBytes("ISO-8859-1"));
 			out.flush();
 			out.close();
 
 			InputStream res = http.getInputStream();
-			BufferedReader rd = new BufferedReader(new InputStreamReader(res, "UTF-8"));
+			BufferedReader rd = new BufferedReader(new InputStreamReader(res, "ISO-8859-1"));
 
 			StringBuilder sb = new StringBuilder();
 			int cp;
@@ -273,7 +273,7 @@ public class JLoginView extends JWebView implements IActionPerform, ILoginPage {
 
 	// LOGIN_WELCOME_TITLE=Bienvenido
 	// LOGIN_WELCOME_TITLE_LOGO=15000
-	// LOGIN_WELCOME_TEXT=Ud ha ingresado al área privada del SITI. Ingrese los
+	// LOGIN_WELCOME_TEXT=Ud ha ingresado al ï¿½rea privada del SITI. Ingrese los
 	// datos de su usuario y presione 'confirmar' para comenzar a administrar su
 	// Empresa
 	// LOGIN_WELCOME_FOOTER=* Sitio optimizado para : Internet Explorer 7 o
@@ -286,9 +286,9 @@ public class JLoginView extends JWebView implements IActionPerform, ILoginPage {
 		String secc = cfg.getCachedStrictValue("GENERAL", "APPLICATION");
 		loginTitle = cfg.getCachedValue(secc, "LOGIN_WELCOME_TITLE", "Bienvenido");
 		loginRegister = cfg.getCachedValue(secc, "LOGIN_REGISTRESE", "Nuevo Usuario? Registrese");
-		loginRecovery = cfg.getCachedValue(secc, "LOGIN_RECUPERAR", "Olvidó su clave?");
+		loginRecovery = cfg.getCachedValue(secc, "LOGIN_RECUPERAR", "Olvidï¿½ su clave?");
 		loginTitleLogo = cfg.getCachedValue(secc, "LOGIN_WELCOME_TITLE_LOGO", "15000");
-		loginText = cfg.getCachedValue(secc, "LOGIN_WELCOME_TEXT", "Ud ha ingresado al área privada del SITI. Ingrese los datos de su usuario y presione 'confirmar' para comenzar a administrar su Empresa");
+		loginText = cfg.getCachedValue(secc, "LOGIN_WELCOME_TEXT", "Ud ha ingresado al ï¿½rea privada del SITI. Ingrese los datos de su usuario y presione 'confirmar' para comenzar a administrar su Empresa");
 		loginFooter = cfg.getCachedValue(secc, "LOGIN_WELCOME_FOOTER", "* Sitio optimizado para : Internet Explorer 7 o superior, Mozilla Firefox 3 o superior");
 		loginTextLink = cfg.getCachedValue(secc, "LOGIN_WELCOME_TEXT_LINK", "Pentaware S.A.");
 		loginLink = cfg.getCachedValue(secc, "LOGIN_WELCOME_LINK", "http://www.pentaware.com.ar");

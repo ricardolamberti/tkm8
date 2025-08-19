@@ -77,6 +77,7 @@
 	
 	<xsl:template name="do_formlov_combo_box_options_json">
 		{
+		  "dictionary": "<xsl:value-of select="/page/url/@payload"/>",
 		  "results": [
 			<xsl:for-each select="groupCombo">
 			{

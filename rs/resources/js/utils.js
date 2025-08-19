@@ -1107,11 +1107,7 @@ function backListener() {
 	document.onkeydown = captureF5;
 	document.onkeypress = captureF5;
 	document.onkeyup = captureF5;
-		if (isMS()) {
-	
-	// explorer no diferencia entre refresh y close
-			
-		} else {
+		if (!isMS()) {
 			$(window).bind("unload", function (event) {
 				adjustSessionID();
 				if (isLogin())

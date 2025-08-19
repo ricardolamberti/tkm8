@@ -201,7 +201,7 @@ public abstract class JAbstractLoginResolver extends JFrontDoorActionResolver {
 		login.execProcessInsert();
 		
 		if (login.isOutAccess() && !BizUsuario.getUsr().canOutAccess())
-			throw new Exception("No tiene autorización para loguearse desde fuera de la intranet. Si lo necesita comuniquese con el administrador.");
+			throw new Exception("No tiene autorizaciï¿½n para loguearse desde fuera de la intranet. Si lo necesita comuniquese con el administrador.");
 
 		BizUsuario.SetGlobal(login.getObjUsuario());
 		login.getObjUsuario().createWebProfile();

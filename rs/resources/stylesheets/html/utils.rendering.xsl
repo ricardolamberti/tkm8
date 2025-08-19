@@ -237,7 +237,7 @@
 			</xsl:attribute>
 			<xsl:attribute name="id"><xsl:value-of select="@form_name"/>_<xsl:value-of select="@name"/>_gmap</xsl:attribute>
 		</DIV>
-				<script type="text/javascript" charset="ISO-8859-1">
+				<script type="text/javascript" charset="UTF-8">
 
 	            setComponenteMapa("<xsl:value-of select="@form_name"/>_<xsl:value-of select="@name"/>_gmap");
 				var mapa = initializeMapa();

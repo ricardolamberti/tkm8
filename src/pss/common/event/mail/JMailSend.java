@@ -189,7 +189,7 @@ public class JMailSend {
 		msg.setSentDate(new Date());
 		
 	
-		msg.setSubject(this.title, "utf-8");
+		msg.setSubject(this.title, "ISO-8859-1");
 		
 		
 		// create the Multipart and add its parts to it

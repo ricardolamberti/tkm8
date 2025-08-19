@@ -77,14 +77,14 @@ public class ChatGPT {
 	            
 	            // Enviar la solicitud
 	            try (OutputStream os = conn.getOutputStream()) {
-	                byte[] input = requestBody.getBytes("utf-8");
+	                byte[] input = requestBody.getBytes("ISO-8859-1");
 	                os.write(input, 0, input.length);
 	            }
 	            StringBuilder response = new StringBuilder();
 		          
 	            // Leer la respuesta
 	            try (BufferedReader br = new BufferedReader(
-	                    new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+	                    new InputStreamReader(conn.getInputStream(), "ISO-8859-1"))) {
 	                String responseLine = null;
 	                while ((responseLine = br.readLine()) != null) {
 	                    response.append(responseLine.trim());
@@ -119,14 +119,14 @@ public class ChatGPT {
 
             // Enviar la solicitud
             try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = requestBody.getBytes("utf-8");
+                byte[] input = requestBody.getBytes("ISO-8859-1");
                 os.write(input, 0, input.length);
             }
             StringBuilder response = new StringBuilder();
 	          
             // Leer la respuesta
             try (BufferedReader br = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream(), "utf-8"))) {
+                    new InputStreamReader(conn.getInputStream(), "ISO-8859-1"))) {
                 String responseLine = null;
                 while ((responseLine = br.readLine()) != null) {
                     response.append(responseLine.trim());

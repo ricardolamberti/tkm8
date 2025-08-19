@@ -355,7 +355,7 @@ public class JDynamicReport  {
 	 xml = xml.trim();
 	 java.io.InputStream in = null;
 	 try{
-	 in = new ByteArrayInputStream(xml.getBytes("UTF-8"));
+	 in = new ByteArrayInputStream(xml.getBytes("ISO-8859-1"));
 	 }catch(Exception ex){
 	 }
 	 return in;

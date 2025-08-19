@@ -810,8 +810,8 @@ public class BizPlantilla extends JRecord implements IPlantilla{
    	source = source.replaceAll("<HR>", "<hr/>");
     	source = source.replaceAll("&nbsp;", " ");
   	source = JTools.replaceWebForForeignChars(source);
-//  	source = source.replaceAll("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">", "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"/>");
-//  	source = source.replaceAll("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">", "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\"/>");
+//  	source = source.replaceAll("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">", "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\"/>");
+//  	source = source.replaceAll("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\">", "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\"/>");
 //  	source = source.replaceAll("<meta name=\"Generator\" content=\"Microsoft Exchange Server\">", "<meta name=\"Generator\" content=\"Microsoft Exchange Server\"/>");
 //  	
 //	 	source = source.replaceAll("<hr id=\"stopSpelling\">","<hr id=\"stopSpelling\"/>");
@@ -836,9 +836,9 @@ public class BizPlantilla extends JRecord implements IPlantilla{
   	//quitaru.substring(quitaru.indexOf("%u"));
   	
   	quitaru = quitaru.replaceAll("%u....", "*");
-  	String source = (quitaru.indexOf("%20")==-1)?quitaru:(new URLCodec()).decode(quitaru,"utf-8");
-  	if (source.indexOf("%20")!=-1) try {source = (new URLCodec()).decode(source,"utf-8");} catch (Exception e) {}
-  	if (source.indexOf("%20")!=-1) try {source = (new URLCodec()).decode(source,"utf-8");} catch (Exception e) {}
+  	String source = (quitaru.indexOf("%20")==-1)?quitaru:(new URLCodec()).decode(quitaru,"ISO-8859-1");
+  	if (source.indexOf("%20")!=-1) try {source = (new URLCodec()).decode(source,"ISO-8859-1");} catch (Exception e) {}
+  	if (source.indexOf("%20")!=-1) try {source = (new URLCodec()).decode(source,"ISO-8859-1");} catch (Exception e) {}
   	source = source.startsWith("<body")?source:"<body>"+source+"</body>";
   	source = source.replaceAll("<br>", "<br/>");
   	source = source.replaceAll("<BR>", "<br/>");
@@ -1077,7 +1077,7 @@ public class BizPlantilla extends JRecord implements IPlantilla{
 		    		int posEndIgual2 = source.indexOf(">",posIgual+1);
 		    		posEndIgualF = posEndIgual2<posEndIgual || posEndIgual==-1?posEndIgual2:posEndIgual;
 		     		String param = source.substring(posIgual+1,posEndIgualF);
-		     		if (!param.equals("us-ascii\"") && !param.equals("UTF-8\"" ))
+		     		if (!param.equals("us-ascii\"") && !param.equals("ISO-8859-1\"" ))
 		     			source = source.substring(0,posIgual+1)+"\""+param+"\""+source.substring(posEndIgualF);
 		  	 }
 		  
@@ -1258,7 +1258,7 @@ public class BizPlantilla extends JRecord implements IPlantilla{
   			int posFS = contenido.indexOf("\"",posIS+("src=\"data:image/jpg;base64,".length())+1);
     		String contenidoS = contenido.substring(posIS+("src=\"data:image/jpg;base64,".length()),posFS);
     		if (contenidoS.indexOf("%0D")==-1) {
-	    	  contenidoS= URLEncoder.encode(contenidoS,"UTF-8");
+	    	  contenidoS= URLEncoder.encode(contenidoS,"ISO-8859-1");
 	    	  if (!contenido.substring(posIS+5,posFS).equals(contenidoS))
 	    	  	contenido = contenido.replace(contenido.substring(posIS+("src=\"data:image/jpg;base64,".length()),posFS), contenidoS);
     		}
@@ -1418,7 +1418,7 @@ public class BizPlantilla extends JRecord implements IPlantilla{
 	private String searchData(String name,String source, String zone, JRecord[] origenes,int posOrigen, boolean preserveTags) throws Exception {
 		StringBuffer out= new StringBuffer("");
 		if (name.equals("SECTOR_MAIN")) {
-			out =new StringBuffer( render(zone,origenes, posOrigen,preserveTags).replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", ""));
+			out =new StringBuffer( render(zone,origenes, posOrigen,preserveTags).replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", ""));
 			return out.toString();
 		} 
 		int i=posOrigen;
@@ -1466,7 +1466,7 @@ public class BizPlantilla extends JRecord implements IPlantilla{
 								origenes[posOrigen+1]=r;
 								String salida = doPreRender(zone,origenes, posOrigen+1,preserveTags);
 //								String salida=render(zone,origenes, posOrigen+1,preserveTags);
-								salida=salida.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?><DIV>", "");
+								salida=salida.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><DIV>", "");
 							//	salida=salida.replace("<div style=\"\">", "");
 								salida=salida.startsWith("<body>")?salida.substring(6):salida;
 								salida=salida.startsWith("<BODY>")?salida.substring(6):salida;
@@ -1481,10 +1481,10 @@ public class BizPlantilla extends JRecord implements IPlantilla{
 //							source=source.replace(zone, aux);
 						} else {
 							JRecord r = (JRecord) record;
-//							source=source.replace(zone, render(zone,r)).replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
+//							source=source.replace(zone, render(zone,r)).replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", "");
 							origenes[posOrigen+1]=r;
 							String salida = doPreRender(zone,origenes, posOrigen+1,preserveTags);
-							salida=salida.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?><DIV>", "");
+							salida=salida.replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?><DIV>", "");
 							salida=salida.startsWith("<body>")?salida.substring(6):salida;
 							salida=salida.startsWith("<BODY>")?salida.substring(6):salida;
 							salida=salida.startsWith("<DIV>")?salida.substring(5):salida;
@@ -1494,7 +1494,7 @@ public class BizPlantilla extends JRecord implements IPlantilla{
 							salida=salida.endsWith("</DIV>")?salida.substring(0, salida.length()-6):salida;
 							salida=salida.endsWith("</div>")?salida.substring(0, salida.length()-6):salida;
 							out= new StringBuffer(salida);
-//							out= render(zone,origenes, posOrigen+1,preserveTags).replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
+//							out= render(zone,origenes, posOrigen+1,preserveTags).replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", "");
 						}
 					} 
 				}
@@ -1535,7 +1535,7 @@ public class BizPlantilla extends JRecord implements IPlantilla{
 				String zone = source.substring(posI,posF+("<!--DATAEND:"+entrada+"-->").length());
 				String subzone = source.substring(posI+("<!--DATA:"+entrada+"-->").length(),posF);
 				String realEntrada =entrada.startsWith("!")?entrada.substring(1):entrada;
-				source=source.replace(zone,searchDataDeep(realEntrada,source,subzone,origenes,posOrigen,true)).replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
+				source=source.replace(zone,searchDataDeep(realEntrada,source,subzone,origenes,posOrigen,true)).replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", "");
 				last=entrada;
 			}
 			useds.addAll(usedsLevels);
@@ -1544,7 +1544,7 @@ public class BizPlantilla extends JRecord implements IPlantilla{
 		}
 
     // la zona demarcada por CC si se repite, borrarlas.
-		source = "<body>"+(render(source, origenes, posOrigen, preserveTags).replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", ""))+"</body>";
+		source = "<body>"+(render(source, origenes, posOrigen, preserveTags).replace("<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>", ""))+"</body>";
 		for (String entrada:mapaCC) {
 			while (true) {
 				String tag = "<!--CC:"+entrada+"-->";
@@ -2103,7 +2103,7 @@ public void processDelete() throws Exception {
 	
 		texto = preRender(datos,cantDatos,null);
 		texto = posRender(texto);
-		texto = (new URLCodec()).encode(JTools.replaceForeignCharsForWeb(texto), "UTF-8").replaceAll("\\+", " ");
+		texto = (new URLCodec()).encode(JTools.replaceForeignCharsForWeb(texto), "ISO-8859-1").replaceAll("\\+", " ");
 		return texto;
 	}
 
@@ -2470,7 +2470,7 @@ String str = html;
 		str = str.replaceAll("border=\"1\" cellSpacing=\"0\" borderColor=\"gray\"", "border=\"0\" cellSpacing=\"0\"");
 		str = str.replaceAll("border=\"1\" cellspacing=\"0\" bordercolor=\"gray\"", "border=\"0\" cellSpacing=\"0\"");
 		
-		String output = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><html><head>";
+		String output = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\"><html><head>";
 		output+=h;
 		output+="<style type=\"text/css\">" + s + "</style>";
 		output+="</head><body>";

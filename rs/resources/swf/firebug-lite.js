@@ -234,7 +234,7 @@ i<other.length;
 ++i){array.splice(i+index,0,other[i])
 }return array
 }this.createStyleSheet=function(doc,url){var style=doc.createElementNS("http://www.w3.org/1999/xhtml","link");
-style.setAttribute("charset","utf-8");
+style.setAttribute("charset","ISO-8859-1");
 style.firebugIgnore=true;
 style.setAttribute("rel","stylesheet");
 style.setAttribute("type","text/css");

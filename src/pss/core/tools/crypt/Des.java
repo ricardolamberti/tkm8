@@ -114,7 +114,7 @@ public class Des {
    */
   public String encrypt(String str) {
     try {
-      // Encode the string into bytes using utf-8
+      // Encode the string into bytes using ISO-8859-1
       byte[] utf8 = str.getBytes("UTF8");
       
       // Encrypt
@@ -172,7 +172,7 @@ public class Des {
       // Decrypt
       byte[] utf8 = dcipher.doFinal(dec);
       
-      // Decode using utf-8
+      // Decode using ISO-8859-1
       return new String(utf8, "UTF8");
     } catch (javax.crypto.BadPaddingException e) {/* nothing to do */
     } catch (IllegalBlockSizeException e) {/* nothing to do */

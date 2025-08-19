@@ -50,7 +50,7 @@
 					</div>
 				</div>
 				<script type="text/javascript"
-      					charset="ISO-8859-1">
+      					charset="UTF-8">
 					$(function() {
 					$("#panel-left_<xsl:value-of select="@name"/>").width('<xsl:value-of select="@pos_split"/>');
 					$("#panel-left_<xsl:value-of select="@name"/>").resizable({
@@ -86,7 +86,7 @@
 					</div>
 				</div>
 				<script type="text/javascript"
-      					charset="ISO-8859-1">
+      					charset="UTF-8">
 					$("#panel-left_<xsl:value-of select="@name"/>").height('<xsl:value-of select="@pos_split"/>');
 					$("#panel-top_<xsl:value-of select="@name"/>).resizable({
 					handleSelector : "#splitter-horizontal_<xsl:value-of select="@name"/>,
@@ -1332,7 +1332,7 @@
 				</div>
 			</div>
 		</div>
-		<script charset="ISO-8859-1">initializeDataTimePicker('<xsl:value-of select="$fullname"/>'<xsl:if test="@options">,{<xsl:value-of select="@options"/>}</xsl:if>); </script>
+		<script charset="UTF-8">initializeDataTimePicker('<xsl:value-of select="$fullname"/>'<xsl:if test="@options">,{<xsl:value-of select="@options"/>}</xsl:if>); </script>
 		<xsl:call-template name="basic_generate_form_component_scripts_out"/>
 	</xsl:template>
 	<xsl:template match="interval_date_chooser_responsive">
@@ -1456,10 +1456,10 @@
 				</div>
 			</div>
 		</div>
-		<script charset="ISO-8859-1">initializeIntervalDataTimePicker('<xsl:value-of select="$fullname"/>','<xsl:value-of select="$fullnamefrom"/>','<xsl:value-of select="$fullnameto"/>',{<xsl:value-of select="@options"/>},'<xsl:value-of select="@out_format"/>',<xsl:value-of select="@detect_changes"/>); </script>
+		<script charset="UTF-8">initializeIntervalDataTimePicker('<xsl:value-of select="$fullname"/>','<xsl:value-of select="$fullnamefrom"/>','<xsl:value-of select="$fullnameto"/>',{<xsl:value-of select="@options"/>},'<xsl:value-of select="@out_format"/>',<xsl:value-of select="@detect_changes"/>); </script>
 		<xsl:call-template name="basic_generate_form_component_scripts_out"/>
 		<xsl:if test="@two_prop='true'">
-			<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullnamefrom"/>',['<xsl:value-of select="$fullnamefrom"/>']); registerNoConstraint('<xsl:value-of select="$fullnameto"/>',['<xsl:value-of select="$fullnameto"/>']); </script>
+			<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullnamefrom"/>',['<xsl:value-of select="$fullnamefrom"/>']); registerNoConstraint('<xsl:value-of select="$fullnameto"/>',['<xsl:value-of select="$fullnameto"/>']); </script>
 		</xsl:if>
 	</xsl:template>
 	<xsl:template match="dropdowncombo_responsive_noform">
@@ -2236,7 +2236,7 @@
 		<xsl:call-template name="basic_generate_composite"/>
 		<xsl:for-each select="panel/notebook_tab[@state='selected']">
 			<xsl:for-each select="action">
-				<script charset="ISO-8859-1">storeAjaxNotebook('<xsl:value-of select="@obj_provider"/>','<xsl:value-of select="@id"/>'); </script>
+				<script charset="UTF-8">storeAjaxNotebook('<xsl:value-of select="@obj_provider"/>','<xsl:value-of select="@id"/>'); </script>
 			</xsl:for-each>
 		</xsl:for-each>
 	</xsl:template>
@@ -2364,13 +2364,13 @@
 					</xsl:if>
 				</button>
 				<xsl:if test="@is_submit='true'">
-					<script charset="ISO-8859-1">setAnchorSubmit('<xsl:value-of select="@name"/>'); </script>
+					<script charset="UTF-8">setAnchorSubmit('<xsl:value-of select="@name"/>'); </script>
 				</xsl:if>
 				<xsl:if test="@is_cancel='true'">
-					<script charset="ISO-8859-1">setAnchorCancel('<xsl:value-of select="@name"/>'); adaptChanges( ) ; </script>
+					<script charset="UTF-8">setAnchorCancel('<xsl:value-of select="@name"/>'); adaptChanges( ) ; </script>
 				</xsl:if>
 				<xsl:if test="@functionKey">
-					<script charset="ISO-8859-1">setAnchorF(<xsl:value-of select="@functionKey"/>,'<xsl:value-of select="@name"/>'); </script>
+					<script charset="UTF-8">setAnchorF(<xsl:value-of select="@functionKey"/>,'<xsl:value-of select="@name"/>'); </script>
 				</xsl:if>
 			</xsl:when>
 			<xsl:otherwise>
@@ -2504,13 +2504,13 @@
 					</xsl:if>
 				</a>
 				<xsl:if test="@is_submit='true'">
-					<script charset="ISO-8859-1">setAnchorSubmit('<xsl:value-of select="@name"/>'); </script>
+					<script charset="UTF-8">setAnchorSubmit('<xsl:value-of select="@name"/>'); </script>
 				</xsl:if>
 				<xsl:if test="@is_cancel='true'">
-					<script charset="ISO-8859-1">setAnchorCancel('<xsl:value-of select="@name"/>'); adaptChanges( ) ; </script>
+					<script charset="UTF-8">setAnchorCancel('<xsl:value-of select="@name"/>'); adaptChanges( ) ; </script>
 				</xsl:if>
 				<xsl:if test="@functionKey">
-					<script charset="ISO-8859-1">setAnchorF(<xsl:value-of select="@functionKey"/>,'<xsl:value-of select="@name"/>'); </script>
+					<script charset="UTF-8">setAnchorF(<xsl:value-of select="@functionKey"/>,'<xsl:value-of select="@name"/>'); </script>
 				</xsl:if>
 			</xsl:otherwise>
 		</xsl:choose>
@@ -2580,10 +2580,10 @@
 			</div>
 		</a>
 		<xsl:if test="@is_submit='true'">
-			<script charset="ISO-8859-1">setAnchorSubmit('<xsl:value-of select="@name"/>'); </script>
+			<script charset="UTF-8">setAnchorSubmit('<xsl:value-of select="@name"/>'); </script>
 		</xsl:if>
 		<xsl:if test="@is_cancel='true'">
-			<script charset="ISO-8859-1">setAnchorCancel('<xsl:value-of select="@name"/>'); adaptChanges( ) ; </script>
+			<script charset="UTF-8">setAnchorCancel('<xsl:value-of select="@name"/>'); adaptChanges( ) ; </script>
 		</xsl:if>
 	</xsl:template>
 	<xsl:template match="navigation_group">
@@ -3046,12 +3046,12 @@
 			<xsl:for-each select="alert">
 				<xsl:if test="@msg">
 					<script type="text/javascript"
-      						charset="ISO-8859-1">showErrRefresh('inf','','<xsl:value-of select="@msg"/>'); </script>
+      						charset="UTF-8">showErrRefresh('inf','','<xsl:value-of select="@msg"/>'); </script>
 				</xsl:if>
 			</xsl:for-each>
 			<xsl:if test="@scroll">
 				<script type="text/javascript"
-      					charset="ISO-8859-1">adaptativeScroll('scroll_body','scroll_header','<xsl:value-of select="@obj_provider"/>','<xsl:value-of select="@scroll"/>',''); </script>
+      					charset="UTF-8">adaptativeScroll('scroll_body','scroll_header','<xsl:value-of select="@obj_provider"/>','<xsl:value-of select="@scroll"/>',''); </script>
 			</xsl:if>
 			<xsl:call-template name="tree_table_responsive"/>
 		</DIV>
@@ -3064,12 +3064,12 @@
 			<xsl:for-each select="alert">
 				<xsl:if test="@msg">
 					<script type="text/javascript"
-      						charset="ISO-8859-1">showErrRefresh('inf','','<xsl:value-of select="@msg"/>'); </script>
+      						charset="UTF-8">showErrRefresh('inf','','<xsl:value-of select="@msg"/>'); </script>
 				</xsl:if>
 			</xsl:for-each>
 			<xsl:if test="@scroll">
 				<script type="text/javascript"
-      					charset="ISO-8859-1">adaptativeScroll('scroll_body','scroll_header','<xsl:value-of select="@obj_provider"/>','<xsl:value-of select="@scroll"/>',''); </script>
+      					charset="UTF-8">adaptativeScroll('scroll_body','scroll_header','<xsl:value-of select="@obj_provider"/>','<xsl:value-of select="@scroll"/>',''); </script>
 				<xsl:call-template name="win_list_table_json"/>
 			</xsl:if>
 		</DIV>
@@ -3082,12 +3082,12 @@
 			<xsl:for-each select="alert">
 				<xsl:if test="@msg">
 					<script type="text/javascript"
-      						charset="ISO-8859-1">alert('<xsl:value-of select="@msg"/>'); </script>
+      						charset="UTF-8">alert('<xsl:value-of select="@msg"/>'); </script>
 				</xsl:if>
 			</xsl:for-each>
 			<xsl:if test="@scroll">
 				<script type="text/javascript"
-      					charset="ISO-8859-1">adaptativeScroll('scroll_body','scroll_header','<xsl:value-of select="@obj_provider"/>','<xsl:value-of select="@scroll"/>',''); </script>
+      					charset="UTF-8">adaptativeScroll('scroll_body','scroll_header','<xsl:value-of select="@obj_provider"/>','<xsl:value-of select="@scroll"/>',''); </script>
 				<xsl:call-template name="win_list_table_bigdata"/>
 			</xsl:if>
 		</DIV>
@@ -3100,12 +3100,12 @@
 			<xsl:for-each select="alert">
 				<xsl:if test="@msg">
 					<script type="text/javascript"
-      						charset="ISO-8859-1">showErrRefresh('inf','','<xsl:value-of select="@msg"/>'); </script>
+      						charset="UTF-8">showErrRefresh('inf','','<xsl:value-of select="@msg"/>'); </script>
 				</xsl:if>
 			</xsl:for-each>
 			<xsl:if test="@scroll">
 				<script type="text/javascript"
-      					charset="ISO-8859-1">adaptativeScroll('scroll_body','scroll_header','<xsl:value-of select="@obj_provider"/>','<xsl:value-of select="@scroll"/>',''); </script>
+      					charset="UTF-8">adaptativeScroll('scroll_body','scroll_header','<xsl:value-of select="@obj_provider"/>','<xsl:value-of select="@scroll"/>',''); </script>
 				<xsl:call-template name="win_list_table"/>
 			</xsl:if>
 		</DIV>
@@ -3323,7 +3323,7 @@
 										<xsl:apply-templates select="*"/>
 									</xsl:for-each>
 									<script type="text/javascript"
-      										charset="ISO-8859-1">$("#<xsl:value-of select="$columnname"/>").resizable({ resizeHeight : false }); </script>
+      										charset="UTF-8">$("#<xsl:value-of select="$columnname"/>").resizable({ resizeHeight : false }); </script>
 								</th>
 							</xsl:for-each>
 						</xsl:for-each>
@@ -6193,13 +6193,13 @@
 				</xsl:otherwise>
 			</xsl:choose>
 			<xsl:if test="@is_submit='true'">
-				<script charset="ISO-8859-1">setAnchorSubmit('<xsl:value-of select="@name"/>'); </script>
+				<script charset="UTF-8">setAnchorSubmit('<xsl:value-of select="@name"/>'); </script>
 			</xsl:if>
 			<xsl:if test="@is_cancel='true'">
-				<script charset="ISO-8859-1">setAnchorCancel('<xsl:value-of select="@name"/>'); adaptChanges( ) ; </script>
+				<script charset="UTF-8">setAnchorCancel('<xsl:value-of select="@name"/>'); adaptChanges( ) ; </script>
 			</xsl:if>
 			<xsl:if test="@functionKey">
-				<script charset="ISO-8859-1">setAnchorF(<xsl:value-of select="@functionKey"/>,'<xsl:value-of select="@name"/>'); </script>
+				<script charset="UTF-8">setAnchorF(<xsl:value-of select="@functionKey"/>,'<xsl:value-of select="@name"/>'); </script>
 			</xsl:if>
 		</div>
 	</xsl:template>
@@ -6835,8 +6835,8 @@
 				</div>
 			</div>
 			<script type="text/javascript"
-      				charset="ISO-8859-1">inicializeSelect2('<xsl:value-of select="$fullname"/>','<xsl:value-of select="@placeholder"/>',<xsl:value-of select="@MaximumSelectionLength"/>,<xsl:value-of select="@MinimumInputLength"/>,<xsl:value-of select="@show_key"/>,<xsl:value-of select="@multiple"/>,<xsl:value-of select="show_lupa"/>); </script>
-			<script charset="ISO-8859-1">
+      				charset="UTF-8">inicializeSelect2('<xsl:value-of select="$fullname"/>','<xsl:value-of select="@placeholder"/>',<xsl:value-of select="@MaximumSelectionLength"/>,<xsl:value-of select="@MinimumInputLength"/>,<xsl:value-of select="@show_key"/>,<xsl:value-of select="@multiple"/>,<xsl:value-of select="show_lupa"/>); </script>
+			<script charset="UTF-8">
 				<xsl:if test="@editable!='false'">
 					<xsl:if test="@modifiedonserver='true'">setChangeInputs(true); </xsl:if>
 				</xsl:if>
@@ -6910,7 +6910,7 @@
 			</a>
 		</div>
 		<xsl:if test="@visible and (@visible='true')">
-			<script charset="ISO-8859-1">registerDependantCombo('<xsl:value-of select="$fullname"/>'); </script>
+			<script charset="UTF-8">registerDependantCombo('<xsl:value-of select="$fullname"/>'); </script>
 		</xsl:if>
 	</xsl:template>
 	<xsl:template match="multiple_list">
@@ -6946,7 +6946,7 @@
 				<xsl:if test="@only-collapsed">
 					<xsl:text disable-output-escaping="yes"><![CDATA[ ]]></xsl:text>nocollapsable</xsl:if>
 			</xsl:attribute>
-			<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']<xsl:if test="constraints/@required='true'">,true</xsl:if>); </script>
+			<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']<xsl:if test="constraints/@required='true'">,true</xsl:if>); </script>
 			<ul>
 				<xsl:attribute name="class">form-control input-sm <xsl:if test="@field_class">
 						<xsl:value-of select="@field_class"/>
@@ -7028,7 +7028,7 @@
 					</xsl:with-param>
 				</xsl:call-template>
 			</div>
-			<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']<xsl:if test="constraints/@required='true'">,'<xsl:value-of select="constraints/@description"/>',true</xsl:if>); </script>
+			<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']<xsl:if test="constraints/@required='true'">,'<xsl:value-of select="constraints/@description"/>',true</xsl:if>); </script>
 		</div>
 	</xsl:template>
 	<xsl:template name="do_multiple_check_inner_div">
@@ -7184,7 +7184,7 @@
 					</xsl:with-param>
 				</xsl:call-template>
 			</ul>
-			<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']<xsl:if test="constraints/@required='true'">,'<xsl:value-of select="constraints/@description"/>',true</xsl:if>); </script>
+			<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']<xsl:if test="constraints/@required='true'">,'<xsl:value-of select="constraints/@description"/>',true</xsl:if>); </script>
 			<xsl:if test="@connect_control">
 				<script>subscribeControlConnect( '<xsl:value-of select="@connect_control"/>', function() { hideSelectMetaItemsRadio('<xsl:value-of select="$fullname"/>','<xsl:value-of select="@connect_control_field"/>','dgf_form_<xsl:value-of select="@connect_control"/>_fd-swap_zone','<xsl:value-of select="@connect_control_operator"/>','<xsl:value-of select="@connect_control_datatype"/>'); hideSelectMetaItemsRadio('<xsl:value-of select="$fullname"/>','<xsl:value-of select="@connect_control_field"/>','dgf_form_<xsl:value-of select="@connect_control"/>_fd-swap_zone_to','<xsl:value-of select="@connect_control_operator"/>','<xsl:value-of select="@connect_control_datatype"/>'); }); </script>
 			</xsl:if>
@@ -7236,7 +7236,7 @@
 			</xsl:if>
 			<xsl:if test="../@editable!='false'">
 				<xsl:if test="@selected">
-					<script charset="ISO-8859-1">document.getElementById('<xsl:value-of select="$fullname"/>').value='<xsl:value-of select="@id"/>'; document.getElementById('<xsl:value-of select="$fullname"/>_option_<xsl:value-of select="@id"/>').className ='multiple_list_option_select'; </script>
+					<script charset="UTF-8">document.getElementById('<xsl:value-of select="$fullname"/>').value='<xsl:value-of select="@id"/>'; document.getElementById('<xsl:value-of select="$fullname"/>_option_<xsl:value-of select="@id"/>').className ='multiple_list_option_select'; </script>
 				</xsl:if>
 				<li>
 					<xsl:attribute name="class">multiple_list_option</xsl:attribute>
@@ -7314,7 +7314,7 @@
 				<xsl:value-of select="$fullname"/>
 			</xsl:attribute>
 		</INPUT>
-		<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']); </script>
+		<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']); </script>
 		<DIV>
 			<xsl:attribute name="style">
 				<xsl:call-template name="generate_inline_style_responsive"/>;overflow:auto; </xsl:attribute>
@@ -7351,7 +7351,7 @@
 				<xsl:value-of select="$fullname"/>
 			</xsl:attribute>
 		</INPUT>
-		<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']); </script>
+		<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']); </script>
 		<DIV>
 			<xsl:attribute name="style">
 				<xsl:call-template name="generate_inline_style"/>;overflow:auto; </xsl:attribute>
@@ -7386,7 +7386,7 @@
 			</xsl:attribute>
 		</div>
 		<script type="text/javascript"
-      			charset="ISO-8859-1">var <xsl:value-of select="$varname"/>_d = new dTree('<xsl:value-of select="$varname"/>_d'); var k = <xsl:value-of select="$varname"/>_d; var p = { fullname: '<xsl:value-of select="$fullname"/>', provider:'<xsl:value-of select="action/@obj_provider"/>', owner:'<xsl:value-of select="action/@object_owner_id"/>', action:'<xsl:value-of select="action/@id_action"/>'}; var i=saveMemoryArray(p); var s='uf('+i+','; var g='gr('+i+')'; var m= [ <xsl:for-each select="item">{ a:'<xsl:value-of select="@id"/>', i:'<xsl:value-of select="@id_tree"/>', p:'<xsl:value-of select="@parent"/>', d:'<xsl:value-of select="@description"/>', f:'<xsl:value-of select="$fullname"/>', <xsl:if test="@icon=@icon_open">c:'<xsl:value-of select="@icon"/>', o:null </xsl:if>
+      			charset="UTF-8">var <xsl:value-of select="$varname"/>_d = new dTree('<xsl:value-of select="$varname"/>_d'); var k = <xsl:value-of select="$varname"/>_d; var p = { fullname: '<xsl:value-of select="$fullname"/>', provider:'<xsl:value-of select="action/@obj_provider"/>', owner:'<xsl:value-of select="action/@object_owner_id"/>', action:'<xsl:value-of select="action/@id_action"/>'}; var i=saveMemoryArray(p); var s='uf('+i+','; var g='gr('+i+')'; var m= [ <xsl:for-each select="item">{ a:'<xsl:value-of select="@id"/>', i:'<xsl:value-of select="@id_tree"/>', p:'<xsl:value-of select="@parent"/>', d:'<xsl:value-of select="@description"/>', f:'<xsl:value-of select="$fullname"/>', <xsl:if test="@icon=@icon_open">c:'<xsl:value-of select="@icon"/>', o:null </xsl:if>
 				<xsl:if test="@icon!=@icon_open">c:'<xsl:value-of select="@icon"/>', o:'<xsl:value-of select="@icon_open"/>' </xsl:if>,x:<xsl:if test="not(../@editable='true' and @elegible='true')">null </xsl:if>
 				<xsl:if test="../@editable='true' and @elegible='true'">s+'\'<xsl:value-of select="@id"/>\'); <xsl:if test="../@refreshForm='true'">'+g </xsl:if>
 					<xsl:if test="../@refreshForm!='true'">' </xsl:if>
@@ -7493,7 +7493,7 @@
 				<xsl:value-of select="$fullname"/>
 			</xsl:attribute>
 		</INPUT>
-		<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']<xsl:if test="constraints/@required='true'">,'<xsl:value-of select="constraints/@description"/>',true</xsl:if>); </script>
+		<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']<xsl:if test="constraints/@required='true'">,'<xsl:value-of select="constraints/@description"/>',true</xsl:if>); </script>
 		<div>
 			<xsl:if test="/page/header/savehelp">
 				<xsl:variable name="fullname">dgf_<xsl:value-of select="@form_name"/>_fd-<xsl:value-of select="@name"/>
@@ -7540,7 +7540,7 @@
 				<xsl:value-of select="$fullname"/>
 			</xsl:attribute>
 		</INPUT>
-		<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']<xsl:if test="constraints/@required='true'">,'<xsl:value-of select="constraints/@description"/>',true</xsl:if>); </script>
+		<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']<xsl:if test="constraints/@required='true'">,'<xsl:value-of select="constraints/@description"/>',true</xsl:if>); </script>
 		<div>
 			<xsl:if test="/page/header/savehelp">
 				<xsl:variable name="fullname">dgf_<xsl:value-of select="@form_name"/>_fd-<xsl:value-of select="@name"/>
@@ -7672,7 +7672,7 @@
 				<xsl:value-of select="$fullname"/>
 			</xsl:attribute>
 		</INPUT>
-		<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']<xsl:if test="constraints/@required='true'">,'<xsl:value-of select="constraints/@description"/>',true</xsl:if>); </script>
+		<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']<xsl:if test="constraints/@required='true'">,'<xsl:value-of select="constraints/@description"/>',true</xsl:if>); </script>
 		<xsl:if test="@editable!='false'">
 			<iframe src="html/upload.html"
       				seamless="seamless">
@@ -7697,7 +7697,7 @@
 				<xsl:value-of select="$fullname"/>
 			</xsl:attribute>
 		</INPUT>
-		<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']); document.getElementById('signApplet_<xsl:value-of select="$fullname"/>').setScriptFromApplet(getURL()+'/html/do-upload'); </script>
+		<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']); document.getElementById('signApplet_<xsl:value-of select="$fullname"/>').setScriptFromApplet(getURL()+'/html/do-upload'); </script>
 		<div>
 			<xsl:attribute name="style">
 				<xsl:call-template name="generate_inline_style"/>
@@ -7738,7 +7738,7 @@
 				<xsl:value-of select="$fullname"/>
 			</xsl:attribute>
 		</INPUT>
-		<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']); document.getElementById('scannerApplet_<xsl:value-of select="$fullname"/>').setScriptFromApplet(getURL()+'/html/do-upload'); </script>
+		<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']); document.getElementById('scannerApplet_<xsl:value-of select="$fullname"/>').setScriptFromApplet(getURL()+'/html/do-upload'); </script>
 		<div>
 			<xsl:attribute name="style">
 				<xsl:call-template name="generate_inline_style"/>
@@ -7777,7 +7777,7 @@
 				<xsl:value-of select="$fullname"/>
 			</xsl:attribute>
 		</INPUT>
-		<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']); </script>
+		<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']); </script>
 		<div>
 			<xsl:attribute name="style">
 				<xsl:call-template name="generate_inline_style"/>
@@ -8038,7 +8038,7 @@
 					</xsl:attribute>
 				</xsl:if>
 			</img>
-			<script charset="ISO-8859-1">registerDate("<xsl:value-of select="$fullname"/>","<xsl:value-of select="@js_date_format"/>","<xsl:value-of select="/page/header/layouts/layout[@id='text_field']/@height"/>"); </script>
+			<script charset="UTF-8">registerDate("<xsl:value-of select="$fullname"/>","<xsl:value-of select="@js_date_format"/>","<xsl:value-of select="/page/header/layouts/layout[@id='text_field']/@height"/>"); </script>
 		</xsl:if>
 	</xsl:template>
 	<xsl:template name="basic_generate_composite">
@@ -8393,26 +8393,26 @@
 			<script>rdg('<xsl:value-of select="@table_name"/>','<xsl:value-of select="@name"/>',['<xsl:value-of select="$fullname"/>'],<xsl:value-of select="@table_row"/>,<xsl:value-of select="@table_column"/>); </script>
 		</xsl:if>
 		<xsl:if test="constraints">
-			<script charset="ISO-8859-1">
+			<script charset="UTF-8">
 				<xsl:if test="@force_focus">cleanFocusObject(); </xsl:if>register( '<xsl:value-of select="$fullname"/>', '<xsl:value-of select="constraints/@description"/>', <xsl:if test="@intable='true'">false</xsl:if>
 				<xsl:if test="not(@intable) or @intable!='true'">
 					<xsl:value-of select="constraints/@required"/>
 				</xsl:if>, '<xsl:value-of select="constraints/format/@needs_input_check"/>', <xsl:value-of select="constraints/format/@max_length"/>, '<xsl:value-of select="constraints/@datatype"/>', '<xsl:value-of select="constraints/format/@pattern"/>', '<xsl:value-of select="constraints/format/@chars"/>', '<xsl:value-of select="constraints/@inputmode"/>', <xsl:if test="@foreground">0,</xsl:if>
 				<xsl:if test="not(@foreground)">1,</xsl:if>'<xsl:value-of select="constraints/@align"/>',<xsl:if test="@intable='true'">true</xsl:if>
 				<xsl:if test="not(@intable) or @intable!='true'">false</xsl:if>); </script>
-			<script charset="ISO-8859-1">formatear('<xsl:value-of select="$fullname"/>');</script>
+			<script charset="UTF-8">formatear('<xsl:value-of select="$fullname"/>');</script>
 		</xsl:if>
 		<xsl:if test="not(@intable) or @intable!='true'">
 			<xsl:if test="registerAsField">
-				<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullname"/>',[ <xsl:for-each select="registerAsField/data">'<xsl:value-of select="$name_prefix"/>
+				<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullname"/>',[ <xsl:for-each select="registerAsField/data">'<xsl:value-of select="$name_prefix"/>
 						<xsl:value-of select="@value"/>', </xsl:for-each>]<xsl:if test="constraints/@required='true'">,'<xsl:value-of select="constraints/@description"/>',true</xsl:if>); </script>
 			</xsl:if>
 			<xsl:if test="not(registerAsField)">
-				<script charset="ISO-8859-1">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']); </script>
+				<script charset="UTF-8">registerNoConstraint('<xsl:value-of select="$fullname"/>',['<xsl:value-of select="$fullname"/>']); </script>
 			</xsl:if>
 		</xsl:if>
 		<xsl:if test="@onAnyChange">
-			<script charset="ISO-8859-1">
+			<script charset="UTF-8">
 				<xsl:if test="@isCalculeOnStart">registerStartedScript('<xsl:value-of select="@orden"/>', '<xsl:value-of select="$fullname"/>', "<xsl:value-of select="@onAnyChange"/>; formatear('<xsl:value-of select="$fullname"/>');"); </xsl:if>
 				<xsl:if test="@isCalculeOnAnyChange">registerScript('<xsl:value-of select="@orden"/>', '<xsl:value-of select="$fullname"/>', "<xsl:value-of select="@onAnyChange"/>;formatear('<xsl:value-of select="$fullname"/>');"); </xsl:if>
 			</script>
@@ -8426,7 +8426,7 @@
 			<xsl:value-of select="@name"/>
 		</xsl:variable>
 		<xsl:for-each select="dependencies">
-			<script charset="ISO-8859-1">registerControlDependency('<xsl:value-of select="$fullname"/>','<xsl:value-of select="$name_prefix"/>
+			<script charset="UTF-8">registerControlDependency('<xsl:value-of select="$fullname"/>','<xsl:value-of select="$name_prefix"/>
 				<xsl:value-of select="@child"/>');</script>
 		</xsl:for-each>
 	</xsl:template>

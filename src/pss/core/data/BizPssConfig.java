@@ -1,6 +1,25 @@
 package pss.core.data;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Optional;
+import java.util.Properties;
+import java.util.Scanner;
+
+import javax.crypto.Cipher;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.GCMParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import pss.JPath;
 import pss.common.regions.multilanguage.JLanguage;
@@ -88,6 +107,7 @@ public class BizPssConfig {
 	}
 
 	private BizPssConfig() throws Exception {
+		inicializeSecure();
 	}
 
 	private JIniFile findPssIni() throws Exception {
@@ -112,6 +132,7 @@ public class BizPssConfig {
 			PssIni.delete();
 		return new JIniFile(JPath.PssPathData() + "/" + name);
 	}
+
 	public static String chatIAServer() {
 		try {
 			return getPssConfig().getCachedStrictValue("GENERAL", "CHAT_IA_SERVER", "http://localhost:5000");
@@ -119,6 +140,7 @@ public class BizPssConfig {
 			return "http://localhost:5000";
 		}
 	}
+
 	/**
 	 * Devuelve un parametro del ini, el mismo se cachea. Si no se encuentra en la
 	 * seccion solicitada se busca en GENERAL
@@ -188,8 +210,7 @@ public class BizPssConfig {
 		return getCachedStrictValue(sSeccion, sParametro, sDefault, true);
 	}
 
-	private String getCachedStrictValue(String sSeccion, String sParametro, String sDefault, boolean exc)
-			throws Exception {
+	private String getCachedStrictValue(String sSeccion, String sParametro, String sDefault, boolean exc) throws Exception {
 		String value = this.getStrictProperty(sSeccion, sParametro);
 		if (value == null)
 			value = this.getValueInSection((sSeccion == null ? "" : sSeccion), sParametro);
@@ -223,8 +244,7 @@ public class BizPssConfig {
 	}
 
 	private String getDBid() throws Exception {
-		String dbid = this.getCachedStrictValue(JBDatos.GetBases().getCurrentDatabase(), "DB_ID",
-				this.getCachedValue(JBDatos.GetBases().getCurrentDatabase(), "NODO_LOCAL", "000"));
+		String dbid = this.getCachedStrictValue(JBDatos.GetBases().getCurrentDatabase(), "DB_ID", this.getCachedValue(JBDatos.GetBases().getCurrentDatabase(), "NODO_LOCAL", "000"));
 		return dbid;
 	}
 
@@ -252,8 +272,7 @@ public class BizPssConfig {
 
 	public static long getRegisterMemoryUssage() {
 		try {
-			return JTools.getLongFirstNumberEmbedded(
-					BizPssConfig.getPssConfig().getCachedValue("GENERAL", "LOG_MEMORY_MS", "0"));
+			return JTools.getLongFirstNumberEmbedded(BizPssConfig.getPssConfig().getCachedValue("GENERAL", "LOG_MEMORY_MS", "0"));
 		} catch (Exception e) {
 			return 0;
 		}
@@ -305,18 +324,18 @@ public class BizPssConfig {
 
 	public static boolean activeDebug(String mode) {
 		try {
-			return !(getPssConfig().getCachedStrictValue("DEBUG", mode, mode.equals("LOG_ERROR") ? "S" : "N")
-					.equalsIgnoreCase("N"));
+			return !(getPssConfig().getCachedStrictValue("DEBUG", mode, mode.equals("LOG_ERROR") ? "S" : "N").equalsIgnoreCase("N"));
 		} catch (Exception e) {
 			PssLogger.logError(e);
 		}
 		return true;
 	}
-	public static int getHealthPort()  {
+
+	public static int getHealthPort() {
 		try {
-			return  Integer.parseInt(getPssConfig().getCachedStrictValue("HEALTH","PORT","9090"));
+			return Integer.parseInt(getPssConfig().getCachedStrictValue("HEALTH", "PORT", "9090"));
 		} catch (Exception e) {
-	
+
 		}
 		return 9090;
 	}
@@ -332,8 +351,7 @@ public class BizPssConfig {
 
 	public static boolean OnlyOneSessionPerUser() {
 		try {
-			return getPssConfig().getCachedStrictValue("GENERAL", "ONLY_ONE_SESSION_PER_USER", "S")
-					.equalsIgnoreCase("S");
+			return getPssConfig().getCachedStrictValue("GENERAL", "ONLY_ONE_SESSION_PER_USER", "S").equalsIgnoreCase("S");
 		} catch (Exception e) {
 			PssLogger.logError(e);
 		}
@@ -360,8 +378,7 @@ public class BizPssConfig {
 		try {
 //			String value = getPssConfig().getPrivateData("MAXIMUM_CONCURRENT_SESSIONS");
 //			if (value!=null) return Integer.parseInt(value);
-			return Integer
-					.parseInt(getPssConfig().getCachedStrictValue("GENERAL", "MAXIMUM_CONCURRENT_SESSIONS", "1000"));
+			return Integer.parseInt(getPssConfig().getCachedStrictValue("GENERAL", "MAXIMUM_CONCURRENT_SESSIONS", "1000"));
 		} catch (Exception e) {
 			PssLogger.logError(e);
 		}
@@ -441,6 +458,7 @@ public class BizPssConfig {
 		}
 
 	}
+
 	public String getGoogleCaptcha() {
 		try {
 			return this.getCachedValue("GOOGLE", "CAPTCHA_KEY", "");
@@ -449,6 +467,7 @@ public class BizPssConfig {
 		}
 
 	}
+
 	public String getGoogleCaptchaServer() {
 		try {
 			return this.getCachedValue("GOOGLE", "CAPTCHA_SERVER_KEY", "");
@@ -457,6 +476,7 @@ public class BizPssConfig {
 		}
 
 	}
+
 	public String getGooglePayGatewayMerchantId() {
 		try {
 			return this.getCachedValue("GOOGLE_PAY", "GATEWAYMERCHANTID", "exampleGatewayMerchantId");
@@ -588,6 +608,7 @@ public class BizPssConfig {
 		// pss.www.ui.views.JExtendedLoginView
 		return val;
 	}
+
 	public String classRegisterLogin() throws Exception {
 		String secc = this.getCachedStrictValue("GENERAL", "APPLICATION", "SITI");
 		String val = this.getCachedStrictValue(secc, "APP_REGISTER_CLASS", "pss.www.ui.views.JRegistrationView");
@@ -595,8 +616,6 @@ public class BizPssConfig {
 		return val;
 	}
 
-	
-	
 	public String getBusinessDefault() throws Exception {
 		String secc = this.getCachedStrictValue("GENERAL", "APPLICATION", "SITI");
 		String val = this.getCachedStrictValue(secc, "APP_BUSINESS", "XXXXXX");
@@ -792,40 +811,219 @@ public class BizPssConfig {
 	public String getClusteringByCompany(String company) throws Exception {
 		return getIniFile().GetParamValue("CLUSTERING", company);
 	}
-    // ---------------------------------------------------------------------
-    // Cache replication configuration
+	// ---------------------------------------------------------------------
+	// Cache replication configuration
 
-    private static String getPropEnvOrIni(String folder,String key, String def) {
-        String v = System.getProperty(key);
-        if (v == null) v = System.getenv(key.replace('.', '_').toUpperCase());
-        if (v == null) {
-            try {
-                v = BizPssConfig.getPssConfig().getCachedValue(folder, key, null);
-            } catch (Exception e) {
-                v = null;
-            }
-        }
-        return v != null ? v : def;
-    }
+	private static String getPropEnvOrIni(String folder, String key, String def) {
+		String v = System.getProperty(key);
+		if (v == null)
+			v = System.getenv(key.replace('.', '_').toUpperCase());
+		if (v == null) {
+			try {
+				v = BizPssConfig.getPssConfig().getCachedValue(folder, key, null);
+			} catch (Exception e) {
+				v = null;
+			}
+		}
+		return v != null ? v : def;
+	}
 
-    public static boolean isCacheReplicationEnabled() {
-        return Boolean.parseBoolean(getPropEnvOrIni("CACHE","pss.cache.replication.enabled", "false"));
-    }
+	public static boolean isCacheReplicationEnabled() {
+		return Boolean.parseBoolean(getPropEnvOrIni("CACHE", "pss.cache.replication.enabled", "false"));
+	}
 
-    public static String getMemcachedHost() {
-        return getPropEnvOrIni("CACHE","pss.cache.memcached.host", "localhost");
-    }
+	public static String getMemcachedHost() {
+		return getPropEnvOrIni("CACHE", "pss.cache.memcached.host", "localhost");
+	}
 
-    public static int getMemcachedPort() {
-        return Integer.parseInt(getPropEnvOrIni("CACHE","pss.cache.memcached.port", "11211"));
-    }
+	public static int getMemcachedPort() {
+		return Integer.parseInt(getPropEnvOrIni("CACHE", "pss.cache.memcached.port", "11211"));
+	}
 
-    public static int getMemcachedDefaultTtlSeconds() {
-        return Integer.parseInt(getPropEnvOrIni("CACHE","pss.cache.memcached.ttl.default.seconds", "3600"));
-    }
+	public static int getMemcachedDefaultTtlSeconds() {
+		return Integer.parseInt(getPropEnvOrIni("CACHE", "pss.cache.memcached.ttl.default.seconds", "3600"));
+	}
 
-    public static int getMemcachedTimeoutMs() {
-        return Integer.parseInt(getPropEnvOrIni("CACHE","pss.cache.memcached.timeout.ms", "100"));
-    }
+	public static int getMemcachedTimeoutMs() {
+		return Integer.parseInt(getPropEnvOrIni("CACHE", "pss.cache.memcached.timeout.ms", "100"));
+	}
+
+	private static final String HEADER = "v1";
+	private static final int SALT_LEN = 16;
+	private static final int IV_LEN = 12;
+	private static final int KEY_LEN_BITS = 256;
+	private static final int GCM_TAG_BITS = 128;
+	private static final int PBKDF2_ITER = 100_000;
+
+	// ======= API principal =======
+
+	/**
+	 * Carga y descifra config.env; retorna Properties sin tocar
+	 * System.getProperties().
+	 */
+	public static Properties loadEncryptedConfig(Path envFile, char[] passphrase) throws IOException, GeneralSecurityException {
+		String enc = new String(Files.readAllBytes(envFile), StandardCharsets.UTF_8).trim();
+		byte[][] parts = parseEnvelope(enc); // [salt, iv, cipher]
+		byte[] key = deriveKey(passphrase, parts[0], KEY_LEN_BITS, PBKDF2_ITER);
+		try {
+			byte[] plain = decryptAesGcm(parts[2], key, parts[1]);
+			String text = new String(plain, StandardCharsets.UTF_8);
+			return parsePropertiesLike(text);
+		} finally {
+			zero(key);
+			zero(passphrase);
+		}
+	}
+
+	/**
+	 * Carga y además aplica a System properties. Si override=false, no pisa claves
+	 * existentes.
+	 */
+	public static Properties loadAndApply(Path encFile, char[] passphrase, boolean override) throws IOException, GeneralSecurityException {
+		Properties p = loadEncryptedConfig(encFile, passphrase);
+		applyToSystem(p, override);
+		return p;
+	}
+
+	/** Aplica un Properties a System properties. */
+	public static void applyToSystem(Properties p, boolean override) {
+		for (String k : p.stringPropertyNames()) {
+			if (override || System.getProperty(k) == null) {
+				System.setProperty(k, p.getProperty(k));
+			}
+		}
+	}
+
+	/**
+	 * Genera un config.env desde contenido plano. Útil para crear/rotar secrets.
+	 */
+	public static void encryptAndWrite(Path outFile, String plaintextConfig, char[] passphrase) throws IOException, GeneralSecurityException {
+		byte[] salt = randomBytes(SALT_LEN);
+		byte[] iv = randomBytes(IV_LEN);
+		byte[] key = deriveKey(passphrase, salt, KEY_LEN_BITS, PBKDF2_ITER);
+		try {
+			byte[] cipher = encryptAesGcm(plaintextConfig.getBytes(StandardCharsets.UTF_8), key, iv);
+			String env = String.format("%s:%s:%s:%s", HEADER, b64(salt), b64(iv), b64(cipher));
+			Files.write(outFile, env.getBytes(StandardCharsets.UTF_8), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+		} finally {
+			zero(key);
+			zero(passphrase);
+		}
+	}
+
+	private static byte[][] parseEnvelope(String enc) {
+		String[] tokens = enc.split(":");
+		if (tokens.length != 4 || !HEADER.equals(tokens[0])) {
+			throw new IllegalArgumentException("Formato inválido de config.enc (esperado v1:<salt>:<iv>:<cipher>)");
+		}
+		byte[] salt = b64d(tokens[1]);
+		byte[] iv = b64d(tokens[2]);
+		byte[] cipher = b64d(tokens[3]);
+		if (salt.length != SALT_LEN)
+			throw new IllegalArgumentException("Salt inválida");
+		if (iv.length != IV_LEN)
+			throw new IllegalArgumentException("IV inválido");
+		return new byte[][] { salt, iv, cipher };
+	}
+
+	private static byte[] deriveKey(char[] pass, byte[] salt, int bits, int iter) throws GeneralSecurityException {
+		PBEKeySpec spec = new PBEKeySpec(pass, salt, iter, bits);
+		SecretKeyFactory skf = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+		byte[] key = skf.generateSecret(spec).getEncoded();
+		spec.clearPassword();
+		return key;
+	}
+
+	private static byte[] encryptAesGcm(byte[] plain, byte[] key, byte[] iv) throws GeneralSecurityException {
+		Cipher c = Cipher.getInstance("AES/GCM/NoPadding");
+		c.init(Cipher.ENCRYPT_MODE, new SecretKeySpec(key, "AES"), new GCMParameterSpec(GCM_TAG_BITS, iv));
+		return c.doFinal(plain);
+	}
+
+	private static byte[] decryptAesGcm(byte[] cipher, byte[] key, byte[] iv) throws GeneralSecurityException {
+		Cipher c = Cipher.getInstance("AES/GCM/NoPadding");
+		c.init(Cipher.DECRYPT_MODE, new SecretKeySpec(key, "AES"), new GCMParameterSpec(GCM_TAG_BITS, iv));
+		return c.doFinal(cipher);
+	}
+
+	private static Properties parsePropertiesLike(String text) {
+		Properties props = new Properties();
+		Scanner sc = new Scanner(text);
+		while (sc.hasNextLine()) {
+			String line = sc.nextLine().trim();
+			if (line.isEmpty())
+				continue;
+			if (line.startsWith("#") || line.startsWith(";"))
+				continue;
+			int eq = line.indexOf('=');
+			if (eq <= 0)
+				continue;
+			String k = line.substring(0, eq).trim();
+			String v = line.substring(eq + 1).trim();
+			// quitar comillas envolventes opcionales
+			if ((v.startsWith("\"") && v.endsWith("\"")) || (v.startsWith("'") && v.endsWith("'"))) {
+				v = v.substring(1, v.length() - 1);
+			}
+			props.setProperty(k, v);
+		}
+		sc.close();
+		return props;
+	}
+
+	private static String b64(byte[] in) {
+		return Base64.getEncoder().withoutPadding().encodeToString(in);
+	}
+
+	private static byte[] b64d(String s) {
+		return Base64.getDecoder().decode(s);
+	}
+
+	private static byte[] randomBytes(int n) {
+		byte[] b = new byte[n];
+		new SecureRandom().nextBytes(b);
+		return b;
+	}
+
+	private static void zero(byte[] b) {
+		if (b != null)
+			Arrays.fill(b, (byte) 0);
+	}
+
+	private static void zero(char[] b) {
+		if (b != null)
+			Arrays.fill(b, '\0');
+	}
+	
+	static Path env;
+	public static void inicializeSecure() throws Exception {
+		if (env!=null) return;// -Dconfig.passphrase=Nhrm7167
+		env = Paths.get(JPath.PssPathData()+ "/config.env");
+		String pass = Optional.ofNullable(System.getProperty("config.passphrase")).orElse(System.getenv("CONFIG_PASSPHRASE"));
+		if (pass == null || pass.isEmpty())
+		    throw new IllegalStateException("CONFIG_PASSPHRASE/config.passphrase faltante");
+		char[] passChars = pass.toCharArray();
+		loadAndApply(env, pass.toCharArray() , true);
+
+	}
+	// generate env
+	public static void main(String[] args) {
+		try {
+			String plain = ""
+			    + "pss.dict.secret=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\n"
+			    + "pss.dict.ttlSeconds=600\n";
+			Path out = Paths.get(JPath.PssPathData()+"/config.env");
+			char[] pass = "XXXXXXX".toCharArray();
+			encryptAndWrite(out, plain, pass);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (GeneralSecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

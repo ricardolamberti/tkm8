@@ -488,7 +488,7 @@
         return output;
       }
       /**
-       * Encode a string as UTF-8
+       * Encode a string as ISO-8859-1
        *
        * @param {string} input Input string
        * @returns {string} UTF8 string

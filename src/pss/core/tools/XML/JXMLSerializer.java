@@ -57,7 +57,7 @@ public class JXMLSerializer {
 
 
   public String toString(Element zNode) throws Exception {
-    if (!(zNode instanceof Element)) JExcepcion.SendError("La implementación de xml no es la deseada.");
+    if (!(zNode instanceof Element)) JExcepcion.SendError("La implementaciï¿½n de xml no es la deseada.");
 //    return ((Element)zNode).toString();
 		Document document = zNode.getOwnerDocument();
 
@@ -247,8 +247,8 @@ protected String normalize(String s) {
 
 
   // @author IRA
-  // Perdón por esta funcion horrible y mal hecha.
-  // Hay que buscar una auxiliar en algún paquete de XML que encodeé un String a un String en UTF-8
+  // Perdï¿½n por esta funcion horrible y mal hecha.
+  // Hay que buscar una auxiliar en algï¿½n paquete de XML que encodeï¿½ un String a un String en ISO-8859-1
   public static String m_table[] = {
     null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,   // 0x00 0x0f
     null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,   // 0x10 0x1f

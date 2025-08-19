@@ -19303,7 +19303,7 @@ function _xlsxToStrings( obj ) {
 			if ( _ieExcel ) {
 				// IE doesn't include the XML declaration
 				if ( str.indexOf( '<?xml' ) === -1 ) {
-					str = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+str;
+					str = '<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>'+str;
 				}
 
 				// Return namespace attributes to being as such
@@ -19322,20 +19322,20 @@ function _xlsxToStrings( obj ) {
 // Excel - Pre-defined strings to build a basic XLSX file
 var excelStrings = {
 	"_rels/.rels":
-		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+		'<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>'+
 		'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
 			'<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>'+
 		'</Relationships>',
 
 	"xl/_rels/workbook.xml.rels":
-		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+		'<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>'+
 		'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
 			'<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>'+
 			'<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'+
 		'</Relationships>',
 
 	"[Content_Types].xml":
-		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+		'<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>'+
 		'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'+
 			'<Default Extension="xml" ContentType="application/xml" />'+
 			'<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml" />'+
@@ -19346,7 +19346,7 @@ var excelStrings = {
 		'</Types>',
 
 	"xl/workbook.xml":
-		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+		'<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>'+
 		'<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'+
 			'<fileVersion appName="xl" lastEdited="5" lowestEdited="5" rupBuild="24816"/>'+
 			'<workbookPr showInkAnnotation="0" autoCompressPictures="0"/>'+
@@ -19359,14 +19359,14 @@ var excelStrings = {
 		'</workbook>',
 
 	"xl/worksheets/sheet1.xml":
-		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+		'<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>'+
 		'<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">'+
 			'<sheetData/>'+
 			'<mergeCells count="0"/>'+
 		'</worksheet>',
 
 	"xl/styles.xml":
-		'<?xml version="1.0" encoding="UTF-8"?>'+
+		'<?xml version="1.0" encoding="ISO-8859-1"?>'+
 		'<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">'+
 			'<numFmts count="6">'+
 				'<numFmt numFmtId="164" formatCode="#,##0.00_-\ [$$-45C]"/>'+
@@ -19670,7 +19670,7 @@ DataTable.ext.buttons.csvFlash = $.extend( {}, flashButton, {
 	escapeChar: '"'
 } );
 
-// Excel save file - this is really a CSV file using UTF-8 that Excel can read
+// Excel save file - this is really a CSV file using ISO-8859-1 that Excel can read
 DataTable.ext.buttons.excelFlash = $.extend( {}, flashButton, {
 	className: 'buttons-excel buttons-flash',
 
@@ -20056,9 +20056,9 @@ var _saveAs = (function(view) {
 			}
 		}
 		, auto_bom = function(blob) {
-			// prepend BOM for UTF-8 XML and text/* types (including HTML)
+			// prepend BOM for ISO-8859-1 XML and text/* types (including HTML)
 			// note: your browser will automatically convert UTF-16 U+FEFF to EF BB BF
-			if (/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(blob.type)) {
+			if (/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*ISO-8859-1/i.test(blob.type)) {
 				return new Blob([String.fromCharCode(0xFEFF), blob], {type: blob.type});
 			}
 			return blob;
@@ -20365,7 +20365,7 @@ function _addToZip( zip, obj ) {
 			if ( _ieExcel ) {
 				// IE doesn't include the XML declaration
 				if ( str.indexOf( '<?xml' ) === -1 ) {
-					str = '<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+str;
+					str = '<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>'+str;
 				}
 
 				// Return namespace attributes to being as such
@@ -20466,20 +20466,20 @@ function _excelColWidth( data, col ) {
 // Excel - Pre-defined strings to build a basic XLSX file
 var excelStrings = {
 	"_rels/.rels":
-		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+		'<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>'+
 		'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
 			'<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>'+
 		'</Relationships>',
 
 	"xl/_rels/workbook.xml.rels":
-		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+		'<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>'+
 		'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+
 			'<Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>'+
 			'<Relationship Id="rId2" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/>'+
 		'</Relationships>',
 
 	"[Content_Types].xml":
-		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+		'<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>'+
 		'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">'+
 			'<Default Extension="xml" ContentType="application/xml" />'+
 			'<Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml" />'+
@@ -20490,7 +20490,7 @@ var excelStrings = {
 		'</Types>',
 
 	"xl/workbook.xml":
-		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+		'<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>'+
 		'<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">'+
 			'<fileVersion appName="xl" lastEdited="5" lowestEdited="5" rupBuild="24816"/>'+
 			'<workbookPr showInkAnnotation="0" autoCompressPictures="0"/>'+
@@ -20503,14 +20503,14 @@ var excelStrings = {
 		'</workbook>',
 
 	"xl/worksheets/sheet1.xml":
-		'<?xml version="1.0" encoding="UTF-8" standalone="yes"?>'+
+		'<?xml version="1.0" encoding="ISO-8859-1" standalone="yes"?>'+
 		'<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">'+
 			'<sheetData/>'+
 			'<mergeCells count="0"/>'+
 		'</worksheet>',
 
 	"xl/styles.xml":
-		'<?xml version="1.0" encoding="UTF-8"?>'+
+		'<?xml version="1.0" encoding="ISO-8859-1"?>'+
 		'<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="x14ac" xmlns:x14ac="http://schemas.microsoft.com/office/spreadsheetml/2009/9/ac">'+
 			'<numFmts count="6">'+
 				'<numFmt numFmtId="164" formatCode="#,##0.00_-\ [$$-45C]"/>'+

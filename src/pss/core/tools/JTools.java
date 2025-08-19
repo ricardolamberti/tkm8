@@ -3711,7 +3711,7 @@ public class JTools {
 		i += " <script type=\"text/javascript\" src=\"" + pathToResources + "/js/three-text2d.js\"></script>";
 		i += " <script src=\"" + pathToResources + "/js/gauge.js\"></script>";
 		i += " <script src=\"" + pathToResources + "/js/gaugev5.js\"></script>";
-		String html = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=iso-8859-1\"><html><head>";
+		String html = "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=ISO-8859-1\"><html><head>";
 		html += i;
 //		html+="<style type=\"text/css\">" + s + "</style>";
 		html += "</head><body>";
@@ -4246,11 +4246,11 @@ public class JTools {
 	}
 
 	public static String encodeURL(String decoded) throws Exception {
-		return URLEncoder.encode(decoded, "UTF-8").replace("+", "%20");
+		return URLEncoder.encode(decoded, "ISO-8859-1").replace("+", "%20");
 	}
 
 	public static String decodeURL(String encoded) throws Exception {
-		return URLDecoder.decode(encoded, "UTF-8");
+		return URLDecoder.decode(encoded, "ISO-8859-1");
 	}
 
 	public static String encodeString2(String line) {
@@ -4396,14 +4396,14 @@ public class JTools {
 	}
 
 	public static String encodeUTF8(String zValue) {
-		return new String(zValue.getBytes(Charset.forName("UTF-8")), Charset.forName("Windows-1252"));
+		return new String(zValue.getBytes(Charset.forName("ISO-8859-1")), Charset.forName("Windows-1252"));
 	}
 
 	private static final String GEOCODER_REQUEST_PREFIX_FOR_XML = "http://maps.google.com/maps/api/geocode/xml";
 
 	public static final GeoPosition getGeoPositionFromAdress(String address) throws Exception {
 		URL url = new URL(GEOCODER_REQUEST_PREFIX_FOR_XML + "?address="
-				+ (URLEncoder.encode(address, "UTF-8").replace("+", "%20")) + "&sensor=false");
+				+ (URLEncoder.encode(address, "ISO-8859-1").replace("+", "%20")) + "&sensor=false");
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
 		Document geocoderResultDocument = null;

@@ -205,7 +205,7 @@ public class apiWebServiceTools {
 	        String entryName;
 
 	        // build jar file name, then loop through zipped entries
-	        jarFileName = URLDecoder.decode(packageURL.getFile(), "UTF-8");
+	        jarFileName = URLDecoder.decode(packageURL.getFile(), "ISO-8859-1");
 	        jarFileName = jarFileName.substring(5,jarFileName.indexOf("!"));
 	        System.out.println(">"+jarFileName);
 	        jf = new JarFile(jarFileName);
@@ -256,7 +256,7 @@ public class apiWebServiceTools {
 		File aFile[] = oFile.listFiles();
 
 		if (aFile == null)
-			JExcepcion.SendError("El directorio^ '" + dirName + JLanguage.translate("' no existe, pero esta configurado en el producto. Se deberá eliminarlo de la confiuración del producto."));
+			JExcepcion.SendError("El directorio^ '" + dirName + JLanguage.translate("' no existe, pero esta configurado en el producto. Se deberï¿½ eliminarlo de la confiuraciï¿½n del producto."));
 
 		JOrderedMap<String, String> tableClassesInfo = JCollectionFactory.createOrderedMap();
 		for (int i = 0; i < aFile.length; i++) {
@@ -291,7 +291,7 @@ public class apiWebServiceTools {
 			} else { 
 				//	Si la el archivo leido es un directorio lo proceso y guardo el resultado siempre y cuando
 				// haya encontrado alguna clase valida.
-				// Excepto sea core ó www
+				// Excepto sea core ï¿½ www
 				String completeFileName = oFile.getPath() + "/" + aFile[i].getName();
 				if (completeFileName.contains("pss/core") || completeFileName.contains("pss/www") ) {
 					continue;

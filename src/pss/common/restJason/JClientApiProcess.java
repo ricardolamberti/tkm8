@@ -154,7 +154,7 @@ public class JClientApiProcess {
 	private void checkStatus(HttpResponse response) throws Exception {
     int statusCode = response.getStatusLine().getStatusCode();
     if (statusCode != HttpStatus.SC_OK) {
-    	String html = EntityUtils.toString(response.getEntity(), "UTF-8");
+    	String html = EntityUtils.toString(response.getEntity(), "ISO-8859-1");
     	JExcepcion.SendError(html);
     }
 	}

@@ -1412,6 +1412,7 @@ function dropdownwinlovclear(comp) {
 function dropwinlovresult(comp,json,originalsearch,showkey) {
 	var componenteul=$('*[id="'+comp+'_ul"]');
 	var componentesearch=$('*[id="'+comp+'_search"]');
+	sessionStorage.setItem('dictionary', json.dictionary);
 
 	var search =  componentesearch.val();
 	 if (search!=originalsearch) return;

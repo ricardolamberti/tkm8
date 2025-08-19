@@ -1199,7 +1199,7 @@ public abstract class JBaseWin implements IInMemory,Transferable,Serializable {
 			arguments="dg_export=serializer=htmlfull,object=win_list_x,range=all,preserve=T,history=N&dg_win_list_nav=name_op1=export,with_preview_op1=N,embedded_op1=false,toolbar_op1=none,&";
 		else if (builderArguments.equals("excel")) {
 			arguments="dg_export=serializer=excel,object=win_list_x,range=all,preserve=T,history=N";
-                       excelArgs ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
+                       excelArgs ="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>";
 		}
 		else if (builderArguments.equals("csv"))
 			arguments="dg_export=serializer=csv,object=win_list_x,range=all,preserve=T,history=N";
@@ -1238,7 +1238,7 @@ public abstract class JBaseWin implements IInMemory,Transferable,Serializable {
 		StringBuffer buffer = new StringBuffer();
 		BufferedReader in=null;
     try {
-                               InputStreamReader isr = new InputStreamReader(url.openStream(), "UTF-8");
+                               InputStreamReader isr = new InputStreamReader(url.openStream(), "ISO-8859-1");
 				in = new BufferedReader(isr);
 				while ((inputLine = in.readLine()) != null) {
 					 if (builderArguments.equals("excel")) 

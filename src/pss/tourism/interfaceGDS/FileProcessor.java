@@ -576,7 +576,7 @@ public class FileProcessor {
 				
 				//FileReader fr = new FileReader(file);
 				input = new BufferedReader(new InputStreamReader(
-            new FileInputStream(file), "UTF-8"));
+            new FileInputStream(file), "ISO-8859-1"));
 
 				noSubDirectory = false;
 

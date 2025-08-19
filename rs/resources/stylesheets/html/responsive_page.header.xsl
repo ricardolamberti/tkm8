@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
               	xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 	<!-- build the page structure taking the values which come in the header -->
@@ -8,7 +8,7 @@
          		select="0"/>
 	<xsl:template name="page.header">
 		<head>
-			<meta charset="utf-8"/>
+			<meta charset="UTF-8"/>
 			<META http-equiv="Content-Script-Type"
     				content="text/javascript" />
 			<meta http-equiv="X-UA-Compatible"

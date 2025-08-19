@@ -358,9 +358,9 @@ public class JLanguage {
     for ( i = 0 ; i < iLen ; i++ ) {
       char c = zMsg.charAt(i);
       if (!(( c >='A' && c <='Z' ) ||
-            ( c =='Á' || c =='É' || c =='Í' || c =='Ó' || c =='Ú' ) ||
-            ( c =='á' || c =='é' || c =='í' || c =='ó' || c =='ú' ) ||
-            ( c >='a' && c <='z' ) || (c=='ñ') || (c=='?') || (c=='¿') ||
+            ( c =='ï¿½' || c =='ï¿½' || c =='ï¿½' || c =='ï¿½' || c =='ï¿½' ) ||
+            ( c =='ï¿½' || c =='ï¿½' || c =='ï¿½' || c =='ï¿½' || c =='ï¿½' ) ||
+            ( c >='a' && c <='z' ) || (c=='ï¿½') || (c=='?') || (c=='ï¿½') ||
             (c==' ' && sAux.length()>0)) ) {
         if ( c=='^' ) { // entre ^ no esta protejido, o desde ^ hasta el final
           int h=zMsg.substring(i).indexOf('\n');
@@ -509,12 +509,12 @@ public class JLanguage {
 
   public static JRecords<BizVirtual> ObtenerIdiomas() throws Exception {
     JRecords<BizVirtual> oBDs = JRecords.createVirtualBDs();
-    oBDs.addItem(JRecord.virtualBD( "ar", "Español (Argentina)", 1) );
-    oBDs.addItem(JRecord.virtualBD( "cl", "Español (Chile)", 1) );
-    oBDs.addItem(JRecord.virtualBD( "gt", "Español (Guatemala)", 1) );
-    oBDs.addItem(JRecord.virtualBD( "mx", "Español (México)", 1) );
-    oBDs.addItem(JRecord.virtualBD( "br", "Português (Brasil)", 1) );
-    oBDs.addItem(JRecord.virtualBD( "us", "Inglés (USA)", 1) );
+    oBDs.addItem(JRecord.virtualBD( "ar", "Espaï¿½ol (Argentina)", 1) );
+    oBDs.addItem(JRecord.virtualBD( "cl", "Espaï¿½ol (Chile)", 1) );
+    oBDs.addItem(JRecord.virtualBD( "gt", "Espaï¿½ol (Guatemala)", 1) );
+    oBDs.addItem(JRecord.virtualBD( "mx", "Espaï¿½ol (Mï¿½xico)", 1) );
+    oBDs.addItem(JRecord.virtualBD( "br", "Portuguï¿½s (Brasil)", 1) );
+    oBDs.addItem(JRecord.virtualBD( "us", "Inglï¿½s (USA)", 1) );
     return oBDs;
   }
 

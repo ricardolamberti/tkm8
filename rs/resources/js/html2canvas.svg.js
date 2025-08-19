@@ -7607,7 +7607,7 @@ fabric.Pattern = fabric.util.createClass(/** @lends fabric.Pattern.prototype */ 
      * @param {Number} [options.viewBox.y] y-coordinate of viewbox
      * @param {Number} [options.viewBox.width] Width of viewbox
      * @param {Number} [options.viewBox.height] Height of viewbox
-     * @param {String} [options.encoding=UTF-8] Encoding of SVG output
+     * @param {String} [options.encoding=ISO-8859-1] Encoding of SVG output
      * @param {Function} [reviver] Method for further parsing of svg elements, called after each fabric object converted into svg representation.
      * @return {String} SVG string
      * @tutorial {@link http://fabricjs.com/fabric-intro-part-3/#serialization}
@@ -7625,7 +7625,7 @@ fabric.Pattern = fabric.util.createClass(/** @lends fabric.Pattern.prototype */ 
      *     height: 300
      *   }
      * });
-     * @example <caption>SVG output with different encoding (default: UTF-8)</caption>
+     * @example <caption>SVG output with different encoding (default: ISO-8859-1)</caption>
      * var svg = canvas.toSVG({encoding: 'ISO-8859-1'});
      * @example <caption>Modify SVG output with reviver function</caption>
      * var svg = canvas.toSVG(null, function(svg) {
@@ -7659,7 +7659,7 @@ fabric.Pattern = fabric.util.createClass(/** @lends fabric.Pattern.prototype */ 
     _setSVGPreamble: function(markup, options) {
       if (!options.suppressPreamble) {
         markup.push(
-          '<?xml version="1.0" encoding="', (options.encoding || 'UTF-8'), '" standalone="no" ?>',
+          '<?xml version="1.0" encoding="', (options.encoding || 'ISO-8859-1'), '" standalone="no" ?>',
             '<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" ',
               '"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">\n'
         );
