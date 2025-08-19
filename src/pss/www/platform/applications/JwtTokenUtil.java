@@ -4,27 +4,52 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 public class JwtTokenUtil {
 
-    private static final String SECRET_KEY = "pentawareamu81h3#hnymb$3xxc7vel3(xd22)efb!ty_xv*@t=7-qi3&5zrjl";
-    private static final long EXPIRATION_TIME = 86400000; // 1 d�a
+	 	public static final String TOKEN_COOKIE_NAME = "Astor_Authorization"; // Nombre de la cookie
 
+    // Clave secreta (debería venir de config o secret manager, no hardcodeada)
+    private static final String SECRET_KEY = System.getProperty("pss.jwt.key");;
+
+    // Tiempo de expiración en milisegundos (ejemplo: 1 días)
+    private static final long EXPIRATION_TIME = 1 * 24 * 60 * 60 * 1000L;
+
+    /**
+     * Genera un JWT con subject = username
+     */
     public static String generateToken(String username) {
+        long now = System.currentTimeMillis();
         return Jwts.builder()
                 .setSubject(username)
-                .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
-                .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
+                .setIssuedAt(new Date(now))
+                .setExpiration(new Date(now + EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes(StandardCharsets.UTF_8))
                 .compact();
     }
-    
+
+    /**
+     * Valida y parsea un JWT devolviendo los claims
+     */
     public static Claims parse(String token) {
-      return  Jwts.parser()
-          .setSigningKey(SECRET_KEY)
-          .parseClaimsJws(token)
-          .getBody();
-  }
-  
+        return Jwts.parser()
+                .setSigningKey(SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                .parseClaimsJws(token)
+                .getBody();
+    }
+
+    /**
+     * Renovar un token dado (sliding expiration)
+     */
+    public static String renew(Claims claims) {
+        long now = System.currentTimeMillis();
+        return Jwts.builder()
+                .setSubject(claims.getSubject())
+                .setIssuedAt(new Date(now))
+                .setExpiration(new Date(now + EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, SECRET_KEY.getBytes(StandardCharsets.UTF_8))
+                .compact();
+    }
 }

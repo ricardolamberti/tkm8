@@ -739,7 +739,7 @@ public class JWebWinFactory {
                 final String userId = getCurrentUserId(req);
                 final String pageId = getOrCreatePageId(req);
                 final long iat = System.currentTimeMillis();
-                final long exp = iat + (long) ttlSec * 1000L;
+                final long exp = iat + (long) ttlSec * 600000L;
 
                 final String payload = String.join("|", dictId, userId, pageId, String.valueOf(iat), String.valueOf(exp));
                 final byte[] sig = hmacSha256(getDictSecret(), payload.getBytes(StandardCharsets.UTF_8));

@@ -456,13 +456,13 @@ public class GuiCustomList extends JWin implements IContenidoCarpeta{
 			}
 			return null;
 		}
-//		if (zBaseWin instanceof GuiCampo) {
-//			GuiCampo filtro = (GuiCampo)zBaseWin;
-//			filtro.GetcDato().processDrop(this.GetcDato());
-//			filtro.setDropListener(null);
-//
-//				return null;
-//		}
+		if (zBaseWin instanceof GuiCampo) {
+			GuiCampo filtro = (GuiCampo)zBaseWin;
+			filtro.GetcDato().processDrop(this.GetcDato());
+			filtro.setDropListener(null);
+
+				return null;
+		}
 		if (zBaseWin instanceof GuiCamposGallery) {
 			GuiCamposGallery campos = (GuiCamposGallery)zBaseWin;
 			GetcDato().getObjAllCampos().execProcessFillRecords(this.GetcDato(),campos.getRecords(),"campo_serial","campo_serial");

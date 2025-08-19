@@ -59,8 +59,7 @@ public abstract class JIndoorsActionResolver extends JBasicWebActionResolver {
   }
 
 
-  private static final String TOKEN_COOKIE_NAME = "Authorization"; // Nombre de la cookie
-
+ 
   @Override
   public Map act(Redirector redirector, SourceResolver resolver, Map objectModel, String source, Parameters parameters) throws Exception {
       HttpRequest request = (HttpRequest) ObjectModelHelper.getRequest(objectModel);
@@ -102,7 +101,7 @@ public abstract class JIndoorsActionResolver extends JBasicWebActionResolver {
   private String getTokenFromCookies(Cookie[] cookies) {
     if (cookies != null) {
         for (Cookie cookie : cookies) {
-            if (TOKEN_COOKIE_NAME.equals(cookie.getName())) {
+            if (JwtTokenUtil.TOKEN_COOKIE_NAME.equals(cookie.getName())) {
                 return cookie.getValue();
             }
         }

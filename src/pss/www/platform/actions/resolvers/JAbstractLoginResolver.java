@@ -153,7 +153,7 @@ public abstract class JAbstractLoginResolver extends JFrontDoorActionResolver {
 				
 				// Configurar la cookie con el token
 				HttpServletResponse response = (HttpServletResponse) this.getObjectModel().get(HttpEnvironment.HTTP_RESPONSE_OBJECT);
-				Cookie authCookie = new Cookie("Authorization", token);
+				Cookie authCookie = new Cookie(JwtTokenUtil.TOKEN_COOKIE_NAME, token);
 				authCookie.setHttpOnly(true);
 				authCookie.setSecure(true);
 				authCookie.setPath("/");

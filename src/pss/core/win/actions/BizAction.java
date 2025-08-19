@@ -1192,6 +1192,7 @@ public class BizAction extends JRecord {
 	public String serialize() throws Exception {
 		Map<String, String> map = new HashMap<>();
 		map.put("class", getClass().getName());
+		map.put("uniqueID", getUniqueId());
 
 		Class<?> clazz = getClass();
 		while (clazz != null && BizAction.class.isAssignableFrom(clazz)) {
@@ -1204,9 +1205,9 @@ public class BizAction extends JRecord {
 					continue;
 				String key = f.getName();
 				if (value instanceof JAct) {
-					map.put(key, "A:" + ((JAct) value).serialize());
+					map.put(key, "A:" + JWebActionFactory.getCurrentRequest().registerActObjectObj((JAct) value));
 				} else if (value instanceof BizAction) {
-					map.put(key, "B:" + ((BizAction) value).serialize());
+					map.put(key, "B:" + JWebActionFactory.getCurrentRequest().registerActionObjectObj((BizAction) value));
 				} else if (value instanceof JBaseWin) {
 					String id = JWebActionFactory.getCurrentRequest().registerWinObjectObj((JBaseWin) value);
 					if (id != null && !id.isEmpty())
@@ -1234,6 +1235,9 @@ public class BizAction extends JRecord {
 		String clazzName = map.get("class");
 		Class<?> clazz = Class.forName(clazzName);
 		BizAction action = (BizAction) clazz.newInstance();
+		String uniqueId = map.get("uniqueID");
+		action.setUniqueId(uniqueId);
+		JWebActionFactory.getCurrentRequest().addObjectCreated(uniqueId, action);
 
 		while (clazz != null && BizAction.class.isAssignableFrom(clazz)) {
 			for (Field f : clazz.getDeclaredFields()) {
@@ -1245,9 +1249,9 @@ public class BizAction extends JRecord {
 					continue;
 				f.setAccessible(true);
 				if (value.startsWith("A:")) {
-					f.set(action, JAct.deserialize(value.substring(2)));
+					f.set(action, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
 				} else if (value.startsWith("B:")) {
-					f.set(action, BizAction.deserialize(value.substring(2)));
+					f.set(action, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
 				} else if (value.startsWith("W:") || value.startsWith("S:")) {
 					f.set(action, JWebActionFactory.getCurrentRequest().getRegisterObject(value.substring(2)));
 				} else if (value.startsWith("F:")) {

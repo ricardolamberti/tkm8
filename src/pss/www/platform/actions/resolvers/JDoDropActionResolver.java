@@ -27,8 +27,13 @@ public class JDoDropActionResolver extends JDoPssActionResolver {
 	public BizAction resolveAction(JBaseWin owner) throws Exception {
 		owner.SetVision((String)this.getRequest().get("dg_action"));
 		BizAction action = ((JWin)owner).addActionDrop(BizAction.DROP,"DROP");
-		getSession().getHistoryManager().addHistory(action);
+		//getSession().getHistoryManager().addHistory(action);
 		return action;
+	}
+	
+	@Override
+	public boolean isBackAfterSubmit() throws Exception {
+		return false;
 	}
 	public JBaseWin resolveMainActionDrop() throws Exception {
 		if (this.getRequest().hasPssObjectSelect()) {

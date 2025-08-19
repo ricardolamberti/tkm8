@@ -7,6 +7,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import pss.core.services.JExec;
 import pss.core.services.records.JRecords;
@@ -23,6 +24,7 @@ import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.winUI.forms.JBaseForm;
 import pss.www.platform.actions.JWebActionFactory;
+import pss.www.platform.actions.JWebRequest;
 
 /**
  * Base class for all executable actions in the UI framework.
@@ -36,6 +38,16 @@ import pss.www.platform.actions.JWebActionFactory;
 public abstract class JAct implements Cloneable, Serializable {
 
 	private static final long serialVersionUID = -2631894790579883735L;
+	private String uniqueID = UUID.randomUUID().toString();
+  
+	public String getUniqueId() {
+		return uniqueID.startsWith(JWebRequest.OBJ_PREFIX+"act_") ?uniqueID:JWebRequest.OBJ_PREFIX+"act_"+uniqueID;
+
+	}
+
+	public void setUniqueID(String uniqueID) {
+		this.uniqueID = uniqueID;
+	}
 
 	private String sName;
 	private int actionId;
@@ -693,8 +705,6 @@ public abstract class JAct implements Cloneable, Serializable {
 			for (Field f : clazz.getDeclaredFields()) {
 				if (Modifier.isStatic(f.getModifiers()))
 					continue;
-				if ("actionSource".equals(f.getName()))
-					continue;
 				f.setAccessible(true);
 				Object value = f.get(this);
 				if (value == null)
@@ -713,9 +723,9 @@ public abstract class JAct implements Cloneable, Serializable {
 
 				// 2) objetos especiales
 				if (value instanceof JAct) {
-					map.put(key, "A:" + ((JAct) value).serialize());
+					map.put(key, "A:" + JWebActionFactory.getCurrentRequest().registerActObjectObj((JAct) value));
 				} else if (value instanceof BizAction) {
-					map.put(key, "B:" + ((BizAction) value).serialize());
+					map.put(key, "B:" + JWebActionFactory.getCurrentRequest().registerActionObjectObj((BizAction) value));
 				} else if (value instanceof JBaseWin) {
 					String id = JWebActionFactory.getCurrentRequest().registerWinObjectObj((JBaseWin) value);
 					if (id != null && !id.isEmpty())
@@ -738,13 +748,14 @@ public abstract class JAct implements Cloneable, Serializable {
 		String clazzName = map.get("class");
 		Class<?> clazz = Class.forName(clazzName);
 		JAct act = (JAct) clazz.getDeclaredConstructor().newInstance();
+		String uniqueId = map.get("uniqueID").substring(2);
+		act.setUniqueID(uniqueId);
+		JWebActionFactory.getCurrentRequest().addObjectCreated(uniqueId, act);
 
 		Class<?> scan = clazz;
 		while (scan != null && JAct.class.isAssignableFrom(scan)) {
 			for (Field f : scan.getDeclaredFields()) {
 				if (Modifier.isStatic(f.getModifiers()))
-					continue;
-				if ("actionSource".equals(f.getName()))
 					continue;
 
 				String key = f.getName();
@@ -773,11 +784,11 @@ public abstract class JAct implements Cloneable, Serializable {
 						break;
 					}
 					case 'A': {
-						f.set(act, JAct.deserialize(payload));
+						f.set(act, JWebActionFactory.getCurrentRequest().getRegisterObject(payload));
 						break;
 					}
 					case 'B': {
-						f.set(act, BizAction.deserialize(payload));
+						f.set(act, JWebActionFactory.getCurrentRequest().getRegisterObject(payload));
 						break;
 					}
 					case 'W': { // objeto registrado (win)

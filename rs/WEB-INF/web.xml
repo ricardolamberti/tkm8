@@ -160,7 +160,7 @@
     - Default session timeout parameter.
     -->
   <session-config>
-    <session-timeout>30</session-timeout>
+    <session-timeout>720</session-timeout>
   </session-config>
 </web-app>
         

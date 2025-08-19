@@ -79,6 +79,7 @@ public class BizCampos extends JRecords<BizCampo> {
 			campo.setObjFiltroParent((BizCampo) parent);
 			campo.processDrop(this.getCustomList());
 			campo.setOperacion(BizCampo.OPER_AND);
+			campo.SetVision(this.GetVision());
 		}
 		return campo;
 	}

@@ -184,7 +184,9 @@ public class BizCustomList extends JRecord implements IActionData {
 
 	private JObjBDs pCampos = new JObjBDs() {
 		public void preset() throws Exception {
-			setValue(getObjAllCampos());
+			if (isRawNull()) {
+				pCampos.setValue(buildCampos());
+			} 
 		}
 //		public JRecords getRawValue() throws Exception {
 //			return super.getRawValue();
@@ -204,12 +206,14 @@ public class BizCustomList extends JRecord implements IActionData {
 	};
 	private JObjBDs pFiltros = new JObjBDs() {
 		public void preset() throws Exception {
-			setValue(getObjFiltros());
+			if (isRawNull()) 
+				setValue(buildObjFiltros());
 		}
 	};
 	private JObjBDs pFiltrosReporte = new JObjBDs() {
 		public void preset() throws Exception {
-			setValue(getObjFiltrosReporte());
+			if (isRawNull()) 
+				setValue(buildObjFiltrosReporte());
 		}
 	};
 	private JObjBDs pCamposVisibles = new JObjBDs() {
@@ -267,8 +271,8 @@ public class BizCustomList extends JRecord implements IActionData {
 //  private BizCampos columnas;
 //  private BizCampos filas;
 //  private BizCampos campos;
-  private BizCampos allCampos;
-  private BizCampos filtrosCampos;
+//  private BizCampos allCampos;
+//  private BizCampos filtrosCampos;
   private BizCampos extraFiltros;
 //  private BizCampos camposVisibles;
 //  private BizCampos filtros;
@@ -787,7 +791,10 @@ public class BizCustomList extends JRecord implements IActionData {
   	return (this.extraFiltros=r);
   }
   public BizCampos getObjFiltrosReporte() throws Exception {
-  	if (this.filtrosCampos!=null) return this.filtrosCampos;
+  	return (BizCampos)pFiltrosReporte.getValue();
+  }
+  
+  public BizCampos buildObjFiltrosReporte() throws Exception {
   	JMap<String,BizCampo> camposAdded = JCollectionFactory.createMap();
   	
   	BizCampos r =new BizCampos();
@@ -827,12 +834,14 @@ public class BizCustomList extends JRecord implements IActionData {
 
   	
   	
-  	return (this.filtrosCampos=r);
+  	return r;
   }
   
   public BizCampos getObjAllCampos() throws Exception {
-  	if (this.allCampos!=null) return this.allCampos;
-
+  	return (BizCampos) pCampos.getValue();
+  }
+  public BizCampos buildCampos() throws Exception {
+  		  
   	BizCampos r =new BizCampos();
   	r.setStatic(true);
   	r.setObjCustomList(this);
@@ -849,7 +858,7 @@ public class BizCustomList extends JRecord implements IActionData {
   			campo.setOrigenDatos(getRelId()); // por migracion
 			r.getStaticItems().addElement(campo);
   	}
-  	return (this.allCampos=r);
+  	return r;
   }
   public BizCampo findCampo(String campo) throws Exception {
   	JRecords<BizCampo> r = this.getObjAllCampos();
@@ -1081,9 +1090,13 @@ public class BizCustomList extends JRecord implements IActionData {
   	}
   	return filtros;
   }
+  
   public BizCampos getObjFiltros() throws Exception {
+  	return (BizCampos) pFiltros.getValue();
+  }
+  public BizCampos buildObjFiltros() throws Exception {
    	Map<String,BizCampo> fields= new TreeMap<String,BizCampo>();
-    	BizCampos r = this.getObjAllCampos();
+    BizCampos r = this.getObjAllCampos();
   	BizCampos filtros = new BizCampos();
   	filtros.setStatic(true);
    	if (extraFiltros!=null) {// estos filtros vienen del informe padre
@@ -1365,7 +1378,7 @@ public class BizCustomList extends JRecord implements IActionData {
 	}
 
 	public void cleanFiltrossCampos() throws Exception {
-		filtrosCampos=null;
+		pFiltros.setValue(buildObjFiltros());
 	}
 	
 	public void clean() throws Exception {
@@ -1657,11 +1670,15 @@ public class BizCustomList extends JRecord implements IActionData {
 		}
 	}
 	
+	public void setCampos(BizCampos origCampos) throws Exception {
+		pCampos.setValue(origCampos);
+	}
+	
 	public void setObjAllCampos(BizCampos origCampos,boolean cleanKeys) throws Exception {
-		this.allCampos=new BizCampos();
-		pCampos.setValue(this.allCampos);
+		BizCampos allCampos=new BizCampos();
+		pCampos.setValue(allCampos);
 		JIterator<BizCampo> it = origCampos.getStaticIterator();
-		this.allCampos.setStatic(true);
+		allCampos.setStatic(true);
 		while (it.hasMoreElements()) {
 			BizCampo origCampo = it.nextElement();
 			BizCampo campo = new BizCampo();
@@ -1676,7 +1693,7 @@ public class BizCustomList extends JRecord implements IActionData {
 					campo.setListId(getListId());
 				campo.setNullToSecuencia();
 			}
-			this.allCampos.addItem(campo);
+			allCampos.addItem(campo);
 		}
 
 		
@@ -2897,8 +2914,8 @@ public class BizCustomList extends JRecord implements IActionData {
 		if (!newDoc.isInvisible()&&getCompany().equals(newDoc.getCompany()))
 				newDoc.setNullSystemProtect();
 //		JMap<Long,Long> equivCampos = JCollectionFactory.createMap();
-		newDoc.allCampos=new BizCampos();
-		newDoc.allCampos.setStatic(true);
+		BizCampos allCampos=new BizCampos();
+		allCampos.setStatic(true);
 		BizCampos ampls = this.getObjAllCampos();
 		JIterator<BizCampo> it = ampls.getStaticIterator();
 		while (it.hasMoreElements()) {
@@ -2911,7 +2928,7 @@ public class BizCustomList extends JRecord implements IActionData {
 			newDoc.addCampo(na);
 		}
 		newDoc.processInsert();
-	
+	  newDoc.setCampos(allCampos);
 
 //		JIterator<BizCampo> it2 = newDoc.getObjAllCampos().getStaticIterator();
 //		while (it2.hasMoreElements()) {

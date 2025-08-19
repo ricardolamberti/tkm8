@@ -414,7 +414,7 @@ public class JWebHistoryManager implements Serializable {
 	
 	JLocalHistoryProvider serializeLocalHistoryProvider(JHistoryProvider local) throws Exception {
 		JLocalHistoryProvider hp = new JLocalHistoryProvider();
-		hp.action = new JWebWinFactory(null).convertActionToURL(local.getAction());
+		hp.action = JWebActionFactory.getCurrentRequest().registerActionObjectObj(local.getAction());
 		hp.columnsOrder = local.getColumnsOrder();
 		
 		hp.multipleSelect = local.getRawMultipleSelect();
@@ -435,7 +435,7 @@ public class JWebHistoryManager implements Serializable {
 	JHistoryProvider unserializeHistoryProvider(JLocalHistoryProvider local) throws Exception {
 		if (local==null) return null;
 		JHistoryProvider hp = new JHistoryProvider();
-		hp.action = new JWebWinFactory(null).convertURLToAction(local.action);
+		hp.action = (BizAction)JWebActionFactory.getCurrentRequest().getRegisterObject(local.action);// new JWebWinFactory(null).convertURLToAction(local.action);
 		hp.columnsOrder= local.columnsOrder;
 		hp.multipleSelect = local.multipleSelect;
 		hp.multiSelectName = local.multiSelectName;

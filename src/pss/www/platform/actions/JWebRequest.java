@@ -36,6 +36,7 @@ import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JMap;
 import pss.core.win.JBaseWin;
+import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.www.platform.actions.requestBundle.JWebActionData;
 import pss.www.platform.actions.requestBundle.JWebActionDataBundle;
@@ -78,12 +79,16 @@ public class JWebRequest {
 	public static final String OUT_CACHE_WIN_PREFIX = OUT_CACHE_PREFIX + "w:";
 	public static final String OUT_CACHE_REC_PREFIX = OUT_CACHE_PREFIX + "r:";
 	public static final String OUT_CACHE_OBJ_PREFIX = OUT_CACHE_PREFIX + "o:";
+	public static final String OUT_CACHE_ACT_PREFIX = OUT_CACHE_PREFIX + "a:";
+	public static final String OUT_CACHE_ACTION_PREFIX = OUT_CACHE_PREFIX + "t:";
 	public static final String OUT_INDIRECT_PREFIX = "obj_i:";
 	public static final String OUT_TEMP_PREFIX = "obj_t:";
 	public static final String OUT_REC_PREFIX = "obj_rec:";
 	public static final String OBJ_PREFIX = "obj_";
 	public static final String IN_TEMP_PREFIX = OBJ_PREFIX + "t_";
 	public static final String IN_REC_PREFIX = OBJ_PREFIX + "rec_";
+	public static final String IN_ACT_PREFIX = OBJ_PREFIX + "act_";
+	public static final String IN_ACTION_PREFIX = OBJ_PREFIX + "bac_";
 	public static final String IN_CACHED_PREFIX = OBJ_PREFIX + "c_";
 	public static final String IN_POINTER_PREFIX = OBJ_PREFIX + "p_";
 	private static final long CACHE_EXPIRE_SECONDS = Long.getLong("jwebrequest.cache.expireMinutes", 600L) * 60L;
@@ -693,7 +698,7 @@ public class JWebRequest {
 	private String getRegisteredObjectNew(String key) {
 		return getRegisteredObjectsNew().get(key);
 	}
-	
+
 	private void removeRegisteredObjectNew(String key) {
 		getRegisteredObjectsNew().remove(key);
 	}
@@ -745,16 +750,17 @@ public class JWebRequest {
 		return oRegisteredRequest;
 
 	}
-	
+
 	public String saveDictionary() throws Exception {
-                JWebRequest req = JWebActionFactory.getCurrentRequest();
-                String dictSerialized = req.getPack().getRegisterObjectsSerialized();
-                return new JWebWinFactory(null).mintDictionaryToken(req, dictSerialized);
-        }
-        public String retrieveDictionary(String token) throws Exception {
-                byte[] data = new JWebWinFactory(null).resolveDictionaryFromToken(this, token);
-                return JTools.byteVectorToString(data);
-        }
+		JWebRequest req = JWebActionFactory.getCurrentRequest();
+		String dictSerialized = req.getPack().getRegisterObjectsSerialized();
+		return new JWebWinFactory(null).mintDictionaryToken(req, dictSerialized);
+	}
+
+	public String retrieveDictionary(String token) throws Exception {
+		byte[] data = new JWebWinFactory(null).resolveDictionaryFromToken(this, token);
+		return JTools.byteVectorToString(data);
+	}
 
 	private boolean isLargeObject(Object obj) throws Exception {
 //		if (obj instanceof JBaseWin) {
@@ -792,7 +798,6 @@ public class JWebRequest {
 		String id = IN_POINTER_PREFIX + sha256(JTools.stringToByteArray(payload));
 		addRegisteredObject(id, payload);
 
-
 		return id;
 	}
 
@@ -818,15 +823,15 @@ public class JWebRequest {
 	public synchronized String registerWinObjectObj(JBaseWin zObject) throws Exception {
 
 		String id = zObject.getUniqueId() != null ? zObject.getUniqueId() : UUID.randomUUID().toString();
-		if ( getObjectSerialized(id))
+		if (getObjectSerialized(id))
 			return id;
 
 		addObjectSerialized(id);
-		
+
 		String out = null;
 		JWinPackager packager = new JWinPackager(null);
 		String json = packager.serializeWinToJson(zObject);
-		PssLogger.logDebug("JSON-->["+zObject.getClass().getName()+"]["+id+"] "+json);
+		PssLogger.logDebug("JSON-->[" + zObject.getClass().getName() + "][" + id + "] " + json);
 		if (isLargeObject(zObject)) {
 			String encoded = Base64.getEncoder().encodeToString(JWinPackager.deflate(JTools.stringToByteArray(json)));
 			CacheProvider.get().putBytes(id, JTools.stringToByteArray(encoded), CACHE_EXPIRE_SECONDS);
@@ -834,7 +839,57 @@ public class JWebRequest {
 		} else {
 			String packed = JWinPackager.b64url(JWinPackager.deflate(JTools.stringToByteArray(json)));
 			out = IN_TEMP_PREFIX + packed;
-			
+
+		}
+		addRegisteredObject(id, out);
+		return id;
+	}
+
+	public synchronized String registerActObjectObj(JAct zObject) throws Exception {
+
+		String id = zObject.getUniqueId() != null ? zObject.getUniqueId() : UUID.randomUUID().toString();
+		if (getObjectSerialized(id))
+			return id;
+
+		addObjectSerialized(id);
+
+		String out = null;
+		JWinPackager packager = new JWinPackager(null);
+		String json = zObject.serialize();
+		PssLogger.logDebug("JSON-->[" + zObject.getClass().getName() + "][" + id + "] " + json);
+		if (isLargeObject(zObject)) {
+			String encoded = Base64.getEncoder().encodeToString(JWinPackager.deflate(JTools.stringToByteArray(json)));
+			CacheProvider.get().putBytes(id, JTools.stringToByteArray(encoded), CACHE_EXPIRE_SECONDS);
+			out = OUT_CACHE_ACT_PREFIX + id;
+		} else {
+			String packed = JWinPackager.b64url(JWinPackager.deflate(JTools.stringToByteArray(json)));
+			out = IN_ACT_PREFIX + packed;
+
+		}
+		addRegisteredObject(id, out);
+		return id;
+	}
+
+	public synchronized String registerActionObjectObj(BizAction zObject) throws Exception {
+
+		String id = zObject.getUniqueId() != null ? zObject.getUniqueId() : UUID.randomUUID().toString();
+		if (getObjectSerialized(id))
+			return id;
+
+		addObjectSerialized(id);
+
+		String out = null;
+		JWinPackager packager = new JWinPackager(null);
+		String json = zObject.serialize();
+		PssLogger.logDebug("JSON-->[" + zObject.getClass().getName() + "][" + id + "] " + json);
+		if (isLargeObject(zObject)) {
+			String encoded = Base64.getEncoder().encodeToString(JWinPackager.deflate(JTools.stringToByteArray(json)));
+			CacheProvider.get().putBytes(id, JTools.stringToByteArray(encoded), CACHE_EXPIRE_SECONDS);
+			out = OUT_CACHE_ACTION_PREFIX + id;
+		} else {
+			String packed = JWinPackager.b64url(JWinPackager.deflate(JTools.stringToByteArray(json)));
+			out = IN_ACTION_PREFIX + packed;
+
 		}
 		addRegisteredObject(id, out);
 		return id;
@@ -843,14 +898,14 @@ public class JWebRequest {
 	public synchronized String registerRecObjectObj(JBaseRecord zObject, Boolean onlyProperties) throws Exception {
 		String id = zObject.getUniqueId() != null ? zObject.getUniqueId() : UUID.randomUUID().toString();
 
-		if ( getObjectSerialized(id))
+		if (getObjectSerialized(id))
 			return id;
 
 		addObjectSerialized(id);
 		String out = null;
 		JWinPackager packager = new JWinPackager(null);
-		String json = packager.serializeRecToJson(zObject,onlyProperties);
-		PssLogger.logDebug("JSON-->["+zObject.getClass().getName()+"]["+id+"] "+json);
+		String json = packager.serializeRecToJson(zObject, onlyProperties);
+		PssLogger.logDebug("JSON-->[" + zObject.getClass().getName() + "][" + id + "] " + json);
 		if (isLargeObject(zObject)) {
 			String encoded = Base64.getEncoder().encodeToString(JWinPackager.deflate(JTools.stringToByteArray(json)));
 			CacheProvider.get().putBytes(id, JTools.stringToByteArray(encoded), CACHE_EXPIRE_SECONDS);
@@ -870,8 +925,7 @@ public class JWebRequest {
 			PssLogger.logInfo("log point");
 		if (key.indexOf("953c8c2a-48a2-4cc4-894b-3677bdeadbfc") != -1)
 			PssLogger.logInfo("log point");
-	
-		
+
 		Serializable objOut = getObjectCreated(key);
 		if (objOut != null) {
 			return objOut;
@@ -890,8 +944,26 @@ public class JWebRequest {
 				String encoded = JTools.byteVectorToString(data);
 				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(encoded));
 				String json = JTools.byteVectorToString(raw);
-				PssLogger.logInfo("Reconstuir JSON: ["+key+"]"+json);
+				PssLogger.logInfo("Reconstuir JSON: [" + key + "]" + json);
 				objOut = new JWinPackager(new JWebWinFactory(null)).jsonToBaseWin(json);
+			} else if (obj.startsWith(OUT_CACHE_ACT_PREFIX)) {
+				byte[] data = CacheProvider.get().getBytes(obj.substring(OUT_CACHE_ACT_PREFIX.length()));
+				if (data == null)
+					return null;
+				String encoded = JTools.byteVectorToString(data);
+				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(encoded));
+				String json = JTools.byteVectorToString(raw);
+				PssLogger.logInfo("Reconstuir JSON: [" + key + "]" + json);
+				objOut = JAct.deserialize(json);
+			} else if (obj.startsWith(OUT_CACHE_ACTION_PREFIX)) {
+				byte[] data = CacheProvider.get().getBytes(obj.substring(OUT_CACHE_ACTION_PREFIX.length()));
+				if (data == null)
+					return null;
+				String encoded = JTools.byteVectorToString(data);
+				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(encoded));
+				String json = JTools.byteVectorToString(raw);
+				PssLogger.logInfo("Reconstuir JSON: [" + key + "]" + json);
+				objOut = BizAction.deserialize(json);
 			} else if (obj.startsWith(OUT_CACHE_REC_PREFIX)) {
 				byte[] data = CacheProvider.get().getBytes(obj.substring(OUT_CACHE_REC_PREFIX.length()));
 				if (data == null)
@@ -899,37 +971,49 @@ public class JWebRequest {
 				String encoded = JTools.byteVectorToString(data);
 				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(encoded));
 				String json = JTools.byteVectorToString(raw);
-				PssLogger.logInfo("Reconstuir JSON: ["+key+"]"+json);
+				PssLogger.logInfo("Reconstuir JSON: [" + key + "]" + json);
 				objOut = new JWinPackager(new JWebWinFactory(null)).jsonToBaseRec(json);
 			} else if (obj.startsWith(OUT_CACHE_OBJ_PREFIX)) {
-				PssLogger.logInfo("Reconstuir JSON: ["+key+"]"+obj);
+				PssLogger.logInfo("Reconstuir JSON: [" + key + "]" + obj);
 				byte[] data = CacheProvider.get().getBytes(obj.substring(OUT_CACHE_OBJ_PREFIX.length()));
 				if (data == null)
 					return null;
 				return (Serializable) deserializeObjectFromBytes(data);
 			} else if (obj.startsWith(OUT_INDIRECT_PREFIX)) {
-				PssLogger.logInfo("Reconstuir JSON: ["+key+"]"+obj);
+				PssLogger.logInfo("Reconstuir JSON: [" + key + "]" + obj);
 				objOut = (Serializable) getRegisterObject(obj.substring(OUT_INDIRECT_PREFIX.length()));
 			} else if (obj.startsWith(OUT_TEMP_PREFIX)) {
-				PssLogger.logInfo("Reconstuir JSON: ["+key+"]"+obj);
+				PssLogger.logInfo("Reconstuir JSON: [" + key + "]" + obj);
 				objOut = (Serializable) fetchFromCache(obj.substring(OUT_TEMP_PREFIX.length()));
 			} else if (obj.startsWith(OUT_REC_PREFIX)) {
-				PssLogger.logInfo("Reconstuir JSON: ["+key+"]"+obj);
-		  	objOut = (Serializable) fetchFromCache(obj.substring(OUT_REC_PREFIX.length()));
+				PssLogger.logInfo("Reconstuir JSON: [" + key + "]" + obj);
+				objOut = (Serializable) fetchFromCache(obj.substring(OUT_REC_PREFIX.length()));
+			} else if (obj.startsWith(IN_ACTION_PREFIX)) {
+				String payload = obj.substring(IN_TEMP_PREFIX.length());
+				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
+				String json = JTools.byteVectorToString(raw);
+				PssLogger.logInfo("Reconstuir JSON: [" + key + "]" + json);
+				objOut = new JWinPackager(new JWebWinFactory(null)).jsonToBaseWin(json);
+			} else if (obj.startsWith(IN_ACT_PREFIX)) {
+				String payload = obj.substring(IN_TEMP_PREFIX.length());
+				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
+				String json = JTools.byteVectorToString(raw);
+				PssLogger.logInfo("Reconstuir JSON: [" + key + "]" + json);
+				objOut = new JWinPackager(new JWebWinFactory(null)).jsonToBaseWin(json);
 			} else if (obj.startsWith(IN_TEMP_PREFIX)) {
 				String payload = obj.substring(IN_TEMP_PREFIX.length());
 				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
 				String json = JTools.byteVectorToString(raw);
-				PssLogger.logInfo("Reconstuir JSON: ["+key+"]"+json);
+				PssLogger.logInfo("Reconstuir JSON: [" + key + "]" + json);
 				objOut = new JWinPackager(new JWebWinFactory(null)).jsonToBaseWin(json);
 			} else if (obj.startsWith(IN_REC_PREFIX)) {
 				String payload = obj.substring(IN_REC_PREFIX.length());
 				byte[] raw = JWinPackager.inflate(Base64.getDecoder().decode(payload));
 				String json = JTools.byteVectorToString(raw);
-				PssLogger.logInfo("Reconstuir JSON: ["+key+"]"+json);
+				PssLogger.logInfo("Reconstuir JSON: [" + key + "]" + json);
 				objOut = new JWinPackager(new JWebWinFactory(null)).jsonToBaseRec(json);
 			} else {
-				PssLogger.logInfo("Reconstuir JSON: ["+key+"]"+obj);
+				PssLogger.logInfo("Reconstuir JSON: [" + key + "]" + obj);
 
 				objOut = deserializeObject(obj);
 			}
@@ -1005,7 +1089,6 @@ public class JWebRequest {
 		pack.localRegisteredObject = getRegisteredObjectsNew();
 		pack.localNameDictionay = getNameDictionary();
 
-
 		return serializeRegisterJSON(pack);
 	}
 
@@ -1080,7 +1163,7 @@ public class JWebRequest {
 			String dictionaryKey = getPssIdDictionary();
 			if (dictionaryKey == null || dictionaryKey.isEmpty())
 				return;
-			pack = (JWebRequestPackage) deserializeRegisterJSON(retrieveDictionary(dictionaryKey)); 
+			pack = (JWebRequestPackage) deserializeRegisterJSON(retrieveDictionary(dictionaryKey));
 			oNameDictionary = pack.localNameDictionay;
 			oRegisteredObjectsOld = pack.localRegisteredObject;
 			if (getHistoryManager().sizeHistory() == 0) {
@@ -1099,18 +1182,21 @@ public class JWebRequest {
 
 	}
 
-	public String serializeRegisterMapJSON(Map<String, String> pack) {
+	public String serializeRegisterMapJSON(Map<String, String> map) {
 		Gson gson = new Gson();
-		String serializedMap = gson.toJson(pack);
-		return Base64.getEncoder().encodeToString(JTools.stringToByteArray(serializedMap));
+		String serializedMap = gson.toJson(map);
+		return serializedMap;// Base64.getEncoder().encodeToString(JTools.stringToByteArray(serializedMap));
 	}
 
 	public Map<String, String> deserializeRegisterMapJSON(String serializedDictionary) {
-		Map<String, String> map = new TreeMap<String, String>();
 		Gson gson = new Gson();
 		Type type = new TypeToken<Map<String, String>>() {
 		}.getType();
-		map = gson.fromJson(JTools.byteVectorToString(Base64.getDecoder().decode(serializedDictionary)), type);
+
+		// map =
+		// gson.fromJson(JTools.byteVectorToString(Base64.getDecoder().decode(serializedDictionary)),
+		// type);
+		Map<String, String> map = gson.fromJson(String.valueOf(serializedDictionary), type);
 		return map;
 	}
 
