@@ -7,6 +7,9 @@
 package pss.www.platform.actions.requestBundle;
 
 import java.io.Serializable;
+import java.util.Map;
+
+import com.google.gson.Gson;
 
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
@@ -101,12 +104,12 @@ public class JWebActionData implements JXMLRepresentable,Serializable {
 		if (oArg == null) {
 			return null;
 		} else {
-			String s = oArg.getValue().replace("á", "�");
-			s = s.replace("é", "�");
-			s = s.replace("í", "�");
-			s = s.replace("ó", "�");
-			s = s.replace("ú", "�");
-			s = s.replace("ñ", "�");
+                        String s = oArg.getValue().replace("á", "");
+                        s = s.replace("é", "");
+                        s = s.replace("í", "");
+                        s = s.replace("ó", "");
+                        s = s.replace("ú", "");
+                        s = s.replace("ñ", "");
 			return s;
 		}
 	}
@@ -150,8 +153,35 @@ public class JWebActionData implements JXMLRepresentable,Serializable {
 		return this.bReadOnly;
 	}
 
-	public void setReadOnly(boolean b) {
-		this.bReadOnly = b;
-	}
+        public void setReadOnly(boolean b) {
+                this.bReadOnly = b;
+        }
+
+        public String serialize() throws Exception {
+                Gson gson = new Gson();
+                DataWrapper d = new DataWrapper();
+                d.id = this.sId;
+                d.readOnly = this.bReadOnly;
+                d.fields = this.oMap != null ? this.oMap.toMap() : null;
+                return gson.toJson(d);
+        }
+
+        public static JWebActionData unserialize(String json) throws Exception {
+                Gson gson = new Gson();
+                DataWrapper d = gson.fromJson(json, DataWrapper.class);
+                JWebActionData data = new JWebActionData(d.id, d.readOnly);
+                if (d.fields != null) {
+                        for (Map.Entry<String, JWebActionDataField> e : d.fields.entrySet()) {
+                                data.oMap.addElement(e.getKey(), e.getValue());
+                        }
+                }
+                return data;
+        }
+
+        private static class DataWrapper {
+                String id;
+                boolean readOnly;
+                Map<String, JWebActionDataField> fields;
+        }
 
 }
