@@ -19,13 +19,45 @@ import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JList;
 
 /**
- * CJG - Comenté los métodos GetBase y SetBase porque estaban sobreescritos en
+ * CJG - ComentÃ© los mÃ©todos GetBase y SetBase porque estaban sobreescritos en
  * JBaseRegistro
  * 
  * @version 1.0
  */
 
 public class JRegJDBC extends JRegSQL {
+
+        public static enum QueryMode { PREVIEW, FULL, EXPLAIN_ONLY }
+
+        public static enum Dialect { POSTGRES, ORACLE, SQLSERVER, HIBERNATE }
+
+        public static final class RegQueryOptions {
+                public final QueryMode mode;
+                public final int previewRows;
+                public final Integer samplePercent;
+                public final int hardTimeoutSec;
+                public final int fetchSize;
+                public final Dialect dialect;
+                public final boolean runPlanGuard;
+
+                public RegQueryOptions(QueryMode m, int n, Integer sp, int to, int fs, Dialect d, boolean guard) {
+                        this.mode = m;
+                        this.previewRows = n;
+                        this.samplePercent = sp;
+                        this.hardTimeoutSec = to;
+                        this.fetchSize = fs;
+                        this.dialect = d;
+                        this.runPlanGuard = guard;
+                }
+
+                public static RegQueryOptions fullDefaults(Dialect d) {
+                        return new RegQueryOptions(QueryMode.FULL, 0, null, 60, 5000, d, true);
+                }
+
+                public static RegQueryOptions previewDefaults(Dialect d) {
+                        return new RegQueryOptions(QueryMode.PREVIEW, 200, 1, 5, 2000, d, true);
+                }
+        }
 
 	protected ResultSet oResultSet;
 	protected Object oObject;
@@ -116,7 +148,7 @@ public class JRegJDBC extends JRegSQL {
 	/**
 	 * Ejecuta una sentencia SELECT
 	 * 
-	 * @throw JConnectionBroken En caso que no haya conexión con la base
+	 * @throw JConnectionBroken En caso que no haya conexiÃ³n con la base
 	 */
 	protected Statement getQueryOpenStatement(JBaseJDBC oDatabaseImpl) throws Exception {
 		return null;
@@ -141,12 +173,12 @@ public class JRegJDBC extends JRegSQL {
 	/**
 	 * Ejecuta una sentencia UPDATE, DELETE, INSERT, etc.
 	 * 
-	 * @throw JConnectionBroken En caso que no haya conexión con la base
+	 * @throw JConnectionBroken En caso que no haya conexiÃ³n con la base
 	 */
 	@Override
 	protected int QueryExec() throws Exception {
 		if (!this.getBaseJDBC().isTransactionInProgress()) {
-			JExcepcion.SendError("Sentencia fuera de transacción");
+			JExcepcion.SendError("Sentencia fuera de transacciÃ³n");
 		}
 		return executeStatementWithResult(sSQL);
 	}
@@ -397,29 +429,37 @@ public class JRegJDBC extends JRegSQL {
 	}
 
 	/**
-	 * Obtiene una nueva Statement luego de intentar una nueva conexión con la Base
+	 * Obtiene una nueva Statement luego de intentar una nueva conexiÃ³n con la Base
 	 * de datos.
 	 * 
 	 * @return la statement nueva
-	 * @throw JConnectionBroken si no pudo establecer una nueva conexión
+	 * @throw JConnectionBroken si no pudo establecer una nueva conexiÃ³n
 	 */
 	/*
 	 * private Statement getNewStatement() throws Exception { if
 	 * (!JBDatos.retryEstablishConnection()) { throw new
-	 * JConnectionBroken("No se puede reestablecer la conexión"); } return
+	 * JConnectionBroken("No se puede reestablecer la conexiÃ³n"); } return
 	 * getBaseJDBC().GetConnection().createStatement(); }
 	 */
 	public JBaseJDBC getBaseJDBC() {
 		return (JBaseJDBC) this.getDatabase();
 	}
 
-	public JIterator<String> getFieldNameIterator() throws Exception {
-		JList<String> vItems;
-		vItems = JCollectionFactory.createList();
-		for (int i = 1; i <= oResultSet.getMetaData().getColumnCount(); i++) {
-			vItems.addElement(oResultSet.getMetaData().getColumnName(i));
-		}
-		return vItems.getIterator();
-	}
+        public JIterator<String> getFieldNameIterator() throws Exception {
+                JList<String> vItems;
+                vItems = JCollectionFactory.createList();
+                for (int i = 1; i <= oResultSet.getMetaData().getColumnCount(); i++) {
+                        vItems.addElement(oResultSet.getMetaData().getColumnName(i));
+                }
+                return vItems.getIterator();
+        }
+
+        public QueryResult query(String sql) throws Exception {
+                return query(sql, RegQueryOptions.fullDefaults(Dialect.POSTGRES));
+        }
+
+        public QueryResult query(String sql, RegQueryOptions opts) throws Exception {
+                throw new UnsupportedOperationException("Not implemented");
+        }
 
 }

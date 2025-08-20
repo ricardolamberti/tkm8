@@ -1,5 +1,7 @@
 package pss.core.data.implementation.postgresql8;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -31,6 +33,10 @@ import pss.core.tools.JExcepcion;
 import pss.core.tools.JTools;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JList;
+import pss.core.data.interfaces.sentences.PlanInfo;
+import pss.core.data.interfaces.sentences.QueryGuard;
+import pss.core.data.interfaces.sentences.QueryResult;
+import pss.core.data.interfaces.sentences.BasicPlanAnalyzer;
 
 public class JRegJDBCImpl extends JRegJDBC {
 
@@ -928,7 +934,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 
 	@Override
 	protected void checkSpecialErrors(SQLException zSQLExe) throws Exception {
-		if (zSQLExe.getMessage().indexOf("La conversión del tipo de datos char a datetime " + "produjo un valor datetime fuera de intervalo") != -1)
+		if (zSQLExe.getMessage().indexOf("La conversiÃ³n del tipo de datos char a datetime " + "produjo un valor datetime fuera de intervalo") != -1)
 			JExcepcion.SendError("Fecha fuera de rango");
 		if ((zSQLExe.getMessage().indexOf("value larger than specified precision allows for this column") != -1))
 			JExcepcion.SendError("Importe fuera de rango");
@@ -1040,16 +1046,73 @@ public class JRegJDBCImpl extends JRegJDBC {
 		if (!this.next()) return 0;
 		return this.CampoAsLong("cantidad").longValue();
 	}
-	public  String ArmarIn(String zTabla, String zTipo, String zValor) throws Exception {
-		if (zValor.startsWith("(")) return zValor;
-		StringTokenizer toks = new StringTokenizer(zValor,",");
-		String s = "";
-		while (toks.hasMoreTokens()) {
-			String ss = toks.nextToken();
-			s+=(s.equals("")?"":",")+ArmarDato(zTabla, zTipo, ss);
-		}
-		return "("+s+")";
-	}	
+        public  String ArmarIn(String zTabla, String zTipo, String zValor) throws Exception {
+                if (zValor.startsWith("(")) return zValor;
+                StringTokenizer toks = new StringTokenizer(zValor,",");
+                String s = "";
+                while (toks.hasMoreTokens()) {
+                        String ss = toks.nextToken();
+                        s+=(s.equals("")?"":",")+ArmarDato(zTabla, zTipo, ss);
+                }
+                return "("+s+")";
+        }
+
+        private String wrapByModePg(String sql, RegQueryOptions o) {
+                switch (o.mode) {
+                case PREVIEW:
+                        String s = (o.samplePercent == null) ? sql
+                                        : sql.replaceFirst("(?i)FROM\\s+(\\S+)",
+                                                        m -> "FROM " + m.group(1) + " TABLESAMPLE SYSTEM (" + o.samplePercent + ")");
+                        return "SELECT * FROM (\n" + s + "\n) q LIMIT " + o.previewRows;
+                case EXPLAIN_ONLY:
+                        return "EXPLAIN (FORMAT JSON) " + sql;
+                default:
+                        return sql;
+                }
+        }
+
+        @Override
+        public QueryResult query(String baseSql, RegQueryOptions opts) throws Exception {
+                JBaseJDBC base = getBaseJDBC();
+                Connection conn = base.GetConnection();
+                String sql = wrapByModePg(baseSql, opts);
+                BasicPlanAnalyzer planAnalyzer = new BasicPlanAnalyzer();
+                QueryGuard guard = new QueryGuard();
+                if (opts.runPlanGuard && opts.mode != QueryMode.EXPLAIN_ONLY) {
+                        PlanInfo p = planAnalyzer.analyze(conn, sql, opts.dialect);
+                        QueryGuard.Decision d = guard.decide(p);
+                        if (d == QueryGuard.Decision.BLOCK)
+                                return QueryResult.blocked("Consulta bloqueada por presupuesto", p.rawPlanText);
+                }
+                boolean restoreAutoCommit = false;
+                if (opts.dialect == Dialect.POSTGRES && conn.getAutoCommit()) {
+                        conn.setAutoCommit(false);
+                        restoreAutoCommit = true;
+                }
+                int count = 0;
+                try (PreparedStatement ps = conn.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
+                        ps.setQueryTimeout(opts.hardTimeoutSec);
+                        ps.setFetchSize(opts.fetchSize);
+                        base.beginOpTracking();
+                        base.registerActiveCursor(ps);
+                        try (ResultSet rs = ps.executeQuery()) {
+                                while (rs.next()) {
+                                        count++;
+                                        if (opts.mode == QueryMode.PREVIEW && count >= opts.previewRows) {
+                                                break;
+                                        }
+                                }
+                        } finally {
+                                base.unregisterActiveCursor(ps);
+                                base.endOpTracking();
+                        }
+                } finally {
+                        if (restoreAutoCommit)
+                                conn.setAutoCommit(true);
+                }
+                boolean trunc = opts.mode == QueryMode.PREVIEW && count >= opts.previewRows;
+                return new QueryResult(false, null, count, trunc);
+        }
 }
 
 // -------------------------------------------------------------------------- // // // Obtengo el

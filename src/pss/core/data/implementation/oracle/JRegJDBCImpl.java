@@ -1,5 +1,8 @@
 package pss.core.data.implementation.oracle;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -20,6 +23,9 @@ import pss.core.tools.JExcepcion;
 import pss.core.tools.JTools;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JList;
+import pss.core.data.interfaces.sentences.PlanInfo;
+import pss.core.data.interfaces.sentences.QueryGuard;
+import pss.core.data.interfaces.sentences.QueryResult;
 
 public class JRegJDBCImpl extends JRegJDBC {
 
@@ -366,7 +372,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 	@Override
 	protected void checkSpecialErrors(SQLException zSQLExe) throws Exception {
 		if (zSQLExe.getMessage().indexOf(
-				"La conversión del tipo de datos char a datetime "
+				"La conversiÃ³n del tipo de datos char a datetime "
 						+ "produjo un valor datetime fuera de intervalo") != -1)
 			JExcepcion.SendError("Fecha fuera de rango");
 		if ((zSQLExe.getMessage().indexOf(
@@ -441,8 +447,46 @@ public class JRegJDBCImpl extends JRegJDBC {
 		return "(" + field + " - to_date('" + fecha + "'))";
 	}
 
-	public String fintervalo(String zFieldname,String valor1,String valor2) throws Exception {
-		return " ("+zFieldname + " between "+valor1+" and "+valor2+" )";
-	}
+        public String fintervalo(String zFieldname,String valor1,String valor2) throws Exception {
+                return " ("+zFieldname + " between "+valor1+" and "+valor2+" )";
+        }
+
+        private String wrapByModeOracle(String sql, RegQueryOptions o) {
+                switch (o.mode) {
+                case PREVIEW:
+                        String wrapped = "SELECT * FROM (" + sql + ") q WHERE ROWNUM <= " + o.previewRows;
+                        return wrapped;
+                case EXPLAIN_ONLY:
+                        return "EXPLAIN PLAN FOR " + sql;
+                default:
+                        return sql;
+                }
+        }
+
+        @Override
+        public QueryResult query(String baseSql, RegQueryOptions opts) throws Exception {
+                JBaseJDBC base = getBaseJDBC();
+                Connection conn = base.GetConnection();
+                String sql = wrapByModeOracle(baseSql, opts);
+                int count = 0;
+                try (PreparedStatement ps = conn.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
+                        ps.setQueryTimeout(opts.hardTimeoutSec);
+                        ps.setFetchSize(opts.fetchSize);
+                        base.beginOpTracking();
+                        base.registerActiveCursor(ps);
+                        try (ResultSet rs = ps.executeQuery()) {
+                                while (rs.next()) {
+                                        count++;
+                                        if (opts.mode == QueryMode.PREVIEW && count >= opts.previewRows)
+                                                break;
+                                }
+                        } finally {
+                                base.unregisterActiveCursor(ps);
+                                base.endOpTracking();
+                        }
+                }
+                boolean trunc = opts.mode == QueryMode.PREVIEW && count >= opts.previewRows;
+                return new QueryResult(false, null, count, trunc);
+        }
 
 }

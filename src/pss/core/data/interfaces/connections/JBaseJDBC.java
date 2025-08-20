@@ -63,11 +63,12 @@ public abstract class JBaseJDBC extends JBDato {
 	// protected String sBaseDatos; // Nombre de la base
 	protected long lLockTimeoutSeconds = 0;
 	protected long lAntiBlockingSystemTimeoutSeconds = 0;
-	protected JDBConnectionPools oConnectionPools;
-	protected Connection connection;
-	protected JPssDriver oDriverImpl;
-	protected JMap<String, Statement> vTransactionCursors = null;
-	private boolean bReportDatabase = false;
+        protected JDBConnectionPools oConnectionPools;
+        protected Connection connection;
+        protected JPssDriver oDriverImpl;
+        protected JMap<String, Statement> vTransactionCursors = null;
+        private JMap<String, Statement> vActiveCursors = null;
+        private boolean bReportDatabase = false;
 
 	public int countOpenCursors() {
 		if (vTransactionCursors == null)
@@ -75,10 +76,59 @@ public abstract class JBaseJDBC extends JBDato {
 		return vTransactionCursors.size();
 	}
 
-	public void removeTransactionCursor(Statement st) {
-		if (vTransactionCursors != null)
-			vTransactionCursors.removeElement(st.toString());
-	}
+        public void removeTransactionCursor(Statement st) {
+                if (vTransactionCursors != null)
+                        vTransactionCursors.removeElement(st.toString());
+        }
+
+        public void beginOpTracking() {
+                if (vActiveCursors == null)
+                        vActiveCursors = JCollectionFactory.createMap();
+        }
+
+        public void endOpTracking() {
+                closeActiveCursors();
+        }
+
+        public void registerActiveCursor(Statement st) {
+                if (vActiveCursors != null)
+                        vActiveCursors.addElement(st.toString(), st);
+        }
+
+        public void unregisterActiveCursor(Statement st) {
+                if (vActiveCursors != null)
+                        vActiveCursors.removeElement(st.toString());
+        }
+
+        public int cancelActiveCursors() {
+                if (vActiveCursors == null)
+                        return 0;
+                try {
+                        JIterator<Statement> it = vActiveCursors.getValueIterator();
+                        while (it.hasMoreElements())
+                                it.nextElement().cancel();
+                } catch (Exception e) {
+                        PssLogger.logError(e);
+                }
+                int n = vActiveCursors.size();
+                vActiveCursors = null;
+                return n;
+        }
+
+        public int closeActiveCursors() {
+                if (vActiveCursors == null)
+                        return 0;
+                try {
+                        JIterator<Statement> it = vActiveCursors.getValueIterator();
+                        while (it.hasMoreElements())
+                                it.nextElement().close();
+                } catch (Exception e) {
+                        PssLogger.logError(e);
+                }
+                int n = vActiveCursors.size();
+                vActiveCursors = null;
+                return n;
+        }
 
 	/**
 	 * Constructor
@@ -149,7 +199,7 @@ public abstract class JBaseJDBC extends JBDato {
 
 	/**
 	 * Obtiene el usuario que levanta el servicio JDataServer. Utilizado para
-	 * conectarse a una base de datos. En caso que el usuario este vacÌo, se le
+	 * conectarse a una base de datos. En caso que el usuario este vac√≠o, se le
 	 * asigna el default 'dbaccess'.
 	 * 
 	 * @return El nombre del usuario del servicio // TODO PASAR ESTO A
@@ -176,15 +226,15 @@ public abstract class JBaseJDBC extends JBDato {
 	}
 
 	/**
-	 * Seteo los parametros para la clase JDBC Se convirtiÛ en algo m·s que set.
-	 * Est· cargando el driver y creando el pool. Lo que no hace es pedir
-	 * conexiones... eso lo har· abrir()
+	 * Seteo los parametros para la clase JDBC Se convirti√≥ en algo m√°s que set.
+	 * Est√° cargando el driver y creando el pool. Lo que no hace es pedir
+	 * conexiones... eso lo har√° abrir()
 	 */
 	@Override
 	public void asignParams(int zUserType) throws Exception {
 		BizPssConfig PssIni = BizPssConfig.getPssConfig();
 
-		// UserService contiene el usuario que levantar· el servicio JDataConnect
+		// UserService contiene el usuario que levantar√° el servicio JDataConnect
 		this.sUserService = PssIni.getCachedValue(this.GetName(), USERSERVICE, "");
 		this.sAlias = PssIni.getCachedValue(this.GetName(), ALIAS, "");
 		this.sAuth = PssIni.getCachedValue(this.GetName(), AUTHENTICATION, "");
@@ -286,10 +336,10 @@ public abstract class JBaseJDBC extends JBDato {
 		oConnectionPools = JDBConnectionPools.getInstance();
 		PssLogger.logWait("try open connection " + this.GetName());
 
-		// Le pide una conexiÛn del pool zBaseDatos
+		// Le pide una conexi√≥n del pool zBaseDatos
 		this.connection = oConnectionPools.getConnection(this.GetName(), timeoutValidConnection());
 		if (this.connection == null)
-			JExcepcion.SendError("No se pudo obtener una conexiÛn a^ " + this.GetName());
+			JExcepcion.SendError("No se pudo obtener una conexi√≥n a^ " + this.GetName());
 
 		
 		for (int i = 0; i < 5; i++) {
@@ -351,14 +401,16 @@ public abstract class JBaseJDBC extends JBDato {
 		// Libera la instancia
 		// oConnectionPools.release();
 	}
-	public synchronized void cancel() throws Exception {
-		if (connection != null) {
-			PssLogger.logWait("try to close open cursors: " + this.GetName());
-			PssLogger.logWait("open cursors cancel: " + (this.cancelTransactionCursors() > 0));
-			PssLogger.logWait("open cursors closed: " + (this.closeTransactionCursors() > 0));
-			oConnectionPools.freeConnection(this.GetName(), connection);
-			connection = null;
-		}
+        public synchronized void cancel() throws Exception {
+                if (connection != null) {
+                        PssLogger.logWait("try to close open cursors: " + this.GetName());
+                        PssLogger.logWait("open cursors cancel (tx): " + (this.cancelTransactionCursors() > 0));
+                        PssLogger.logWait("open cursors cancel (ops): " + (this.cancelActiveCursors() > 0));
+                        PssLogger.logWait("open cursors closed (tx): " + (this.closeTransactionCursors() > 0));
+                        PssLogger.logWait("open cursors closed (ops): " + (this.closeActiveCursors() > 0));
+                        oConnectionPools.freeConnection(this.GetName(), connection);
+                        connection = null;
+                }
 		// Libera la instancia
 		// oConnectionPools.release();
 	}
@@ -374,7 +426,7 @@ public abstract class JBaseJDBC extends JBDato {
 	@Override
 	public void beginTransaction() throws Exception {
 		if (vTransactionCursors != null)
-			JExcepcion.SendError("Error: TransacciÛn anidada");
+			JExcepcion.SendError("Error: Transacci√≥n anidada");
 
 		vTransactionCursors = JCollectionFactory.createMap();
 
@@ -511,7 +563,7 @@ public abstract class JBaseJDBC extends JBDato {
 	}
 
 	/**
-	 * Devuelve el nombre de la m·quina
+	 * Devuelve el nombre de la m√°quina
 	 */
 	/*
 	 * public String getHostName() throws Exception { return
@@ -528,7 +580,7 @@ public abstract class JBaseJDBC extends JBDato {
 
 	/**
 	 * Establece los valores de un JBDato para usar el JReport, y agrega una
-	 * conexiÛn al pool
+	 * conexi√≥n al pool
 	 */
 	@Override
 	public void setParamsReport() throws Exception {
@@ -568,7 +620,7 @@ public abstract class JBaseJDBC extends JBDato {
 
 	/**
 	 * Establece los valores de un JBDato para usar el JReport, y agrega una
-	 * conexiÛn al pool
+	 * conexi√≥n al pool
 	 */
 	/*
 	 * public void setParamsMaster(JBDato zBaseSource) throws Exception {
@@ -595,11 +647,11 @@ public abstract class JBaseJDBC extends JBDato {
 
 	/**
 	 * Arroja una exception JConnectionBroken en caso que el error corresponda a
-	 * una pÈrida de conexiÛn con la base de datos. Caso contrario, lanza la
-	 * exception original(el par·metro)
+	 * una p√©rida de conexi√≥n con la base de datos. Caso contrario, lanza la
+	 * exception original(el par√°metro)
 	 * 
 	 * @param zSQLex
-	 *          Exception que se evaluar· para saber si es una falla de conexiÛn
+	 *          Exception que se evaluar√° para saber si es una falla de conexi√≥n
 	 */
 	public void throwConnectionBroken(SQLException zException) throws Exception {
 		JDBConnectionPools.getInstance().getDriverManager(this.GetName()).throwConnectionBroken(zException);
@@ -613,21 +665,21 @@ public abstract class JBaseJDBC extends JBDato {
 	 * .getSQLState().equalsIgnoreCase(JBaseJDBC.CODE_CONN_UNABLE_TO_ESTABLISH) ||
 	 * zSQLex.getSQLState().equalsIgnoreCase(JBaseJDBC.CODE_CONN_UNESTABLISHED) ||
 	 * zSQLex.getSQLState().equalsIgnoreCase(JBaseJDBC.CODE_CONN_REJECTED)) { {
-	 * JDebugPrint.logDebug("Error de conexiÛn con la base [" + zSQLex + "]");
+	 * JDebugPrint.logDebug("Error de conexi√≥n con la base [" + zSQLex + "]");
 	 * throw new JConnectionBroken(zSQLex); } } } } else if
 	 * (this.isDriverOracle()) { if (zSQLex.getErrorCode() == 17002) { // Socket
 	 * write error exception
-	 * JDebugPrint.logDebug("Error de conexiÛn con la base [" + zSQLex + "]");
+	 * JDebugPrint.logDebug("Error de conexi√≥n con la base [" + zSQLex + "]");
 	 * throw new JConnectionBroken(zSQLex); } } throw zSQLex;
 	 */
 
 	/**
 	 * Arroja una exception JConnectionBroken en caso que el error corresponda a
-	 * una pÈrida de conexiÛn con la base de datos. Caso contrario, lanza la
-	 * exception original(el par·metro)
+	 * una p√©rida de conexi√≥n con la base de datos. Caso contrario, lanza la
+	 * exception original(el par√°metro)
 	 * 
 	 * @param zSQLex
-	 *          Exception que se evaluar· para saber si es una falla de conexiÛn
+	 *          Exception que se evaluar√° para saber si es una falla de conexi√≥n
 	 * @author CJG
 	 */
 	public void throwConnectionBroken(SocketException zException) throws Exception {
@@ -645,11 +697,11 @@ public abstract class JBaseJDBC extends JBDato {
 	}
 
 	/**
-	 * Informa si la excepciÛn es por perdida de conexiÛn con la base de datos
+	 * Informa si la excepci√≥n es por perdida de conexi√≥n con la base de datos
 	 * 
-	 * @return true si es por perdida de conexiÛn
+	 * @return true si es por perdida de conexi√≥n
 	 * @return false en caso que el driver JDBC no sea JDataConnect, o que la
-	 *         excepcion no sea por pÈrdida de conexiÛn
+	 *         excepcion no sea por p√©rdida de conexi√≥n
 	 */
 	public boolean isConnectionBroken(SQLException zException) throws Exception {
 		return JDBConnectionPools.getInstance().getDriverManager(this.GetName()).isConnectionBroken(zException);
@@ -658,14 +710,14 @@ public abstract class JBaseJDBC extends JBDato {
 	/*
 	 * if ((this.isDriverJSQL() || this.isDriverMSSQL() || this.isDriverJDATA())
 	 * == false) return false; if (zSQLex.getSQLState() == null) return false;
-	 * JDebugPrint.logDebug("Verificando si se perdiÛ la conexiÛn: [" + zSQLex +
+	 * JDebugPrint.logDebug("Verificando si se perdi√≥ la conexi√≥n: [" + zSQLex +
 	 * "]"); if (zSQLex.getSQLState().equalsIgnoreCase(JBaseJDBC.CODE_CONN_BROKEN)
 	 * ||
 	 * zSQLex.getSQLState().equalsIgnoreCase(JBaseJDBC.CODE_CONN_UNABLE_TO_ESTABLISH
 	 * ) ||
 	 * zSQLex.getSQLState().equalsIgnoreCase(JBaseJDBC.CODE_CONN_UNESTABLISHED) ||
 	 * zSQLex.getSQLState().equalsIgnoreCase(JBaseJDBC.CODE_CONN_REJECTED)) {
-	 * JDebugPrint.logDebug("ConexiÛn perdida"); return true; } return false;
+	 * JDebugPrint.logDebug("Conexi√≥n perdida"); return true; } return false;
 	 */
 	public boolean isSQL92() {
 		return false;

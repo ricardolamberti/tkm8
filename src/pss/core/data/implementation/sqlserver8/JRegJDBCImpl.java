@@ -1,5 +1,7 @@
 package pss.core.data.implementation.sqlserver8;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,6 +20,7 @@ import pss.core.tools.JExcepcion;
 import pss.core.tools.PssLogger;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JList;
+import pss.core.data.interfaces.sentences.QueryResult;
 
 public class JRegJDBCImpl extends JRegJDBC {
 
@@ -297,7 +300,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 		if (zSQLExe.getErrorCode()==JBaseJDBCImpl.ERROR_ILEGAL_DATETIME) JExcepcion.SendError("Fecha fuera de rango");
 		if (zSQLExe.getErrorCode()==JBaseJDBCImpl.ERROR_DUPLICATE_KEY) {
 			PssLogger.logError(zSQLExe);
-			JExcepcion.SendError("ALTA duplicada. Revise la identificación del ítem que intenta ingresar.");
+			JExcepcion.SendError("ALTA duplicada. Revise la identificaciÃ³n del Ã­tem que intenta ingresar.");
 		}
 
 	}
@@ -324,7 +327,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 
 	private void killBlockingProcesses(JList<Long> vBlockingProcess) throws Exception {
 		if (vBlockingProcess.size()>0) {
-			// KILL no permite estar dentro de una Transacción
+			// KILL no permite estar dentro de una TransacciÃ³n
 			boolean bTxInProgress=JBDatos.GetBases().getPrivateCurrentDatabase().isTransactionInProgress();
 			if (bTxInProgress) JBDatos.GetBases().rollback();
 			Iterator<Long> oIter=vBlockingProcess.iterator();
@@ -344,7 +347,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 
 		String sMode=CampoAsStr("Mode");
 		Long lSPID=CampoAsLong("req_spid");
-		// No debe ser el mismo proceso que está bloqueado
+		// No debe ser el mismo proceso que estÃ¡ bloqueado
 		if (lSPID.longValue()!=lSPIDlocal) {
 			// Bloqueo tipo Exclusive o Update o Shared
 
@@ -438,8 +441,45 @@ public class JRegJDBCImpl extends JRegJDBC {
 		return "to_date(" + (zFieldname) +", '"+format+"')";
 	}
 
-	public String ftoChar(String zFieldname, String format) throws Exception {
-		return "convert(varchar, " + (zFieldname) +", "+format+")";
-	}
+        public String ftoChar(String zFieldname, String format) throws Exception {
+                return "convert(varchar, " + (zFieldname) +", "+format+")";
+        }
+
+        private String wrapByModeSqlServer(String sql, RegQueryOptions o) {
+                switch (o.mode) {
+                case PREVIEW:
+                        return "SELECT TOP (" + o.previewRows + ") * FROM (" + sql + ") q";
+                case EXPLAIN_ONLY:
+                        return "SET SHOWPLAN_TEXT ON; " + sql + "; SET SHOWPLAN_TEXT OFF;";
+                default:
+                        return sql;
+                }
+        }
+
+        @Override
+        public QueryResult query(String baseSql, RegQueryOptions opts) throws Exception {
+                JBaseJDBC base = getBaseJDBC();
+                Connection conn = base.GetConnection();
+                String sql = wrapByModeSqlServer(baseSql, opts);
+                int count = 0;
+                try (PreparedStatement ps = conn.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
+                        ps.setQueryTimeout(opts.hardTimeoutSec);
+                        ps.setFetchSize(opts.fetchSize);
+                        base.beginOpTracking();
+                        base.registerActiveCursor(ps);
+                        try (ResultSet rs = ps.executeQuery()) {
+                                while (rs.next()) {
+                                        count++;
+                                        if (opts.mode == QueryMode.PREVIEW && count >= opts.previewRows)
+                                                break;
+                                }
+                        } finally {
+                                base.unregisterActiveCursor(ps);
+                                base.endOpTracking();
+                        }
+                }
+                boolean trunc = opts.mode == QueryMode.PREVIEW && count >= opts.previewRows;
+                return new QueryResult(false, null, count, trunc);
+        }
 
 }

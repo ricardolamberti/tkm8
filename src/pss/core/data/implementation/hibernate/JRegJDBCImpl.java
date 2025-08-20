@@ -1,11 +1,16 @@
 package pss.core.data.implementation.hibernate;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.Date;
 
 import com.ibm.icu.util.Calendar;
 
 import pss.common.security.BizUsuario;
+import pss.core.data.interfaces.connections.JBaseJDBC;
 import pss.core.data.interfaces.sentences.JRegHibernate;
+import pss.core.data.interfaces.sentences.QueryResult;
 import pss.core.services.fields.JObject;
 import pss.core.tools.JDateTools;
 import pss.core.tools.JTools;
@@ -326,7 +331,43 @@ public class JRegJDBCImpl extends JRegHibernate {
 		}
 		return "";
 
-	}
+        }
 
-	
+        private String wrapByModeHibernate(String sql, RegQueryOptions o) {
+                switch (o.mode) {
+                case PREVIEW:
+                        return sql;
+                case EXPLAIN_ONLY:
+                        return sql;
+                default:
+                        return sql;
+                }
+        }
+
+        @Override
+        public QueryResult query(String baseSql, RegQueryOptions opts) throws Exception {
+                JBaseJDBC base = getBaseJDBC();
+                Connection conn = base.GetConnection();
+                String sql = wrapByModeHibernate(baseSql, opts);
+                int count = 0;
+                try (PreparedStatement ps = conn.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
+                        ps.setQueryTimeout(opts.hardTimeoutSec);
+                        ps.setFetchSize(opts.fetchSize);
+                        base.beginOpTracking();
+                        base.registerActiveCursor(ps);
+                        try (ResultSet rs = ps.executeQuery()) {
+                                while (rs.next()) {
+                                        count++;
+                                        if (opts.mode == QueryMode.PREVIEW && count >= opts.previewRows)
+                                                break;
+                                }
+                        } finally {
+                                base.unregisterActiveCursor(ps);
+                                base.endOpTracking();
+                        }
+                }
+                boolean trunc = opts.mode == QueryMode.PREVIEW && count >= opts.previewRows;
+                return new QueryResult(false, null, count, trunc);
+        }
+
 }
