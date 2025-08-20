@@ -1,5 +1,7 @@
 package pss.www.platform.content.generators;
 
+
+import pss.common.cache.CommonCache;
 import pss.www.platform.applications.JWebApplication;
 import pss.www.platform.applications.JWebServer;
 import pss.www.ui.JWebPage;
@@ -35,6 +37,7 @@ public abstract class JFrontDoorPageGenerator extends JXMLPageGenerator {
 ////			oServletSession.invalidate();
 //		}
 //		this.setSessionToNull();
+		CommonCache.clearSession();
 		JWebApplication app =JWebServer.getInstance().getWebApplication(null);
 		app.getStadistics().removeInfoSession(getSession());
 	

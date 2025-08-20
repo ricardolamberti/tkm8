@@ -73,7 +73,7 @@ public class FormBSPConsola extends JBaseForm {
 	  	  JFormPanelResponsive row31 = (JFormPanelResponsive)col1.AddItemRow().setSizeColumns(12);
 	  	  JFormPanelResponsive row32 = (JFormPanelResponsive)col2.AddItemRow().setSizeColumns(12);
 	  		
-	  	  row1.AddCardPanel(25);
+	  	  row1.AddCardPanel(25).setGutter(true);
 	  		
 
 //	  		  rowA.AddItemFieldset("Contratos").AddItemList(100);
