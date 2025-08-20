@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 import pss.core.data.interfaces.sentences.JBaseRegistro;
+import pss.core.data.interfaces.sentences.JRegJDBC.RegQueryOptions;
 import pss.core.data.interfaces.structure.RFilter;
 import pss.core.data.interfaces.structure.ROrderBy;
 import pss.core.services.JExec;
@@ -53,6 +54,8 @@ public class JRecords<TRecord extends JRecord> extends JBaseRecord {
 	protected boolean withUse = false;
 	protected long maxNumberRowsPerPage = -1;
 	private String sSearchKey = null;
+	protected RegQueryOptions opts;
+
 	// private boolean fixed=false;
 	boolean fieldBased;
 	JObject propAsoc;
@@ -208,9 +211,8 @@ public class JRecords<TRecord extends JRecord> extends JBaseRecord {
 	 * JExcepcion.SendError("Error en la creación del JDBs^", e.getMessage()); }
 	 * }
 	 */
-
 	public boolean readAll() throws Exception {
-		if (this.isStatic()|| !isSQLBased()) {
+			if (this.isStatic()|| !isSQLBased()) {
 			this.firstRecord();
 			return true;
 		}
@@ -222,10 +224,16 @@ public class JRecords<TRecord extends JRecord> extends JBaseRecord {
 		pRSet.setWithUse(this.withUse);
 		pRSet.setTop(this.rowstoread);
 		pRSet.setDistinct(this.distinct);
-		pRSet.openCursor();
+		pRSet.openCursor(getOpts() );
 		return true;
 	}
+	public RegQueryOptions getOpts() {
+		return opts;
+	}
 
+	public void setOpts(RegQueryOptions opts) {
+		this.opts = opts;
+	}
 	public void firstRecord() throws Exception {
 		if (this.isStatic() || !isSQLBased()) {
 			curr_row = -1;

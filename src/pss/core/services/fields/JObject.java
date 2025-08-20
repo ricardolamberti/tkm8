@@ -80,6 +80,7 @@ public class JObject<T extends Serializable> extends JBaseObject {
 	private JScript scriptOnChangeScript = null;
 
 	public Object getInternalVal() {
+		if (pVal==null) initialize();
 		return pVal;
 	}
 
@@ -164,6 +165,7 @@ public class JObject<T extends Serializable> extends JBaseObject {
 			e.printStackTrace();
 			return null;
 		}
+		if (pVal==null) initialize();
 		return pVal;
 	}
 
@@ -257,18 +259,18 @@ public class JObject<T extends Serializable> extends JBaseObject {
 	/*
 	 * Sobre los AsString y los AsDBString, etc.
 	 * ----------------------------------------- #toString() --> para obtener la
-	 * representación interna del valor como String; esta es la representación
+	 * representaciï¿½n interna del valor como String; esta es la representaciï¿½n
 	 * usada por la base de datos, y nunca debe llegar al usuario;
 	 * 
-	 * #toStringOrig() --> igual que #toString(), pero sin aplicar el método
+	 * #toStringOrig() --> igual que #toString(), pero sin aplicar el mï¿½todo
 	 * #Pre();
 	 * 
-	 * #toFormattedString() --> para obtener la representación del valor que debe
-	 * ver el usuario; ésta sale de aplicar regional formatters en los casos que
+	 * #toFormattedString() --> para obtener la representaciï¿½n del valor que debe
+	 * ver el usuario; ï¿½sta sale de aplicar regional formatters en los casos que
 	 * corresponda
 	 * 
 	 * #toFormattedStringOrig() --> igual que #toFormattedString(), pero sin
-	 * aplicar el método #Pre();
+	 * aplicar el mï¿½todo #Pre();
 	 * 
 	 */
 
@@ -292,6 +294,14 @@ public class JObject<T extends Serializable> extends JBaseObject {
 
 	//	public void setFilter(String f) throws Exception {
 //	}
+	private void initialize() {
+		try {
+			init();
+		} catch (Exception e) {
+		}
+	}
+	public void init() throws Exception {
+	}
 	public void preset() throws Exception {
 	}
 	public void setFilter(String f) throws Exception {
@@ -349,6 +359,7 @@ public class JObject<T extends Serializable> extends JBaseObject {
 					e.printStackTrace();
 				}			
 			}
+			if (pVal==null) initialize();
 			return pVal;
 		}
 

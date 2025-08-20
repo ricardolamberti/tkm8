@@ -32,15 +32,13 @@ public class JRegJDBCImpl extends JRegJDBC {
 	private int wherelen = 0;
 
 	@Override
-	public String getVirtualBDsField(String zFieldToEvaluate,
-			JRecords<BizVirtual> vBDs, String zElse) throws Exception {
+	public String getVirtualBDsField(String zFieldToEvaluate, JRecords<BizVirtual> vBDs, String zElse) throws Exception {
 		String sConditionalString = "";
 		String sConditionalStringEnd = "";
 		vBDs.firstRecord();
 		while (vBDs.nextRecord()) {
 			BizVirtual oVirtual = vBDs.getRecord();
-			sConditionalString = " decode(" + zFieldToEvaluate + ","
-					+ oVirtual.getValor() + "," + oVirtual.getDescrip() + ",";
+			sConditionalString = " decode(" + zFieldToEvaluate + "," + oVirtual.getValor() + "," + oVirtual.getDescrip() + ",";
 			sConditionalStringEnd += ")";
 		}
 		if (!sConditionalString.equals("")) {
@@ -50,16 +48,13 @@ public class JRegJDBCImpl extends JRegJDBC {
 	}
 
 	@Override
-	protected String getConditionalFieldAux(String zFieldToEvaluate,
-			JList<String> vCondition, String zTrue, String zFalse)
-			throws Exception {
+	protected String getConditionalFieldAux(String zFieldToEvaluate, JList<String> vCondition, String zTrue, String zFalse) throws Exception {
 		String sConditionalString = "";
 		String sConditionalStringEnd = "";
 		JIterator<String> oIter = vCondition.getIterator();
 		while (oIter.hasMoreElements()) {
 			String zCondition = oIter.nextElement();
-			sConditionalString += " decode(" + zFieldToEvaluate + ","
-					+ zCondition + "," + zTrue + ",";
+			sConditionalString += " decode(" + zFieldToEvaluate + "," + zCondition + "," + zTrue + ",";
 			sConditionalStringEnd += ")";
 		}
 		if (!sConditionalString.equals(""))
@@ -81,30 +76,30 @@ public class JRegJDBCImpl extends JRegJDBC {
 		this.wherelen = where.trim().length();
 		return where;
 	}
-	
+
 	protected boolean isLike(String oper) {
-		if (oper.equalsIgnoreCase("like")) return true;
-		if (oper.equalsIgnoreCase("ilike")) return true;
+		if (oper.equalsIgnoreCase("like"))
+			return true;
+		if (oper.equalsIgnoreCase("ilike"))
+			return true;
 		return false;
 	}
-	
+
 	protected String changeFieldValueInLike(String field, String sOper) {
-		if (!this.isLike(sOper)) return field;
-		field = "lower("+field+")";
+		if (!this.isLike(sOper))
+			return field;
+		field = "lower(" + field + ")";
 		return field;
 	}
-	
-	public void ilike(StringBuffer sBuffer,String sTipo,String value) throws Exception {
+
+	public void ilike(StringBuffer sBuffer, String sTipo, String value) throws Exception {
 		sBuffer.append(" like ");
 		this.armarLike(sBuffer, sTipo, value);
 	}
 
-	protected void armarLike(StringBuffer sBuffer, String sTipo, String value)
-			throws Exception {
-		sBuffer.append("lower("+ArmarDato(oDato.getStructure().getTable(), JObject.JSTRING, "%"+value.trim()+"%" )+")");
+	protected void armarLike(StringBuffer sBuffer, String sTipo, String value) throws Exception {
+		sBuffer.append("lower(" + ArmarDato(oDato.getStructure().getTable(), JObject.JSTRING, "%" + value.trim() + "%") + ")");
 	}
-
-
 
 	public String getTop() {
 		String ret = "";
@@ -126,7 +121,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 		sAux = "select ";
 
 		if (!oDato.getStructure().hasFields()) {
-			sAux = sAux + oDato.getStructure().getTable()+".*";
+			sAux = sAux + oDato.getStructure().getTable() + ".*";
 		} else {
 			JList<RField> aCampos = oDato.getFields();
 			JIterator<RField> oIt = aCampos.getIterator();
@@ -180,8 +175,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 				} else
 					sAux = sAux + " , ";
 				if (oOrder.GetTabla() != null)
-					sAux = sAux + oOrder.GetTabla() + "." + oOrder.GetCampo()
-							+ " " + oOrder.GetOrden();
+					sAux = sAux + oOrder.GetTabla() + "." + oOrder.GetCampo() + " " + oOrder.GetOrden();
 				else
 					sAux = sAux + oOrder.GetCampo() + " " + oOrder.GetOrden();
 			}
@@ -199,8 +193,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 				} else
 					sAux = sAux + " , ";
 				if (oOrder.GetTabla() != null)
-					sAux = sAux + oOrder.GetTabla() + "." + oOrder.GetCampo()
-							+ " " + oOrder.GetOrden();
+					sAux = sAux + oOrder.GetTabla() + "." + oOrder.GetCampo() + " " + oOrder.GetOrden();
 				else
 					sAux = sAux + oOrder.GetCampo() + " " + oOrder.GetOrden();
 			}
@@ -261,11 +254,11 @@ public class JRegJDBCImpl extends JRegJDBC {
 			}
 			sCampos = sCampos + oCampo.GetCampo();
 			if (oCampo.ifAutonumerico()) {
-				sValor = oCampo.GetTabla() + "_" + oCampo.GetCampo()+ ".nextval";
+				sValor = oCampo.GetTabla() + "_" + oCampo.GetCampo() + ".nextval";
 			} else {
 				sValor = oCampo.GetValor();
 			}
-			sValores = sValores + ArmarDato(oCampo.GetTabla(), oCampo.ifAutonumerico()?JObject.JLONG:oCampo.GetTipo(), sValor);
+			sValores = sValores + ArmarDato(oCampo.GetTabla(), oCampo.ifAutonumerico() ? JObject.JLONG : oCampo.GetTipo(), sValor);
 		}
 		sAux = sAux + "(" + sCampos + ") values (" + sValores + ")";
 		return sAux;
@@ -297,9 +290,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 			}
 			sAux = sAux + oCampo.GetCampo() + " = ";
 			sTipo = oCampo.GetTipo();
-			sAux = sAux
-					+ ArmarDato(oDato.getStructure().getTable(), sTipo,
-							oCampo.GetValor());
+			sAux = sAux + ArmarDato(oDato.getStructure().getTable(), sTipo, oCampo.GetValor());
 		}
 		sAux = sAux + Where();
 		return sAux;
@@ -316,10 +307,13 @@ public class JRegJDBCImpl extends JRegJDBC {
 				RJoins oJoin = oIt.nextElement();
 				if (!oJoin.isInnerJoin())
 					continue;
-				if (oJoin.hasTypeJoin()) sAux += " "+oJoin.getTypeJoin();
-				sAux += " " + oJoin.GetTablaJoin() + " " ;
-				if (oJoin.hasCondicion()) sAux += " ON "+oJoin.GetCondicion();
-				if (oJoin.hasCondicionSegunda()) sAux += " ON "+oJoin.GetCondicionSegundo();
+				if (oJoin.hasTypeJoin())
+					sAux += " " + oJoin.getTypeJoin();
+				sAux += " " + oJoin.GetTablaJoin() + " ";
+				if (oJoin.hasCondicion())
+					sAux += " ON " + oJoin.GetCondicion();
+				if (oJoin.hasCondicionSegunda())
+					sAux += " ON " + oJoin.GetCondicionSegundo();
 			}
 		}
 
@@ -341,8 +335,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 	@Override
 	public long GetIdentity(String zCampo) throws Exception {
 		QueryInit();
-		String sCampo = this.oDato.getStructure().getTable() + "_" + zCampo
-				+ ".currval";
+		String sCampo = this.oDato.getStructure().getTable() + "_" + zCampo + ".currval";
 		sSQL = "Select " + sCampo + " sec from dual";
 		QueryOpen();
 		this.next();
@@ -352,35 +345,28 @@ public class JRegJDBCImpl extends JRegJDBC {
 	}
 
 	@Override
-	protected Statement getQueryOpenStatement(JBaseJDBC oDatabaseImpl)
-			throws Exception {
+	protected Statement getQueryOpenStatement(JBaseJDBC oDatabaseImpl) throws Exception {
 		return oDatabaseImpl.GetConnection().createStatement();
 	}
 
 	@Override
-	protected String getStringValueAux(String zField, int zSize)
-			throws Exception {
+	protected String getStringValueAux(String zField, int zSize) throws Exception {
 		return " to_char(" + zField + ") ";
 	}
 
 	@Override
-	protected String getLeftStringAux(String zField, int zSize)
-			throws Exception {
+	protected String getLeftStringAux(String zField, int zSize) throws Exception {
 		return " substr( " + zField + ",1," + zSize + ") ";
 	}
 
 	@Override
 	protected void checkSpecialErrors(SQLException zSQLExe) throws Exception {
-		if (zSQLExe.getMessage().indexOf(
-				"La conversión del tipo de datos char a datetime "
-						+ "produjo un valor datetime fuera de intervalo") != -1)
+		if (zSQLExe.getMessage().indexOf("La conversión del tipo de datos char a datetime " + "produjo un valor datetime fuera de intervalo") != -1)
 			JExcepcion.SendError("Fecha fuera de rango");
-		if ((zSQLExe.getMessage().indexOf(
-				"value larger than specified precision allows for this column") != -1))
+		if ((zSQLExe.getMessage().indexOf("value larger than specified precision allows for this column") != -1))
 			JExcepcion.SendError("Importe fuera de rango");
 		if (zSQLExe.getErrorCode() == 54)
-			JExcepcion
-					.SendError("Error de Datos Bloqueados, reintente mas tarde.");
+			JExcepcion.SendError("Error de Datos Bloqueados, reintente mas tarde.");
 
 	}
 
@@ -400,41 +386,41 @@ public class JRegJDBCImpl extends JRegJDBC {
 				zValor = zValor.substring(0, zValor.length() - 4);
 			return COMILLA + zValor + COMILLA;
 		}
-		
-		if (sTipo.equals(JObject.JSTRING) && zValor.length()>4000 ) {
+
+		if (sTipo.equals(JObject.JSTRING) && zValor.length() > 4000) {
 			zValor = buildCLOBBlocks(zValor);
 			return zValor;
 		}
-		
+
 		return new JRegSQL().ArmarDato(zTabla, zTipo, zValor);
 
 	}
 
 	private String buildCLOBBlocks(String zValor) {
 		StringBuffer ret = new StringBuffer();
-		int rest = zValor.length(); 
+		int rest = zValor.length();
 		int restold = 0;
-		int i=0;
-		int len=4000;
+		int i = 0;
+		int len = 4000;
 		boolean first = true;
-		while ( rest>4000 ) {
-			if (rest>4000) {
-				len=4000;
+		while (rest > 4000) {
+			if (rest > 4000) {
+				len = 4000;
 			} else {
-				len=rest;
+				len = rest;
 			}
-			if (first==true) {
-				first=false;
+			if (first == true) {
+				first = false;
 			} else {
-				if (rest>4000)
-				  ret.append("||");
+				if (rest > 4000)
+					ret.append("||");
 			}
-			ret.append( " to_clob('" + JTools.escapeQuote( zValor.substring(i,i+len) ) + "') " ); 
+			ret.append(" to_clob('" + JTools.escapeQuote(zValor.substring(i, i + len)) + "') ");
 			i += len;
 			rest -= 4000;
 		}
-		if (rest>0) {
-			ret.append( "|| to_clob('" + JTools.escapeQuote(zValor.substring(i,i+rest) ) + "') " ); 
+		if (rest > 0) {
+			ret.append("|| to_clob('" + JTools.escapeQuote(zValor.substring(i, i + rest)) + "') ");
 		}
 		return ret.toString();
 	}
@@ -447,46 +433,46 @@ public class JRegJDBCImpl extends JRegJDBC {
 		return "(" + field + " - to_date('" + fecha + "'))";
 	}
 
-        public String fintervalo(String zFieldname,String valor1,String valor2) throws Exception {
-                return " ("+zFieldname + " between "+valor1+" and "+valor2+" )";
-        }
+	public String fintervalo(String zFieldname, String valor1, String valor2) throws Exception {
+		return " (" + zFieldname + " between " + valor1 + " and " + valor2 + " )";
+	}
 
-        private String wrapByModeOracle(String sql, RegQueryOptions o) {
-                switch (o.mode) {
-                case PREVIEW:
-                        String wrapped = "SELECT * FROM (" + sql + ") q WHERE ROWNUM <= " + o.previewRows;
-                        return wrapped;
-                case EXPLAIN_ONLY:
-                        return "EXPLAIN PLAN FOR " + sql;
-                default:
-                        return sql;
-                }
-        }
+	private String wrapByModeOracle(String sql, RegQueryOptions o) {
+		switch (o.mode) {
+		case PREVIEW:
+			String wrapped = "SELECT * FROM (" + sql + ") q WHERE ROWNUM <= " + o.previewRows;
+			return wrapped;
+		case EXPLAIN_ONLY:
+			return "EXPLAIN PLAN FOR " + sql;
+		default:
+			return sql;
+		}
+	}
 
-        @Override
-        public QueryResult query(String baseSql, RegQueryOptions opts) throws Exception {
-                JBaseJDBC base = getBaseJDBC();
-                Connection conn = base.GetConnection();
-                String sql = wrapByModeOracle(baseSql, opts);
-                int count = 0;
-                try (PreparedStatement ps = conn.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
-                        ps.setQueryTimeout(opts.hardTimeoutSec);
-                        ps.setFetchSize(opts.fetchSize);
-                        base.beginOpTracking();
-                        base.registerActiveCursor(ps);
-                        try (ResultSet rs = ps.executeQuery()) {
-                                while (rs.next()) {
-                                        count++;
-                                        if (opts.mode == QueryMode.PREVIEW && count >= opts.previewRows)
-                                                break;
-                                }
-                        } finally {
-                                base.unregisterActiveCursor(ps);
-                                base.endOpTracking();
-                        }
-                }
-                boolean trunc = opts.mode == QueryMode.PREVIEW && count >= opts.previewRows;
-                return new QueryResult(false, null, count, trunc);
-        }
+	@Override
+	public QueryResult query(String baseSql, RegQueryOptions opts) throws Exception {
+		JBaseJDBC base = getBaseJDBC();
+		Connection conn = base.GetConnection();
+		String sql = wrapByModeOracle(baseSql, opts);
+		int count = 0;
+		try (PreparedStatement ps = conn.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
+			ps.setQueryTimeout(opts.hardTimeoutSec);
+			ps.setFetchSize(opts.fetchSize);
+			base.beginOpTracking();
+			base.registerActiveCursor(ps);
+			try (ResultSet rs = ps.executeQuery()) {
+				while (rs.next()) {
+					count++;
+					if (opts.mode == QueryMode.PREVIEW && count >= opts.previewRows)
+						break;
+				}
+			} finally {
+				base.unregisterActiveCursor(ps);
+				base.endOpTracking();
+			}
+		}
+		boolean trunc = opts.mode == QueryMode.PREVIEW && count >= opts.previewRows;
+		return new QueryResult(false, null, count, trunc,sql);
+	}
 
 }

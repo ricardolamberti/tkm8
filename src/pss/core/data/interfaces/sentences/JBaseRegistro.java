@@ -5,6 +5,7 @@ import java.util.Date;
 
 import pss.core.data.interfaces.connections.JBDato;
 import pss.core.data.interfaces.connections.JBDatos;
+import pss.core.data.interfaces.sentences.JRegJDBC.RegQueryOptions;
 import pss.core.services.records.JBaseRecord;
 import pss.core.services.records.JRecord;
 import pss.core.tools.JExcepcion;
@@ -99,6 +100,9 @@ public class JBaseRegistro  implements Serializable {
 	// Clases Base Genericas a sobreescribir
 	// -------------------------------------------------------------------------- //
 	public void openCursor() throws Exception {
+	}
+
+	public void openCursor(RegQueryOptions opts) throws Exception {
 	}
 
 	public void first() throws Exception {
@@ -244,7 +248,14 @@ public class JBaseRegistro  implements Serializable {
 	// Select
 	// -------------------------------------------------------------------------- //
 	public boolean Select() throws Exception {
-		this.openCursor();
+		return Select(null);
+	}
+	public boolean Select(RegQueryOptions opts) throws Exception {
+		if (opts==null)
+			this.openCursor();
+		else
+			this.openCursor(opts);
+		
 		this.next();
 		if (EOF()&&!oDato.withoutException())
 		// JExcepcion.SendError( "Ninguna Fila Encontrada: " + oDato.GetTable() );
@@ -252,7 +263,6 @@ public class JBaseRegistro  implements Serializable {
 
 		return !EOF();
 	}
-
 	public long longValue(String zCampo) throws Exception {
 		Long campo=CampoAsLong(zCampo);
 		return (campo==null) ? 0L : campo.longValue();

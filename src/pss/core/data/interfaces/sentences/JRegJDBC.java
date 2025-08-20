@@ -2,6 +2,7 @@ package pss.core.data.interfaces.sentences;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -11,6 +12,7 @@ import pss.core.JAplicacion;
 import pss.core.data.BizPssConfig;
 import pss.core.data.files.JStreamFile;
 import pss.core.data.interfaces.connections.JBaseJDBC;
+import pss.core.data.interfaces.sentences.QueryGuard.Decision;
 import pss.core.tools.JDateTools;
 import pss.core.tools.JExcepcion;
 import pss.core.tools.PssLogger;
@@ -27,37 +29,39 @@ import pss.core.tools.collections.JList;
 
 public class JRegJDBC extends JRegSQL {
 
-        public static enum QueryMode { PREVIEW, FULL, EXPLAIN_ONLY }
+	public static enum QueryMode {
+		PREVIEW, FULL, EXPLAIN_ONLY
+	}
 
-        public static enum Dialect { POSTGRES, ORACLE, SQLSERVER, HIBERNATE }
+	public static enum Dialect {
+		POSTGRES, ORACLE, SQLSERVER, HIBERNATE
+	}
 
-        public static final class RegQueryOptions {
-                public final QueryMode mode;
-                public final int previewRows;
-                public final Integer samplePercent;
-                public final int hardTimeoutSec;
-                public final int fetchSize;
-                public final Dialect dialect;
-                public final boolean runPlanGuard;
+	public static final class RegQueryOptions {
+		public final QueryMode mode;
+		public final int previewRows;
+		public final Integer samplePercent;
+		public final int hardTimeoutSec;
+		public final int fetchSize;
+		public final boolean runPlanGuard;
 
-                public RegQueryOptions(QueryMode m, int n, Integer sp, int to, int fs, Dialect d, boolean guard) {
-                        this.mode = m;
-                        this.previewRows = n;
-                        this.samplePercent = sp;
-                        this.hardTimeoutSec = to;
-                        this.fetchSize = fs;
-                        this.dialect = d;
-                        this.runPlanGuard = guard;
-                }
+		public RegQueryOptions(QueryMode m, int previewRows, Integer samplePercent, int hardTimeoutSec, int fetchSize, boolean guard) {
+			this.mode = m;
+			this.previewRows = previewRows;
+			this.samplePercent = samplePercent;
+			this.hardTimeoutSec = hardTimeoutSec;
+			this.fetchSize = fetchSize;
+			this.runPlanGuard = guard;
+		}
 
-                public static RegQueryOptions fullDefaults(Dialect d) {
-                        return new RegQueryOptions(QueryMode.FULL, 0, null, 60, 5000, d, true);
-                }
+		public static RegQueryOptions fullDefaults() {
+			return new RegQueryOptions(QueryMode.FULL, 0, null, 60, 5000,  true);
+		}
 
-                public static RegQueryOptions previewDefaults(Dialect d) {
-                        return new RegQueryOptions(QueryMode.PREVIEW, 200, 1, 5, 2000, d, true);
-                }
-        }
+		public static RegQueryOptions previewDefaults() {
+			return new RegQueryOptions(QueryMode.PREVIEW, 10, 1, 10, 200, true);
+		}
+	}
 
 	protected ResultSet oResultSet;
 	protected Object oObject;
@@ -170,6 +174,35 @@ public class JRegJDBC extends JRegSQL {
 		}
 	}
 
+	@Override
+	protected void QueryOpen(RegQueryOptions opts) throws Exception {
+	    try {
+	        final JBaseJDBC base = this.getBaseJDBC();
+	        
+	        QueryResult pre = query(sSQL, opts); // usa el mismo wrap internamente
+	        if (pre.blocked) {
+	            throw new Exception("Consulta bloqueada por presupuesto");
+	        }
+	        if (opts.mode == QueryMode.PREVIEW && pre.truncated) {
+	            PssLogger.logDebugSQL("Preview truncado a " + opts.previewRows + " filas (rowCount=" + pre.rowCount + ")");
+	        }
+
+	        oStatement = getQueryOpenStatement(base);
+	        if (opts != null) {
+	            oStatement.setQueryTimeout(opts.hardTimeoutSec);
+	            oStatement.setFetchSize(opts.fetchSize);
+	        }
+	        PssLogger.logDebugSQL("(" + base.countOpenCursors() + ") Open SQL(with RegQueryOptions)= " + pre.finalSql);
+	        long startTime = System.currentTimeMillis();
+	        oResultSet = oStatement.executeQuery(pre.finalSql);
+	        long time = System.currentTimeMillis() - startTime;
+	        if (time > 20) PssLogger.logDebugSQL("Low Query = " + time);
+	        base.addTransactionCursors(oStatement);
+
+	    } catch (SQLException e) {
+	        this.manageSQLException(e);
+	    }
+	}
 	/**
 	 * Ejecuta una sentencia UPDATE, DELETE, INSERT, etc.
 	 * 
@@ -382,8 +415,7 @@ public class JRegJDBC extends JRegSQL {
 			return null;
 		return oObj;
 	} // CampoAsObject
-	
-	
+
 	@Override
 	public String CampoAsBlob(String zCampo) throws Exception {
 		String oStr = oResultSet.getString(zCampo);
@@ -411,8 +443,7 @@ public class JRegJDBC extends JRegSQL {
 				String msg = exe.getErrorCode() + " - " + exe.getMessage();
 				JStreamFile file = new JStreamFile();
 				file.CreateNewFile(JPath.PssPathData() + "/sqlerr.log", false);
-				file.WriteLn(JDateTools.CurrentDateTime() + " <-> " + JAplicacion.GetApp().getLogName() + " <-> Error: "
-						+ msg);
+				file.WriteLn(JDateTools.CurrentDateTime() + " <-> " + JAplicacion.GetApp().getLogName() + " <-> Error: " + msg);
 				StringWriter sw = new StringWriter();
 				PrintWriter pw = new PrintWriter(sw);
 				exe.printStackTrace(pw);
@@ -445,21 +476,21 @@ public class JRegJDBC extends JRegSQL {
 		return (JBaseJDBC) this.getDatabase();
 	}
 
-        public JIterator<String> getFieldNameIterator() throws Exception {
-                JList<String> vItems;
-                vItems = JCollectionFactory.createList();
-                for (int i = 1; i <= oResultSet.getMetaData().getColumnCount(); i++) {
-                        vItems.addElement(oResultSet.getMetaData().getColumnName(i));
-                }
-                return vItems.getIterator();
-        }
+	public JIterator<String> getFieldNameIterator() throws Exception {
+		JList<String> vItems;
+		vItems = JCollectionFactory.createList();
+		for (int i = 1; i <= oResultSet.getMetaData().getColumnCount(); i++) {
+			vItems.addElement(oResultSet.getMetaData().getColumnName(i));
+		}
+		return vItems.getIterator();
+	}
 
-        public QueryResult query(String sql) throws Exception {
-                return query(sql, RegQueryOptions.fullDefaults(Dialect.POSTGRES));
-        }
+	public QueryResult query(String sql) throws Exception {
+		return query(sql, RegQueryOptions.fullDefaults());
+	}
 
-        public QueryResult query(String sql, RegQueryOptions opts) throws Exception {
-                throw new UnsupportedOperationException("Not implemented");
-        }
+	public QueryResult query(String sql, RegQueryOptions opts) throws Exception {
+		throw new UnsupportedOperationException("Not implemented");
+	}
 
 }

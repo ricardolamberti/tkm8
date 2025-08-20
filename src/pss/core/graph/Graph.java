@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import pss.common.regions.company.JCompanyBusiness;
 import pss.common.security.BizUsuario;
+import pss.core.data.interfaces.sentences.JRegJDBC.RegQueryOptions;
 import pss.core.graph.analize.AnalizeDataGraph;
 import pss.core.graph.analize.Categories;
 import pss.core.graph.analize.Dataset;
@@ -421,10 +422,13 @@ public abstract class Graph implements Serializable {
     if (filterMap!=null) wins.asignFiltersFromFilterMap(filterMap);
     if (filterBar!=null) wins.asignFiltersFromFilterBar(filterBar);
     if (wins.GetVision().equals("PREVIEW")) {
-      wins.setPagesize(10);
-      wins.getRecords().setWithUse(true);
-    } else
+   //   wins.setPagesize(10);
+   //   wins.getRecords().setWithUse(true);
+    	wins.getRecords().setOpts(RegQueryOptions.previewDefaults());
+    } else {
+    	wins.getRecords().setOpts(null);
     	wins.setPagesize(-1);
+    }
     wins.setOffset(-1);
 		BizUsuario.eventInterfaz(this.getClass().getCanonicalName(), "Generando gráfico", -1, -1, false, null);
 

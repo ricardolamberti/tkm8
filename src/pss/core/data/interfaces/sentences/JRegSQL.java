@@ -5,6 +5,7 @@ import java.util.StringTokenizer;
 
 import pss.core.data.interfaces.connections.JBDatos;
 import pss.core.data.interfaces.connections.JBaseJDBC;
+import pss.core.data.interfaces.sentences.JRegJDBC.RegQueryOptions;
 import pss.core.data.interfaces.structure.RField;
 import pss.core.data.interfaces.structure.RFilter;
 import pss.core.data.interfaces.structure.RFixedFilter;
@@ -82,7 +83,10 @@ public class JRegSQL extends JBaseRegistro {
 
 	protected void QueryOpen() throws Exception {
 	}
-
+	
+	protected void QueryOpen(RegQueryOptions opts) throws Exception {
+	}
+	
 	protected int QueryExec() throws Exception {
 		return -1;
 	}
@@ -103,7 +107,22 @@ public class JRegSQL extends JBaseRegistro {
 
 		this.QueryOpen();
 	}
+	@Override
+	public void openCursor(RegQueryOptions opts) throws Exception {
+		this.QueryInit();
+		if (oDato.getStructure().getSQL()!=null)
+			sSQL=oDato.getStructure().getSQL();
+		else
+			sSQL=this.ArmarSelect();
+		
+		sSQL=((JBaseJDBC) JBDatos.GetBases().getPrivateCurrentDatabase()).convertSqlToANSISql86(sSQL);
+		oDato.getStructure().setLastSQL(sSQL);
 
+		if (opts==null)
+			this.QueryOpen();
+		else
+			this.QueryOpen(opts);
+	}
 	// -------------------------------------------------------------------------- //
 	// Ejecuto un Update
 	// -------------------------------------------------------------------------- //
@@ -1054,7 +1073,7 @@ public class JRegSQL extends JBaseRegistro {
 	}
 
 	/*
-	 * Función implementada para identificar la implementación de la base de datos, en algunos casos es necesario identificarla para determinar la sintaxis de la sentencia SQL a ejecutar.
+	 * Funciï¿½n implementada para identificar la implementaciï¿½n de la base de datos, en algunos casos es necesario identificarla para determinar la sintaxis de la sentencia SQL a ejecutar.
 	 */
 
 	/*

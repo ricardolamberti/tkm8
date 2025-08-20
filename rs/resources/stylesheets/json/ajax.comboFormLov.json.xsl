@@ -84,10 +84,11 @@
 			      "text": "<xsl:value-of select="@description"/>", 
       			  "children" : [
 					<xsl:for-each select="itemCombo">
-					    {
+						<xsl:variable name="desc" select="translate(@description,'&quot;','')" />
+			    	    {
 					      "id": "<xsl:value-of select="@id"/>",
 					      "real_id": "<xsl:value-of select="@real_id"/>",
-					      "text": "<xsl:value-of select="@description"/>"
+					      "text": "<xsl:value-of select="$desc"/>"
 					    }<xsl:if test="position()!=last()">,</xsl:if>
 				    </xsl:for-each>
       			  ]
@@ -95,10 +96,11 @@
 			</xsl:for-each>
 
 			<xsl:for-each select="itemCombo">
+  		        <xsl:variable name="desc" select="translate(@description,'&quot;','')" />
 			    {
 			      "id": "<xsl:value-of select="@id"/>",
 			      "real_id": "<xsl:value-of select="@real_id"/>",
-			      "text": "<xsl:value-of select="@description"/>"
+				  "text": "<xsl:value-of select="$desc"/>"
 			    }<xsl:if test="position()!=last()">,</xsl:if>
 		    </xsl:for-each>
 		  ]

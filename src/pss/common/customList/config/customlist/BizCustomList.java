@@ -49,6 +49,7 @@ import pss.common.regions.company.JCompanyBusiness;
 import pss.common.regions.multilanguage.JLanguage;
 import pss.common.security.BizUsuario;
 import pss.core.data.interfaces.sentences.JBaseRegistro;
+import pss.core.data.interfaces.sentences.JRegJDBC.RegQueryOptions;
 import pss.core.data.interfaces.structure.RFilter;
 import pss.core.graph.Graph;
 import pss.core.graph.implementations.GraphMatrix;
@@ -110,26 +111,22 @@ public class BizCustomList extends JRecord implements IActionData {
   private JBoolean pSubTotalizar = new JBoolean();
   private JBoolean pShowTodoEnEdicion = new JBoolean();
   private JBoolean pShowTipo = new JBoolean() {
-  	public void preset() throws Exception {
-  		if (pShowTipo.isRawNull())
+  	public void init() throws Exception {
   			pShowTipo.setValue(false);
   	};
   };
   private JBoolean pShowModelo = new JBoolean(){
-  	public void preset() throws Exception {
-  		if (pShowTipo.isRawNull())
-  			pShowTipo.setValue(false);
-  	};
+  	public void init() throws Exception {
+			pShowTipo.setValue(false);
+		}
   };
   private JBoolean pShowConf = new JBoolean(){
-  	public void preset() throws Exception {
-  		if (pShowTipo.isRawNull())
-  			pShowTipo.setValue(false);
+  	public void init() throws Exception {
+  		pShowTipo.setValue(false);
   	};
   };
   private JBoolean pShowIA = new JBoolean(){
-  	public void preset() throws Exception {
-  		if (pShowIA.isRawNull())
+  	public void init() throws Exception {
   			pShowIA.setValue(false);
   	};
   };
@@ -183,10 +180,9 @@ public class BizCustomList extends JRecord implements IActionData {
 	};
 
 	private JObjBDs pCampos = new JObjBDs() {
-		public void preset() throws Exception {
-			if (isRawNull()) {
-				pCampos.setValue(buildCampos());
-			} 
+		
+		public void init() throws Exception {
+					pCampos.setValue(buildCampos());
 		}
 //		public JRecords getRawValue() throws Exception {
 //			return super.getRawValue();
@@ -205,15 +201,13 @@ public class BizCustomList extends JRecord implements IActionData {
 //		};
 	};
 	private JObjBDs pFiltros = new JObjBDs() {
-		public void preset() throws Exception {
-			if (isRawNull()) 
+		public void init() throws Exception {
 				setValue(buildObjFiltros());
 		}
 	};
 	private JObjBDs pFiltrosReporte = new JObjBDs() {
-		public void preset() throws Exception {
-			if (isRawNull()) 
-				setValue(buildObjFiltrosReporte());
+		public void init() throws Exception {
+			setValue(buildObjFiltrosReporte());
 		}
 	};
 	private JObjBDs pCamposVisibles = new JObjBDs() {
@@ -2713,8 +2707,11 @@ public class BizCustomList extends JRecord implements IActionData {
 		this.clearOrderBy();
 		r.SetVision(this.GetVision());
 		if (r.GetVision().equals("PREVIEW")) {
-			r.setPagesize(10);
-			r.setWithUse(true);
+		//	r.setPagesize(10);
+			//r.setWithUse(true);
+			r.setOpts(RegQueryOptions.previewDefaults());
+		} else {
+			r.setOpts(null);
 		}
 		getLogica().setWithgeo(isWithGeo());
 		getLogica().prepareTables(r);

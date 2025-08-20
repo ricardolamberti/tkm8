@@ -14,6 +14,8 @@ import pss.common.regions.company.JCompanyBusiness;
 import pss.common.security.BizUsuario;
 import pss.core.data.interfaces.connections.JBDatos;
 import pss.core.data.interfaces.sentences.JBaseRegistro;
+import pss.core.data.interfaces.sentences.JRegJDBC.QueryMode;
+import pss.core.data.interfaces.sentences.JRegJDBC.RegQueryOptions;
 import pss.core.data.interfaces.structure.RFilter;
 import pss.core.services.fields.JDate;
 import pss.core.services.fields.JFloat;

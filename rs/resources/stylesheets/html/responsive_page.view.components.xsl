@@ -3103,6 +3103,11 @@
       						charset="UTF-8">showErrRefresh('inf','','<xsl:value-of select="@msg"/>'); </script>
 				</xsl:if>
 			</xsl:for-each>
+			<xsl:for-each select="error">
+				<xsl:if test="@message">
+					<xsl:value-of select="@message"/>
+				</xsl:if>
+			</xsl:for-each>
 			<xsl:if test="@scroll">
 				<script type="text/javascript"
       					charset="UTF-8">adaptativeScroll('scroll_body','scroll_header','<xsl:value-of select="@obj_provider"/>','<xsl:value-of select="@scroll"/>',''); </script>
@@ -3120,6 +3125,11 @@
 			<xsl:for-each select="alert">
 				<xsl:if test="@msg">
 					<script type="text/javascript">showErrRefresh('inf','','<xsl:value-of select="@msg"/>'); </script>
+				</xsl:if>
+			</xsl:for-each>
+			<xsl:for-each select="error">
+				<xsl:if test="@message">
+					<xsl:value-of select="@message"/>
 				</xsl:if>
 			</xsl:for-each>
 			<xsl:if test="@scroll">

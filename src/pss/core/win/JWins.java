@@ -10,6 +10,7 @@ import pss.JPath;
 import pss.common.security.BizUsuario;
 import pss.core.data.BizPssConfig;
 import pss.core.data.interfaces.connections.JBDatos;
+import pss.core.data.interfaces.sentences.JRegJDBC.RegQueryOptions;
 import pss.core.data.interfaces.structure.RFilter;
 import pss.core.reports.GuiReporteBase;
 import pss.core.services.fields.JIntervalDate;
@@ -80,6 +81,8 @@ public abstract class JWins<TWin extends JWin> extends JBaseWin {
 
 	protected int pagesize = -1;
 	protected int offset = -1;
+	
+
 
 	protected boolean dontUseFilterDefault = false;
 	Serializable extraFilter;
@@ -97,7 +100,7 @@ public abstract class JWins<TWin extends JWin> extends JBaseWin {
 	public void setSimpleOrden(Boolean zValue) {
 		bUseSimpleOrden =zValue;
 	}
-
+	
 	
 	
 
@@ -443,8 +446,8 @@ public abstract class JWins<TWin extends JWin> extends JBaseWin {
 	}
 
 	public void readAll() throws Exception {
-		getRecords().setPagesize(this.pagesize);
-		getRecords().setOffset(this.offset);
+		getRecords().setPagesize(getPagesize());
+		getRecords().setOffset(getOffset());
 		getRecords().readAll();
 	}
 

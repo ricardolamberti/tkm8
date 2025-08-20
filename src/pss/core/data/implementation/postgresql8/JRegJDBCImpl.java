@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.postgresql.util.PGbytea;
 
@@ -16,7 +18,11 @@ import com.ibm.icu.util.Calendar;
 import pss.common.customList.config.relation.JRelations;
 import pss.common.security.BizUsuario;
 import pss.core.data.interfaces.connections.JBaseJDBC;
+import pss.core.data.interfaces.sentences.BasicPlanAnalyzer;
 import pss.core.data.interfaces.sentences.JRegJDBC;
+import pss.core.data.interfaces.sentences.PlanInfo;
+import pss.core.data.interfaces.sentences.QueryGuard;
+import pss.core.data.interfaces.sentences.QueryResult;
 import pss.core.data.interfaces.structure.RField;
 import pss.core.data.interfaces.structure.RFilter;
 import pss.core.data.interfaces.structure.RFixedFilter;
@@ -33,10 +39,6 @@ import pss.core.tools.JExcepcion;
 import pss.core.tools.JTools;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JList;
-import pss.core.data.interfaces.sentences.PlanInfo;
-import pss.core.data.interfaces.sentences.QueryGuard;
-import pss.core.data.interfaces.sentences.QueryResult;
-import pss.core.data.interfaces.sentences.BasicPlanAnalyzer;
 
 public class JRegJDBCImpl extends JRegJDBC {
 
@@ -81,7 +83,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 		}
 		if (!sConditionalString.equals("")) {
 			sConditionalString += zElse + sConditionalStringEnd;
-		} 
+		}
 		return sConditionalString;
 	}
 
@@ -122,7 +124,6 @@ public class JRegJDBCImpl extends JRegJDBC {
 		return ret + " limit " + lTopRows + " ";
 	}
 
-	
 	@Override
 	public String ArmarSelect() throws Exception {
 		StringBuffer sAux = new StringBuffer();
@@ -150,9 +151,9 @@ public class JRegJDBCImpl extends JRegJDBC {
 					sAux.append(oCampo.GetTabla() + ".");
 				}
 				sAux.append(getField(oCampo));
-				
+
 				if (oCampo.hasRename())
-					sAux.append(" as "+oCampo.GetRename()+" ");
+					sAux.append(" as " + oCampo.GetRename() + " ");
 
 			}
 		}
@@ -219,8 +220,10 @@ public class JRegJDBCImpl extends JRegJDBC {
 			sAux.append(" for Update ");
 		}
 
-		if (!this.getTop().equals(""))sAux.append(this.getTop());
-		else sAux.append(this.getLimitWithOffset());
+		if (!this.getTop().equals(""))
+			sAux.append(this.getTop());
+		else
+			sAux.append(this.getLimitWithOffset());
 
 		return sAux.toString();
 	}
@@ -239,50 +242,55 @@ public class JRegJDBCImpl extends JRegJDBC {
 		ret += " offset " + offset + " ";
 		return ret;
 	}
+
 	public String WhereUse() throws Exception {
-		StringBuffer sBuffer=new StringBuffer(128);
+		StringBuffer sBuffer = new StringBuffer(128);
 		String sOper;
 		String sTipo;
-		boolean bFirst=true;
+		boolean bFirst = true;
 
 		sBuffer.append(SPACE);
 
 		if (oDato.getStructure().hasFixedFilters()) {
-			JList<RFixedFilter> oEnum=oDato.getFixedFilters();
-			Iterator<RFixedFilter> oIt=oEnum.iterator();
+			JList<RFixedFilter> oEnum = oDato.getFixedFilters();
+			Iterator<RFixedFilter> oIt = oEnum.iterator();
 			while (oIt.hasNext()) {
-				RFixedFilter oFiltroFijo=oIt.next();
-				if (oFiltroFijo.getsTableAsoc()!=null&&!oFiltroFijo.getsTableAsoc().equalsIgnoreCase(this.getTable())) continue;
-				String sFiltro= oFiltroFijo.getFiltro().trim();
-				if (sFiltro.equals("")) continue;
+				RFixedFilter oFiltroFijo = oIt.next();
+				if (oFiltroFijo.getsTableAsoc() != null && !oFiltroFijo.getsTableAsoc().equalsIgnoreCase(this.getTable()))
+					continue;
+				String sFiltro = oFiltroFijo.getFiltro().trim();
+				if (sFiltro.equals(""))
+					continue;
 				if (!bFirst) {
 					if (sFiltro.toLowerCase().startsWith("where")) {
-						sFiltro=AND+sFiltro.substring(5);
+						sFiltro = AND + sFiltro.substring(5);
 					}
-					if (!sFiltro.toLowerCase().trim().startsWith("and")&&!sFiltro.toLowerCase().trim().startsWith("or")) {
-						sFiltro=AND+sFiltro;
+					if (!sFiltro.toLowerCase().trim().startsWith("and") && !sFiltro.toLowerCase().trim().startsWith("or")) {
+						sFiltro = AND + sFiltro;
 					}
 				} else {
-					if (sFiltro.toLowerCase().indexOf("where")==-1) {
-						sFiltro=" WHERE "+sFiltro;
+					if (sFiltro.toLowerCase().indexOf("where") == -1) {
+						sFiltro = " WHERE " + sFiltro;
 					}
 				}
 				sBuffer.append(SPACE);
 				sBuffer.append(sFiltro);
 				sBuffer.append(SPACE);
-				bFirst=false;
+				bFirst = false;
 			}
 		}
 		if (oDato.getStructure().hasFilters()) {
-			JList<RFilter> eEnum=oDato.getFilters();
-			Iterator<RFilter> oIt=eEnum.iterator();
+			JList<RFilter> eEnum = oDato.getFilters();
+			Iterator<RFilter> oIt = eEnum.iterator();
 
 			while (oIt.hasNext()) {
-				RFilter oFiltro=oIt.next();
-				if (oFiltro.isVirtual()) continue;
-				if (!oFiltro.getTable().equalsIgnoreCase(this.getTable())) continue;
+				RFilter oFiltro = oIt.next();
+				if (oFiltro.isVirtual())
+					continue;
+				if (!oFiltro.getTable().equalsIgnoreCase(this.getTable()))
+					continue;
 				if (bFirst) {
-					bFirst=false;
+					bFirst = false;
 					sBuffer.append(" where ");
 				} else {
 
@@ -297,51 +305,51 @@ public class JRegJDBCImpl extends JRegJDBC {
 				}
 
 				// Seteo Agrupamiento
-				if (oFiltro.hasAgrup()) 
+				if (oFiltro.hasAgrup())
 					sBuffer.append(oFiltro.getAgrup());
-				sOper=oFiltro.getOperator();
+				sOper = oFiltro.getOperator();
 
-				if (sOper.equalsIgnoreCase("CONTAINS")||sOper.equalsIgnoreCase("FREETEXT")) {
-					sBuffer.append(SPACE+sOper.toUpperCase()+"(");
-					if (oFiltro.getTable()==null||oFiltro.getTable().length()==0) 
+				if (sOper.equalsIgnoreCase("CONTAINS") || sOper.equalsIgnoreCase("FREETEXT")) {
+					sBuffer.append(SPACE + sOper.toUpperCase() + "(");
+					if (oFiltro.getTable() == null || oFiltro.getTable().length() == 0)
 						sBuffer.append(oFiltro.getField());
-					else 
+					else
 						sBuffer.append(oFiltro.getTable()).append(DOT).append(oFiltro.getField());
-					sBuffer.append(COMMA+"'");
+					sBuffer.append(COMMA + "'");
 					sBuffer.append(oFiltro.getValue().equals("") ? "*" : oFiltro.getValue());
 					sBuffer.append("') ");
 				} else {
 
-					this.armarCampoEnLike(sBuffer, oFiltro,sOper);
-					
+					this.armarCampoEnLike(sBuffer, oFiltro, sOper);
+
 					// Seteo operador
-					boolean bValorNull=oFiltro.getValue()==null||oFiltro.getValue().trim().equalsIgnoreCase("null")||oFiltro.getValue().trim().length()==0;
-					boolean bSinOper=oFiltro.getOperator().trim().length()==0;
-					if (bSinOper) sOper="=";
-					if (bValorNull) 
-						sOper=(sOper.equals("=")) ? "IS" : "IS NOT";
+					boolean bValorNull = oFiltro.getValue() == null || oFiltro.getValue().trim().equalsIgnoreCase("null") || oFiltro.getValue().trim().length() == 0;
+					boolean bSinOper = oFiltro.getOperator().trim().length() == 0;
+					if (bSinOper)
+						sOper = "=";
+					if (bValorNull)
+						sOper = (sOper.equals("=")) ? "IS" : "IS NOT";
 
 					// Seteo el filtro
-					sTipo=oFiltro.getType();
+					sTipo = oFiltro.getType();
 
 					if (sOper.equalsIgnoreCase("ilike")) {
-						ilike(sBuffer,sTipo,oFiltro.getValue());
-					}
-					else {
+						ilike(sBuffer, sTipo, oFiltro.getValue());
+					} else {
 						sBuffer.append(SPACE);
 						sBuffer.append(sOper);
 						sBuffer.append(SPACE);
-	
-	
-						if (sOper.equalsIgnoreCase("IN") || sOper.equalsIgnoreCase("NOT IN")) 
+
+						if (sOper.equalsIgnoreCase("IN") || sOper.equalsIgnoreCase("NOT IN"))
 							sBuffer.append(ArmarIn(oDato.getStructure().getTable(), sTipo, oFiltro.getValue()));
-						else if (sOper.equalsIgnoreCase("like") )
+						else if (sOper.equalsIgnoreCase("like"))
 							armarLike(sBuffer, sTipo, oFiltro.getValue());
-						else sBuffer.append(ArmarDato(oDato.getStructure().getTable(), sTipo, oFiltro.getValue()));
+						else
+							sBuffer.append(ArmarDato(oDato.getStructure().getTable(), sTipo, oFiltro.getValue()));
 					}
 				}
 				// Seteo Agrupamiento
-				if (oFiltro.hasAgrup()) 
+				if (oFiltro.hasAgrup())
 					sBuffer.append(oFiltro.getAgrup());
 
 			}
@@ -350,49 +358,53 @@ public class JRegJDBCImpl extends JRegJDBC {
 	} // TRegSQL.Where
 
 	public String Where() throws Exception {
-		StringBuffer sBuffer=new StringBuffer(128);
+		StringBuffer sBuffer = new StringBuffer(128);
 		String sOper;
 		String sTipo;
-		boolean bFirst=true;
+		boolean bFirst = true;
 
 		sBuffer.append(SPACE);
 
 		if (oDato.getStructure().hasFixedFilters()) {
-			JList<RFixedFilter> oEnum=oDato.getFixedFilters();
-			Iterator<RFixedFilter> oIt=oEnum.iterator();
+			JList<RFixedFilter> oEnum = oDato.getFixedFilters();
+			Iterator<RFixedFilter> oIt = oEnum.iterator();
 			while (oIt.hasNext()) {
-				RFixedFilter oFiltroFijo=oIt.next();
-				if (isWithUse() &&  oFiltroFijo.getsTableAsoc()!=null&&oFiltroFijo.getsTableAsoc().equalsIgnoreCase(this.getTable())) continue;
-				String sFiltro= oFiltroFijo.getFiltro().trim();
-				if (sFiltro.equals("")) continue;
+				RFixedFilter oFiltroFijo = oIt.next();
+				if (isWithUse() && oFiltroFijo.getsTableAsoc() != null && oFiltroFijo.getsTableAsoc().equalsIgnoreCase(this.getTable()))
+					continue;
+				String sFiltro = oFiltroFijo.getFiltro().trim();
+				if (sFiltro.equals(""))
+					continue;
 				if (!bFirst) {
 					if (sFiltro.toLowerCase().startsWith("where")) {
-						sFiltro=AND+sFiltro.substring(5);
+						sFiltro = AND + sFiltro.substring(5);
 					}
-					if (!sFiltro.toLowerCase().trim().startsWith("and")&&!sFiltro.toLowerCase().trim().startsWith("or")) {
-						sFiltro=AND+sFiltro;
+					if (!sFiltro.toLowerCase().trim().startsWith("and") && !sFiltro.toLowerCase().trim().startsWith("or")) {
+						sFiltro = AND + sFiltro;
 					}
 				} else {
-					if (sFiltro.toLowerCase().indexOf("where")==-1) {
-						sFiltro=" WHERE "+sFiltro;
+					if (sFiltro.toLowerCase().indexOf("where") == -1) {
+						sFiltro = " WHERE " + sFiltro;
 					}
 				}
 				sBuffer.append(SPACE);
 				sBuffer.append(sFiltro);
 				sBuffer.append(SPACE);
-				bFirst=false;
+				bFirst = false;
 			}
 		}
 		if (oDato.getStructure().hasFilters()) {
-			JList<RFilter> eEnum=oDato.getFilters();
-			Iterator<RFilter> oIt=eEnum.iterator();
+			JList<RFilter> eEnum = oDato.getFilters();
+			Iterator<RFilter> oIt = eEnum.iterator();
 
 			while (oIt.hasNext()) {
-				RFilter oFiltro=oIt.next();
-				if (oFiltro.isVirtual()) continue;
-				if (isWithUse() && oFiltro.getTable().equalsIgnoreCase(this.getTable())) continue;
+				RFilter oFiltro = oIt.next();
+				if (oFiltro.isVirtual())
+					continue;
+				if (isWithUse() && oFiltro.getTable().equalsIgnoreCase(this.getTable()))
+					continue;
 				if (bFirst) {
-					bFirst=false;
+					bFirst = false;
 					sBuffer.append(" where ");
 				} else {
 
@@ -410,79 +422,79 @@ public class JRegJDBCImpl extends JRegJDBC {
 				if (oFiltro.isParentesis()) {
 					if (oFiltro.isStartParentesis())
 						sBuffer.append(oFiltro.getAgrup());
-				} else if (oFiltro.hasAgrup()) 
+				} else if (oFiltro.hasAgrup())
 					sBuffer.append(oFiltro.getAgrup());
-				sOper=oFiltro.getOperator();
+				sOper = oFiltro.getOperator();
 
-				if (sOper.equalsIgnoreCase("CONTAINS")||sOper.equalsIgnoreCase("FREETEXT")) {
-					sBuffer.append(SPACE+sOper.toUpperCase()+"(");
-					if (oFiltro.getTable()==null||oFiltro.getTable().length()==0) 
+				if (sOper.equalsIgnoreCase("CONTAINS") || sOper.equalsIgnoreCase("FREETEXT")) {
+					sBuffer.append(SPACE + sOper.toUpperCase() + "(");
+					if (oFiltro.getTable() == null || oFiltro.getTable().length() == 0)
 						sBuffer.append(oFiltro.getField());
-					else 
+					else
 						sBuffer.append(oFiltro.getTable()).append(DOT).append(oFiltro.getField());
-					sBuffer.append(COMMA+"'");
+					sBuffer.append(COMMA + "'");
 					sBuffer.append(oFiltro.getValue().equals("") ? "*" : oFiltro.getValue());
 					sBuffer.append("') ");
 				} else if (oFiltro.getType().equals(JObject.JINTERVALDATETIME)) {
 					String field = "";
-					if (!oFiltro.hasTable()) 
+					if (!oFiltro.hasTable())
 						field = oFiltro.getField();
-					else 
-						field = oFiltro.getTable()+DOT+oFiltro.getField();
-					  String valueFrom =  ((JIntervalDateTime)oFiltro.getObjValue()).getStartDateValueAsString();
-					  String valueTo =  ((JIntervalDateTime)oFiltro.getObjValue()).getEndDateValueAsString();
-					  if (valueFrom!=null && valueTo!=null && !valueFrom.equals("") && !valueTo.equals(""))
-					  	sBuffer.append(fintervalo(field, ArmarDato(oDato.getStructure().getTable(), JObject.JDATETIME, valueFrom,false), ArmarDato(oDato.getStructure().getTable(), JObject.JDATETIME, valueTo,false)));
-					  else 
-					  	sBuffer.append(" true ");
+					else
+						field = oFiltro.getTable() + DOT + oFiltro.getField();
+					String valueFrom = ((JIntervalDateTime) oFiltro.getObjValue()).getStartDateValueAsString();
+					String valueTo = ((JIntervalDateTime) oFiltro.getObjValue()).getEndDateValueAsString();
+					if (valueFrom != null && valueTo != null && !valueFrom.equals("") && !valueTo.equals(""))
+						sBuffer.append(fintervalo(field, ArmarDato(oDato.getStructure().getTable(), JObject.JDATETIME, valueFrom, false), ArmarDato(oDato.getStructure().getTable(), JObject.JDATETIME, valueTo, false)));
+					else
+						sBuffer.append(" true ");
 				} else if (oFiltro.getType().equals(JObject.JINTERVALDATE)) {
 					String field = "";
-					if (!oFiltro.hasTable()) 
+					if (!oFiltro.hasTable())
 						field = oFiltro.getField();
-					else 
-						field = oFiltro.getTable()+DOT+oFiltro.getField();
-					  String valueFrom =  ((JIntervalDate)oFiltro.getObjValue()).getStartDateValueAsString();
-					  String valueTo =  ((JIntervalDate)oFiltro.getObjValue()).getEndDateValueAsString();
-					  if (valueFrom!=null && valueTo!=null && !valueFrom.equals("") && !valueTo.equals(""))
-					  	sBuffer.append(fintervalo(field, ArmarDato(oDato.getStructure().getTable(), JObject.JDATE, valueFrom,false), ArmarDato(oDato.getStructure().getTable(), JObject.JDATE, valueTo,false)));
-					  else 
-					  	sBuffer.append(" true ");
+					else
+						field = oFiltro.getTable() + DOT + oFiltro.getField();
+					String valueFrom = ((JIntervalDate) oFiltro.getObjValue()).getStartDateValueAsString();
+					String valueTo = ((JIntervalDate) oFiltro.getObjValue()).getEndDateValueAsString();
+					if (valueFrom != null && valueTo != null && !valueFrom.equals("") && !valueTo.equals(""))
+						sBuffer.append(fintervalo(field, ArmarDato(oDato.getStructure().getTable(), JObject.JDATE, valueFrom, false), ArmarDato(oDato.getStructure().getTable(), JObject.JDATE, valueTo, false)));
+					else
+						sBuffer.append(" true ");
 				} else {
-	
-						this.armarCampoEnLike(sBuffer, oFiltro,sOper);
-						
-						// Seteo operador
-						boolean bValorNull=oFiltro.getValue()==null||oFiltro.getValue().trim().equalsIgnoreCase("null")||oFiltro.getValue().trim().length()==0;
-						boolean bSinOper=oFiltro.getOperator().trim().length()==0;
-						if (bSinOper) sOper="=";
-						if (bValorNull) 
-							sOper=(sOper.equals("=")) ? "IS" : "IS NOT";
-	
-						// Seteo el filtro
-						sTipo=oFiltro.getType();
 
-						if (sOper.equalsIgnoreCase("ilike")) {
-							ilike(sBuffer,sTipo,oFiltro.getValue());
-						}
-						else {
-							sBuffer.append(SPACE);
-							sBuffer.append(sOper);
-							sBuffer.append(SPACE);
-		
-		
-							if (sOper.equalsIgnoreCase("IN") || sOper.equalsIgnoreCase("NOT IN")) 
-								sBuffer.append(ArmarIn(oDato.getStructure().getTable(), sTipo, oFiltro.getValue()));
-							else if (sOper.equalsIgnoreCase("like") )
-								armarLike(sBuffer, sTipo, oFiltro.getValue());
-							else sBuffer.append(ArmarDato(oDato.getStructure().getTable(), sTipo, oFiltro.getValue()));
+					this.armarCampoEnLike(sBuffer, oFiltro, sOper);
+
+					// Seteo operador
+					boolean bValorNull = oFiltro.getValue() == null || oFiltro.getValue().trim().equalsIgnoreCase("null") || oFiltro.getValue().trim().length() == 0;
+					boolean bSinOper = oFiltro.getOperator().trim().length() == 0;
+					if (bSinOper)
+						sOper = "=";
+					if (bValorNull)
+						sOper = (sOper.equals("=")) ? "IS" : "IS NOT";
+
+					// Seteo el filtro
+					sTipo = oFiltro.getType();
+
+					if (sOper.equalsIgnoreCase("ilike")) {
+						ilike(sBuffer, sTipo, oFiltro.getValue());
+					} else {
+						sBuffer.append(SPACE);
+						sBuffer.append(sOper);
+						sBuffer.append(SPACE);
+
+						if (sOper.equalsIgnoreCase("IN") || sOper.equalsIgnoreCase("NOT IN"))
+							sBuffer.append(ArmarIn(oDato.getStructure().getTable(), sTipo, oFiltro.getValue()));
+						else if (sOper.equalsIgnoreCase("like"))
+							armarLike(sBuffer, sTipo, oFiltro.getValue());
+						else
+							sBuffer.append(ArmarDato(oDato.getStructure().getTable(), sTipo, oFiltro.getValue()));
 					}
 				}
-				
+
 				// Seteo Agrupamiento
 				if (oFiltro.isParentesis()) {
 					if (oFiltro.isEndParentesis())
 						sBuffer.append(oFiltro.getAgrup());
-				} else if (oFiltro.hasAgrup()) 
+				} else if (oFiltro.hasAgrup())
 					sBuffer.append(oFiltro.getAgrup());
 
 			}
@@ -497,6 +509,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 	private String getTable() throws Exception {
 		return (oDato.getStructure().getTable());
 	}
+
 	private String getTableForFrom() throws Exception {
 		return (oDato.getStructure().getTableForFrom());
 	}
@@ -511,22 +524,27 @@ public class JRegJDBCImpl extends JRegJDBC {
 	public String fsum(String zFieldname) throws Exception {
 		return "coalesce(sum(" + (zFieldname) + "),0)";
 	}
+
 	@Override
 	public String fnulo(String zFieldname) throws Exception {
 		return "(" + (zFieldname) + " is null)";
 	}
+
 	@Override
 	public String fnonulo(String zFieldname) throws Exception {
 		return "(" + (zFieldname) + " is not null)";
 	}
+
 	@Override
 	public String fsumover(String zFieldname) throws Exception {
 		return "sum(" + (zFieldname) + ") over()"; // se usa para por porcentajes
 	}
+
 	@Override
 	public String fmax(String zFieldname) throws Exception {
 		return "max(" + (zFieldname) + ")";
 	}
+
 	@Override
 	public String fmin(String zFieldname) throws Exception {
 		return "min(" + (zFieldname) + ")";
@@ -549,171 +567,200 @@ public class JRegJDBCImpl extends JRegJDBC {
 	public String ftoDate(String zFieldname, String format) throws Exception {
 		return "to_date(" + (zFieldname) + ", '" + format + "')";
 	}
-	
+
 	@Override
 	public String fmes(String zFieldname) throws Exception {
 		return "date_part('month'::text," + (zFieldname) + ")";
 	}
-	public String fbooleanValue(String zFieldname,String strue,String sfalse) throws Exception {
-		return "(case " + (zFieldname) + " when true then '"+strue+"' else '"+sfalse+"' end)";
+
+	public String fbooleanValue(String zFieldname, String strue, String sfalse) throws Exception {
+		return "(case " + (zFieldname) + " when true then '" + strue + "' else '" + sfalse + "' end)";
 	}
+
 	@Override
 	public String fanio(String zFieldname) throws Exception {
 		return "date_part('year'," + (zFieldname) + ")";
 	}
+
 	public String fbimestre(String zFieldname) throws Exception {
 		return "floor(((extract (month from " + (zFieldname) + "))-1 ) / 2) +1";
 	}
+
 	public String ftrimestre(String zFieldname) throws Exception {
 		return "floor(((extract (month from " + (zFieldname) + "))-1 ) / 3) +1";
 	}
+
 	public String fcuatrimestre(String zFieldname) throws Exception {
 		return "extract(QUARTER  from " + (zFieldname) + ")";
 	}
+
 	public String fsemestre(String zFieldname) throws Exception {
 		return "floor(((extract (month from  " + (zFieldname) + "))-1 ) / 6) +1";
 	}
+
 	public String fdiasemana(String zFieldname) throws Exception {
 		return "case extract(dow from " + (zFieldname) + ") when 1 then '1.Lunes' when 2 then '2.Martes' when 3 then '3.Miercoles' when 4 then '4.Jueves' when 5 then '5.Viernes' when 6 then '6.Sabado' else '7.Domingo' end";
 	}
+
 	public String fdiames(String zFieldname) throws Exception {
 		return "extract('day' from " + (zFieldname) + ")";
 	}
+
 	public String fdiaano(String zFieldname) throws Exception {
 		return "extract('doy' from " + (zFieldname) + ")";
 	}
+
 	@Override
 	public String faniomes(String zFieldname) throws Exception {
 		return "(CAST(date_part('year'," + (zFieldname) + ") as Text) || '/' || lpad(CAST(date_part('month'::text," + (zFieldname) + ") as text),2,'0'))";
 	}
+
 	@Override
 	public String faniosem(String zFieldname) throws Exception {
 		return "(CAST(date_part('year'," + (zFieldname) + ") as Text) || '/' || lpad(CAST(date_part('week'::text," + (zFieldname) + ") as text),2,'0'))";
 	}
-	public String fporcWithOver(String zFieldname,JList<String> partition) throws Exception {
-		String campos ="";
-		if (partition!=null) {
+
+	public String fporcWithOver(String zFieldname, JList<String> partition) throws Exception {
+		String campos = "";
+		if (partition != null) {
 			JIterator<String> it = partition.getIterator();
 			while (it.hasMoreElements()) {
-				campos += (campos.equals("")?"PARTITION BY ":",")+it.nextElement();
+				campos += (campos.equals("") ? "PARTITION BY " : ",") + it.nextElement();
 			}
 		}
-		return "case sum( " + (zFieldname) + ") over() when 0 then 0 else ((100* " + (zFieldname) + ") / sum( " + (zFieldname) + ") over("+campos+") ) end ";
+		return "case sum( " + (zFieldname) + ") over() when 0 then 0 else ((100* " + (zFieldname) + ") / sum( " + (zFieldname) + ") over(" + campos + ") ) end ";
 	}
-	public String fporc(String zFieldname,String zTotalize) throws Exception {
-		return "case ("+zTotalize+") when 0 then 0 else ((100.0* " + (zFieldname) + ") / ("+zTotalize+") ) end ";
+
+	public String fporc(String zFieldname, String zTotalize) throws Exception {
+		return "case (" + zTotalize + ") when 0 then 0 else ((100.0* " + (zFieldname) + ") / (" + zTotalize + ") ) end ";
 	}
 
 	public String ftoChar(String zFieldname, String format) throws Exception {
 		return "to_char(" + (zFieldname) + ", '" + format + "')";
 	}
-	public boolean hoyEsAhora(Date hoy) throws Exception  {
-		if (BizUsuario.getUsr()==null)
-			return (hoy==null||JDateTools.getDateStartDay(hoy).equals(JDateTools.getDateStartDay(new Date())));
-		return (hoy==null||JDateTools.getDateStartDay(hoy).equals(JDateTools.getDateStartDay(BizUsuario.getUsr().todayGMT())));
+
+	public boolean hoyEsAhora(Date hoy) throws Exception {
+		if (BizUsuario.getUsr() == null)
+			return (hoy == null || JDateTools.getDateStartDay(hoy).equals(JDateTools.getDateStartDay(new Date())));
+		return (hoy == null || JDateTools.getDateStartDay(hoy).equals(JDateTools.getDateStartDay(BizUsuario.getUsr().todayGMT())));
 
 	}
-	public String fanioactual(String zFieldname,Date hoy) throws Exception {
+
+	public String fanioactual(String zFieldname, Date hoy) throws Exception {
 		if (hoyEsAhora(hoy))
-			return  "date_part('year'," + (zFieldname) + ") = date_part('year', now())";
+			return "date_part('year'," + (zFieldname) + ") = date_part('year', now())";
 		Calendar c = Calendar.getInstance();
 		c.setTime(hoy);
-		return  "date_part('year'," + (zFieldname) + ") = "+c.get(Calendar.YEAR);
+		return "date_part('year'," + (zFieldname) + ") = " + c.get(Calendar.YEAR);
 	}
-	public String fmesactual(String zFieldname,Date hoy) throws Exception {
+
+	public String fmesactual(String zFieldname, Date hoy) throws Exception {
 		if (hoyEsAhora(hoy))
-			return  "date_part('year'," + (zFieldname) + ") = date_part('year', now()) and date_part('month'," + (zFieldname) + ") = date_part('month', now()) ";
+			return "date_part('year'," + (zFieldname) + ") = date_part('year', now()) and date_part('month'," + (zFieldname) + ") = date_part('month', now()) ";
 		Calendar c = Calendar.getInstance();
 		c.setTime(hoy);
-		return  "date_part('year'," + (zFieldname) + ") = "+c.get(Calendar.YEAR)+" and date_part('month'," + (zFieldname) + ") = "+(c.get(Calendar.MONTH)+1)+" ";
+		return "date_part('year'," + (zFieldname) + ") = " + c.get(Calendar.YEAR) + " and date_part('month'," + (zFieldname) + ") = " + (c.get(Calendar.MONTH) + 1) + " ";
 	}
-	public String fhoy(String zFieldname,Date hoy) throws Exception {
+
+	public String fhoy(String zFieldname, Date hoy) throws Exception {
 		if (hoyEsAhora(hoy))
-			return " "+zFieldname + "::date = 'today'::date ";
+			return " " + zFieldname + "::date = 'today'::date ";
 		Calendar c = Calendar.getInstance();
 		c.setTime(hoy);
-		return " "+zFieldname + "::date = '"+JDateTools.DateToString(c.getTime(),"dd/MM/yyyy")+"'::date ";
+		return " " + zFieldname + "::date = '" + JDateTools.DateToString(c.getTime(), "dd/MM/yyyy") + "'::date ";
 	}
-	public String ffuturo(String zFieldname,Date hoy) throws Exception {
+
+	public String ffuturo(String zFieldname, Date hoy) throws Exception {
 		if (hoyEsAhora(hoy))
-			return " "+zFieldname + "::date > 'today'::date ";
+			return " " + zFieldname + "::date > 'today'::date ";
 		Calendar c = Calendar.getInstance();
 		c.setTime(hoy);
-		return " "+zFieldname + "::date > '"+JDateTools.DateToString(c.getTime(),"dd/MM/yyyy")+"'::date ";
+		return " " + zFieldname + "::date > '" + JDateTools.DateToString(c.getTime(), "dd/MM/yyyy") + "'::date ";
 	}
-	public String fpasado(String zFieldname,Date hoy) throws Exception {
+
+	public String fpasado(String zFieldname, Date hoy) throws Exception {
 		if (hoyEsAhora(hoy))
-			return " "+zFieldname + "::date < 'today'::date ";
+			return " " + zFieldname + "::date < 'today'::date ";
 		Calendar c = Calendar.getInstance();
 		c.setTime(hoy);
-		return " "+zFieldname + "::date < '"+JDateTools.DateToString(c.getTime(),"dd/MM/yyyy")+"'::date ";
+		return " " + zFieldname + "::date < '" + JDateTools.DateToString(c.getTime(), "dd/MM/yyyy") + "'::date ";
 	}
-	public String fayer(String zFieldname,Date hoy) throws Exception {
+
+	public String fayer(String zFieldname, Date hoy) throws Exception {
 		if (hoyEsAhora(hoy))
-			return " "+zFieldname + "::date = 'yesterday'::date ";
-		if (hoy==null)
-			hoy=new Date();
+			return " " + zFieldname + "::date = 'yesterday'::date ";
+		if (hoy == null)
+			hoy = new Date();
 		Calendar c = Calendar.getInstance();
 		c.setTime(hoy);
 		c.add(Calendar.DAY_OF_MONTH, -1);
-		return " "+zFieldname + "::date = '"+JDateTools.DateToString(c.getTime(),"dd/MM/yyyy")+"'::date ";
+		return " " + zFieldname + "::date = '" + JDateTools.DateToString(c.getTime(), "dd/MM/yyyy") + "'::date ";
 	}
-	public String fmaniana(String zFieldname,Date hoy) throws Exception {
+
+	public String fmaniana(String zFieldname, Date hoy) throws Exception {
 		if (hoyEsAhora(hoy))
-			return " "+zFieldname + "::date = 'tomorrow'::date ";
+			return " " + zFieldname + "::date = 'tomorrow'::date ";
 		Calendar c = Calendar.getInstance();
 		c.setTime(hoy);
 		c.add(Calendar.DAY_OF_MONTH, 1);
-		return " "+zFieldname + "::date = '"+JDateTools.DateToString(c.getTime(),"dd/MM/yyyy")+"'::date ";
+		return " " + zFieldname + "::date = '" + JDateTools.DateToString(c.getTime(), "dd/MM/yyyy") + "'::date ";
 	}
-	public String fultimos(String zFieldname,Date hoy,long valorDias) throws Exception {
+
+	public String fultimos(String zFieldname, Date hoy, long valorDias) throws Exception {
 		if (hoyEsAhora(hoy))
-			return " ("+zFieldname + "::date > now() - '"+valorDias+" days'::interval and "+zFieldname + "::date < now()::date) ";
+			return " (" + zFieldname + "::date > now() - '" + valorDias + " days'::interval and " + zFieldname + "::date < now()::date) ";
 		Calendar c = Calendar.getInstance();
 		c.setTime(hoy);
-		return " ("+zFieldname + "::date > '"+JDateTools.DateToString(c.getTime(),"dd/MM/yyyy")+"'::date - '"+valorDias+" days'::interval and "+zFieldname + "::date < '"+JDateTools.DateToString(c.getTime(),"dd/MM/yyyy")+"'::date) ";
+		return " (" + zFieldname + "::date > '" + JDateTools.DateToString(c.getTime(), "dd/MM/yyyy") + "'::date - '" + valorDias + " days'::interval and " + zFieldname + "::date < '" + JDateTools.DateToString(c.getTime(), "dd/MM/yyyy") + "'::date) ";
 	}
-	public String fproximos(String zFieldname,Date hoy,long valorDias) throws Exception {
+
+	public String fproximos(String zFieldname, Date hoy, long valorDias) throws Exception {
 		if (hoyEsAhora(hoy))
-			return " ("+zFieldname + "::date < now() + '"+valorDias+" days'::interval and "+zFieldname + "::date > now()::date) ";
+			return " (" + zFieldname + "::date < now() + '" + valorDias + " days'::interval and " + zFieldname + "::date > now()::date) ";
 		Calendar c = Calendar.getInstance();
 		c.setTime(hoy);
-		return " ("+zFieldname + "::date < '"+JDateTools.DateToString(c.getTime(),"dd/MM/yyyy")+"'::date + '"+valorDias+" days'::interval and "+zFieldname + "::date > '"+JDateTools.DateToString(c.getTime(),"dd/MM/yyyy")+"'::date) ";
+		return " (" + zFieldname + "::date < '" + JDateTools.DateToString(c.getTime(), "dd/MM/yyyy") + "'::date + '" + valorDias + " days'::interval and " + zFieldname + "::date > '" + JDateTools.DateToString(c.getTime(), "dd/MM/yyyy") + "'::date) ";
 	}
+
 //	public String fintervalo(String zFieldname,String valorDias1,String valorDias2) throws Exception {
 //		return " ("+zFieldname + "::date > now() + '"+valorDias1+" days'::interval and "+zFieldname + "::date < now() + '"+valorDias2+" days'::interval) ";
 //	}
-	public String fintervalo(String zFieldname,String valor1,String valor2) throws Exception {
-		return " ("+zFieldname + " between "+valor1+" and "+valor2+" )";
+	public String fintervalo(String zFieldname, String valor1, String valor2) throws Exception {
+		return " (" + zFieldname + " between " + valor1 + " and " + valor2 + " )";
 	}
-	public String fbimestreactual(String zFieldname,Date hoy) throws Exception {
+
+	public String fbimestreactual(String zFieldname, Date hoy) throws Exception {
 		if (hoyEsAhora(hoy))
-			return " (floor(((extract (month from " + (zFieldname) + "))-1 ) / 2) +1 = floor(((extract (month from now()))-1 ) / 2) +1) and "+fanioactual(zFieldname,hoy);
+			return " (floor(((extract (month from " + (zFieldname) + "))-1 ) / 2) +1 = floor(((extract (month from now()))-1 ) / 2) +1) and " + fanioactual(zFieldname, hoy);
 		Calendar c = Calendar.getInstance();
 		c.setTime(hoy);
-		return " (floor(((extract (month from " + (zFieldname) + "))-1 ) / 2) +1 = floor(((extract (month from '"+JDateTools.DateToString(c.getTime(),"dd/MM/yyyy")+"'::date))-1 ) / 2) +1) and "+fanioactual(zFieldname,hoy);
+		return " (floor(((extract (month from " + (zFieldname) + "))-1 ) / 2) +1 = floor(((extract (month from '" + JDateTools.DateToString(c.getTime(), "dd/MM/yyyy") + "'::date))-1 ) / 2) +1) and " + fanioactual(zFieldname, hoy);
 	}
-	public String ftrimestreactual(String zFieldname,Date hoy) throws Exception {
+
+	public String ftrimestreactual(String zFieldname, Date hoy) throws Exception {
 		if (hoyEsAhora(hoy))
-			return " (floor(((extract (month from " + (zFieldname) + "))-1 ) / 3) +1 = floor(((extract (month from now()))-1 ) / 3) +1) and "+fanioactual(zFieldname,hoy);
+			return " (floor(((extract (month from " + (zFieldname) + "))-1 ) / 3) +1 = floor(((extract (month from now()))-1 ) / 3) +1) and " + fanioactual(zFieldname, hoy);
 		Calendar c = Calendar.getInstance();
 		c.setTime(hoy);
-		return " (floor(((extract (month from " + (zFieldname) + "))-1 ) / 3) +1 = floor(((extract (month from '"+JDateTools.DateToString(c.getTime(),"dd/MM/yyyy")+"'::date))-1 ) / 3) +1) and "+fanioactual(zFieldname,hoy);
+		return " (floor(((extract (month from " + (zFieldname) + "))-1 ) / 3) +1 = floor(((extract (month from '" + JDateTools.DateToString(c.getTime(), "dd/MM/yyyy") + "'::date))-1 ) / 3) +1) and " + fanioactual(zFieldname, hoy);
 	}
-	public String fcuatrimestreactual(String zFieldname,Date hoy) throws Exception {
+
+	public String fcuatrimestreactual(String zFieldname, Date hoy) throws Exception {
 		if (hoyEsAhora(hoy))
-			return " (extract(QUARTER  from " + (zFieldname) + ")  = extract(QUARTER  from now())) and "+fanioactual(zFieldname,hoy);
+			return " (extract(QUARTER  from " + (zFieldname) + ")  = extract(QUARTER  from now())) and " + fanioactual(zFieldname, hoy);
 		Calendar c = Calendar.getInstance();
 		c.setTime(hoy);
-		return " (extract(QUARTER  from " + (zFieldname) + ")  = extract(QUARTER  from '"+JDateTools.DateToString(c.getTime(),"dd/MM/yyyy")+"'::date)) and "+fanioactual(zFieldname,hoy);
+		return " (extract(QUARTER  from " + (zFieldname) + ")  = extract(QUARTER  from '" + JDateTools.DateToString(c.getTime(), "dd/MM/yyyy") + "'::date)) and " + fanioactual(zFieldname, hoy);
 	}
-	public String fsemestreactual(String zFieldname,Date hoy) throws Exception {
+
+	public String fsemestreactual(String zFieldname, Date hoy) throws Exception {
 		if (hoyEsAhora(hoy))
-			return " (floor(((extract (month from " + (zFieldname) + "))-1 ) / 6) +1 = floor(((extract (month from now()))-1 ) / 6) +1) and "+fanioactual(zFieldname,hoy);
+			return " (floor(((extract (month from " + (zFieldname) + "))-1 ) / 6) +1 = floor(((extract (month from now()))-1 ) / 6) +1) and " + fanioactual(zFieldname, hoy);
 		Calendar c = Calendar.getInstance();
 		c.setTime(hoy);
-		return " (floor(((extract (month from " + (zFieldname) + "))-1 ) / 6) +1 = floor(((extract (month from '"+JDateTools.DateToString(c.getTime(),"dd/MM/yyyy")+"'::date))-1 ) / 6) +1) and "+fanioactual(zFieldname,hoy);
+		return " (floor(((extract (month from " + (zFieldname) + "))-1 ) / 6) +1 = floor(((extract (month from '" + JDateTools.DateToString(c.getTime(), "dd/MM/yyyy") + "'::date))-1 ) / 6) +1) and " + fanioactual(zFieldname, hoy);
 	}
+
 	@Override
 	public String ArmarInsert() throws Exception {
 		String sAux;
@@ -758,20 +805,19 @@ public class JRegJDBCImpl extends JRegJDBC {
 				} else {
 					// GAP - 2009-03-25
 					// En postgres los campos bytea (BLOB) necesitan doble caracter de escape
-					byte[] b =JTools.stringToByteVector(sValor);
+					byte[] b = JTools.stringToByteVector(sValor);
 					String a = PGbytea.toPGString(b);
-					StringBuffer c=new StringBuffer(a.length());
+					StringBuffer c = new StringBuffer(a.length());
 					for (int iIndex = 0; iIndex < a.length(); ++iIndex) {
 						char curr = a.charAt(iIndex);
 						if (curr == '\\')
-						  c.append('\\');
-						else 
-							if ( curr == '\'' )
-								c.append('\'');
+							c.append('\\');
+						else if (curr == '\'')
+							c.append('\'');
 						c.append(curr);
 					}
 
-					sValores = sValores + "E" + ArmarDato(oCampo.GetTabla(), oCampo.GetTipo(), c.toString(), false) ;  
+					sValores = sValores + "E" + ArmarDato(oCampo.GetTabla(), oCampo.GetTipo(), c.toString(), false);
 				}
 			} else {
 				sValores = sValores + ArmarDato(oCampo.GetTabla(), oCampo.GetTipo(), sValor);
@@ -814,21 +860,20 @@ public class JRegJDBCImpl extends JRegJDBC {
 			} else if (oCampo.GetTipo().equals(JObject.JBLOB)) {
 				if (sValor == null || sValor.trim().equalsIgnoreCase("null") || sValor.length() == 0) {
 					sAux = sAux + ArmarDato(getTable(), sTipo, oCampo.GetValor());
-			} else {
-					byte[] b =JTools.stringToByteVector(sValor);
+				} else {
+					byte[] b = JTools.stringToByteVector(sValor);
 					String a = PGbytea.toPGString(b);
-					StringBuffer c=new StringBuffer(a.length());
+					StringBuffer c = new StringBuffer(a.length());
 					for (int iIndex = 0; iIndex < a.length(); ++iIndex) {
 						char curr = a.charAt(iIndex);
 						if (curr == '\\')
-						  c.append('\\');
-						else 
-							if ( curr == '\'' )
-								c.append('\'');
+							c.append('\\');
+						else if (curr == '\'')
+							c.append('\'');
 						c.append(curr);
 					}
 
-					sAux = sAux + "E" + ArmarDato(getTable(), sTipo, c.toString(),false);
+					sAux = sAux + "E" + ArmarDato(getTable(), sTipo, c.toString(), false);
 				}
 			} else {
 				sAux = sAux + ArmarDato(getTable(), sTipo, oCampo.GetValor());
@@ -838,19 +883,20 @@ public class JRegJDBCImpl extends JRegJDBC {
 		return sAux;
 	}
 
-	
 	@Override
 	public String buildWith() throws Exception {
-		if (!isWithUse() || this.WhereUse().trim().equals("")) return "";
+		if (!isWithUse() || this.WhereUse().trim().equals(""))
+			return "";
 		String sAux = " with " + getTable() + " as (";
-		sAux+= "select "+getTable()+".* ";//from "+ getTableForFrom() + " ";
-		sAux+= this.buildFrom();
-		sAux+= this.WhereUse();
-		if (pagesize!=-1) sAux+= " limit "+pagesize;
-		sAux+=") ";
-		
+		sAux += "select " + getTable() + ".* ";// from "+ getTableForFrom() + " ";
+		sAux += this.buildFrom();
+		sAux += this.WhereUse();
+		if (pagesize != -1)
+			sAux += " limit " + pagesize;
+		sAux += ") ";
+
 		return sAux;
-	} 
+	}
 
 	@Override
 	public String buildFrom() throws Exception {
@@ -863,60 +909,61 @@ public class JRegJDBCImpl extends JRegJDBC {
 	}
 
 	public String buildFrom(JList<RJoins> oJoins) throws Exception {
-			String sAux="";
-			JIterator<RJoins> oIt = oJoins.getIterator();
-			while (oIt.hasMoreElements()) {
-				RJoins oJoin = oIt.nextElement();
-				if (!oJoin.isInnerJoin())
-					sAux = sAux + " , ";
-				if (oJoin.hasTypeJoin() && oJoin.getTypeJoin().equals(JRelations.JOIN_ONE)) {
-					sAux +=  " JOIN LATERAL (select * ";
-					
-					if (oJoin.hasJoins()) {
-						sAux += "	FROM "+oJoin.GetTablaJoin();
-						sAux += buildFrom(oJoin.getJoins());
-						sAux += " where "; 
-					} else {
-						sAux +=  "	FROM "+oJoin.GetTablaJoin()+" where "; 
-					}
-					sAux +=  "  "+ (oJoin.GetCondicionSegundo()==null?"":oJoin.GetCondicionSegundo().replace(oJoin.GetAliasJoin(), oJoin.GetTablaJoin()))+" "; 
-					sAux +=  " LIMIT 1 ";
-					sAux +=  " ) " +oJoin.GetAliasJoin()+" ON "+(oJoin.GetCondicion()==null?" true ":oJoin.GetCondicion())+" ";
+		String sAux = "";
+		JIterator<RJoins> oIt = oJoins.getIterator();
+		while (oIt.hasMoreElements()) {
+			RJoins oJoin = oIt.nextElement();
+			if (!oJoin.isInnerJoin())
+				sAux = sAux + " , ";
+			if (oJoin.hasTypeJoin() && oJoin.getTypeJoin().equals(JRelations.JOIN_ONE)) {
+				sAux += " JOIN LATERAL (select * ";
 
-				} else if (oJoin.hasTypeJoin() && oJoin.getTypeJoin().equals(JRelations.JOIN_TEN)) {
-					sAux +=  " JOIN LATERAL (select * ";
-					if (oJoin.hasJoins()) {
-						sAux += "	FROM "+oJoin.GetTablaJoin();
-						sAux += buildFrom(oJoin.getJoins());
-						sAux += " where "; 
-					} else {
-						sAux += "FROM "+oJoin.GetTablaJoin()+" where "; 
-					}
-					sAux +=  "  "+ (oJoin.GetCondicionSegundo()==null?"":oJoin.GetCondicionSegundo().replace(oJoin.GetAliasJoin(), oJoin.GetTablaJoin()))+" "; 
-					sAux +=  " LIMIT 10 ";
-					sAux +=  " ) " +oJoin.GetAliasJoin()+" ON "+(oJoin.GetCondicion()==null?" true ":oJoin.GetCondicion())+" ";
-
+				if (oJoin.hasJoins()) {
+					sAux += "	FROM " + oJoin.GetTablaJoin();
+					sAux += buildFrom(oJoin.getJoins());
+					sAux += " where ";
 				} else {
-					sAux +=  " "+(oJoin.hasTypeJoin()?oJoin.getTypeJoin():"");
-					sAux +=  " " + oJoin.GetTablaJoin();
-					if (oJoin.hasAliasJoin())	
-						sAux +=  " " +oJoin.GetAliasJoin()+" ";
-					if (oJoin.hasCondicion() || oJoin.hasCondicionSegunda()) {
-						String cond = "";
-						cond+=(oJoin.GetCondicion()==null?"":" "+oJoin.GetCondicion());
-						cond+=(oJoin.GetCondicionSegundo()==null)?"":(cond.equals("")?"":" AND ")+oJoin.GetCondicionSegundo();
-						sAux +=  " ON "+cond;
-						
-					}
+					sAux += "	FROM " + oJoin.GetTablaJoin() + " where ";
+				}
+				sAux += "  " + (oJoin.GetCondicionSegundo() == null ? "" : oJoin.GetCondicionSegundo().replace(oJoin.GetAliasJoin(), oJoin.GetTablaJoin())) + " ";
+				sAux += " LIMIT 1 ";
+				sAux += " ) " + oJoin.GetAliasJoin() + " ON " + (oJoin.GetCondicion() == null ? " true " : oJoin.GetCondicion()) + " ";
+
+			} else if (oJoin.hasTypeJoin() && oJoin.getTypeJoin().equals(JRelations.JOIN_TEN)) {
+				sAux += " JOIN LATERAL (select * ";
+				if (oJoin.hasJoins()) {
+					sAux += "	FROM " + oJoin.GetTablaJoin();
+					sAux += buildFrom(oJoin.getJoins());
+					sAux += " where ";
+				} else {
+					sAux += "FROM " + oJoin.GetTablaJoin() + " where ";
+				}
+				sAux += "  " + (oJoin.GetCondicionSegundo() == null ? "" : oJoin.GetCondicionSegundo().replace(oJoin.GetAliasJoin(), oJoin.GetTablaJoin())) + " ";
+				sAux += " LIMIT 10 ";
+				sAux += " ) " + oJoin.GetAliasJoin() + " ON " + (oJoin.GetCondicion() == null ? " true " : oJoin.GetCondicion()) + " ";
+
+			} else {
+				sAux += " " + (oJoin.hasTypeJoin() ? oJoin.getTypeJoin() : "");
+				sAux += " " + oJoin.GetTablaJoin();
+				if (oJoin.hasAliasJoin())
+					sAux += " " + oJoin.GetAliasJoin() + " ";
+				if (oJoin.hasCondicion() || oJoin.hasCondicionSegunda()) {
+					String cond = "";
+					cond += (oJoin.GetCondicion() == null ? "" : " " + oJoin.GetCondicion());
+					cond += (oJoin.GetCondicionSegundo() == null) ? "" : (cond.equals("") ? "" : " AND ") + oJoin.GetCondicionSegundo();
+					sAux += " ON " + cond;
+
 				}
 			}
-			return sAux;
+		}
+		return sAux;
 	}
 
 	@Override
 	protected Statement getQueryOpenStatement(JBaseJDBC oDatabaseImpl) throws Exception {
 		Statement st = oDatabaseImpl.GetConnection().createStatement(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-		// postgres driver put all the records in memory, so we have to change that to avoid
+		// postgres driver put all the records in memory, so we have to change that to
+		// avoid
 		// using all the memory of the server
 		st.setFetchSize(200);
 		return st;
@@ -969,7 +1016,7 @@ public class JRegJDBCImpl extends JRegJDBC {
 	public long GetIdentity(String zCampo) throws Exception {
 		String sequenceName = this.getTable() + '_' + zCampo + "_seq";
 		QueryInit();
-		sSQL = "select currval('"+sequenceName.toLowerCase()+"')";
+		sSQL = "select currval('" + sequenceName.toLowerCase() + "')";
 		QueryOpen();
 		this.next();
 		String strRta = this.CampoAsStr("currval");
@@ -977,61 +1024,79 @@ public class JRegJDBCImpl extends JRegJDBC {
 		return Integer.valueOf(strRta);
 	}
 
-	public void ilike(StringBuffer sBuffer,String sTipo,String value) throws Exception {
+	public void ilike(StringBuffer sBuffer, String sTipo, String value) throws Exception {
 		sBuffer.append(SPACE);
 		sBuffer.append("~*");
 		sBuffer.append(SPACE);
 
 		sBuffer.append(ArmarDato(oDato.getStructure().getTable(), sTipo, value));
 	}
-	
-	public  String ArmarDato(String zTabla, String zTipo, String zValor) throws Exception {
-		return ArmarDato(zTabla, zTipo, zValor,true);
+
+	public String ArmarDato(String zTabla, String zTipo, String zValor) throws Exception {
+		return ArmarDato(zTabla, zTipo, zValor, true);
 	}
-	
+
 	public static String ArmarDato(String zTabla, String zTipo, String zValor, boolean escape) throws Exception {
 		String sTipo;
 
-		if (zValor==null) return "null";
-		sTipo=zTipo;
+		if (zValor == null)
+			return "null";
+		sTipo = zTipo;
 
-		if ( zTabla.length()<=6 && (zValor.trim().equalsIgnoreCase("null")||zValor.length()==0)) {
+		if (zTabla.length() <= 6 && (zValor.trim().equalsIgnoreCase("null") || zValor.length() == 0)) {
 			return "''";
 		}
-		
-		if (zValor.trim().equalsIgnoreCase("null")||zValor.length()==0) {
+
+		if (zValor.trim().equalsIgnoreCase("null") || zValor.length() == 0) {
 			return "NULL";
 		}
-			
+
 		if (sTipo.equals(JObject.JDATETIME)) {
-			if ( zValor.charAt(zValor.length()-4) == '.' )
-				zValor = zValor.substring(0, zValor.length()-4);
-			return COMILLA+zValor+COMILLA;
+			if (zValor.charAt(zValor.length() - 4) == '.')
+				zValor = zValor.substring(0, zValor.length() - 4);
+			return COMILLA + zValor + COMILLA;
 		}
 
-		if (sTipo.equals(JObject.JSTRING)) return COMILLA+JTools.escapeQuote(zValor)+COMILLA;
-		else if (sTipo.equals(JObject.JINTEGER)) return zValor;
-		else if (sTipo.equals(JObject.JFLOAT)) return zValor;
-		else if (sTipo.equals(JObject.JCURRENCY)) return zValor;
-		else if (sTipo.equals(JObject.JLONG)) return zValor;
-		else if (sTipo.equals(JObject.JPASSWORD)) return COMILLA+JTools.escapeQuote(JTools.StringToPassword(zValor))+"' ";
-		else if (sTipo.equals(JObject.JHTML)) return COMILLA+JTools.escapeQuote(zValor)+COMILLA;
-		else if (sTipo.equals("campo")) return zTabla+DOT+zValor;
-		else if (sTipo.equals(JObject.JDATE)) return COMILLA+zValor+COMILLA;
-		else if (sTipo.equals(JObject.JINTERVALDATETIME)) return COMILLA+zValor+COMILLA;
-		else if (sTipo.equals(JObject.JINTERVALDATE)) return COMILLA+zValor+COMILLA;
-		else if (sTipo.equals(JObject.JHOUR)) return COMILLA+JTools.HourToString(zValor)+COMILLA;
-		else if (sTipo.equals(JObject.JCOLOUR)) return COMILLA+zValor+COMILLA;
-		else if (sTipo.equals(JObject.JIMAGE)) return COMILLA+zValor+COMILLA;
-		else if (sTipo.equals(JObject.JBOOLEAN)) return COMILLA+zValor+COMILLA;
+		if (sTipo.equals(JObject.JSTRING))
+			return COMILLA + JTools.escapeQuote(zValor) + COMILLA;
+		else if (sTipo.equals(JObject.JINTEGER))
+			return zValor;
+		else if (sTipo.equals(JObject.JFLOAT))
+			return zValor;
+		else if (sTipo.equals(JObject.JCURRENCY))
+			return zValor;
+		else if (sTipo.equals(JObject.JLONG))
+			return zValor;
+		else if (sTipo.equals(JObject.JPASSWORD))
+			return COMILLA + JTools.escapeQuote(JTools.StringToPassword(zValor)) + "' ";
+		else if (sTipo.equals(JObject.JHTML))
+			return COMILLA + JTools.escapeQuote(zValor) + COMILLA;
+		else if (sTipo.equals("campo"))
+			return zTabla + DOT + zValor;
+		else if (sTipo.equals(JObject.JDATE))
+			return COMILLA + zValor + COMILLA;
+		else if (sTipo.equals(JObject.JINTERVALDATETIME))
+			return COMILLA + zValor + COMILLA;
+		else if (sTipo.equals(JObject.JINTERVALDATE))
+			return COMILLA + zValor + COMILLA;
+		else if (sTipo.equals(JObject.JHOUR))
+			return COMILLA + JTools.HourToString(zValor) + COMILLA;
+		else if (sTipo.equals(JObject.JCOLOUR))
+			return COMILLA + zValor + COMILLA;
+		else if (sTipo.equals(JObject.JIMAGE))
+			return COMILLA + zValor + COMILLA;
+		else if (sTipo.equals(JObject.JBOOLEAN))
+			return COMILLA + zValor + COMILLA;
 //		else if (sTipo.equals(JObject.JDATETIME)) return COMILLA+zValor+COMILLA;
-		else if (sTipo.equals(JObject.JGEOPOSITION)) return COMILLA+zValor+COMILLA;
-		else if (sTipo.equals(JObject.JMULTIPLE)) return COMILLA+zValor+COMILLA;
+		else if (sTipo.equals(JObject.JGEOPOSITION))
+			return COMILLA + zValor + COMILLA;
+		else if (sTipo.equals(JObject.JMULTIPLE))
+			return COMILLA + zValor + COMILLA;
 		else if (sTipo.equals(JObject.JBLOB)) {
-			if ( escape )
-			  return COMILLA+JTools.escapeQuote(zValor)+COMILLA;
+			if (escape)
+				return COMILLA + JTools.escapeQuote(zValor) + COMILLA;
 			else
-				return COMILLA+zValor+COMILLA;
+				return COMILLA + zValor + COMILLA;
 		}
 		return "";
 
@@ -1040,79 +1105,175 @@ public class JRegJDBCImpl extends JRegJDBC {
 	public long selectSupraCount(String sql) throws Exception {
 		QueryInit();
 		int idx = sql.lastIndexOf("limit");
-		if (idx!=-1) sql=sql.substring(0, idx);
-		sSQL="select count(*) as cantidad from ("+sql+") regs";
+		if (idx != -1)
+			sql = sql.substring(0, idx);
+		sSQL = "select count(*) as cantidad from (" + sql + ") regs";
 		QueryOpen();
-		if (!this.next()) return 0;
+		if (!this.next())
+			return 0;
 		return this.CampoAsLong("cantidad").longValue();
 	}
-        public  String ArmarIn(String zTabla, String zTipo, String zValor) throws Exception {
-                if (zValor.startsWith("(")) return zValor;
-                StringTokenizer toks = new StringTokenizer(zValor,",");
-                String s = "";
-                while (toks.hasMoreTokens()) {
-                        String ss = toks.nextToken();
-                        s+=(s.equals("")?"":",")+ArmarDato(zTabla, zTipo, ss);
-                }
-                return "("+s+")";
-        }
 
-        private String wrapByModePg(String sql, RegQueryOptions o) {
-                switch (o.mode) {
-                case PREVIEW:
-                        String s = (o.samplePercent == null) ? sql
-                                        : sql.replaceFirst("(?i)FROM\\s+(\\S+)",
-                                                        m -> "FROM " + m.group(1) + " TABLESAMPLE SYSTEM (" + o.samplePercent + ")");
-                        return "SELECT * FROM (\n" + s + "\n) q LIMIT " + o.previewRows;
-                case EXPLAIN_ONLY:
-                        return "EXPLAIN (FORMAT JSON) " + sql;
-                default:
-                        return sql;
-                }
-        }
+	public String ArmarIn(String zTabla, String zTipo, String zValor) throws Exception {
+		if (zValor.startsWith("("))
+			return zValor;
+		StringTokenizer toks = new StringTokenizer(zValor, ",");
+		String s = "";
+		while (toks.hasMoreTokens()) {
+			String ss = toks.nextToken();
+			s += (s.equals("") ? "" : ",") + ArmarDato(zTabla, zTipo, ss);
+		}
+		return "(" + s + ")";
+	}
 
-        @Override
-        public QueryResult query(String baseSql, RegQueryOptions opts) throws Exception {
-                JBaseJDBC base = getBaseJDBC();
-                Connection conn = base.GetConnection();
-                String sql = wrapByModePg(baseSql, opts);
-                BasicPlanAnalyzer planAnalyzer = new BasicPlanAnalyzer();
-                QueryGuard guard = new QueryGuard();
-                if (opts.runPlanGuard && opts.mode != QueryMode.EXPLAIN_ONLY) {
-                        PlanInfo p = planAnalyzer.analyze(conn, sql, opts.dialect);
-                        QueryGuard.Decision d = guard.decide(p);
-                        if (d == QueryGuard.Decision.BLOCK)
-                                return QueryResult.blocked("Consulta bloqueada por presupuesto", p.rawPlanText);
-                }
-                boolean restoreAutoCommit = false;
-                if (opts.dialect == Dialect.POSTGRES && conn.getAutoCommit()) {
-                        conn.setAutoCommit(false);
-                        restoreAutoCommit = true;
-                }
-                int count = 0;
-                try (PreparedStatement ps = conn.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
-                        ps.setQueryTimeout(opts.hardTimeoutSec);
-                        ps.setFetchSize(opts.fetchSize);
-                        base.beginOpTracking();
-                        base.registerActiveCursor(ps);
-                        try (ResultSet rs = ps.executeQuery()) {
-                                while (rs.next()) {
-                                        count++;
-                                        if (opts.mode == QueryMode.PREVIEW && count >= opts.previewRows) {
-                                                break;
-                                        }
-                                }
-                        } finally {
-                                base.unregisterActiveCursor(ps);
-                                base.endOpTracking();
-                        }
-                } finally {
-                        if (restoreAutoCommit)
-                                conn.setAutoCommit(true);
-                }
-                boolean trunc = opts.mode == QueryMode.PREVIEW && count >= opts.previewRows;
-                return new QueryResult(false, null, count, trunc);
+	private String wrapByModePg(String sql, RegQueryOptions o) {
+		switch (o.mode) {
+		case PREVIEW: {
+			String s = sql;
+			if (o.samplePercent != null) {
+				Pattern p = Pattern.compile("(?i)FROM\\s+(\\S+)");
+				Matcher m = p.matcher(sql);
+				if (m.find()) {
+					String t = m.group(1);
+					if (t.length() > 0 && t.charAt(0) != '(') {
+						String replacement = "FROM " + t + " TABLESAMPLE SYSTEM (" + o.samplePercent + ") REPEATABLE (42)";
+						StringBuffer sb = new StringBuffer();
+						m.appendReplacement(sb, Matcher.quoteReplacement(replacement));
+						m.appendTail(sb);
+						s = sb.toString();
+					}
+				}
+			}
+			return "SELECT * FROM (\n" + s + "\n) q LIMIT " + o.previewRows;
+		}
+		case EXPLAIN_ONLY:
+			return "EXPLAIN (FORMAT JSON) " + sql;
+		default:
+			return sql;
+		}
+	}
+
+	public QueryResult query(String baseSql, RegQueryOptions opts) throws Exception {
+    JBaseJDBC base = getBaseJDBC();
+    Connection conn = base.GetConnection();
+
+    // Afinar sample según EXPLAIN
+    RegQueryOptions eff = tuneSampling(conn, baseSql, opts);
+
+    String sql = wrapByModePg(baseSql, eff);
+    BasicPlanAnalyzer planAnalyzer = new BasicPlanAnalyzer();
+    QueryGuard guard = new QueryGuard();
+
+    if (eff.runPlanGuard && eff.mode != QueryMode.EXPLAIN_ONLY) {
+        PlanInfo p = planAnalyzer.analyze(conn, sql,Dialect.POSTGRES );
+        QueryGuard.Decision d = guard.decide(p);
+        if (d == QueryGuard.Decision.BLOCK)
+            return QueryResult.blocked("Consulta bloqueada por presupuesto", p.rawPlanText);
+    }
+
+    boolean restoreAuto = false;
+    if ( conn.getAutoCommit()) {
+        conn.setAutoCommit(false);
+        restoreAuto = true;
+    }
+
+    int count = 0;
+    try (PreparedStatement ps = conn.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
+        // timeout/fetch (con fallback a SET LOCAL para PG viejos si hace falta)
+        try { ps.setQueryTimeout(eff.hardTimeoutSec); } catch (Exception ignore) {}
+        ps.setFetchSize(eff.fetchSize);
+
+        base.beginOpTracking();
+        base.registerActiveCursor(ps);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                count++;
+                if (eff.mode == QueryMode.PREVIEW && count >= eff.previewRows) break;
+            }
+        } finally {
+            base.unregisterActiveCursor(ps);
+            base.endOpTracking();
         }
+    } finally {
+        if (restoreAuto) conn.setAutoCommit(true);
+    }
+
+    // Fallback: si la muestra dio 0, reintentar sin sample (solo en PREVIEW)
+    if (eff.mode == QueryMode.PREVIEW && eff.samplePercent != null && count == 0) {
+        RegQueryOptions noSample = new RegQueryOptions(
+            QueryMode.PREVIEW, eff.previewRows, null,
+            eff.hardTimeoutSec, eff.fetchSize, false // guard ya corrido
+        );
+        return query(baseSql, noSample); // un solo reintento
+    }
+
+    boolean trunc = eff.mode == QueryMode.PREVIEW && count >= eff.previewRows;
+    return new QueryResult(false, null, count, trunc, sql);
+}
+
+	private RegQueryOptions tuneSampling(Connection conn, String baseSql, RegQueryOptions opts) throws Exception {
+		if (opts == null || opts.mode != QueryMode.PREVIEW)
+			return opts;
+
+		BasicPlanAnalyzer analyzer = new BasicPlanAnalyzer();
+		PlanInfo p = analyzer.analyze(conn, baseSql, Dialect.POSTGRES);
+		long est = Math.max(0L, p.estRows);
+
+		// Si el estimado es chico, no tiene sentido samplear
+		if (est == 0L || est <= (2L * opts.previewRows)) {
+			return new RegQueryOptions(QueryMode.PREVIEW, opts.previewRows, null, // <-- sin sample
+					opts.hardTimeoutSec, opts.fetchSize, opts.runPlanGuard);
+		}
+
+		// pct ≈ previewRows / estRows * 100, acotado 1..20
+		int pct = (int) Math.ceil(100.0 * opts.previewRows / (double) est);
+		pct = Math.max(1, Math.min(20, pct));
+
+		return new RegQueryOptions(QueryMode.PREVIEW, opts.previewRows, pct, opts.hardTimeoutSec, opts.fetchSize, opts.runPlanGuard);
+	}
+
+//	@Override
+//	public QueryResult query(String baseSql, RegQueryOptions opts) throws Exception {
+//		JBaseJDBC base = getBaseJDBC();
+//		Connection conn = base.GetConnection();
+//		String sql = wrapByModePg(baseSql, opts);
+//		BasicPlanAnalyzer planAnalyzer = new BasicPlanAnalyzer();
+//		QueryGuard guard = new QueryGuard();
+//		if (opts.runPlanGuard && opts.mode != QueryMode.EXPLAIN_ONLY) {
+//			PlanInfo p = planAnalyzer.analyze(conn, sql, Dialect.POSTGRES);
+//			QueryGuard.Decision d = guard.decide(p);
+//			if (d == QueryGuard.Decision.BLOCK)
+//				return QueryResult.blocked("Consulta bloqueada por presupuesto", p.rawPlanText);
+//		}
+//		boolean restoreAutoCommit = false;
+//		if (conn.getAutoCommit()) {
+//			conn.setAutoCommit(false);
+//			restoreAutoCommit = true;
+//		}
+//		int count = 0;
+//		try (PreparedStatement ps = conn.prepareStatement(sql, ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
+//			ps.setQueryTimeout(opts.hardTimeoutSec);
+//			ps.setFetchSize(opts.fetchSize);
+//			base.beginOpTracking();
+//			base.registerActiveCursor(ps);
+//			try (ResultSet rs = ps.executeQuery()) {
+//				while (rs.next()) {
+//					count++;
+//					if (opts.mode == QueryMode.PREVIEW && count >= opts.previewRows) {
+//						break;
+//					}
+//				}
+//			} finally {
+//				base.unregisterActiveCursor(ps);
+//				base.endOpTracking();
+//			}
+//		} finally {
+//			if (restoreAutoCommit)
+//				conn.setAutoCommit(true);
+//		}
+//		boolean trunc = opts.mode == QueryMode.PREVIEW && count >= opts.previewRows;
+//		return new QueryResult(false, null, count, trunc,sql);
+//	}
 }
 
 // -------------------------------------------------------------------------- // // // Obtengo el

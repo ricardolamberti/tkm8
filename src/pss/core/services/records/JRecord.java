@@ -29,6 +29,7 @@ import pss.common.security.BizUsuario;
 import pss.core.data.BizPssConfig;
 import pss.core.data.interfaces.connections.JBDatos;
 import pss.core.data.interfaces.sentences.JBaseRegistro;
+import pss.core.data.interfaces.sentences.JRegJDBC.RegQueryOptions;
 import pss.core.data.interfaces.structure.RFilter;
 import pss.core.services.JExec;
 import pss.core.services.fields.JDate;
@@ -212,10 +213,10 @@ public class JRecord extends JBaseRecord implements Comparable<Object>,JPurgeInt
 	public boolean isValidateConstraints() {
 		return false;
 	}
-
-	public boolean read() throws Exception {
-//		if(this instanceof BizCustomList)
-//			PssLogger.logInfo("vvv");
+	
+	public boolean read(RegQueryOptions opts) throws Exception {
+		//	if(this instanceof BizCustomList)
+		//	PssLogger.logInfo("vvv");
 		if (!this.isTableBased() || this.isStatic() || !this.isSQLBased())
 			return true;
 		else if (this.getFilters().isEmpty())
@@ -223,12 +224,17 @@ public class JRecord extends JBaseRecord implements Comparable<Object>,JPurgeInt
 		
 		this.setTableTemporal(this.GetTableTemporal());
 		JBaseRegistro oSet = createRecordset();
-
-		boolean bOk = oSet.Select();
+		
+		boolean bOk = oSet.Select(opts);
 		if (bOk)
 			this.Read(oSet);
 		oSet.close();
 		return bOk;
+		
+	}
+		
+	public boolean read() throws Exception {
+		return read(null);
 	}
 
 	@Deprecated
