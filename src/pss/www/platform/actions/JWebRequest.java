@@ -1176,6 +1176,8 @@ public class JWebRequest {
 			JWebApplication app = JWebServer.getInstance().getWebApplication(null);
 			app.getStadistics().addInfoSession(getSession());
 
+			new JWebWinFactory(null).purgeOlderDictionariesByToken(this,dictionaryKey);
+			
 		} catch (Exception e) {
 			PssLogger.logError(e);
 		}

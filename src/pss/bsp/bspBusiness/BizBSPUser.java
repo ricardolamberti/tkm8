@@ -75,6 +75,8 @@ public class BizBSPUser extends BizUsuario {
 		super();
 	}
 	
+	
+	
 	public synchronized static BizBSPUser getUsrBSP() {
 		return (BizBSPUser) BizUsuario.getUsr();
 	}
@@ -177,7 +179,10 @@ public class BizBSPUser extends BizUsuario {
 		}
 	}
 	
-	
+	@Override
+	public boolean serializeOnlyProperties() throws Exception {
+		return false;
+	}
 	
 	
 }

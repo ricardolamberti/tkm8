@@ -1009,11 +1009,11 @@ public class BizPssConfig {
 	public static void main(String[] args) {
 		try {
 			String plain = ""
-			    + "pss.dict.secret=xxxx\n"
-			    + "pss.jwt.key=xxx\n"
-			    + "pss.dict.ttlSeconds=600\n";
+			    + "pss.dict.secret=xx\n"
+			    + "pss.jwt.key=xx\n"
+			    + "pss.dict.ttlSeconds=60000\n";
 			Path out = Paths.get(JPath.PssPathData()+"/config.env");
-			char[] pass = "xx".toCharArray();
+			char[] pass = "Nhrmx7167".toCharArray();
 			encryptAndWrite(out, plain, pass);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

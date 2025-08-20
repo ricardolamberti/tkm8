@@ -47,14 +47,11 @@ public class JWebWinFactory {
 
 	IControlToBD controToBD;
 
-
 	private final JWinPackager packager = new JWinPackager(this);
 
 	public JWinPackager getPackager() {
 		return packager;
 	}
-
-	
 
 	public void fillHistory() throws Exception {
 		JWebHistoryManager hm = JWebActionFactory.getCurrentRequest().getHistoryManager();
@@ -179,10 +176,6 @@ public class JWebWinFactory {
 
 		return null;
 	}
-
-	
-
-	
 
 	private JWebActionData getExtraFormData() throws Exception {
 		return JWebActionFactory.getCurrentRequest().getData("extra_form_data");
@@ -638,7 +631,7 @@ public class JWebWinFactory {
 		if (!value.startsWith(JWebRequest.OBJ_PREFIX))
 			return obj;
 		obj = (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(value);
-		
+
 		return obj;
 	}
 
@@ -716,259 +709,264 @@ public class JWebWinFactory {
 		cache.putBytes(key, JTools.stringToByteArray(packed), 0);
 		return packed;
 	}
-        @Deprecated
-        public String dictionaryToURL(String dict) throws Exception {
-                JWebRequest req = JWebActionFactory.getCurrentRequest();
-                return mintDictionaryToken(req, dict);
-        }
 
-        @Deprecated
-        public String URLToDictionary(String token) throws Exception {
-                byte[] data = resolveDictionaryFromToken(JWebActionFactory.getCurrentRequest(), token);
-                return JTools.byteVectorToString(data);
-        }
+	@Deprecated
+	public String dictionaryToURL(String dict) throws Exception {
+		JWebRequest req = JWebActionFactory.getCurrentRequest();
+		return mintDictionaryToken(req, dict);
+	}
 
-        public String mintDictionaryToken(JWebRequest req, String dict) throws Exception {
-                final String dictId = java.util.UUID.randomUUID().toString();
-                final byte[] bytes = JTools.stringToByteArray(dict);
+	@Deprecated
+	public String URLToDictionary(String token) throws Exception {
+		byte[] data = resolveDictionaryFromToken(JWebActionFactory.getCurrentRequest(), token);
+		return JTools.byteVectorToString(data);
+	}
 
-                final DistCache cache = CacheProvider.get();
-                final int ttlSec = dictTtlSec();
-                cache.putBytes(dictKey(dictId), bytes, ttlSec);
+	public String mintDictionaryToken(JWebRequest req, String dict) throws Exception {
+		final String dictId = java.util.UUID.randomUUID().toString();
+		final byte[] bytes = JTools.stringToByteArray(dict);
 
-                final String userId = getCurrentUserId(req);
-                final String pageId = getOrCreatePageId(req);
-                final long iat = System.currentTimeMillis();
-                final long exp = iat + (long) ttlSec * 1000L;
+		final DistCache cache = CacheProvider.get();
+		final int ttlSec = dictTtlSec();
+		cache.putBytes(dictKey(dictId), bytes, ttlSec);
 
-                final String payload = String.join("|", dictId, userId, pageId, String.valueOf(iat), String.valueOf(exp));
-                final byte[] sig = hmacSha256(getDictSecret(), payload.getBytes(StandardCharsets.UTF_8));
-                final String token = "v1." + b64url(payload.getBytes(StandardCharsets.UTF_8)) + "." + b64url(sig);
+		final String userId = getCurrentUserId(req);
+		final String pageId = getOrCreatePageId(req);
+		final long iat = System.currentTimeMillis();
+		final long exp = iat + (long) ttlSec * 1000L;
 
-                final String curKey = "DICTCUR:" + userId + ":" + pageId;
-                cachePutString(cache, curKey, dictId, ttlSec);
+		final String payload = String.join("|", dictId, userId, pageId, String.valueOf(iat), String.valueOf(exp));
+		final byte[] sig = hmacSha256(getDictSecret(), payload.getBytes(StandardCharsets.UTF_8));
+		final String token = "v1." + b64url(payload.getBytes(StandardCharsets.UTF_8)) + "." + b64url(sig);
 
-                final String iKey = idxKey(userId, pageId);
-                java.util.List<DictIdxEntry> idx = readIndex(cache, iKey);
-                idx.add(new DictIdxEntry(iat, dictId));
-                int max = dictMaxHistory();
-                if (idx.size() > max) {
-                        int toRemove = idx.size() - max;
-                        for (int i = 0; i < toRemove; i++) {
-                                cacheRemove(cache, dictKey(idx.get(i).id));
-                        }
-                        idx = new java.util.ArrayList<>(idx.subList(toRemove, idx.size()));
-                }
-                writeIndex(cache, iKey, idx, ttlSec);
+		final String curKey = "DICTCUR:" + userId + ":" + pageId;
+		cachePutString(cache, curKey, dictId, ttlSec);
 
-                return token;
-        }
+		final String iKey = idxKey(userId, pageId);
+		java.util.List<DictIdxEntry> idx = readIndex(cache, iKey);
+		idx.add(new DictIdxEntry(iat, dictId));
+		int max = dictMaxHistory();
+		if (idx.size() > max) {
+			int toRemove = idx.size() - max;
+			for (int i = 0; i < toRemove; i++) {
+				cacheRemove(cache, dictKey(idx.get(i).id));
+			}
+			idx = new java.util.ArrayList<>(idx.subList(toRemove, idx.size()));
+		}
+		writeIndex(cache, iKey, idx, ttlSec);
 
-        public byte[] resolveDictionaryFromToken(JWebRequest req, String token) throws Exception {
-                if (token == null || token.isEmpty())
-                        throw new IllegalArgumentException("missing token");
-                String[] parts = token.split("\\.", 3);
-                if (parts.length != 3 || !"v1".equals(parts[0]))
-                        throw new IllegalArgumentException("bad token format");
+		return token;
+	}
 
-                byte[] payloadBytes = b64urlDecode(parts[1]);
-                byte[] sigBytes = b64urlDecode(parts[2]);
+	public byte[] resolveDictionaryFromToken(JWebRequest req, String token) throws Exception {
+		if (token == null || token.isEmpty())
+			throw new IllegalArgumentException("missing token");
+		String[] parts = token.split("\\.", 3);
+		if (parts.length != 3 || !"v1".equals(parts[0]))
+			throw new IllegalArgumentException("bad token format");
 
-                byte[] expected = hmacSha256(getDictSecret(), payloadBytes);
-                if (!java.util.Arrays.equals(expected, sigBytes)) {
-                        throw new SecurityException("invalid token signature");
-                }
+		byte[] payloadBytes = b64urlDecode(parts[1]);
+		byte[] sigBytes = b64urlDecode(parts[2]);
 
-                String payload = new String(payloadBytes, StandardCharsets.UTF_8);
-                String[] f = payload.split("\\|");
-                if (f.length != 5)
-                        throw new IllegalArgumentException("bad payload");
+		byte[] expected = hmacSha256(getDictSecret(), payloadBytes);
+		if (!java.util.Arrays.equals(expected, sigBytes)) {
+			throw new SecurityException("invalid token signature");
+		}
 
-                String dictId = f[0];
-                String userId = f[1];
-                String pageId = f[2];
-                long iat = Long.parseLong(f[3]);
-                long exp = Long.parseLong(f[4]);
+		String payload = new String(payloadBytes, StandardCharsets.UTF_8);
+		String[] f = payload.split("\\|");
+		if (f.length != 5)
+			throw new IllegalArgumentException("bad payload");
 
-                String currentUserId = getCurrentUserId(req);
-                if (!userId.equals(currentUserId))
-                        throw new SecurityException("user mismatch");
+		String dictId = f[0];
+		String userId = f[1];
+		String pageId = f[2];
+		long iat = Long.parseLong(f[3]);
+		long exp = Long.parseLong(f[4]);
 
-                long now = System.currentTimeMillis();
-                if (now > exp)
-                        throw new SecurityException("token expired");
+		String currentUserId = getCurrentUserId(req);
+		if (!userId.equals(currentUserId))
+			throw new SecurityException("user mismatch");
 
-                DistCache cache = CacheProvider.get();
-                String curKey = "DICTCUR:" + userId + ":" + pageId;
-                String currentDictId = cacheGetString(cache, curKey);
-                if (currentDictId == null || !currentDictId.equals(dictId)) {
-                        throw new SecurityException("stale dictionary token");
-                }
+		long now = System.currentTimeMillis();
+		if (now > exp)
+			throw new SecurityException("token expired");
 
-                byte[] data = cache.getBytes(dictKey(dictId));
-                if (data == null)
-                        throw new IllegalStateException("dictionary not found (evicted/expired)");
-                return data;
-        }
+		DistCache cache = CacheProvider.get();
+		String curKey = "DICTCUR:" + userId + ":" + pageId;
+		String currentDictId = cacheGetString(cache, curKey);
+		if (currentDictId == null || !currentDictId.equals(dictId)) {
+			throw new SecurityException("stale dictionary token");
+		}
 
-        /** Purgar por TOKEN: elimina todos los diccionarios anteriores para (userId,pageId) del token. */
-        public int purgeOlderDictionariesByToken(JWebRequest req, String token) throws Exception {
-                if (token == null || token.isEmpty())
-                        throw new IllegalArgumentException("missing token");
-                String[] parts = token.split("\\.", 3);
-                if (parts.length != 3 || !"v1".equals(parts[0]))
-                        throw new IllegalArgumentException("bad token format");
-                String payload = new String(b64urlDecode(parts[1]), java.nio.charset.StandardCharsets.UTF_8);
-                String[] f = payload.split("\\|");
-                if (f.length != 5)
-                        throw new IllegalArgumentException("bad payload");
-                String dictId = f[0];
-                String userId = f[1];
-                String pageId = f[2];
-                if (!getCurrentUserId(req).equals(userId))
-                        throw new SecurityException("user mismatch");
-                return purgeOlderDictionariesInternal(userId, pageId, dictId);
-        }
+		byte[] data = cache.getBytes(dictKey(dictId));
+		if (data == null)
+			throw new IllegalStateException("dictionary not found (evicted/expired)");
+		return data;
+	}
 
-        /** Purgar por dictId con pageId conocido (usa user actual). */
-        public int purgeOlderDictionaries(JWebRequest req, String pageId, String dictId) throws Exception {
-                return purgeOlderDictionariesInternal(getCurrentUserId(req), pageId, dictId);
-        }
+	/**
+	 * Purgar por TOKEN: elimina todos los diccionarios anteriores para
+	 * (userId,pageId) del token.
+	 */
+	public int purgeOlderDictionariesByToken(JWebRequest req, String token) throws Exception {
+		if (token == null || token.isEmpty())
+			throw new IllegalArgumentException("missing token");
+		String[] parts = token.split("\\.", 3);
+		if (parts.length != 3 || !"v1".equals(parts[0]))
+			throw new IllegalArgumentException("bad token format");
+		String payload = new String(b64urlDecode(parts[1]), java.nio.charset.StandardCharsets.UTF_8);
+		String[] f = payload.split("\\|");
+		if (f.length != 5)
+			throw new IllegalArgumentException("bad payload");
+		String dictId = f[0];
+		String userId = f[1];
+		String pageId = f[2];
+		if (!getCurrentUserId(req).equals(userId))
+			throw new SecurityException("user mismatch");
+		return purgeOlderDictionariesInternal(userId, pageId, dictId);
+	}
 
-        /** Implementación: borra DICT:<id> anteriores al 'cutId' y reescribe DICTIDX. */
-        private int purgeOlderDictionariesInternal(String userId, String pageId, String cutDictId) throws Exception {
-                DistCache cache = CacheProvider.get();
-                String iKey = idxKey(userId, pageId);
-                java.util.List<DictIdxEntry> idx = readIndex(cache, iKey);
-                if (idx.isEmpty())
-                        return 0;
-                int cut = -1;
-                for (int i = 0; i < idx.size(); i++) {
-                        if (idx.get(i).id.equals(cutDictId)) {
-                                cut = i;
-                                break;
-                        }
-                }
-                if (cut <= 0)
-                        return 0;
-                int removed = 0;
-                for (int i = 0; i < cut; i++) {
-                        cacheRemove(cache, dictKey(idx.get(i).id));
-                        removed++;
-                }
-                java.util.List<DictIdxEntry> newIdx = new java.util.ArrayList<>(idx.subList(cut, idx.size()));
-                writeIndex(cache, iKey, newIdx, dictTtlSec());
-                String curKey = "DICTCUR:" + userId + ":" + pageId;
-                String last = newIdx.get(newIdx.size() - 1).id;
-                String cur = cacheGetString(cache, curKey);
-                if (cur == null || !cur.equals(last)) {
-                        cachePutString(cache, curKey, last, dictTtlSec());
-                }
-                return removed;
-        }
+	/** Purgar por dictId con pageId conocido (usa user actual). */
+	public int purgeOlderDictionaries(JWebRequest req, String pageId, String dictId) throws Exception {
+		return purgeOlderDictionariesInternal(getCurrentUserId(req), pageId, dictId);
+	}
 
-        private static byte[] hmacSha256(String secret, byte[] data) throws Exception {
-                Mac mac = Mac.getInstance("HmacSHA256");
-                SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
-                mac.init(keySpec);
-                return mac.doFinal(data);
-        }
+	/**
+	 * Implementación: borra DICT:<id> anteriores al 'cutId' y reescribe DICTIDX.
+	 */
+	private int purgeOlderDictionariesInternal(String userId, String pageId, String cutDictId) throws Exception {
+		DistCache cache = CacheProvider.get();
+		String iKey = idxKey(userId, pageId);
+		java.util.List<DictIdxEntry> idx = readIndex(cache, iKey);
+		if (idx.isEmpty())
+			return 0;
+		int cut = -1;
+		for (int i = 0; i < idx.size(); i++) {
+			if (idx.get(i).id.equals(cutDictId)) {
+				cut = i;
+				break;
+			}
+		}
+		if (cut <= 0)
+			return 0;
+		int removed = 0;
+		for (int i = 0; i < cut; i++) {
+			cacheRemove(cache, dictKey(idx.get(i).id));
+			removed++;
+		}
+		java.util.List<DictIdxEntry> newIdx = new java.util.ArrayList<>(idx.subList(cut, idx.size()));
+		writeIndex(cache, iKey, newIdx, dictTtlSec());
+		String curKey = "DICTCUR:" + userId + ":" + pageId;
+		String last = newIdx.get(newIdx.size() - 1).id;
+		String cur = cacheGetString(cache, curKey);
+		if (cur == null || !cur.equals(last)) {
+			cachePutString(cache, curKey, last, dictTtlSec());
+		}
+		return removed;
+	}
 
-        private static String b64url(byte[] in) {
-                return Base64.getUrlEncoder().withoutPadding().encodeToString(in);
-        }
+	private static byte[] hmacSha256(String secret, byte[] data) throws Exception {
+		Mac mac = Mac.getInstance("HmacSHA256");
+		SecretKeySpec keySpec = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+		mac.init(keySpec);
+		return mac.doFinal(data);
+	}
 
-        private static byte[] b64urlDecode(String s) {
-                return Base64.getUrlDecoder().decode(s);
-        }
+	private static String b64url(byte[] in) {
+		return Base64.getUrlEncoder().withoutPadding().encodeToString(in);
+	}
 
-        private static String getDictSecret() {
-                String s = System.getProperty("pss.dict.secret");
-                if (s == null || s.isEmpty())
-                        throw new IllegalStateException("Missing system property pss.dict.secret");
-                return s;
-        }
+	private static byte[] b64urlDecode(String s) {
+		return Base64.getUrlDecoder().decode(s);
+	}
 
-        private static int dictTtlSec() {
-                return Integer.getInteger("pss.dict.ttlSeconds", 600);
-        }
+	private static String getDictSecret() {
+		String s = System.getProperty("pss.dict.secret");
+		if (s == null || s.isEmpty())
+			throw new IllegalStateException("Missing system property pss.dict.secret");
+		return s;
+	}
 
-        private static int dictMaxHistory() {
-                return Integer.getInteger("pss.dict.maxHistory", 50);
-        }
+	private static int dictTtlSec() {
+		return Integer.getInteger("pss.dict.ttlSeconds", 60000);
+	}
 
-        private static String getCurrentUserId(JWebRequest req) {
-                JWebApplicationSession sess = req.getSession();
-                return (sess != null) ? sess.getSessionId() : "0";
-        }
+	private static int dictMaxHistory() {
+		return Integer.getInteger("pss.dict.maxHistory", 50);
+	}
 
-        private static String getOrCreatePageId(JWebRequest req) {
-                String pid = req.getRequestid();
-                return (pid != null && !pid.isEmpty()) ? pid : getCurrentUserId(req);
-        }
+	private static String getCurrentUserId(JWebRequest req) {
+		JWebApplicationSession sess = req.getSession();
+		return (sess != null) ? sess.getSessionId() : "0";
+	}
 
-        private static String idxKey(String userId, String pageId) {
-                return "DICTIDX:" + userId + ":" + pageId;
-        }
+	private static String getOrCreatePageId(JWebRequest req) {
+		String pid = req.getRequestid();
+		return (pid != null && !pid.isEmpty()) ? pid : getCurrentUserId(req);
+	}
 
-        private static String dictKey(String dictId) {
-                return "DICT:" + dictId;
-        }
+	private static String idxKey(String userId, String pageId) {
+		return "DICTIDX:" + userId + ":" + pageId;
+	}
 
-        private static final class DictIdxEntry {
-                final long iat;
-                final String id;
+	private static String dictKey(String dictId) {
+		return "DICT:" + dictId;
+	}
 
-                DictIdxEntry(long iat, String id) {
-                        this.iat = iat;
-                        this.id = id;
-                }
-        }
+	private static final class DictIdxEntry {
+		final long iat;
+		final String id;
 
-        private static java.util.List<DictIdxEntry> readIndex(DistCache cache, String key) throws Exception {
-                byte[] b = cache.getBytes(key);
-                java.util.List<DictIdxEntry> out = new java.util.ArrayList<>();
-                if (b == null)
-                        return out;
-                String s = new String(b, java.nio.charset.StandardCharsets.UTF_8);
-                for (String line : s.split("\\R")) {
-                        line = line.trim();
-                        if (line.isEmpty())
-                                continue;
-                        int sp = line.indexOf(' ');
-                        if (sp <= 0)
-                                continue;
-                        long iat = Long.parseLong(line.substring(0, sp));
-                        String id = line.substring(sp + 1);
-                        out.add(new DictIdxEntry(iat, id));
-                }
-                out.sort((a, b2) -> Long.compare(a.iat, b2.iat));
-                return out;
-        }
+		DictIdxEntry(long iat, String id) {
+			this.iat = iat;
+			this.id = id;
+		}
+	}
 
-        private static void writeIndex(DistCache cache, String key, java.util.List<DictIdxEntry> idx, int ttlSec)
-                        throws Exception {
-                StringBuilder sb = new StringBuilder();
-                for (DictIdxEntry e : idx)
-                        sb.append(e.iat).append(' ').append(e.id).append('\n');
-                cache.putBytes(key, sb.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8), ttlSec);
-        }
+	private static java.util.List<DictIdxEntry> readIndex(DistCache cache, String key) throws Exception {
+		byte[] b = cache.getBytes(key);
+		java.util.List<DictIdxEntry> out = new java.util.ArrayList<>();
+		if (b == null)
+			return out;
+		String s = new String(b, java.nio.charset.StandardCharsets.UTF_8);
+		for (String line : s.split("\\R")) {
+			line = line.trim();
+			if (line.isEmpty())
+				continue;
+			int sp = line.indexOf(' ');
+			if (sp <= 0)
+				continue;
+			long iat = Long.parseLong(line.substring(0, sp));
+			String id = line.substring(sp + 1);
+			out.add(new DictIdxEntry(iat, id));
+		}
+		out.sort((a, b2) -> Long.compare(a.iat, b2.iat));
+		return out;
+	}
 
-        private static void cachePutString(DistCache cache, String key, String value, int ttlSec) throws Exception {
-                cache.putBytes(key, value.getBytes(StandardCharsets.UTF_8), ttlSec);
-        }
+	private static void writeIndex(DistCache cache, String key, java.util.List<DictIdxEntry> idx, int ttlSec) throws Exception {
+		StringBuilder sb = new StringBuilder();
+		for (DictIdxEntry e : idx)
+			sb.append(e.iat).append(' ').append(e.id).append('\n');
+		cache.putBytes(key, sb.toString().getBytes(java.nio.charset.StandardCharsets.UTF_8), ttlSec);
+	}
 
-        private static String cacheGetString(DistCache cache, String key) throws Exception {
-                byte[] b = cache.getBytes(key);
-                return b == null ? null : new String(b, StandardCharsets.UTF_8);
-        }
+	private static void cachePutString(DistCache cache, String key, String value, int ttlSec) throws Exception {
+		cache.putBytes(key, value.getBytes(StandardCharsets.UTF_8), ttlSec);
+	}
 
-        private static void cacheRemove(DistCache cache, String key) throws Exception {
-                try {
-                        cache.delete(key);
-                } catch (Throwable ignore) {
-                }
-        }
+	private static String cacheGetString(DistCache cache, String key) throws Exception {
+		byte[] b = cache.getBytes(key);
+		return b == null ? null : new String(b, StandardCharsets.UTF_8);
+	}
+
+	private static void cacheRemove(DistCache cache, String key) throws Exception {
+		try {
+			cache.delete(key);
+		} catch (Throwable ignore) {
+		}
+	}
 
 	public void invalidateWinPack(JBaseWin win) throws Exception {
 		CacheProvider.get().delete("win:" + winStamp(win));
