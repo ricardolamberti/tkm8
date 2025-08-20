@@ -30,7 +30,7 @@ public class JHistoryProvider implements Serializable {
 	String multiSelectName;
 	List<String> multipleSelect = null;
 	List<JPair<String, String>> columnsOrder;
-	transient JWebActionData oNavigation = null;
+	JWebActionData oNavigation = null;
 
 	private JMap<String, String> extraData;
 

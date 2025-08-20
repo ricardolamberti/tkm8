@@ -25,7 +25,7 @@ import pss.www.ui.processing.JXMLRepresentable;
  * @author PSS
  */
 
-public class JWebActionData implements JXMLRepresentable,Serializable {
+public class JWebActionData implements JXMLRepresentable, Serializable {
 
 	public static final JWebActionData NULL = new JWebActionData("NULL", true);
 
@@ -45,11 +45,13 @@ public class JWebActionData implements JXMLRepresentable,Serializable {
 		this.sId = zId;
 		this.bReadOnly = zReadOnly;
 	}
+
 	public void clear() {
 		if (this.oMap != null) {
 			this.oMap = JCollectionFactory.createOrderedMap();
 		}
 	}
+
 	public void destroy() {
 		if (this.oMap != null) {
 			this.oMap.removeAllElements();
@@ -61,7 +63,7 @@ public class JWebActionData implements JXMLRepresentable,Serializable {
 	public boolean isNull() {
 		return this == NULL;
 	}
-	
+
 	public boolean isEmpty() {
 		return this.oMap.isEmpty();
 	}
@@ -69,9 +71,11 @@ public class JWebActionData implements JXMLRepresentable,Serializable {
 	public void add(String zFieldName, String zValue) {
 		this.add(zFieldName, "=", zValue);
 	}
+
 	public void replace(String zFieldName, String zValue) {
-		this.replace(zFieldName, "=", zValue,false);
+		this.replace(zFieldName, "=", zValue, false);
 	}
+
 	public void addEncrypted(String zFieldName, String zOperator, String zValue) {
 		add(zFieldName, zOperator, zValue, true);
 	}
@@ -80,36 +84,38 @@ public class JWebActionData implements JXMLRepresentable,Serializable {
 		add(zFieldName, zOperator, zValue, false);
 	}
 
-	private void add(String zFieldName, String zOperator, String zValue,boolean zEncrypted) {
+	private void add(String zFieldName, String zOperator, String zValue, boolean zEncrypted) {
 		if (this.bReadOnly) {
 			throw new RuntimeException("Data is read only !!!");
 		}
 		this.oMap.addElement(zFieldName, new JWebActionDataField(zFieldName, zOperator, zValue, zEncrypted));
 	}
 
-
 	private void replace(String zFieldName, String zOperator, String zValue, boolean zEncrypted) {
-		if (this.oMap.removeElement(zFieldName)==null) return;
-		this.oMap.addElement(zFieldName, new JWebActionDataField(zFieldName,zOperator, zValue, zEncrypted));
+		if (this.oMap.removeElement(zFieldName) == null)
+			return;
+		this.oMap.addElement(zFieldName, new JWebActionDataField(zFieldName, zOperator, zValue, zEncrypted));
 	}
+
 	public JWebActionDataField getField(String zFieldName) {
 		return this.oMap.getElement(zFieldName);
 	}
 
 	public boolean hasField(String f) {
-		return this.get(f)!=null;
+		return this.get(f) != null;
 	}
+
 	public String get(String zFieldName) {
 		JWebActionDataField oArg = this.oMap.getElement(zFieldName);
 		if (oArg == null) {
 			return null;
 		} else {
-                        String s = oArg.getValue().replace("á", "");
-                        s = s.replace("é", "");
-                        s = s.replace("í", "");
-                        s = s.replace("ó", "");
-                        s = s.replace("ú", "");
-                        s = s.replace("ñ", "");
+			String s = oArg.getValue().replace("á", "");
+			s = s.replace("é", "");
+			s = s.replace("í", "");
+			s = s.replace("ó", "");
+			s = s.replace("ú", "");
+			s = s.replace("ñ", "");
 			return s;
 		}
 	}
@@ -141,9 +147,7 @@ public class JWebActionData implements JXMLRepresentable,Serializable {
 		JWebActionDataField oField;
 		while (oFldIt.hasMoreElements()) {
 			oField = oFldIt.nextElement();
-			oBuff.append(sIndent).append(sIndent).append(oField.getName()).append(
-					oField.getOperator()).append('\'').append(oField.getValue()).append(
-					'\'').append('\n');
+			oBuff.append(sIndent).append(sIndent).append(oField.getName()).append(oField.getOperator()).append('\'').append(oField.getValue()).append('\'').append('\n');
 		}
 		oBuff.append(sIndent).append("}");
 		return oBuff.toString();
@@ -153,35 +157,35 @@ public class JWebActionData implements JXMLRepresentable,Serializable {
 		return this.bReadOnly;
 	}
 
-        public void setReadOnly(boolean b) {
-                this.bReadOnly = b;
-        }
+	public void setReadOnly(boolean b) {
+		this.bReadOnly = b;
+	}
 
-        public String serialize() throws Exception {
-                Gson gson = new Gson();
-                DataWrapper d = new DataWrapper();
-                d.id = this.sId;
-                d.readOnly = this.bReadOnly;
-                d.fields = this.oMap != null ? this.oMap.toMap() : null;
-                return gson.toJson(d);
-        }
+	public String serialize() throws Exception {
+		Gson gson = new Gson();
+		DataWrapper d = new DataWrapper();
+		d.id = this.sId;
+		d.readOnly = this.bReadOnly;
+		d.fields = this.oMap != null ? this.oMap.toMap() : null;
+		return gson.toJson(d);
+	}
 
-        public static JWebActionData unserialize(String json) throws Exception {
-                Gson gson = new Gson();
-                DataWrapper d = gson.fromJson(json, DataWrapper.class);
-                JWebActionData data = new JWebActionData(d.id, d.readOnly);
-                if (d.fields != null) {
-                        for (Map.Entry<String, JWebActionDataField> e : d.fields.entrySet()) {
-                                data.oMap.addElement(e.getKey(), e.getValue());
-                        }
-                }
-                return data;
-        }
+	public static JWebActionData unserialize(String json) throws Exception {
+		Gson gson = new Gson();
+		DataWrapper d = gson.fromJson(json, DataWrapper.class);
+		JWebActionData data = new JWebActionData(d.id, d.readOnly);
+		if (d.fields != null) {
+			for (Map.Entry<String, JWebActionDataField> e : d.fields.entrySet()) {
+				data.oMap.addElement(e.getKey(), e.getValue());
+			}
+		}
+		return data;
+	}
 
-        private static class DataWrapper {
-                String id;
-                boolean readOnly;
-                Map<String, JWebActionDataField> fields;
-        }
+	private static class DataWrapper {
+		String id;
+		boolean readOnly;
+		Map<String, JWebActionDataField> fields;
+	}
 
 }

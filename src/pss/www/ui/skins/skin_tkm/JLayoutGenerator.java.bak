@@ -83,8 +83,7 @@ public class JLayoutGenerator extends JBasicLayoutGenerator implements ILayoutGe
 			parent.addSeparator(g3);
 			parent.addCloseSession(g3, JWebIcon.getResponsiveIcon("fa fa-fw fa-sign-out"), null);
 		}
-		parent.addRefresh(null, JWebIcon.getResponsiveIcon("fa fa-fw fa-sync-alt"), null);
-		parent.addActiveHelp(null, null, "Ayuda");
+		//parent.addRefresh(null, JWebIcon.getResponsiveIcon("fa fa-fw fa-sync-alt"), null);
 
 		// parent.addLogo(JWebIcon.getPssDataResource(logoPath),"height:25px;");
 
@@ -131,8 +130,8 @@ public class JLayoutGenerator extends JBasicLayoutGenerator implements ILayoutGe
 		} 
 		
 		panelHeading.setClassResponsive("panel-heading clearfix");
-//		if (parent.isEmbedded())
-//			panelBody.setClassResponsive("panel-body");
+		if (parent.isEmbedded())
+			panelBody.setClassResponsive("panel-body");
 		if (parent.isToolbarLeft())
 			panelBody.setClassResponsive(panelBody.getClassResponsive() + " with-sidebar");
 

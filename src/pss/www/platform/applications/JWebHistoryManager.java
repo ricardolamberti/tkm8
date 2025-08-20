@@ -397,6 +397,7 @@ public class JWebHistoryManager implements Serializable {
 		String action;
 		String selectedItem = "-1";
 		String scroller = "";
+		String navigation;
 		String multiSelectName;
 		List<String> multipleSelect = null;
 		List<JPair<String,String>>  columnsOrder;
@@ -416,7 +417,7 @@ public class JWebHistoryManager implements Serializable {
 		JLocalHistoryProvider hp = new JLocalHistoryProvider();
 		hp.action = JWebActionFactory.getCurrentRequest().registerActionObjectObj(local.getAction());
 		hp.columnsOrder = local.getColumnsOrder();
-		
+		hp.navigation = local.getNavigation()==null?null:local.getNavigation().serialize();
 		hp.multipleSelect = local.getRawMultipleSelect();
 		hp.scroller = local.getScroller();
 		hp.selectedItem = local.getSelectedItem();
@@ -440,6 +441,7 @@ public class JWebHistoryManager implements Serializable {
 		hp.multipleSelect = local.multipleSelect;
 		hp.multiSelectName = local.multiSelectName;
 		hp.scroller = local.scroller;
+		hp.oNavigation= local.navigation==null?null:JWebActionData.unserialize(local.navigation);
 		hp.selectedItem = local.selectedItem;
 		if (local.extraData!=null) {
 			for(JPair<String,String> p:local.extraData) {

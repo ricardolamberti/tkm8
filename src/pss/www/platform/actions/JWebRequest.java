@@ -1163,7 +1163,9 @@ public class JWebRequest {
 			String dictionaryKey = getPssIdDictionary();
 			if (dictionaryKey == null || dictionaryKey.isEmpty())
 				return;
-			pack = (JWebRequestPackage) deserializeRegisterJSON(retrieveDictionary(dictionaryKey));
+			String sql = retrieveDictionary(dictionaryKey);
+			pack = (JWebRequestPackage) deserializeRegisterJSON(sql);
+		
 			oNameDictionary = pack.localNameDictionay;
 			oRegisteredObjectsOld = pack.localRegisteredObject;
 			if (getHistoryManager().sizeHistory() == 0) {
@@ -1205,15 +1207,19 @@ public class JWebRequest {
 	public String serializeRegisterJSON(JWebRequestPackage pack) {
 		Gson gson = new Gson();
 		String serializedMap = gson.toJson(pack);
+		PssLogger.logDebug("JSON-->[ History ]" + serializedMap);
+
 		return Base64.getEncoder().encodeToString(JTools.stringToByteArray(serializedMap));
 	}
 
 	public JWebRequestPackage deserializeRegisterJSON(String serializedDictionary) {
 		JWebRequestPackage map = new JWebRequestPackage();
 		Gson gson = new Gson();
-		Type type = new TypeToken<JWebRequestPackage>() {
-		}.getType();
-		map = gson.fromJson(JTools.byteVectorToString(Base64.getDecoder().decode(serializedDictionary)), type);
+		Type type = new TypeToken<JWebRequestPackage>() {}.getType();
+		String sql = JTools.byteVectorToString(Base64.getDecoder().decode(serializedDictionary));
+		PssLogger.logDebug("Reconstruir JSON-->[ History ]" + sql);
+
+		map = gson.fromJson(sql, type);
 		return map;
 	}
 

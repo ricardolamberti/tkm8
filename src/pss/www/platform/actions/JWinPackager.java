@@ -233,6 +233,9 @@ public class JWinPackager {
 		actionOwner.setParent(dto.parent == null ? null : (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(dto.parent));
 		if (actionOwner.isWin())
 			((JWin) actionOwner).getRecord().setDatosLeidos(dto.readed);
+		else
+			((JWins) actionOwner).setPreviewFlag(dto.previewFlag);
+			
 		if (dto.drop != null)
 			actionOwner.setDropListener((JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(dto.drop));
 		if (dto.dropControl != null)
@@ -485,6 +488,7 @@ public class JWinPackager {
 		serializableWin.cls = win.getClass().getName();
 		serializableWin.uniqueId = win.getUniqueId();
 		serializableWin.vision = win.GetVision();
+		serializableWin.previewFlag = win.isWin()?null:((JWins)win).getPreviewFlag();
 		serializableWin.record = JWebActionFactory.getCurrentRequest().registerRecObjectObj(win.GetBaseDato(), win.canConvertToURL());
 		serializableWin.parent = win.getParent() == null ? null : JWebActionFactory.getCurrentRequest().registerWinObjectObj(win.getParent());
 		if (serializableWin.cls.indexOf("Campos") != -1)
@@ -656,6 +660,7 @@ public class JWinPackager {
 		public String record;
 		public String rowid;
 		public String parent;
+		public String previewFlag;
 
 		public List<SerializableFilter> filters;
 		public Map<String, String> properties;
