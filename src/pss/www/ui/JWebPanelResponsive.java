@@ -148,7 +148,7 @@ public class JWebPanelResponsive extends JWebViewInternalComposite implements JW
 	
 		@Override
 		public String getSizeResponsive() throws Exception {
-			if (isGutter()) return "row gutter-0";
+			if (isGutter()) return "row gutter-col";
 			return super.getSizeResponsive();
 		}
 		@Override

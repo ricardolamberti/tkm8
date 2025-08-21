@@ -229,6 +229,7 @@ public class JWinPackager {
 		JBaseWin actionOwner = getOrCreateWin(dto.cls, sUniqueId);
 		actionOwner.SetBaseDato((JBaseRecord) JWebActionFactory.getCurrentRequest().getRegisterObject(dto.record));
 		actionOwner.setUniqueID(sUniqueId);
+		actionOwner.setToolbarForced(dto.toolbarForced);
 		actionOwner.SetVision(dto.vision == null ? "" : dto.vision);
 		actionOwner.setParent(dto.parent == null ? null : (JBaseWin) JWebActionFactory.getCurrentRequest().getRegisterObject(dto.parent));
 		if (actionOwner.isWin())
@@ -488,6 +489,7 @@ public class JWinPackager {
 		serializableWin.cls = win.getClass().getName();
 		serializableWin.uniqueId = win.getUniqueId();
 		serializableWin.vision = win.GetVision();
+		serializableWin.toolbarForced=win.getToolbarForced();
 		serializableWin.previewFlag = win.isWin()?null:((JWins)win).getPreviewFlag();
 		serializableWin.record = JWebActionFactory.getCurrentRequest().registerRecObjectObj(win.GetBaseDato(), win.canConvertToURL());
 		serializableWin.parent = win.getParent() == null ? null : JWebActionFactory.getCurrentRequest().registerWinObjectObj(win.getParent());
@@ -661,6 +663,7 @@ public class JWinPackager {
 		public String rowid;
 		public String parent;
 		public String previewFlag;
+		public String toolbarForced;
 
 		public List<SerializableFilter> filters;
 		public Map<String, String> properties;

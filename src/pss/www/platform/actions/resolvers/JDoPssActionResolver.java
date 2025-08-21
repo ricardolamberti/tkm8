@@ -806,6 +806,8 @@ public class JDoPssActionResolver extends JIndoorsActionResolver implements ICon
 
 	protected BizAction createVirtualAction(JBaseWin owner) throws Exception {
 		BizAction a = new BizAction();
+		if (owner==null)
+			PssLogger.logError("log point");
 		a.setObjOwner(owner);
 		a.SetIdAction("anonimus_" + owner.hashCode());
 		if (owner instanceof JWins) {

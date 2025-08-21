@@ -5,17 +5,19 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import pss.bsp.consola.BizBSPConsola;
+import pss.bsp.consola.GuiBSPConsola;
 import pss.bsp.pais.BizPais;
 import pss.common.security.BizUsuario;
 import pss.common.security.BizUsuarioRol;
 import pss.core.services.fields.JInteger;
 import pss.core.services.fields.JString;
 import pss.core.tools.JDateTools;
+import pss.core.tools.PssLogger;
+import pss.www.platform.actions.JWebActionFactory;
 
 public class BizBSPUser extends BizUsuario {
 	
 	BizPais bspPais = null;
-	BizBSPConsola bspConsola = null;
 	JString pUsuarioPre = new JString() {
 		public void preset() throws Exception {
 			if (pUsuarioPre.isRawNotNull()) return;
@@ -41,7 +43,13 @@ public class BizBSPUser extends BizUsuario {
 	}
 	
 	public BizBSPConsola getBspConsola() {
-		return bspConsola;
+		try {
+			return (BizBSPConsola)((GuiBSPConsola) JWebActionFactory.getCurrentRequest().getWinConsole()).getRecord();
+		} catch (Exception e) {
+			PssLogger.logError(e);
+			return null;
+		}
+		
 	}
 	
 
@@ -66,9 +74,6 @@ public class BizBSPUser extends BizUsuario {
 		if (GetUsuario().toUpperCase().endsWith("."+getCompany().toUpperCase()))
 			return GetUsuario().toUpperCase().substring(0, GetUsuario().toUpperCase().indexOf("."+getCompany().toUpperCase()));
 		return GetUsuario();
-	}
-	public void setBspConsola(BizBSPConsola bspConsola) {
-		this.bspConsola = bspConsola;
 	}
 
 	public BizBSPUser() throws Exception {

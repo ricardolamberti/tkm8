@@ -411,6 +411,7 @@ public class JWebHistoryManager implements Serializable {
 	}
 	public class JLocalHistoryManager implements Serializable {
 	  List<JLocalHistory> oActionHistory;
+	  JLocalHistory homePage;
 	}
 	
 	JLocalHistoryProvider serializeLocalHistoryProvider(JHistoryProvider local) throws Exception {
@@ -480,6 +481,7 @@ public class JWebHistoryManager implements Serializable {
 	
 	public JLocalHistoryManager serializeHistoryManager()  throws Exception {
 		JLocalHistoryManager hm = new JLocalHistoryManager();
+//		hm.homePage = this.homePage==null?null:serializeLocalHistory( this.homePage);
 		if (this.oActionHistory!=null) {
 			hm.oActionHistory = new ArrayList();
 			JIterator<JHistory> it = this.oActionHistory.getIterator();
@@ -494,6 +496,7 @@ public class JWebHistoryManager implements Serializable {
 	}
 	
 	public JWebHistoryManager deserializeHistoryManager(JLocalHistoryManager local)  throws Exception {
+//		this.homePage = local.homePage==null?null:unserializeHistory(local.homePage);
 		if (local.oActionHistory!=null) {
 			this.oActionHistory = JCollectionFactory.createList();
 			for (JLocalHistory h:local.oActionHistory) {

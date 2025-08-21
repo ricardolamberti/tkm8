@@ -104,13 +104,9 @@ public class GuiModuloBSP extends GuiModulo {
 		GuiBSPConsola c = new GuiBSPConsola();
 		c.setToolbarForced(JBaseWin.TOOLBAR_LEFT);
 
-		if (BizBSPUser.getUsrBSP().getBspConsola()!=null) {
-			c.setRecord(BizBSPUser.getUsrBSP().getBspConsola());
-			return c;
-		}
+
 		GuiBSPConfig cc = new GuiBSPConfig();
 		cc.GetcDato().dontThrowException(true);
-		BizBSPUser.getUsrBSP().setBspConsola(c.GetcDato());
 		if (cc.GetcDato().read(BizUsuario.getUsr().getCompany(),"*")) return c;
 		cc.GetcDato().ExecGenerateUser(BizUsuario.getUsr().getCompany(),"*","" );
 		if (!cc.GetcDato().read(BizUsuario.getUsr().getCompany(),"*" )) throw new Exception ("usuario no inicializado");

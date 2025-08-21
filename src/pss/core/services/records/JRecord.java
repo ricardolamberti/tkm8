@@ -1646,6 +1646,7 @@ public class JRecord extends JBaseRecord implements Comparable<Object>,JPurgeInt
 		int len = oProps.getLength();
 		for (int i = 0; i < len; i++) {
 			String sProp = oProps.item(i).getNodeName();
+			if (sProp.startsWith("__")) continue;//meta
 			String sValor = zRow.getAttribute(sProp);
 			this.getProp(sProp).setValue(sValor);
 	//		PssLogger.logInfo("----->"+sProp+"="+sValor);

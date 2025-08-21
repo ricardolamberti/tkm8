@@ -102,7 +102,7 @@ public class JWebRequest {
 		private Map<String, String> localNameDictionay;
 		private Map<String, String> localRegisteredObject;
 		private JLocalHistoryManager localHistoryManager;
-
+		
 		public String getRegisterObjectsSerialized() throws Exception {
 			return buildOutgoingDictionary();
 		}
@@ -1125,6 +1125,11 @@ public class JWebRequest {
 
 	}
 
+	public JBaseWin getWinConsole()  throws Exception {
+			return getHistoryManager().getHomePageHistory().getMainSumbit().getResult();
+
+	}
+	
 	static long id = 0;
 
 	public String getNameDictionary(String s) {

@@ -67,7 +67,11 @@ public abstract class JWebActionFactory {
 	}
 	public static String registerObject(Serializable serializable) throws Exception {
 		return JWebActionFactory.getCurrentRequest().registerObjectObj(serializable);
-	}	//
+	}	
+
+	
+	
+	//
 	//
 	// WEB ACTION PROVIDING METHODS
 	//
@@ -80,23 +84,23 @@ public abstract class JWebActionFactory {
 	public static JWebAction createDoLogout() throws Exception {
 //		JWebAction oAction=JWebActionFactory.create(BizUsuario.getCurrentLoginPage(), false);
 		JWebAction oAction=JWebActionFactory.create("closed", false);
-		oAction.setDescription("Cerrar sesión");
+		oAction.setDescription("Cerrar sesiï¿½n");
 		return oAction; 
 	}
 	public static JWebAction createDoLogoutClosed() throws Exception {
 		JWebAction oAction=JWebActionFactory.create("closed_subsession", false);
-		oAction.setDescription("Cerrar sesión");
+		oAction.setDescription("Cerrar sesiï¿½n");
 		return oAction; 
 	}
 	
 	public static JWebAction createDoPasswordChangeLex() {
 		JWebAction oAction=JWebActionFactory.create("do-passwordchangelex", true);
-		oAction.setDescription("Cambiar contraseña e ingresar a la aplicación");
+		oAction.setDescription("Cambiar contraseï¿½a e ingresar a la aplicaciï¿½n");
 		return oAction;
 	}
 	public static JWebAction createRegistrar() {
 		JWebAction oAction=JWebActionFactory.create("do-registrar", true);
-		oAction.setDescription("Ingresar a la aplicación");
+		oAction.setDescription("Ingresar a la aplicaciï¿½n");
 		return oAction;
 	}
 
@@ -111,7 +115,7 @@ public abstract class JWebActionFactory {
 	
 	public static JWebAction createDoForget() {
 		JWebAction oAction=JWebActionFactory.create("do-forget", true);
-		oAction.setDescription("Olvidar contraseña");
+		oAction.setDescription("Olvidar contraseï¿½a");
 		return oAction;
 	}
 	public static JWebAction createNewSession(JWebApplicationSession secc,String action) throws Exception {
@@ -136,21 +140,21 @@ public abstract class JWebActionFactory {
 	
 	public static JWebAction createDoAutoLogin() {
 		JWebAction oAction=JWebActionFactory.create("autologin", true);
-		oAction.setDescription("Ingresar anónimo a la aplicación");
+		oAction.setDescription("Ingresar anï¿½nimo a la aplicaciï¿½n");
 		return oAction;
 	}
 
 	public static JWebAction createDoLoginByIni() {
 		JWebServerAction oAction=JWebActionFactory.create("do-login-ini", true);
 		oAction.setUploadata(true);
-		oAction.setDescription("Ingresar a la aplicación");
+		oAction.setDescription("Ingresar a la aplicaciï¿½n");
 		return oAction;
 	}
 
 	public static JWebAction createDoLogin() {
 		JWebServerAction oAction=JWebActionFactory.create("do-login", true);
 		oAction.setUploadata(true);
-		oAction.setDescription("Ingresar a la aplicación");
+		oAction.setDescription("Ingresar a la aplicaciï¿½n");
 		return oAction;
 	}
 
@@ -158,21 +162,21 @@ public abstract class JWebActionFactory {
 		JWebServerAction oAction=JWebActionFactory.create("do-login", true);
 		oAction.setOpenInNewWindow(true);
 		oAction.setUploadata(true);
-		oAction.setDescription("Ingresar a la aplicación");
+		oAction.setDescription("Ingresar a la aplicaciï¿½n");
 		return oAction;
 	}
 	
 	public static JWebAction createDoRegister() {
 		JWebServerAction oAction=JWebActionFactory.create("do-register", true);
 		oAction.setUploadata(true);
-		oAction.setDescription("Registrarse a la aplicación");
+		oAction.setDescription("Registrarse a la aplicaciï¿½n");
 		return oAction;
 	}
 
 	public static JWebAction createRegister() {
 		JWebServerAction oAction=JWebActionFactory.create("register", false);
 		oAction.setUploadata(true);
-		oAction.setDescription("Registrarse a la aplicación");
+		oAction.setDescription("Registrarse a la aplicaciï¿½n");
 		return oAction;
 	}
 
@@ -191,7 +195,7 @@ public abstract class JWebActionFactory {
 	public static JWebAction createDoPasswordChange() {
 		JWebServerAction oAction=JWebActionFactory.create("do-passwordchange", true);
 		oAction.setUploadata(true);
-		oAction.setDescription("Cambiar contraseña e ingresar a la aplicación");
+		oAction.setDescription("Cambiar contraseï¿½a e ingresar a la aplicaciï¿½n");
 		return oAction;
 	}
 
@@ -356,7 +360,7 @@ public abstract class JWebActionFactory {
 
 	public static JWebAction createWinListExportAllToGraph(BizAction sourceAction, JWebActionOwnerProvider provider, String idObject) throws Exception {
 		BizAction a = new BizAction();
-		a.setDescrip("Exportar a Gráfico");
+		a.setDescrip("Exportar a Grï¿½fico");
 		a.SetIdAction(sourceAction.getIdAction());
 		a.setNuevaVentana(true);
 		JWebServerAction webaction=new JWebPssAction();
@@ -372,7 +376,7 @@ public abstract class JWebActionFactory {
 
 	public static JWebAction createWinListExportAllToExcel(BizAction sourceAction, JWebActionOwnerProvider provider, String idObject,String presentation) throws Exception {
 		BizAction a = new BizAction();
-		a.setDescrip("Exportar a Excel®");
+		a.setDescrip("Exportar a Excelï¿½");
 		a.SetIdAction(sourceAction.getIdAction());
 		a.setNuevaVentana(true);
 		JWebServerAction webaction=new JWebReportAction();
@@ -609,7 +613,7 @@ public abstract class JWebActionFactory {
 
 	public static JWebAction createGoBackSubmitting() throws Exception {
 		JWebAction oAction=JWebActionFactory.create("closed", true);
-		oAction.setDescription("Atrás");
+		oAction.setDescription("Atrï¿½s");
 		return oAction;
 	}
 
@@ -619,7 +623,7 @@ public abstract class JWebActionFactory {
 		// String sActionId = zSession.getUserProfile().getHomePageAction();
 		// int iSepIndex = sActionId.indexOf('_');
 		JWebAction oAction=JWebActionFactory.createGoHome(zSession.getHomePageAction());
-		oAction.setDescription("Página principal");
+		oAction.setDescription("Pï¿½gina principal");
 		return oAction;
 	}
 
@@ -1328,7 +1332,7 @@ public abstract class JWebActionFactory {
 	}
 
 	private static void parseActionDataField(JWebServerAction zAction, String zFullFieldName, String zFieldValue) {
-		if (zFieldValue.length()>2000) // limite al tamaño, no entiendo bien para que se manda esto, no parece afectar al funcionamiento. SI es muy grande explota la pila
+		if (zFieldValue.length()>2000) // limite al tamaï¿½o, no entiendo bien para que se manda esto, no parece afectar al funcionamiento. SI es muy grande explota la pila
 			return;
 		int iSepIndex=zFullFieldName.lastIndexOf('-');
 		if (iSepIndex==-1) {

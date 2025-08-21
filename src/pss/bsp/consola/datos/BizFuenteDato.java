@@ -30,6 +30,8 @@ import pss.core.tools.collections.JIterator;
 import pss.tourism.interfaceGDS.log.BizInterfaceLog;
 import pss.tourism.pnr.BizPNRReserva;
 import pss.tourism.pnr.BizPNRTicket;
+import pss.www.platform.actions.JWebActionFactory;
+import pss.www.platform.actions.JWebWinFactory;
 
 public class BizFuenteDato extends JRecord {
 
