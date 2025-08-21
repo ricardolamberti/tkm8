@@ -119,64 +119,113 @@ public class PssLogger {
 		logger.removeAllAppenders();
 	}
 
-	public static void logDebug(String zMessage) {
-		printWithLevel(PssLogger.LOG_DEBUG, zMessage);
-	}
+        public static void logDebug(String zMessage) {
+                logDebug(zMessage, false);
+        }
 
-	public static void logDebug(Throwable zException) {
-		printWithLevel(PssLogger.LOG_ERROR, zException, true);
-	}
+        public static void logDebug(String zMessage, boolean printLink) {
+                printWithLevel(PssLogger.LOG_DEBUG, zMessage, printLink);
+        }
 
-	public static void logDebug(Throwable zException, String zHeading) {
-		logDebug(zHeading);
-		logDebug(zException);
-	}
+        public static void logDebug(Throwable zException) {
+                logDebug(zException, false);
+        }
 
-	public static void logError(Throwable zException, String zHeading,
-			boolean zDumpStack) {
-		logError(zHeading);
-		logError(zException, zDumpStack);
-	}
+        public static void logDebug(Throwable zException, boolean printLink) {
+                printWithLevel(PssLogger.LOG_ERROR, zException, true, printLink);
+        }
 
-	public static void logError(Throwable zException, String zHeading) {
-		logError(zException, zHeading, true);
-	}
+        public static void logDebug(Throwable zException, String zHeading) {
+                logDebug(zException, zHeading, false);
+        }
 
-	public static void logError(Throwable zException, boolean zDumpStack) {
-		printWithLevel(PssLogger.LOG_ERROR, zException, zDumpStack);
-	}
+        public static void logDebug(Throwable zException, String zHeading, boolean printLink) {
+                logDebug(zHeading, printLink);
+                logDebug(zException, printLink);
+        }
 
-	public static void logError(Throwable zException) {
-		logError(zException, true);
-	}
+        public static void logError(Throwable zException, String zHeading,
+                        boolean zDumpStack) {
+                logError(zException, zHeading, zDumpStack, false);
+        }
 
-	public static void logError(String zMessage) {
-		printWithLevel(PssLogger.LOG_ERROR, zMessage);
-	}
+        public static void logError(Throwable zException, String zHeading,
+                        boolean zDumpStack, boolean printLink) {
+                logError(zHeading, printLink);
+                logError(zException, zDumpStack, printLink);
+        }
 
-	public static void logDebugSQL(String zMessage) {
-		printWithLevel(PssLogger.LOG_DEBUG_SQL, zMessage);
-	}
+        public static void logError(Throwable zException, String zHeading) {
+                logError(zException, zHeading, true, false);
+        }
 
-	public static void logDebugXML(String zMessage) {
-		printWithLevel(PssLogger.LOG_DEBUG_XML, zMessage);
-	}
+        public static void logError(Throwable zException, boolean zDumpStack) {
+                logError(zException, zDumpStack, false);
+        }
 
-	public static void logInfo(String zMessage) {
-		printWithLevel(PssLogger.LOG_INFO, zMessage);
-	}
+        public static void logError(Throwable zException, boolean zDumpStack, boolean printLink) {
+                printWithLevel(PssLogger.LOG_ERROR, zException, zDumpStack, printLink);
+        }
 
-	public static void logWait(String zMessage) {
-		printWithLevel(PssLogger.LOG_WAIT, zMessage);
-	}
+        public static void logError(Throwable zException) {
+                logError(zException, true, false);
+        }
 
-	public static void logFiscal(String zMessage) {
-		printWithLevel(PssLogger.LOG_FISCAL, zMessage);
-	}
+        public static void logError(String zMessage) {
+                logError(zMessage, false);
+        }
 
-	public static void logMM(String zMessage) {
-		printWithLevel(PssLogger.LOG_MM, zMessage);
-	}
+        public static void logError(String zMessage, boolean printLink) {
+                printWithLevel(PssLogger.LOG_ERROR, zMessage, printLink);
+        }
+
+        public static void logDebugSQL(String zMessage) {
+                logDebugSQL(zMessage, false);
+        }
+
+        public static void logDebugSQL(String zMessage, boolean printLink) {
+                printWithLevel(PssLogger.LOG_DEBUG_SQL, zMessage, printLink);
+        }
+
+        public static void logDebugXML(String zMessage) {
+                logDebugXML(zMessage, false);
+        }
+
+        public static void logDebugXML(String zMessage, boolean printLink) {
+                printWithLevel(PssLogger.LOG_DEBUG_XML, zMessage, printLink);
+        }
+
+        public static void logInfo(String zMessage) {
+                logInfo(zMessage, false);
+        }
+
+        public static void logInfo(String zMessage, boolean printLink) {
+                printWithLevel(PssLogger.LOG_INFO, zMessage, printLink);
+        }
+
+        public static void logWait(String zMessage) {
+                logWait(zMessage, false);
+        }
+
+        public static void logWait(String zMessage, boolean printLink) {
+                printWithLevel(PssLogger.LOG_WAIT, zMessage, printLink);
+        }
+
+        public static void logFiscal(String zMessage) {
+                logFiscal(zMessage, false);
+        }
+
+        public static void logFiscal(String zMessage, boolean printLink) {
+                printWithLevel(PssLogger.LOG_FISCAL, zMessage, printLink);
+        }
+
+        public static void logMM(String zMessage) {
+                logMM(zMessage, false);
+        }
+
+        public static void logMM(String zMessage, boolean printLink) {
+                printWithLevel(PssLogger.LOG_MM, zMessage, printLink);
+        }
 
 	public static void logFiscalMessage(String sTitulo, String zMessage) {
 		int len = zMessage.length();
@@ -191,55 +240,95 @@ public class PssLogger {
 		printWithLevel(PssLogger.LOG_FISCAL, sHexa.toString());
 	}
 
-	private static void printWithLevel(int Log_Id, String zMensaje) {
-		if (!isLogEnable(Log_Id))
-			return;
-		printWithLevel(Log_Id, zMensaje, null, false);
-	}
+        private static void printWithLevel(int Log_Id, String zMensaje) {
+                if (!isLogEnable(Log_Id))
+                        return;
+                printWithLevel(Log_Id, zMensaje, null, false, false);
+        }
 
-	private static void printWithLevel(int Log_Id, Throwable t,
-			boolean dumpStack) {
-		if (!isLogEnable(Log_Id))
-			return;
-		printWithLevel(Log_Id, null, t, dumpStack);
-	}
+        private static void printWithLevel(int Log_Id, String zMensaje, boolean printLink) {
+                if (!isLogEnable(Log_Id))
+                        return;
+                printWithLevel(Log_Id, zMensaje, null, false, printLink);
+        }
 
-	private static void printWithLevel(int Log_Id, String message, Throwable t,
-			boolean dumpStack) {
-		if (!isLogEnable(Log_Id))
-			return;
-		try {
-			Logger logger = initialize();
-			if (logger == null) {
-				System.out.println(message);
-				return;
-			}
-			printStartInfo();
-			if (message != null) {
-				try {
-					String sText = message;
-					printDebugPrint(logger, Log_Id, sText);
-				} catch (Exception e) {
-					System.out.println(message);
-				}
-			} else {
-				if (dumpStack) {
-					String sStackMsg = "";
-					StringWriter sw = new StringWriter();
-					PrintWriter pw = new PrintWriter(sw);
-					t.printStackTrace(pw);
-					sStackMsg = sw.toString();
-					//int level = Math.max(Log_Id, LOG_DEBUG);
-					printDebugPrint(logger, Log_Id, sStackMsg);
-				} else {
-					printDebugPrint(logger, Log_Id, t.getMessage());
-				}
-			}
-		} catch (Exception e) {
-			System.out.println("Error en debug print de excepciÛn:");
-			e.printStackTrace();
-		}
-	}
+        private static void printWithLevel(int Log_Id, Throwable t,
+                        boolean dumpStack) {
+                if (!isLogEnable(Log_Id))
+                        return;
+                printWithLevel(Log_Id, null, t, dumpStack, false);
+        }
+
+        private static void printWithLevel(int Log_Id, Throwable t,
+                        boolean dumpStack, boolean printLink) {
+                if (!isLogEnable(Log_Id))
+                        return;
+                printWithLevel(Log_Id, null, t, dumpStack, printLink);
+        }
+
+        private static void printWithLevel(int Log_Id, String message, Throwable t,
+                        boolean dumpStack, boolean printLink) {
+                if (!isLogEnable(Log_Id))
+                        return;
+                try {
+                        StackTraceElement caller = null;
+                        String srcInfo = "";
+                        if (printLink) {
+                                StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+                                for (StackTraceElement ste : stack) {
+                                        if (!ste.getClassName().equals(PssLogger.class.getName())
+                                                        && !ste.getClassName().equals(Thread.class.getName())) {
+                                                caller = ste;
+                                                break;
+                                        }
+                                }
+                                if (caller != null) {
+                                        String location = caller.getClassName() + "." + caller.getMethodName()
+                                                        + "(" + caller.getFileName() + ":" + caller.getLineNumber() + ")";
+                                        String repoUrl = System.getProperty("pss.logger.repoUrl");
+                                        String ref = System.getProperty("pss.logger.ref");
+                                        String srcPrefix = System.getProperty("pss.logger.srcPrefix");
+                                        if (repoUrl != null && ref != null && srcPrefix != null) {
+                                                String blob = repoUrl.contains("gitlab") ? "/-/blob/" : "/blob/";
+                                                String path = caller.getClassName().replace('.', '/') + ".java";
+                                                String link = repoUrl + blob + ref + "/" + srcPrefix + "/" + path
+                                                                + "#L" + caller.getLineNumber();
+                                                srcInfo = " [src: " + location + " " + link + "]";
+                                        } else {
+                                                srcInfo = " [src: " + location + "]";
+                                        }
+                                }
+                        }
+
+                        String text;
+                        if (message != null) {
+                                text = message + srcInfo;
+                        } else if (t != null) {
+                                if (dumpStack) {
+                                        StringWriter sw = new StringWriter();
+                                        PrintWriter pw = new PrintWriter(sw);
+                                        t.printStackTrace(pw);
+                                        text = (srcInfo.length() > 0 ? srcInfo + System.lineSeparator() : "") + sw.toString();
+                                } else {
+                                        String msg = t.getMessage();
+                                        text = (msg == null ? "" : msg) + srcInfo;
+                                }
+                        } else {
+                                text = srcInfo;
+                        }
+
+                        Logger logger = initialize();
+                        if (logger == null) {
+                                System.out.println(text);
+                                return;
+                        }
+                        printStartInfo();
+                        printDebugPrint(logger, Log_Id, text);
+                } catch (Exception e) {
+                        System.out.println("Error en debug print de excepci√≥n:");
+                        e.printStackTrace();
+                }
+        }
 
 	private static void printDebugPrint(Logger logger, int level,
 			String zMensaje) throws Exception {
