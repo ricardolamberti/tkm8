@@ -31,6 +31,7 @@ import pss.www.platform.actions.JWebActionFactory;
 import pss.www.platform.actions.JWebRequest;
 import pss.www.platform.content.generators.internal.HtmlPayload;
 import pss.www.platform.content.generators.internal.InternalRequestResolverEmu;
+import pss.www.platform.content.generators.internal.InternalReportService;
 import pss.www.platform.content.generators.internal.ReportRenderer;
 import pss.www.platform.content.generators.internal.UserContext;
 
@@ -1338,26 +1339,41 @@ public abstract class JBaseWin implements IInMemory, Transferable, Serializable 
 		return getHtmlView(action, builderArguments, params, false, false, false, false);
 	}
 
-	public String getHtmlView(int action, String builderArguments, JFilterMap params, boolean convertScriptRefToFile, boolean convertScriptRefToPrefix, boolean convertInjectStyle, boolean convertImageRef) throws Exception {
-		if ("csv".equalsIgnoreCase(builderArguments)) {
-			return getCsvView(action, params);
-		}
-		if ("excel".equalsIgnoreCase(builderArguments) || "xls".equalsIgnoreCase(builderArguments)) {
-			return getExcelView(action, params);
-		}
+        public String getHtmlView(int action, String builderArguments, JFilterMap params, boolean convertScriptRefToFile, boolean convertScriptRefToPrefix, boolean convertInjectStyle, boolean convertImageRef) throws Exception {
+                if ("csv".equalsIgnoreCase(builderArguments)) {
+                        return getCsvView(action, params);
+                }
+                if ("excel".equalsIgnoreCase(builderArguments) || "xls".equalsIgnoreCase(builderArguments)) {
+                        return getExcelView(action, params);
+                }
 
-		Map<String, Object> filters = toMap(params);
-		filters.put("action", action);
+                String variant = "html";
+                if ("htmlfull".equalsIgnoreCase(builderArguments)) {
+                        variant = "htmlfull";
+                }
 
-		UserContext user = UserContext.from(BizUsuario.getUsr());
-		String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
+                Map<String, Object> filters = toMap(params);
+                filters.put("action", action);
+                filters.put("serializer", builderArguments);
 
-		InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
-		HtmlPayload payload = resolver.resolveHtml("win_list_x", builderArguments, null, basedir, null, null, user, filters);
+                Map<String, Object> xsltParams = new HashMap<>();
+                xsltParams.put("basedir", BizPssConfig.getPssConfig().getAppURLPreview());
 
-		ReportRenderer renderer = new ReportRenderer();
-		return renderer.renderHtml(payload);
-	}
+                UserContext user = UserContext.from(BizUsuario.getUsr());
+
+                InternalReportService internalReportService = new InternalReportService();
+                HtmlPayload payload = internalReportService.buildHtmlForOwner(
+                                this,
+                                "win_list_x",
+                                variant,
+                                user,
+                                filters,
+                                xsltParams,
+                                null);
+
+                ReportRenderer renderer = new ReportRenderer();
+                return renderer.renderHtml(payload);
+        }
 
 	public byte[] getPdfBytes(int action, String builderArguments, JFilterMap params) throws Exception {
 		Map<String, Object> filters = toMap(params);
