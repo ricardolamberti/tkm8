@@ -27,21 +27,44 @@ public class InternalReportService {
     public HtmlPayload buildHtml(String reportName,
                                  String xslVariant,
                                  UserContext userContext,
-                                 Map<String, Object> params) throws Exception {
+                                 Map<String, Object> businessParams,
+                                 Map<String, Object> xsltParams,
+                                 String transformerOverrideOpt) throws Exception {
 
-        Document xml = buildXml(reportName, params, userContext);
+        Document xml = buildXml(reportName, businessParams, userContext);
 
-        String xslPath = "/xsl/" + reportName + '_' + xslVariant + ".xsl";
+        String xslPath;
+        if (transformerOverrideOpt != null) {
+            if (transformerOverrideOpt.startsWith("/")) {
+                xslPath = transformerOverrideOpt;
+            } else {
+                xslPath = "/xsl/" + transformerOverrideOpt;
+            }
+        } else {
+            xslPath = "/xsl/" + reportName + '_' + xslVariant + ".xsl";
+        }
         Source xsl = new StreamSource(getClass().getResourceAsStream(xslPath));
 
         Transformer transformer = factory.newTransformer(xsl);
         transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        if (xsltParams != null) {
+            for (Map.Entry<String, Object> e : xsltParams.entrySet()) {
+                transformer.setParameter(e.getKey(), e.getValue());
+            }
+        }
 
         StringWriter writer = new StringWriter();
         transformer.transform(new DOMSource(xml), new StreamResult(writer));
 
         String baseUrl = getClass().getResource("/public/").toExternalForm();
         return new HtmlPayload(writer.toString(), baseUrl);
+    }
+
+    public HtmlPayload buildHtml(String reportName,
+                                 String xslVariant,
+                                 UserContext userContext,
+                                 Map<String, Object> params) throws Exception {
+        return buildHtml(reportName, xslVariant, userContext, params, null, null);
     }
 
     /**
@@ -51,6 +74,8 @@ public class InternalReportService {
     private Document buildXml(String reportName,
                               Map<String, Object> params,
                               UserContext  user) throws Exception {
+        // TODO connect with JWebWinMatrixResponsive/JLogicaCustomList* to build
+        // the real XML structure for reports.
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.newDocument();

@@ -3,24 +3,32 @@ package pss.common.report;
 import pss.common.security.BizUsuario;
 
 /**
- * Wrapper around {@link BizUsuario} exposing only the information required for
- * report generation.
+ * Wrapper exposing only the information required for report generation.
  */
 public final class UserContext {
-  
-  
-    public static BizUsuario getUsuario() throws Exception {
-        return BizUsuario.getUsr();
+
+    private final String userId;
+
+    private UserContext(String userId) {
+        this.userId = userId;
     }
- 
 
-  /**
-   * Convenience factory creating the context for the currently authenticated
-   * user.
-   */
-  public static UserContext fromCurrentUser() throws Exception {
-      return new UserContext();
-  }
+    public String getUserId() {
+        return userId;
+    }
+
+    /**
+     * Creates a context from the given {@link BizUsuario}.
+     */
+    public static UserContext from(BizUsuario usr) throws Exception {
+        return new UserContext(usr.GetCertificado());
+    }
+
+    /**
+     * Convenience factory creating the context for the currently authenticated
+     * user.
+     */
+    public static UserContext fromCurrentUser() throws Exception {
+        return from(BizUsuario.getUsr());
+    }
 }
-
- 
