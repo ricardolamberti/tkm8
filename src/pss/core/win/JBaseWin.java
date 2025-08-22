@@ -3,26 +3,18 @@ package pss.core.win;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.apache.commons.codec.net.URLCodec;
-
-import pss.JPath;
 import pss.common.layout.JWinLayout;
 import pss.common.security.BizUsuario;
-import pss.core.data.BizPssConfig;
 import pss.core.services.records.JBaseRecord;
 import pss.core.services.records.JFilterMap;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JExcepcion;
-import pss.core.tools.JTools;
 import pss.core.tools.PssLogger;
 import pss.core.tools.collections.JIterator;
 import pss.core.win.actions.BizAction;
@@ -35,7 +27,11 @@ import pss.core.winUI.icons.GuiIcon;
 import pss.core.winUI.icons.GuiIconos;
 import pss.www.platform.actions.JWebActionFactory;
 import pss.www.platform.actions.JWebRequest;
-import pss.www.platform.actions.resolvers.JDoInternalRequestResolver;
+
+import pss.report.HtmlPayload;
+import pss.report.InternalReportService;
+import pss.report.ReportRenderer;
+import pss.report.UserContext;
 
 public abstract class JBaseWin implements IInMemory,Transferable,Serializable {
 
@@ -1186,246 +1182,81 @@ public abstract class JBaseWin implements IInMemory,Transferable,Serializable {
 	public String getExtraParamsInternalRequest() throws Exception {
 		return null;
 	}
-	public String getHtmlView(int action,String builderArguments,JFilterMap params) throws Exception {
-		return getHtmlView(action, builderArguments, params,false,false,true,true);
-	}	
+        public String getHtmlView(int action,String builderArguments,JFilterMap params) throws Exception {
+                return getHtmlView(action, builderArguments, params,false,false,false,false);
+        }
 	
-	public String getHtmlView(int action,String builderArguments,JFilterMap params,boolean convertScriptRefToFile,boolean convertScriptRefToPrefix,boolean convertInjectStyle, boolean convertImageRef) throws Exception {
-		String arguments = "";
-		String excelArgs = "";
-		if (builderArguments.equals("html"))
-			arguments="dg_export=serializer=html,object=win_list_x,range=all,preserve=T,history=N&dg_win_list_nav=name_op1=export,with_preview_op1=N,embedded_op1=false,toolbar_op1=none,&";
-		else if (builderArguments.equals("htmlfull")) 
-			arguments="dg_export=serializer=htmlfull,object=win_list_x,range=all,preserve=T,history=N&dg_win_list_nav=name_op1=export,with_preview_op1=N,embedded_op1=false,toolbar_op1=none,&";
-		else if (builderArguments.equals("excel")) {
-			arguments="dg_export=serializer=excel,object=win_list_x,range=all,preserve=T,history=N";
-                       excelArgs ="<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>";
-		}
-		else if (builderArguments.equals("csv"))
-			arguments="dg_export=serializer=csv,object=win_list_x,range=all,preserve=T,history=N";
-		else if (builderArguments.equals("map"))
-			arguments="dg_export=serializer=map,object=win_list_x,range=all,preserve=T,history=N";
-		else if (builderArguments.equals("report"))
-			arguments="dg_export=serializer_op1=report,object=win_list_x,range=all,preserve=T,history=N";
-		if (builderArguments.equals("htmlfull")) 
-			arguments+="&dg_client_conf=pw_op1=1000,ph_op1=2500,sw_op1=1000,sh_op1=2500";
-		else
-			arguments+="&dg_client_conf=pw_op1=1500,ph_op1=2500,sw_op1=1500,sh_op1=2500";
-		if (params!=null) {
-			JIterator<String> it = params.getMap().getKeyIterator();
-			while (it.hasMoreElements()) {
-				String key = it.nextElement();
-				Object value = params.getMap().getElement(key);
-				if (value instanceof String)
-					arguments +="&dgf_filter_pane_fd-"+key+"="+new URLCodec().encode((String)value);
-				
-			}
-		}
-		String args = this.getExtraParamsInternalRequest();
-		if (args!=null) {
-				arguments +=args;
-		}
-		
-		
-		String server = BizPssConfig.getPssConfig().getUrlTotal();
-		if (server==null)
-			server = BizPssConfig.getPssConfig().getAppURLPreview();
-		String id =""+(long)Math.ceil((Math.random()*77777));
-		String extraArguments = JDoInternalRequestResolver.addInternaRequest(id, this, action,BizUsuario.getUsr().GetCertificado());
-		URL url = new URL(server+"/do-InternalRequestResolver?id="+id+(arguments!=null?"&"+arguments:"")+(extraArguments!=null?"&"+extraArguments:""));
-		int ptr = 0;
-	  String inputLine;
-		StringBuffer buffer = new StringBuffer();
-		BufferedReader in=null;
-    try {
-                               InputStreamReader isr = new InputStreamReader(url.openStream(), "ISO-8859-1");
-				in = new BufferedReader(isr);
-				while ((inputLine = in.readLine()) != null) {
-					 if (builderArguments.equals("excel")) 
-						 inputLine = excelArgs + inputLine;
-					buffer.append(inputLine);
-					if (builderArguments.equals("csv")) {
-						buffer.append("\r\n");
-					}
-				}
-		} finally {
-			if (in!=null) in.close();
-		}
-    String html = buffer.toString(); 
-    
-    if (convertScriptRefToFile) {
-      int oldPos=0;
-    	while (true) {
-    		String key = "v_"+BizPssConfig.getVersionJS()+"/";
-			  int pos1 = buffer.indexOf(key,oldPos+1);
-			  if (pos1==-1) break;
-			  buffer = buffer.replace(pos1, pos1+key.length(), "");
-    	}
-    	
-  		String pathToResources= "file:///"+JPath.PssPathResourceHtml();
+	        public String getHtmlView(int action,String builderArguments,JFilterMap params,boolean convertScriptRefToFile,boolean convertScriptRefToPrefix,boolean convertInjectStyle, boolean convertImageRef) throws Exception {
+                if ("csv".equalsIgnoreCase(builderArguments)) {
+                        return getCsvView(action, params);
+                }
+                if ("excel".equalsIgnoreCase(builderArguments) || "xls".equalsIgnoreCase(builderArguments)) {
+                        return getExcelView(action, params);
+                }
 
-	    oldPos=0;
-			while (true) {
-			  int pos1 = buffer.indexOf("href=\"",oldPos+1);
-			  //buffer.toString().substring(pos1);
-			  oldPos=pos1;
-			  if (pos1==-1) break;
-			  int pos3=buffer.indexOf("html/",oldPos+1);
-			  int pos4=buffer.indexOf("skins/sbadmin/css/sb-admin-2.css",oldPos+1);
-			  if (pos3!=-1 && pos3-pos1<30) {
-			  	buffer = buffer.replace(pos1, pos3, "href=\""+pathToResources+"/");	  	
-			  }
-			  else if (pos4!=-1 && pos4-pos1<30) {
-			  	buffer = buffer.replace(pos1, pos1+6+("skins/sbadmin/css/sb-admin-2.css".length()), "href=\""+pathToResources+"/skins/sbadmin/css/sb-admin-2-novariable.css");	  	
-			  }
-			  else	buffer = buffer.replace(pos1, pos1+6, "href=\""+pathToResources+"/");
-			}   
-	    oldPos=0;//skins/sbadmin/css/sb-admin-2.css
-			while (true) {
-			  int posb = buffer.indexOf("<body");
-			  int pos1 = buffer.indexOf("src=\"",oldPos+1);
-			  oldPos=pos1;
-			  if (pos1>posb) break;
-			  if (pos1==-1) break;
-			  int pos2=buffer.indexOf("nls.strings",oldPos+1);
-			  if (pos2!=-1 && pos2-pos1<30) {
-				  int pos3=buffer.indexOf(".js",pos2);
-			  	buffer = buffer.replace(pos1, pos3, "src=\""+pathToResources+"/html/nls.strings");	
-			  } else 
-			  		buffer = buffer.replace(pos1, pos1+5, "src=\""+pathToResources+"/");
-			}   
-		   return buffer.toString();
-    }
-    if (convertScriptRefToPrefix) {
-  		String pathToResources= BizPssConfig.getPssConfig().getAppURLPrefix();
-  		
-	    int oldPos=0;
-			while (true) {
-			  int pos1 = buffer.indexOf("href=\"",oldPos+1);
-			  oldPos=pos1;
-			  if (pos1==-1) break;
-			  if (buffer.substring(pos1).startsWith("href=\"/"+pathToResources+"/")) continue;
-			  
-			  buffer = buffer.replace(pos1, pos1+6, "href=\"/"+pathToResources+"/");
-			}   
-	    oldPos=0;
-		  int posb = buffer.indexOf("<body");
-			while (true) {
-			  int pos1 = buffer.indexOf("src=\"",oldPos+1);
-			  oldPos=pos1;
-			  if (pos1>posb) break;
-			  if (pos1==-1) break;
-			  if (buffer.substring(pos1).startsWith("src=\"/"+pathToResources+"/")) continue;
-	  		buffer = buffer.replace(pos1, pos1+5, "src=\"/"+pathToResources+"/");
-			}   
-		   return buffer.toString();
-    }
-		
-		
-		
+                Map<String,Object> map = new HashMap<>();
+                if (params != null && params.getMap() != null) {
+                        JIterator<String> it = params.getMap().getKeyIterator();
+                        while (it.hasMoreElements()) {
+                                String key = it.nextElement();
+                                map.put(key, params.getMap().getElement(key));
+                        }
+                }
 
-   
-   /*
-		while (true) {
-		  int pos1 = buffer.indexOf("<link rel=\"stylesheet\" href=\"skins/");
-		  if (pos1==-1) break;
-		  	int pos2 = buffer.indexOf(".css",pos1);
-			  if (pos2==-1) break;
-					String cssFile = server+"/"+buffer.substring(pos1+29,pos2+4);
-					URL urlcss = new URL(cssFile);
-					InputStream iscss = urlcss.openStream();
-					int ptrcss = 0;
-					StringBuffer buffercss = new StringBuffer();
-					while ((ptrcss = iscss.read()) != -1) {
-					    buffercss.append((char)ptrcss);
-					}
-					String css= buffercss.toString();
-					buffer = buffer.replace(pos1, pos2+6, "");
-					buffer = new StringBuffer( JTools.inlineStyles(buffer.toString(), css, false) );
-		}*/
-    if (convertInjectStyle) {
-    	String oneCss=null;
-  		while (true) {
-  		  int pos1 = buffer.indexOf("<link");
-  		  int pos2=0;
-  			if (pos1 == -1)		break;
-  			pos2 = buffer.indexOf(">", pos1);//buffer.substring(pos1)
-  			if (pos2 == -1)		break;
-  			String link = buffer.substring(pos1, pos2+1);
-  			int pos3 = link.indexOf("href=\"");
-  			if (pos3 == -1)	break;
-  			int pos4 = link.indexOf("\"", pos3 + 7);
-  			if (pos4 == -1)	break;
-  			String cssFile = server + "/" + link.substring(pos3 + 6, pos4);
-	 			buffer = buffer.replace(pos1, pos2+1, "<style type=\"text/css\"></style>");
-  			if (cssFile.toLowerCase().indexOf("/bootstrap.min.css")!=-1) {
-  				cssFile = JTools.replace(cssFile, "/bootstrap.min.css", "/bootstrap_email.css");
-  				if (oneCss==null)
-  					oneCss=cssFile;
-					continue;
-  			}
-  			
-	 			continue;
-  		}
-  		//antes convertia todos, pero era lento y solo uno tiene lo que me interesa
-  		if (oneCss!=null) {
-	 			URL urlcss = new URL(oneCss);
-				InputStream iscss = urlcss.openStream();
-				int ptrcss = 0;
-				StringBuffer buffercss = new StringBuffer();
-				while ((ptrcss = iscss.read()) != -1) {
-				    buffercss.append((char)ptrcss);
-				}
-				String css= buffercss.toString();
-			  css = JTools.replace(css, "--color", "#337ab7");
-			  css = JTools.replace(css, "--color-fondo", "#ffffff");
-			  css = JTools.replace(css, "--roweven", "#f1f1f1");
-			  css = JTools.replace(css, "--rowevenover", "rgba(207, 206, 223, 0.8)");
-			  css = JTools.replace(css, "--rowodd", "#ffffff");
-			  css = JTools.replace(css, "--rowoddover", "rgba(207, 206, 223, 0.8)");
-			  css = JTools.replace(css, "--rowselect", "rgba(176, 190, 222, 0.6)");
-			  css = JTools.replace(css, "--colorbody", "#f8f8f8");
-			  css = JTools.replace(css, "--colorpage", "white");
-			  css = JTools.replace(css, "--breadcolor", "#495057");
+                InternalReportService service = new InternalReportService();
+                HtmlPayload payload = service.buildHtml(getClass().getSimpleName(), builderArguments, UserContext.fromCurrentUser(), map);
 
- 	 			buffer = new StringBuffer( JTools.inlineStyles(buffer.toString(), css, false));
-  		}
-//  			URL urlcss = new URL(cssFile);
-//  			InputStream iscss = urlcss.openStream();
-//  			int ptrcss = 0;
-//  			StringBuffer buffercss = new StringBuffer();
-//  			while ((ptrcss = iscss.read()) != -1) {
-//  				buffercss.append((char) ptrcss);
-//  			}
-//  			String css = buffercss.toString();
-//  			buffer = buffer.replace(pos1, pos2+1, "<style type=\"text/css\">" + css + "</style>");
+                ReportRenderer renderer = new ReportRenderer();
+                return renderer.renderHtml(payload);
 
-  		
-    }
+        }
 
-//	  int pos1 = buffer.indexOf("/resources/styles[");
-//	  if (pos1!=-1) {
-//	  	int pos2 = buffer.indexOf("].css",pos1);
-//		  if (pos2!=-1) {
-//				String cssFile = server+buffer.substring(pos1,pos2+5);
-//				URL urlcss = new URL(cssFile);
-//				InputStream iscss = urlcss.openStream();
-//				int ptrcss = 0;
-//				StringBuffer buffercss = new StringBuffer();
-//				while ((ptrcss = iscss.read()) != -1) {
-//				    buffercss.append((char)ptrcss);
-//				}
-//				String css= buffercss.toString();
-//				html = JTools.inlineStyles(html, css, false);
-//			}
-//	  }
-    
-    if (convertImageRef)
-    	 html=JTools.replace(buffer.toString(), "pss_icon", server+"/pss_icon");
-    else html=buffer.toString();
-		return html;
-		
-	}
+        public byte[] getPdfBytes(int action, String builderArguments, JFilterMap params) throws Exception {
+                Map<String,Object> map = new HashMap<>();
+                if (params != null && params.getMap() != null) {
+                        JIterator<String> it = params.getMap().getKeyIterator();
+                        while (it.hasMoreElements()) {
+                                String key = it.nextElement();
+                                map.put(key, params.getMap().getElement(key));
+                        }
+                }
+
+                InternalReportService service = new InternalReportService();
+                HtmlPayload payload = service.buildHtml(getClass().getSimpleName(), builderArguments, UserContext.fromCurrentUser(), map);
+                ReportRenderer renderer = new ReportRenderer();
+                return renderer.renderPdf(payload);
+        }
+
+        public String getCsvView(int action, JFilterMap params) throws Exception {
+                Map<String,Object> map = new HashMap<>();
+                if (params != null && params.getMap() != null) {
+                        JIterator<String> it = params.getMap().getKeyIterator();
+                        while (it.hasMoreElements()) {
+                                String key = it.nextElement();
+                                map.put(key, params.getMap().getElement(key));
+                        }
+                }
+
+                InternalReportService service = new InternalReportService();
+                HtmlPayload payload = service.buildHtml(getClass().getSimpleName(), "csv", UserContext.fromCurrentUser(), map);
+                return payload.getHtml();
+        }
+
+        public String getExcelView(int action, JFilterMap params) throws Exception {
+                Map<String,Object> map = new HashMap<>();
+                if (params != null && params.getMap() != null) {
+                        JIterator<String> it = params.getMap().getKeyIterator();
+                        while (it.hasMoreElements()) {
+                                String key = it.nextElement();
+                                map.put(key, params.getMap().getElement(key));
+                        }
+                }
+
+                InternalReportService service = new InternalReportService();
+                HtmlPayload payload = service.buildHtml(getClass().getSimpleName(), "excel", UserContext.fromCurrentUser(), map);
+                return payload.getHtml();
+        }
+
 	
 	public boolean isWin() {
 		return false;
