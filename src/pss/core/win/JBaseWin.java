@@ -4,13 +4,13 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import pss.common.layout.JWinLayout;
 import pss.common.report.HtmlPayload;
-import pss.common.report.InternalReportService;
 import pss.common.report.InternalRequestResolverEmu;
 import pss.common.report.ReportRenderer;
 import pss.common.report.UserContext;
@@ -1370,34 +1370,28 @@ public abstract class JBaseWin implements IInMemory, Transferable, Serializable 
                 return resolver.resolvePdf("win_list_x", builderArguments, null, basedir, null, null, user, filters);
         }
 
-	public String getCsvView(int action, JFilterMap params) throws Exception {
-		Map<String, Object> map = new HashMap<>();
-		if (params != null && params.getMap() != null) {
-			JIterator<String> it = params.getMap().getKeyIterator();
-			while (it.hasMoreElements()) {
-				String key = it.nextElement();
-				map.put(key, params.getMap().getElement(key));
-			}
-		}
+        public String getCsvView(int action, JFilterMap params) throws Exception {
+                Map<String, Object> map = toMap(params);
+                map.put("action", action);
 
-		InternalReportService service = new InternalReportService();
-		HtmlPayload payload = service.buildHtml(getClass().getSimpleName(), "csv", UserContext.fromCurrentUser(), map);
-		return payload.getHtml();
-	}
+                UserContext user = UserContext.from(BizUsuario.getUsr());
+                String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
+
+                InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
+                byte[] bytes = resolver.resolveCsv("win_list_x", null, basedir, null, null, user, map);
+                return new String(bytes, StandardCharsets.UTF_8);
+        }
 
         public String getExcelView(int action, JFilterMap params) throws Exception {
-                Map<String, Object> map = new HashMap<>();
-                if (params != null && params.getMap() != null) {
-                        JIterator<String> it = params.getMap().getKeyIterator();
-                        while (it.hasMoreElements()) {
-                                String key = it.nextElement();
-                                map.put(key, params.getMap().getElement(key));
-                        }
-                }
+                Map<String, Object> map = toMap(params);
+                map.put("action", action);
 
-                InternalReportService service = new InternalReportService();
-                HtmlPayload payload = service.buildHtml(getClass().getSimpleName(), "excel", UserContext.fromCurrentUser(), map);
-                return payload.getHtml();
+                UserContext user = UserContext.from(BizUsuario.getUsr());
+                String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
+
+                InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
+                byte[] bytes = resolver.resolveExcel("win_list_x", null, basedir, null, null, user, map);
+                return new String(bytes, StandardCharsets.UTF_8);
         }
 
         private Map<String, Object> toMap(JFilterMap params) {
