@@ -74,72 +74,193 @@ public class InternalReportService {
 	 * {@link JBasicXMLContentGenerator} and delegates the XML creation to the
 	 * {@link JWebWinMatrixResponsive} view associated to the report.
 	 */
+	@SuppressWarnings("unchecked")
 	private Document buildXml(String reportName, Map<String, Object> params, UserContext user) throws Exception {
 
-		// ------------------------------------------------------------------
-		// 1) Ensure there is a current web request and user information
-		// ------------------------------------------------------------------
-		JWebRequest req = JWebActionFactory.getCurrentRequest();
-		if (req == null) {
-			throw new IllegalStateException("No current request available");
-		}
+	    // ------------------------------------------------------------------
+	    // 0) Preconditions: request y usuario actual
+	    // ------------------------------------------------------------------
+	    JWebRequest req = JWebActionFactory.getCurrentRequest();
+	    if (req == null) throw new IllegalStateException("No current request available");
+	    if (BizUsuario.getUsr() == null && user != null) {
+	        // Si tu framework lo permite, setea el usuario de sesión acá
+	        // BizUsuario.setFromCertificado(user.getUserId()); // <-- si existe
+	    }
 
-		// If the thread local BizUsuario is not set, rebuild it from the
-		// certificate contained in the UserContext.
-		if (BizUsuario.getUsr() == null && user != null) {
-			BizUsuario usr = new BizUsuario();
-			usr.unSerialize(BizUsuario.readCertificado(user.getUserId()));
-			BizUsuario.SetGlobal(usr);
-			// Try to attach the user to the current session via reflection. The
-			// API exposes only a protected setter.
-			try {
-				Method m = req.getSession().getClass().getDeclaredMethod("setUser", BizUsuario.class);
-				m.setAccessible(true);
-				m.invoke(req.getSession(), usr);
-			} catch (Exception ignore) {
-				// session user is optional for report rendering
-			}
-		}
+	    // ------------------------------------------------------------------
+	    // 1) Simular JDoInternalRequestResolver: armar arguments y registrar
+	    // ------------------------------------------------------------------
+	    final String serializer = "html"; // o tomalo de params.get("serializer")
+	    String arguments;
+	    if ("htmlfull".equalsIgnoreCase(String.valueOf(params.get("serializer")))) {
+	        arguments = "dg_export=serializer=htmlfull,object=" + reportName + ",range=all,preserve=T,history=N"
+	                  + "&dg_win_list_nav=name_op1=export,with_preview_op1=N,embedded_op1=false,toolbar_op1=none,&"
+	                  + "&dg_client_conf=pw_op1=1000,ph_op1=2500,sw_op1=1000,sh_op1=2500";
+	    } else {
+	        arguments = "dg_export=serializer=" + serializer + ",object=" + reportName + ",range=all,preserve=T,history=N"
+	                  + "&dg_win_list_nav=name_op1=export,with_preview_op1=N,embedded_op1=false,toolbar_op1=none,&"
+	                  + "&dg_client_conf=pw_op1=1500,ph_op1=2500,sw_op1=1500,sh_op1=2500";
+	    }
 
-		// ------------------------------------------------------------------
-		// 2) Prepare a generator able to build DOM in memory
-		// ------------------------------------------------------------------
-		InMemoryGenerator generator = new InMemoryGenerator(req);
-		JXMLContent zContent = generator.getContent();
+	    // Filtros como hacía tu viejo getHtmlView (dgf_filter_pane_fd-<key>=<val>)
+	    if (params != null) {
+	        for (Map.Entry<String, Object> e : params.entrySet()) {
+	            if (e.getValue() == null) continue;
+	            String k = "dgf_filter_pane_fd-" + e.getKey();
+	            String v = String.valueOf(e.getValue());
+	            arguments += "&" + k + "=" + urlEncodeISO(v); // mismo encoding que usabas
+	        }
+	    }
 
-		// ------------------------------------------------------------------
-		// 3) Instantiate and configure the view responsible for the XML
-		// ------------------------------------------------------------------
-		BizAction action = new BizAction();
-		action.pAccion.setValue(reportName);
-		JWebWinMatrixResponsive view = new JWebWinMatrixResponsive(action, true);
-		view.setEmbedded(true);
+	    // Registrar internal request (esto te devuelve __dictionary y __requestid, etc.)
+	    final String internalId = java.util.UUID.randomUUID().toString();
+	    // action: si lo necesitás, obtenelo desde params ("action") o usa 0
+	    final int actionInt = params != null && params.get("action") != null
+	            ? Integer.parseInt(String.valueOf(params.get("action"))) : 0;
 
-		// ------------------------------------------------------------------
-		// 4) Map incoming parameters to the request. When the concrete report
-		// expects filters, they are usually delivered via JWebActionData
-		// structures. The detailed mapping is application specific, so for
-		// now we simply expose the raw parameters to the request bundle.
-		// ------------------------------------------------------------------
-		if (params != null && !params.isEmpty()) {
-			for (Map.Entry<String, Object> e : params.entrySet()) {
-				try {
-					req.addDataBundle(e.getKey(), String.valueOf(e.getValue()));
-				} catch (Exception ex) {
-					// Non critical: continue processing other parameters
-				}
-			}
-		}
+	    String extraArguments = JDoInternalRequestResolver.addInternaRequest(
+	            internalId,
+	            this,                                // el "caller" igual que antes
+	            actionInt,
+	            BizUsuario.getUsr() != null ? BizUsuario.getUsr().GetCertificado() : user.getUserId()
+	    );
 
-		// ------------------------------------------------------------------
-		// 5) Execute the view to populate the XML content
-		// ------------------------------------------------------------------
-		view.componentToXML(zContent);
+	    // Inyectar TODOS los parámetros (arguments + extraArguments) en el request
+	    pushQueryParamsToRequest(req, arguments);
+	    if (extraArguments != null && !extraArguments.isEmpty()) {
+	        pushQueryParamsToRequest(req, extraArguments);
+	    }
 
-		// ------------------------------------------------------------------
-		// 6) Return the generated DOM document
-		// ------------------------------------------------------------------
-		return generator.getDocument();
+	    // ------------------------------------------------------------------
+	    // 2) Ejecutar JWinListInternalRequestPageGenerator in-process
+	    // ------------------------------------------------------------------
+	    // Armá el content con el “generator context” apropiado
+	    JXMLContent zContent = createJXMLContentWithSessionContext(req);
+
+	    // Instanciar el generator real
+	    Object generator = new pss.www.platform.content.generators.JWinListInternalRequestPageGenerator();
+
+	    // Intentar llamar por reflexión al método que produzca el XML dentro de zContent
+	    boolean produced = false;
+	    // Candidatos comunes: generate(JXMLContent), generateTo(JXMLContent),
+	    // produce(JXMLContent), build(JXMLContent), componentToXML(JXMLContent)
+	    String[] methodCandidates = {
+	            "generate", "generateTo", "produce", "build", "componentToXML"
+	    };
+	    for (String m : methodCandidates) {
+	        try {
+	            java.lang.reflect.Method method = generator.getClass().getMethod(m, zContent.getClass());
+	            method.invoke(generator, zContent);
+	            produced = true;
+	            break;
+	        } catch (NoSuchMethodException ignore) {
+	            // probar siguiente
+	        }
+	    }
+
+	    // Fallback: hay proyectos donde el generator sólo prepara contexto
+	    // y la vista (JWebWinMatrixResponsive) es quien emite el XML:
+	    if (!produced) {
+	        BizAction act = new BizAction();
+	        act.pAccion.setValue(reportName);
+	        JWebWinMatrixResponsive view = new JWebWinMatrixResponsive(act, true);
+	        view.setEmbedded(true);
+	        view.componentToXML(zContent);
+	    }
+
+	    // ------------------------------------------------------------------
+	    // 3) Entregar el Document resultante
+	    // ------------------------------------------------------------------
+	    return extractDocument(zContent);
 	}
+
+	/* ====================== Helpers ====================== */
+
+	private static void pushQueryParamsToRequest(JWebRequest req, String qs) {
+	    if (qs == null || qs.isEmpty()) return;
+	    for (String pair : qs.split("&")) {
+	        if (pair.isEmpty()) continue;
+	        int p = pair.indexOf('=');
+	        String k = (p >= 0) ? pair.substring(0, p) : pair;
+	        String v = (p >= 0) ? pair.substring(p + 1) : "";
+	        try {
+	            // mismo mecanismo que usabas para “data bundles” del request
+	            req.addDataBundle(k, urlDecodeISO(v));
+	        } catch (Exception ignore) { /* non-critical */ }
+	    }
+	}
+
+	private static String urlEncodeISO(String s) {
+	    try { return new org.apache.commons.codec.net.URLCodec().encode(s, "ISO-8859-1"); }
+	    catch (Exception e) { return s; }
+	}
+
+	private static String urlDecodeISO(String s) {
+	    try { return new org.apache.commons.codec.net.URLCodec().decode(s, "ISO-8859-1"); }
+	    catch (Exception e) { return s; }
+	}
+
+	/**
+	 * Crea un JXMLContent “válido” para que .addProviderHistory / HistoryManager
+	 * y otros accesos a sesión no fallen durante la generación.
+	 */
+	private static JXMLContent createJXMLContentWithSessionContext(JWebRequest req) throws Exception {
+	    // Si tu proyecto tiene una factoría/constructor específico, usalo acá.
+	    // Muchas bases tienen JXMLContent(JWebRequest) o con un “generator ctx”.
+	    try {
+	        // Opción 1: constructor JXMLContent(JWebRequest)
+	        java.lang.reflect.Constructor<JXMLContent> c1 =
+	                JXMLContent.class.getConstructor(JWebRequest.class);
+	        return c1.newInstance(req);
+	    } catch (NoSuchMethodException ignore) {
+	        // Opción 2: constructor por defecto + setGeneratorContext(...)
+	        JXMLContent z = JXMLContent.class.newInstance();
+	        try {
+	            java.lang.reflect.Method setGen =
+	                    JXMLContent.class.getMethod("setGeneratorContext", JWebRequest.class);
+	            setGen.invoke(z, req);
+	        } catch (NoSuchMethodException ignored) {
+	            // Opción 3: si existe setRequest(...)
+	            try {
+	                java.lang.reflect.Method setReq =
+	                        JXMLContent.class.getMethod("setRequest", JWebRequest.class);
+	                setReq.invoke(z, req);
+	            } catch (NoSuchMethodException ignored2) {
+	                // última opción: simplemente devolver el objeto y confiar
+	            }
+	        }
+	        return z;
+	    }
+	}
+
+	/**
+	 * Extrae un org.w3c.dom.Document desde JXMLContent.
+	 * Intenta getDocument()/toDOM()/asDocument(), y si no, parsea el XML string.
+	 */
+	private static Document extractDocument(JXMLContent zContent) throws Exception {
+	    // Intentos por reflexión comunes
+	    String[] getters = { "getDocument", "toDOM", "asDocument" };
+	    for (String g : getters) {
+	        try {
+	            java.lang.reflect.Method m = zContent.getClass().getMethod(g);
+	            Object dom = m.invoke(zContent);
+	            if (dom instanceof org.w3c.dom.Document) {
+	                return (org.w3c.dom.Document) dom;
+	            }
+	        } catch (NoSuchMethodException ignore) {}
+	    }
+	    // Si sólo hay string:
+	    try {
+	        java.lang.reflect.Method m = zContent.getClass().getMethod("toString");
+	        String xml = String.valueOf(m.invoke(zContent));
+	        javax.xml.parsers.DocumentBuilderFactory dbf = javax.xml.parsers.DocumentBuilderFactory.newInstance();
+	        dbf.setNamespaceAware(true);
+	        javax.xml.parsers.DocumentBuilder db = dbf.newDocumentBuilder();
+	        return db.parse(new org.xml.sax.InputSource(new java.io.StringReader(xml)));
+	    } catch (Exception e) {
+	        throw new IllegalStateException("No pude extraer Document desde JXMLContent", e);
+	    }
+	}
+
 
 }
