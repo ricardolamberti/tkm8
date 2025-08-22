@@ -135,7 +135,7 @@ public class JWebTabPanelResponsive extends JWebPanelResponsive implements JWebC
 	}
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		JIterator<String> oKeyIt=this.getTabs().getKeyIterator();
 		if (this.getForm() != null)
 			zContent.setAttribute("form_name", this.getForm().getFormName());

@@ -62,7 +62,7 @@ public class JWebFlowBreak extends JWebViewFixedComponent implements JWebControl
   }
 
   @Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
     if (this.bAppliedByLayout) {
       zContent.setAttribute("appled_by_layout", true);
     }

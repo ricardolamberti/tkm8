@@ -409,7 +409,7 @@ public class JWebWinGridBigDataResponsive  extends JWebWinGenericResponsive impl
 	}
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		JInternalGenerateXML iXML = new JInternalGenerateXML();
 		iXML.oWebWinList = this;
 		iXML.zContent = zContent;
@@ -551,7 +551,7 @@ public class JWebWinGridBigDataResponsive  extends JWebWinGenericResponsive impl
 					// se
 					// traduce
 				}
-			} // acá, sino antes
+			} // acï¿½, sino antes
 			zContent.endNode("column");
 		}
 		zContent.endNode("header");
@@ -1192,7 +1192,7 @@ public class JWebWinGridBigDataResponsive  extends JWebWinGenericResponsive impl
 			alerta = getWins().anyAlert(totalCountElement);
 			if (alerta != null)
 				setAlert(alerta); // warning referidos a los resultados, paso el
-			// tamaño para no volver a calcularlo
+			// tamaï¿½o para no volver a calcularlo
 		}
 
 		protected void ConfigurarColumnasLista() throws Exception {

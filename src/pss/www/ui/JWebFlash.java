@@ -59,7 +59,7 @@ public class JWebFlash extends JWebViewFixedComponent {
 	}
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 	    zContent.startNode("flash");
 	    if (this.iSource==SOURCE_Pss) {
 	      zContent.setAttribute("source", "pss_icon");

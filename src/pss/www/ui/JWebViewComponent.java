@@ -1637,7 +1637,7 @@ public abstract class JWebViewComponent implements JXMLRepresentable, JWebViewsC
 	protected void componentToXMLposLayout(JXMLContent zContent) throws Exception {
 	}
 
-	protected abstract void componentToXML(JXMLContent zContent) throws Exception;
+	public abstract void componentToXML(JXMLContent zContent) throws Exception;
 	protected void componentToHelpXML(JXMLContent zContent) throws Exception {
 		
 	}

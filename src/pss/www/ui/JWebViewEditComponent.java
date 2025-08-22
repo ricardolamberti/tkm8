@@ -82,7 +82,7 @@ public abstract class JWebViewEditComponent extends JWebViewComponent implements
 	}
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		zContent.setAttribute("editable", this.isEditable());
 		zContent.setAttribute("needenter", this.isNeedEnter());
 		zContent.setAttribute("noform", this.isNoForm());

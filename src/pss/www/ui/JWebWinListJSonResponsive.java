@@ -207,7 +207,7 @@ public class JWebWinListJSonResponsive extends JWebWinGenericResponsive implemen
 
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		JInternalGenerateXML iXML = new JInternalGenerateXML();
 		iXML.oWebWinList = this;
 		iXML.zContent = zContent;
@@ -461,7 +461,7 @@ public class JWebWinListJSonResponsive extends JWebWinGenericResponsive implemen
 					// se
 					// traduce
 				}
-			} // acá, sino antes
+			} // acï¿½, sino antes
 			zContent.endNode("column");
 		}
 		zContent.endNode("header");
@@ -1114,7 +1114,7 @@ public class JWebWinListJSonResponsive extends JWebWinGenericResponsive implemen
 			alerta = getWins().anyAlert(totalCountElement);
 			if (alerta != null)
 				setAlert(alerta); // warning referidos a los resultados, paso el
-			// tamaño para no volver a calcularlo
+			// tamaï¿½o para no volver a calcularlo
 		}
 
 		protected void ConfigurarColumnasLista() throws Exception {

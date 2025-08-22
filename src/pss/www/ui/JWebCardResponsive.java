@@ -198,7 +198,7 @@ public class JWebCardResponsive extends JWebPanelResponsive implements JWebActio
 
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		if (isDiferido()) {
 			JWin clone = this.getBaseWin().getClass().newInstance();
 			clone.setRecord(this.getBaseWin().getRecord());

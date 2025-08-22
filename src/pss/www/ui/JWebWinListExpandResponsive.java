@@ -187,7 +187,7 @@ public class JWebWinListExpandResponsive extends JWebWinGenericResponsive implem
 	}
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		JInternalGenerateXML iXML = new JInternalGenerateXML();
 		iXML.oWebWinList = this;
 		iXML.zContent = zContent;
@@ -612,7 +612,7 @@ public class JWebWinListExpandResponsive extends JWebWinGenericResponsive implem
 			alerta = getWins().anyAlert(totalCountElement);
 			if (alerta != null)
 				setAlert(alerta); // warning referidos a los resultados, paso el
-			// tamaño para no volver a calcularlo
+			// tamaï¿½o para no volver a calcularlo
 		}
 
 

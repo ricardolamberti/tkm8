@@ -262,7 +262,7 @@ public class JWebWinGridExpandResponsive extends JWebWinGenericResponsive implem
 	}
 	
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		this.zContent = zContent;
 
 		if (!this.startDeclarations()) return;		

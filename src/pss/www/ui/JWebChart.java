@@ -64,7 +64,7 @@ public abstract class JWebChart extends JWebViewFixedComponent {
    * Override setting the relative path 
    */
   @Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
     this.exportAsImage(zContent.getGenerator().getContext(), zContent.getGenerator().getSession());
     zContent.setAttribute("chart_image_path", this.sPath);
   }

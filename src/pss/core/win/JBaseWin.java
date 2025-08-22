@@ -10,10 +10,6 @@ import java.util.Map;
 import java.util.UUID;
 
 import pss.common.layout.JWinLayout;
-import pss.common.report.HtmlPayload;
-import pss.common.report.InternalRequestResolverEmu;
-import pss.common.report.ReportRenderer;
-import pss.common.report.UserContext;
 import pss.common.security.BizUsuario;
 import pss.core.data.BizPssConfig;
 import pss.core.services.records.JBaseRecord;
@@ -33,6 +29,10 @@ import pss.core.winUI.icons.GuiIcon;
 import pss.core.winUI.icons.GuiIconos;
 import pss.www.platform.actions.JWebActionFactory;
 import pss.www.platform.actions.JWebRequest;
+import pss.www.platform.content.generators.internal.HtmlPayload;
+import pss.www.platform.content.generators.internal.InternalRequestResolverEmu;
+import pss.www.platform.content.generators.internal.ReportRenderer;
+import pss.www.platform.content.generators.internal.UserContext;
 
 public abstract class JBaseWin implements IInMemory, Transferable, Serializable {
 
@@ -1338,73 +1338,73 @@ public abstract class JBaseWin implements IInMemory, Transferable, Serializable 
 		return getHtmlView(action, builderArguments, params, false, false, false, false);
 	}
 
-        public String getHtmlView(int action, String builderArguments, JFilterMap params, boolean convertScriptRefToFile, boolean convertScriptRefToPrefix, boolean convertInjectStyle, boolean convertImageRef) throws Exception {
-                if ("csv".equalsIgnoreCase(builderArguments)) {
-                        return getCsvView(action, params);
-                }
-                if ("excel".equalsIgnoreCase(builderArguments) || "xls".equalsIgnoreCase(builderArguments)) {
-                        return getExcelView(action, params);
-                }
+	public String getHtmlView(int action, String builderArguments, JFilterMap params, boolean convertScriptRefToFile, boolean convertScriptRefToPrefix, boolean convertInjectStyle, boolean convertImageRef) throws Exception {
+		if ("csv".equalsIgnoreCase(builderArguments)) {
+			return getCsvView(action, params);
+		}
+		if ("excel".equalsIgnoreCase(builderArguments) || "xls".equalsIgnoreCase(builderArguments)) {
+			return getExcelView(action, params);
+		}
 
-                Map<String, Object> filters = toMap(params);
-                filters.put("action", action);
+		Map<String, Object> filters = toMap(params);
+		filters.put("action", action);
 
-                UserContext user = UserContext.from(BizUsuario.getUsr());
-                String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
+		UserContext user = UserContext.from(BizUsuario.getUsr());
+		String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
 
-                InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
-                HtmlPayload payload = resolver.resolveHtml("win_list_x", builderArguments, null, basedir, null, null, user, filters);
+		InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
+		HtmlPayload payload = resolver.resolveHtml("win_list_x", builderArguments, null, basedir, null, null, user, filters);
 
-                ReportRenderer renderer = new ReportRenderer();
-                return renderer.renderHtml(payload);
-        }
+		ReportRenderer renderer = new ReportRenderer();
+		return renderer.renderHtml(payload);
+	}
 
-        public byte[] getPdfBytes(int action, String builderArguments, JFilterMap params) throws Exception {
-                Map<String, Object> filters = toMap(params);
-                filters.put("action", action);
+	public byte[] getPdfBytes(int action, String builderArguments, JFilterMap params) throws Exception {
+		Map<String, Object> filters = toMap(params);
+		filters.put("action", action);
 
-                UserContext user = UserContext.from(BizUsuario.getUsr());
-                String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
+		UserContext user = UserContext.from(BizUsuario.getUsr());
+		String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
 
-                InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
-                return resolver.resolvePdf("win_list_x", builderArguments, null, basedir, null, null, user, filters);
-        }
+		InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
+		return resolver.resolvePdf("win_list_x", builderArguments, null, basedir, null, null, user, filters);
+	}
 
-        public String getCsvView(int action, JFilterMap params) throws Exception {
-                Map<String, Object> map = toMap(params);
-                map.put("action", action);
+	public String getCsvView(int action, JFilterMap params) throws Exception {
+		Map<String, Object> map = toMap(params);
+		map.put("action", action);
 
-                UserContext user = UserContext.from(BizUsuario.getUsr());
-                String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
+		UserContext user = UserContext.from(BizUsuario.getUsr());
+		String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
 
-                InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
-                byte[] bytes = resolver.resolveCsv("win_list_x", null, basedir, null, null, user, map);
-                return new String(bytes, StandardCharsets.UTF_8);
-        }
+		InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
+		byte[] bytes = resolver.resolveCsv("win_list_x", null, basedir, null, null, user, map);
+		return new String(bytes, StandardCharsets.UTF_8);
+	}
 
-        public String getExcelView(int action, JFilterMap params) throws Exception {
-                Map<String, Object> map = toMap(params);
-                map.put("action", action);
+	public String getExcelView(int action, JFilterMap params) throws Exception {
+		Map<String, Object> map = toMap(params);
+		map.put("action", action);
 
-                UserContext user = UserContext.from(BizUsuario.getUsr());
-                String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
+		UserContext user = UserContext.from(BizUsuario.getUsr());
+		String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
 
-                InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
-                byte[] bytes = resolver.resolveExcel("win_list_x", null, basedir, null, null, user, map);
-                return new String(bytes, StandardCharsets.UTF_8);
-        }
+		InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
+		byte[] bytes = resolver.resolveExcel("win_list_x", null, basedir, null, null, user, map);
+		return new String(bytes, StandardCharsets.UTF_8);
+	}
 
-        private Map<String, Object> toMap(JFilterMap params) {
-                Map<String, Object> map = new HashMap<>();
-                if (params != null && params.getMap() != null) {
-                        JIterator<String> it = params.getMap().getKeyIterator();
-                        while (it.hasMoreElements()) {
-                                String key = it.nextElement();
-                                map.put(key, params.getMap().getElement(key));
-                        }
-                }
-                return map;
-        }
+	private Map<String, Object> toMap(JFilterMap params) throws Exception {
+		Map<String, Object> map = new HashMap<>();
+		if (params != null && params.getMap() != null) {
+			JIterator<String> it = params.getMap().getKeyIterator();
+			while (it.hasMoreElements()) {
+				String key = it.nextElement();
+				map.put(key, params.getMap().getElement(key));
+			}
+		}
+		return map;
+	}
 
 	public boolean isWin() {
 		return false;

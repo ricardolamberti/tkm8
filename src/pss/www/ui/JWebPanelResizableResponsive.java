@@ -9,7 +9,7 @@ public class JWebPanelResizableResponsive extends JWebPanelResponsive {
 	}
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		zContent.setAttribute("id", this.getName());
 		super.componentToXML(zContent);
   }

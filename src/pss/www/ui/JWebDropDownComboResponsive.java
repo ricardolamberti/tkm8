@@ -216,7 +216,7 @@ public class JWebDropDownComboResponsive extends JWebPanelResponsive implements 
 	}
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 			JBaseWin win = null;
 			win=this.getSourceAction().getResult();
 //			if (!getForm().isModoConsulta())

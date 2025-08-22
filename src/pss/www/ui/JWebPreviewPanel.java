@@ -12,7 +12,7 @@ public class JWebPreviewPanel extends JWebPanel {
 	}
 	
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		super.componentToXML(zContent);
 	}
 	

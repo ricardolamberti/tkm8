@@ -348,7 +348,7 @@ public abstract class JWebViewComposite extends JWebViewComponent implements JWe
 	}
 
 		@Override
-		protected void componentToXML(JXMLContent zContent) throws Exception {
+		public void componentToXML(JXMLContent zContent) throws Exception {
 			// generate this component XML
 		zContent.setAttribute("composite", true);
 

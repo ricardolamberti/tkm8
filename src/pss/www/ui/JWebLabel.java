@@ -67,7 +67,7 @@ public class JWebLabel extends JWebViewFixedComponent implements JWebCompoundLab
   }
 
   @Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
   }
   
 

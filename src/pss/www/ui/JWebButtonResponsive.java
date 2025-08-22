@@ -117,7 +117,7 @@ public class JWebButtonResponsive  extends JWebButton  implements JWebControlInt
 	  }
 	
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		// TODO Auto-generated method stub
 		JFormButtonResponsive zControl = (JFormButtonResponsive) getControl();
 		if (getData()!=null)

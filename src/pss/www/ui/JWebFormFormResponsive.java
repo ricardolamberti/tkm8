@@ -173,7 +173,7 @@ public class JWebFormFormResponsive extends JWebPanelResponsive implements JWebA
 
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		this.iRegisteredObjectId = zContent.addObject(this.getWinName(), this.getBaseWin());
 		if (isDiferido()) {
 			JWebAction actSmplClick = this.getActionDiferido(this.iRegisteredObjectId);

@@ -34,7 +34,7 @@ public class JWebDrawingHolder extends JWebViewComponent {
   }
 
   @Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
   }
 
   @Override

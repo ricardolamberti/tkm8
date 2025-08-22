@@ -285,7 +285,7 @@ public class JWebDropDownWinLovResponsive  extends JWebPanelResponsive implement
 	
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 			JBaseWin win = getControl().getWinNew();
 //			if (!getForm().isModoConsulta())
 //				win.setCanConvertToURL(false); // en edicion para que las modificaciones se apliquen no debe reconstruirse

@@ -15,7 +15,7 @@ public class JWebButtonLoginResponsive extends JWebAbstractActionView   {
 
 	
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		zContent.setAttribute("form_name", "login");
 		zContent.setAttribute("editable", true);
 

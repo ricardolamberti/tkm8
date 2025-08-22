@@ -132,7 +132,7 @@ public class JWebLocalFormResponsive  extends JWebPanelResponsive implements JWe
 
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		super.componentToXML(zContent);
 	}
 

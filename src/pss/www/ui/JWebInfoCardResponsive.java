@@ -112,7 +112,7 @@ public class JWebInfoCardResponsive   extends JWebTextComponent  implements JWeb
 	}
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		if (directLink!=null && !directLink.startsWith("newsession:")) 
 				zContent.setAttribute("directlink", this.getDirectLink());
 		if (getDataparent()!=null) 

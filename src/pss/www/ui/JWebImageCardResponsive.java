@@ -77,7 +77,7 @@ public class JWebImageCardResponsive extends JWebImageResponsive implements JWeb
 	}
 	
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		zContent.setAttribute("content", isContent());
 		super.componentToXML(zContent);
 	}

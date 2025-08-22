@@ -1,4 +1,4 @@
-package pss.common.report;
+package pss.www.platform.content.generators.internal;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,13 +13,13 @@ import pss.core.tools.collections.JIterator;
  */
 public class ReportController {
 
-  private final InternalReportService reportService;
-  private final ReportRenderer renderer;
+	private final InternalReportService reportService;
+	private final ReportRenderer renderer;
 
-  public ReportController(InternalReportService reportService, ReportRenderer renderer) {
-      this.reportService = reportService;
-      this.renderer = renderer;
-  }
+	public ReportController(InternalReportService reportService, ReportRenderer renderer) {
+		this.reportService = reportService;
+		this.renderer = renderer;
+	}
 
 	private Map<String, Object> toMap(JFilterMap params) throws Exception {
 		Map<String, Object> map = new HashMap<>();

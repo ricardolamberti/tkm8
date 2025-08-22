@@ -255,7 +255,7 @@ public class JWebImageResponsive extends JWebViewFixedComponent implements JWebC
 	}
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		boolean diferido = actionSource != null;
 		if (sinDIV)
 			zContent.setAttribute("sinDIV", true);

@@ -264,7 +264,7 @@ public String getClassResponsive() {
 
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		JInternalGenerateXML iXML = new JInternalGenerateXML();
 		iXML.oWebWinList = this;
 		iXML.zContent = zContent;

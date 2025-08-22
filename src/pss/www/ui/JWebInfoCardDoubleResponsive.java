@@ -113,7 +113,7 @@ public class JWebInfoCardDoubleResponsive  extends JWebTextComponent  implements
 	}
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		if (directLink != null && !directLink.startsWith("newsession:"))
 			zContent.setAttribute("directlink", this.getDirectLink());
 		if (getDataparent() != null)

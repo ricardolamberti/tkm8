@@ -206,7 +206,7 @@ public class JWebWinMatrixResponsive extends JWebWinGenericResponsive implements
 	}
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		this.addProviderHistory(zContent);
 
 		if (!startDeclarations(zContent))

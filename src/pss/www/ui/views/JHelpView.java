@@ -86,7 +86,7 @@ public class JHelpView  extends JWebView {
 	}
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 	  session = getRequest().getSession();
 			BizAction action=(BizAction)session.getHistoryManager().getLastHistoryAction();
 			JAct submit = action.getSubmit();

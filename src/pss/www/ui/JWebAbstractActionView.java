@@ -35,7 +35,7 @@ public abstract class JWebAbstractActionView extends JWebViewComponent implement
   private JWebIcon oIcon;
 
   @Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 
   }
 

@@ -16,7 +16,7 @@ public class JWebSplit extends JWebViewComposite {
 	JWebViewComposite[] panels = new JWebViewComposite[2];
 	
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		this.containerToXML(zContent);
 
 		zContent.startNode("panel_a");

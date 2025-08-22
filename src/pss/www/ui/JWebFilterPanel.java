@@ -81,7 +81,7 @@ public class JWebFilterPanel extends JWebPanel implements JWebEditComponentConta
   }
   
   @Override
-  protected void componentToXML(JXMLContent content) throws Exception {
+	public void componentToXML(JXMLContent content) throws Exception {
   	this.webWinList.regiterObjects();
    	for (JWebButton b:getButtons()) {
    		if (b.getWebAction()==null) continue;//sin permisos

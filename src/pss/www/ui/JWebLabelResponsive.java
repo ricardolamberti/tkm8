@@ -51,7 +51,7 @@ public class JWebLabelResponsive extends JWebViewFixedComponent implements JWebC
   }
 
   @Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
   }
   
 

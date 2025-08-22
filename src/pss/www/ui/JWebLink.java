@@ -148,7 +148,7 @@ public class JWebLink extends JWebAbstractActionView {
     return this.bOpensNewSession;
   }
   @Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
     zContent.setAttribute("opens_new_window", this.isOpensNewWindow());
     zContent.setAttribute("opens_new_session", this.isOpensNewSession());
     zContent.setAttribute("is_submit", this.isSubmit());

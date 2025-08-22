@@ -369,7 +369,7 @@ public class JWebWinTreeResponsive  extends JWebWinGenericResponsive implements 
 	boolean goesNext;
 	boolean goesBack;
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		JInternalGenerateXML iXML = new JInternalGenerateXML();
 //		PssLogger.logInfo("ini");
 //		long ini = System.nanoTime();
@@ -611,7 +611,7 @@ public class JWebWinTreeResponsive  extends JWebWinGenericResponsive implements 
 //					zContent.addTextNode("title", oCol.GetColumnaTitulo()); // no
 //					// se
 //					// traduce
-//			} // acá, sino antes
+//			} // acï¿½, sino antes
 //			zContent.endNode("column");
 //		}
 //		zContent.endNode("header");
@@ -1154,7 +1154,7 @@ public class JWebWinTreeResponsive  extends JWebWinGenericResponsive implements 
 			alerta = getWins().anyAlert(totalCountElement);
 			if (alerta != null)
 				setAlert(alerta); // warning referidos a los resultados, paso el
-			// tamaño para no volver a calcularlo
+			// tamaï¿½o para no volver a calcularlo
 		}
 
 		protected void readNextData(int desde) throws Exception {

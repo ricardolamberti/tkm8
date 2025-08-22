@@ -61,7 +61,7 @@ public class JWebHtmlTextAreaResponsive  extends JWebViewTextAreaResponsive {
 	}
 	
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		zContent.setAttribute("isweb", isweb);
 		if (!formulario) {
 			zContent.setAttribute("formulario",formulario);

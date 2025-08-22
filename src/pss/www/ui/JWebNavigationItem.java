@@ -94,7 +94,7 @@ public class JWebNavigationItem extends JWebAbstractActionView implements JWebIc
 
 
 	@Override
-	protected void componentToXML(JXMLContent zContent) throws Exception {
+	public void componentToXML(JXMLContent zContent) throws Exception {
 		zContent.setAttribute("opens_new_window", this.isOpensNewWindow());
 		zContent.setAttribute("is_submit", this.isSubmit());
 		zContent.setAttribute("is_cancel", this.isCancel());
