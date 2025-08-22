@@ -3,21 +3,32 @@ package pss.report;
 import pss.common.security.BizUsuario;
 
 /**
- * Wrapper around {@link BizUsuario} exposing only the information required for
- * report generation.
+ * Minimal information required for report generation. Instances are created
+ * from the current {@link BizUsuario} using its certificate and login name.
  */
 public final class UserContext {
-    private final BizUsuario usuario;
+    private final String certificado;
+    private final String login;
 
-    public UserContext(BizUsuario usuario) {
-        this.usuario = usuario;
+    public UserContext(String certificado, String login) {
+        this.certificado = certificado;
+        this.login = login;
     }
 
-    public BizUsuario getUsuario() {
-        return usuario;
+    public String getCertificado() {
+        return certificado;
     }
 
-    public String getLogin() throws Exception {
-        return usuario.getUsuario();
+    public String getLogin() {
+        return login;
+    }
+
+    /**
+     * Convenience factory creating the context for the currently authenticated
+     * user.
+     */
+    public static UserContext fromCurrentUser() throws Exception {
+        BizUsuario usr = BizUsuario.getUsr();
+        return new UserContext(usr.GetCertificado(), usr.getUsuario());
     }
 }
