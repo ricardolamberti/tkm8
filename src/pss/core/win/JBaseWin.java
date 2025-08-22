@@ -11,9 +11,11 @@ import java.util.UUID;
 import pss.common.layout.JWinLayout;
 import pss.common.report.HtmlPayload;
 import pss.common.report.InternalReportService;
+import pss.common.report.InternalRequestResolverEmu;
 import pss.common.report.ReportRenderer;
 import pss.common.report.UserContext;
 import pss.common.security.BizUsuario;
+import pss.core.data.BizPssConfig;
 import pss.core.services.records.JBaseRecord;
 import pss.core.services.records.JFilterMap;
 import pss.core.services.records.JRecord;
@@ -1336,46 +1338,37 @@ public abstract class JBaseWin implements IInMemory, Transferable, Serializable 
 		return getHtmlView(action, builderArguments, params, false, false, false, false);
 	}
 
-	public String getHtmlView(int action, String builderArguments, JFilterMap params, boolean convertScriptRefToFile, boolean convertScriptRefToPrefix, boolean convertInjectStyle, boolean convertImageRef) throws Exception {
-		if ("csv".equalsIgnoreCase(builderArguments)) {
-			return getCsvView(action, params);
-		}
-		if ("excel".equalsIgnoreCase(builderArguments) || "xls".equalsIgnoreCase(builderArguments)) {
-			return getExcelView(action, params);
-		}
+        public String getHtmlView(int action, String builderArguments, JFilterMap params, boolean convertScriptRefToFile, boolean convertScriptRefToPrefix, boolean convertInjectStyle, boolean convertImageRef) throws Exception {
+                if ("csv".equalsIgnoreCase(builderArguments)) {
+                        return getCsvView(action, params);
+                }
+                if ("excel".equalsIgnoreCase(builderArguments) || "xls".equalsIgnoreCase(builderArguments)) {
+                        return getExcelView(action, params);
+                }
 
-		Map<String, Object> map = new HashMap<>();
-		if (params != null && params.getMap() != null) {
-			JIterator<String> it = params.getMap().getKeyIterator();
-			while (it.hasMoreElements()) {
-				String key = it.nextElement();
-				map.put(key, params.getMap().getElement(key));
-			}
-		}
+                Map<String, Object> filters = toMap(params);
+                filters.put("action", action);
 
-		InternalReportService service = new InternalReportService();
-		HtmlPayload payload = service.buildHtml(getClass().getSimpleName(), builderArguments, UserContext.fromCurrentUser(), map);
+                UserContext user = UserContext.from(BizUsuario.getUsr());
+                String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
 
-		ReportRenderer renderer = new ReportRenderer();
-		return renderer.renderHtml(payload);
+                InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
+                HtmlPayload payload = resolver.resolveHtml("win_list_x", builderArguments, null, basedir, null, null, user, filters);
 
-	}
+                ReportRenderer renderer = new ReportRenderer();
+                return renderer.renderHtml(payload);
+        }
 
-	public byte[] getPdfBytes(int action, String builderArguments, JFilterMap params) throws Exception {
-		Map<String, Object> map = new HashMap<>();
-		if (params != null && params.getMap() != null) {
-			JIterator<String> it = params.getMap().getKeyIterator();
-			while (it.hasMoreElements()) {
-				String key = it.nextElement();
-				map.put(key, params.getMap().getElement(key));
-			}
-		}
+        public byte[] getPdfBytes(int action, String builderArguments, JFilterMap params) throws Exception {
+                Map<String, Object> filters = toMap(params);
+                filters.put("action", action);
 
-		InternalReportService service = new InternalReportService();
-		HtmlPayload payload = service.buildHtml(getClass().getSimpleName(), builderArguments, UserContext.fromCurrentUser(), map);
-		ReportRenderer renderer = new ReportRenderer();
-		return renderer.renderPdf(payload);
-	}
+                UserContext user = UserContext.from(BizUsuario.getUsr());
+                String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
+
+                InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
+                return resolver.resolvePdf("win_list_x", builderArguments, null, basedir, null, null, user, filters);
+        }
 
 	public String getCsvView(int action, JFilterMap params) throws Exception {
 		Map<String, Object> map = new HashMap<>();
@@ -1392,20 +1385,32 @@ public abstract class JBaseWin implements IInMemory, Transferable, Serializable 
 		return payload.getHtml();
 	}
 
-	public String getExcelView(int action, JFilterMap params) throws Exception {
-		Map<String, Object> map = new HashMap<>();
-		if (params != null && params.getMap() != null) {
-			JIterator<String> it = params.getMap().getKeyIterator();
-			while (it.hasMoreElements()) {
-				String key = it.nextElement();
-				map.put(key, params.getMap().getElement(key));
-			}
-		}
+        public String getExcelView(int action, JFilterMap params) throws Exception {
+                Map<String, Object> map = new HashMap<>();
+                if (params != null && params.getMap() != null) {
+                        JIterator<String> it = params.getMap().getKeyIterator();
+                        while (it.hasMoreElements()) {
+                                String key = it.nextElement();
+                                map.put(key, params.getMap().getElement(key));
+                        }
+                }
 
-		InternalReportService service = new InternalReportService();
-		HtmlPayload payload = service.buildHtml(getClass().getSimpleName(), "excel", UserContext.fromCurrentUser(), map);
-		return payload.getHtml();
-	}
+                InternalReportService service = new InternalReportService();
+                HtmlPayload payload = service.buildHtml(getClass().getSimpleName(), "excel", UserContext.fromCurrentUser(), map);
+                return payload.getHtml();
+        }
+
+        private Map<String, Object> toMap(JFilterMap params) {
+                Map<String, Object> map = new HashMap<>();
+                if (params != null && params.getMap() != null) {
+                        JIterator<String> it = params.getMap().getKeyIterator();
+                        while (it.hasMoreElements()) {
+                                String key = it.nextElement();
+                                map.put(key, params.getMap().getElement(key));
+                        }
+                }
+                return map;
+        }
 
 	public boolean isWin() {
 		return false;
