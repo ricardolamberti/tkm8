@@ -1,9 +1,16 @@
 package pss.www.platform.content.generators.internal;
 
 import java.io.StringWriter;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -12,17 +19,31 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 
+import org.apache.avalon.framework.parameters.Parameters;
+import org.apache.cocoon.environment.Context;
+import org.apache.cocoon.environment.ObjectModelHelper;
+import org.apache.cocoon.environment.Request;
+import org.apache.cocoon.environment.Response;
+import org.apache.cocoon.environment.http.HttpContext;
+import org.apache.cocoon.environment.http.HttpRequest;
+import org.apache.cocoon.environment.http.HttpResponse;
+import org.apache.cocoon.environment.http.HttpEnvironment;
+import org.apache.excalibur.source.Source;
+import org.apache.excalibur.source.SourceException;
+import org.apache.excalibur.source.SourceResolver;
+import org.apache.commons.codec.net.URLCodec;
 import org.w3c.dom.Document;
 
+import pss.common.actions.BizAction;
 import pss.common.security.BizUsuario;
 import pss.core.win.JBaseWin;
-import pss.core.win.actions.BizAction;
 import pss.www.platform.actions.JWebActionFactory;
 import pss.www.platform.actions.JWebRequest;
 import pss.www.platform.actions.resolvers.JDoInternalRequestResolver;
 import pss.www.platform.content.generators.JBasicXMLContentGenerator;
 import pss.www.platform.content.generators.JWinListInternalRequestPageGenerator;
 import pss.www.platform.content.generators.JXMLContent;
+import pss.www.ui.JWebWinMatrixResponsive;
 
 /**
  * Builds the XML for a report and transforms it into HTML using an XSLT
@@ -64,77 +85,161 @@ public class InternalReportService {
 		return new HtmlPayload(writer.toString(), baseUrl);
 	}
 
-	@SuppressWarnings("unchecked")
-	private Document buildXmlForOwner(JBaseWin owner, String reportName, Map<String, Object> params, UserContext user) throws Exception {
+        @SuppressWarnings("unchecked")
+        private Document buildXmlForOwner(JBaseWin owner, String reportName, Map<String, Object> params, UserContext user) throws Exception {
 
-		JWebRequest req = JWebActionFactory.getCurrentRequest();
-		if (req == null)
-			throw new IllegalStateException("No current request available");
-		if (BizUsuario.getUsr() == null && user != null) {
-			// BizUsuario.setFromCertificado(user.getUserId());
-		}
+                JWebRequest req = JWebActionFactory.getCurrentRequest();
+                if (req == null) {
+                        throw new IllegalStateException("No current request available");
+                }
 
-		final String serializer = "html";
-		String arguments;
-		if ("htmlfull".equalsIgnoreCase(String.valueOf(params.get("serializer")))) {
-			arguments = "dg_export=serializer=htmlfull,object=" + reportName + ",range=all,preserve=T,history=N" + "&dg_win_list_nav=name_op1=export,with_preview_op1=N,embedded_op1=false,toolbar_op1=none,&" + "&dg_client_conf=pw_op1=1000,ph_op1=2500,sw_op1=1000,sh_op1=2500";
-		} else {
-			arguments = "dg_export=serializer=" + serializer + ",object=" + reportName + ",range=all,preserve=T,history=N" + "&dg_win_list_nav=name_op1=export,with_preview_op1=N,embedded_op1=false,toolbar_op1=none,&" + "&dg_client_conf=pw_op1=1500,ph_op1=2500,sw_op1=1500,sh_op1=2500";
-		}
+                String serializer = params != null ? String.valueOf(params.get("serializer")) : null;
+                boolean full = "htmlfull".equalsIgnoreCase(serializer);
 
-		if (params != null) {
-			for (Map.Entry<String, Object> e : params.entrySet()) {
-				if (e.getValue() == null)
-					continue;
-				String k = "dgf_filter_pane_fd-" + e.getKey();
-				String v = String.valueOf(e.getValue());
-				arguments += "&" + k + "=" + urlEncodeISO(v);
-			}
-		}
+                String arguments;
+                if (full) {
+                        arguments = "dg_export=serializer=htmlfull,object=" + reportName
+                                        + ",range=all,preserve=T,history=N" + "&dg_win_list_nav=name_op1=export,with_preview_op1=N,embedded_op1=false,toolbar_op1=none,&"
+                                        + "&dg_client_conf=pw_op1=1000,ph_op1=2500,sw_op1=1000,sh_op1=2500";
+                } else {
+                        arguments = "dg_export=serializer=html,object=" + reportName
+                                        + ",range=all,preserve=T,history=N" + "&dg_win_list_nav=name_op1=export,with_preview_op1=N,embedded_op1=false,toolbar_op1=none,&"
+                                        + "&dg_client_conf=pw_op1=1500,ph_op1=2500,sw_op1=1500,sh_op1=2500";
+                }
 
-		final String internalId = java.util.UUID.randomUUID().toString();
-		final int actionInt = params != null && params.get("action") != null ? Integer.parseInt(String.valueOf(params.get("action"))) : 0;
+                if (params != null) {
+                        for (Map.Entry<String, Object> e : params.entrySet()) {
+                                if (e.getValue() == null)
+                                        continue;
+                                String k = "dgf_filter_pane_fd-" + e.getKey();
+                                String v = String.valueOf(e.getValue());
+                                arguments += "&" + k + "=" + urlEncodeISO(v);
+                        }
+                }
 
-		String extraArguments = JDoInternalRequestResolver.addInternaRequest(internalId, owner, actionInt, BizUsuario.getUsr() != null ? BizUsuario.getUsr().GetCertificado() : user.getUserId());
+                String internalId = java.util.UUID.randomUUID().toString();
+                int actionInt = params != null && params.get("action") != null
+                                ? Integer.parseInt(String.valueOf(params.get("action"))) : 0;
 
-		pushQueryParamsToRequest(req, arguments);
-		if (extraArguments != null && !extraArguments.isEmpty()) {
-			pushQueryParamsToRequest(req, extraArguments);
-		}
+                String userId = BizUsuario.getUsr() != null ? BizUsuario.getUsr().GetCertificado()
+                                : (user != null ? user.getUserId() : "anonymous");
+                String extraArguments = JDoInternalRequestResolver.addInternaRequest(internalId, owner, actionInt, userId);
 
-		JXMLContent zContent = createContentWithOwnerContext(owner, req);
+                pushQueryParamsToRequest(req, arguments);
+                pushQueryParamsToRequest(req, extraArguments);
 
-		Object generator = new pss.www.platform.content.generators.JWinListInternalRequestPageGenerator();
+                JXMLContent content = createJXMLContentWithSessionContext(owner, req);
 
-		boolean produced = false;
-		String[] methodCandidates = { "generate", "generateTo", "produce", "build", "componentToXML" };
-		for (String m : methodCandidates) {
-			try {
-				Method method = generator.getClass().getMethod(m, zContent.getClass());
-				method.invoke(generator, zContent);
-				produced = true;
-				break;
-			} catch (NoSuchMethodException ignore) {
-			}
-		}
+                boolean generated = false;
+                try {
+                        Method m = owner.getClass().getMethod("componentToXML", JXMLContent.class);
+                        m.invoke(owner, content);
+                        generated = true;
+                } catch (NoSuchMethodException ignore) {
+                }
 
-		if (!produced) {
-			BizAction act = new BizAction();
-			act.pAccion.setValue(reportName);
-			JWinListInternalRequestPageGenerator view = new JWinListInternalRequestPageGenerator();
-			view.generate();
+                if (!generated) {
+                        BizAction act = new BizAction();
+                        act.pAccion.setValue(reportName);
+                        JWebWinMatrixResponsive view = new JWebWinMatrixResponsive(act, true);
+                        trySet(view, "setOwner", JBaseWin.class, owner);
+                        trySet(view, "setParent", JBaseWin.class, owner);
+                        trySet(view, "setEmbedded", boolean.class, Boolean.TRUE);
+                        Method m = view.getClass().getMethod("componentToXML", JXMLContent.class);
+                        m.invoke(view, content);
+                }
 
-		}
+                return extractDocument(content);
+        }
 
-		return extractDocument(zContent);
-	}
+        /* ====================== Helpers ====================== */
 
-	/* ====================== Helpers ====================== */
+        private static HttpServletRequest extractHttpServletRequest(JWebRequest req) {
+                try {
+                        Request cocoonReq = req.getServletRequest();
+                        if (cocoonReq instanceof HttpRequest) {
+                                java.lang.reflect.Field f = cocoonReq.getClass().getDeclaredField("req");
+                                f.setAccessible(true);
+                                return (HttpServletRequest) f.get(cocoonReq);
+                        }
+                } catch (Exception ignore) {
+                }
+                return null;
+        }
 
-	private static void pushQueryParamsToRequest(JWebRequest req, String qs) {
-		if (qs == null || qs.isEmpty())
-			return;
-		for (String pair : qs.split("&")) {
+        private static HttpServletResponse extractHttpServletResponse(JWebRequest req) {
+                try {
+                        Request cocoonReq = req.getServletRequest();
+                        if (cocoonReq instanceof HttpRequest) {
+                                java.lang.reflect.Field f = cocoonReq.getClass().getDeclaredField("env");
+                                f.setAccessible(true);
+                                Object env = f.get(cocoonReq);
+                                java.lang.reflect.Field rf = env.getClass().getDeclaredField("res");
+                                rf.setAccessible(true);
+                                Object resp = rf.get(env);
+                                if (resp instanceof HttpServletResponse) {
+                                        return (HttpServletResponse) resp;
+                                }
+                        }
+                } catch (Exception ignore) {
+                }
+                return null;
+        }
+
+        private static ServletContext extractServletContext(HttpServletRequest httpReq) {
+                try {
+                        return httpReq.getSession().getServletContext();
+                } catch (Exception e) {
+                        return null;
+                }
+        }
+
+        private static Map<String, Object> makeCocoonObjectModel(HttpServletRequest httpReq,
+                        HttpServletResponse httpRes, ServletContext servletCtx) {
+                Map<String, Object> objectModel = new HashMap<>();
+                try {
+                        HttpContext ctx = new HttpContext(servletCtx);
+                        HttpResponse res = new HttpResponse(httpRes);
+                        HttpEnvironment env = new HttpEnvironment("", httpReq, httpRes, servletCtx, ctx, "", "");
+                        Constructor<HttpRequest> c = HttpRequest.class.getDeclaredConstructor(HttpServletRequest.class, HttpEnvironment.class);
+                        c.setAccessible(true);
+                        HttpRequest req = c.newInstance(httpReq, env);
+                        objectModel.put(ObjectModelHelper.REQUEST_OBJECT, req);
+                        objectModel.put(ObjectModelHelper.RESPONSE_OBJECT, res);
+                        objectModel.put(ObjectModelHelper.CONTEXT_OBJECT, ctx);
+                } catch (Exception e) {
+                        throw new RuntimeException("Unable to build Cocoon object model", e);
+                }
+                return objectModel;
+        }
+
+        private static final class NoopResolver implements SourceResolver {
+                private final ServletContext servletContext;
+
+                NoopResolver(ServletContext servletContext) {
+                        this.servletContext = servletContext;
+                }
+
+                @Override
+                public Source resolveURI(String location) throws MalformedURLException, IOException, SourceException {
+                        return null;
+                }
+
+                @Override
+                public Source resolveURI(String location, String baseURI, Map parameters)
+                                throws MalformedURLException, IOException, SourceException {
+                        return null;
+                }
+
+                @Override
+                public void release(Source source) {
+                }
+        }
+
+        private static void pushQueryParamsToRequest(JWebRequest req, String qs) {
+                if (qs == null || qs.isEmpty())
+                        return;
+                for (String pair : qs.split("&")) {
 			if (pair.isEmpty())
 				continue;
 			int p = pair.indexOf('=');
@@ -164,43 +269,30 @@ public class InternalReportService {
 		}
 	}
 
-	/**
-	 * Crea un JXMLContent “válido” para que .addProviderHistory / HistoryManager y
-	 * otros accesos a sesión no fallen durante la generación.
-	 */
-	private static JXMLContent createContentWithOwnerContext(JBaseWin owner, JWebRequest req) throws Exception {
-		JXMLContent z = createJXMLContentWithSessionContext(owner,req);
-		try {
-			java.lang.reflect.Method setOwner = z.getClass().getMethod("setOwner", JBaseWin.class);
-			setOwner.invoke(z, owner);
-		} catch (NoSuchMethodException ignore) {
-		}
-		return z;
-	}
+        private static JXMLContent createJXMLContentWithSessionContext(JBaseWin owner, JWebRequest req) throws Exception {
+                JWinListInternalRequestPageGenerator gen = new JWinListInternalRequestPageGenerator();
 
+                HttpServletRequest httpReq = extractHttpServletRequest(req);
+                HttpServletResponse httpRes = extractHttpServletResponse(req);
+                ServletContext servletCtx = extractServletContext(httpReq);
 
-private static JXMLContent createJXMLContentWithSessionContext(JBaseWin owner, JWebRequest req) throws Exception {
-    // 1) Instanciar el GENERATOR concreto (subclase de JBasicXMLContentGenerator)
-    JWinListInternalRequestPageGenerator gen = new JWinListInternalRequestPageGenerator();
+                Map<String, Object> objectModel = makeCocoonObjectModel(httpReq, httpRes, servletCtx);
+                SourceResolver resolver = new NoopResolver(servletCtx);
 
-    // 2) Inyectar contexto (si existen estos setters en tu base; por eso uso reflexión segura)
-    callIfPresent(gen, "setRequest", JWebRequest.class, req);
-    callIfPresent(gen, "setOwner",   JBaseWin.class,    owner);
-    // si tu generator necesita usuario/sesión/historial, agregá aquí más setters:
-    // callIfPresent(gen, "setUser", BizUsuario.class, BizUsuario.getUsr());
+                gen.setup(resolver, objectModel, null, Parameters.EMPTY_PARAMETERS);
 
-    // 3) Construir el JXMLContent con EXACTAMENTE el ctor requerido
-    java.lang.reflect.Constructor<JXMLContent> c =
-            JXMLContent.class.getDeclaredConstructor(JBasicXMLContentGenerator.class);
-    c.setAccessible(true);
-    JXMLContent z = c.newInstance(gen);
+                callIfPresent(gen, "setRequest", JWebRequest.class, req);
+                callIfPresent(gen, "setOwner", JBaseWin.class, owner);
 
-    // 4) (Opcional) redundar el contexto en el content si tu implementación lo expone
-    trySet(z, "setOwner",   JBaseWin.class,    owner);
-    trySet(z, "setRequest", JWebRequest.class, req);
+                Constructor<JXMLContent> c = JXMLContent.class.getDeclaredConstructor(JBasicXMLContentGenerator.class);
+                c.setAccessible(true);
+                JXMLContent z = c.newInstance(gen);
 
-    return z;
-}
+                trySet(z, "setOwner", JBaseWin.class, owner);
+                trySet(z, "setRequest", JWebRequest.class, req);
+
+                return z;
+        }
 
 
 	/* ===== helpers de reflexión ===== */

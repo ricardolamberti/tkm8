@@ -1351,7 +1351,7 @@ public abstract class JBaseWin implements IInMemory, Transferable, Serializable 
 		filters.put("serializer", builderArguments);
 
 		Map<String, Object> xsltParams = new HashMap<>();
-		xsltParams.put("basedir", BizPssConfig.getPssConfig().getAppURLPreview());
+                xsltParams.put("basedir", BizPssConfig.getPssConfig().getAppURLPrefixAbsolute());
 
 		UserContext user = UserContext.from(BizUsuario.getUsr());
 
