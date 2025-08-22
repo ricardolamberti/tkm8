@@ -18,7 +18,6 @@ package pss.www.platform.content.generators;
  */
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.Map;
 
 import org.apache.avalon.framework.parameters.Parameters;
@@ -36,7 +35,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.AttributesImpl;
 
 import pss.common.regions.multilanguage.JLanguage;
-import pss.core.tools.JExcepcion;
 import pss.core.tools.JTools;
 import pss.core.tools.PssLogger;
 import pss.www.platform.JConstantes;

@@ -2,7 +2,6 @@ package pss.bsp.contrato.detalle.prorrateo;
 
 import pss.bsp.dk.GuiClienteDKs;
 import pss.common.customList.config.relation.JRelations;
-import pss.common.event.mailing.BizMailingPersona;
 import pss.common.event.mailing.GuiMailingPersona;
 import pss.core.services.fields.JFloat;
 import pss.core.services.fields.JLong;

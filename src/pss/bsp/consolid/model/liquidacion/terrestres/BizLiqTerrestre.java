@@ -8,7 +8,6 @@ import pss.JPath;
 import pss.bsp.consolid.model.liquidacion.detail.BizLiqDetail;
 import pss.bsp.parseo.IParseo;
 import pss.bsp.parseo.JParseoFactory;
-import pss.common.security.BizUsuario;
 import pss.core.data.files.JStreamGZip;
 import pss.core.services.fields.JBoolean;
 import pss.core.services.fields.JLong;

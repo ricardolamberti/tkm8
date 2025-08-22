@@ -1,11 +1,9 @@
 package  pss.bsp.parseo.bspParseo;
 
-import pss.bsp.contrato.detalleCopa.BizDetalleCopa;
 import pss.bsp.interfaces.copa.IFinderCopa;
 import pss.bsp.interfaces.copa.JParseoCopa;
 import pss.bsp.interfaces.copa.cabecera.BizCopaCabecera;
 import pss.bsp.interfaces.copa.cabecera.GuiCopaCabecera;
-import pss.bsp.interfaces.copa.datos.BizCopa;
 import pss.bsp.interfaces.copa.detalle.BizCopaDetalle;
 import pss.bsp.interfaces.copa.detalle.GuiCopaDetalles;
 import pss.core.win.JWin;

@@ -1,14 +1,10 @@
 package pss.tourism.dks;
 
-import pss.common.regions.company.GuiCompanies;
-import pss.common.security.BizUsuario;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActSubmit;
-import pss.core.win.submits.JActWins;
-import pss.core.win.submits.JActWinsSelect;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiDk extends JWin {

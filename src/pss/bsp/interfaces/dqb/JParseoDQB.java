@@ -2,8 +2,6 @@ package pss.bsp.interfaces.dqb;
 
 import java.io.InputStream;
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import com.ibm.icu.util.StringTokenizer;
 

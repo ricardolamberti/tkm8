@@ -2,7 +2,6 @@ package pss.bsp.bspBusiness;
 
 import java.util.Date;
 
-import pss.common.regions.company.BizCompany;
 import pss.common.regions.company.BizCompanyCountry;
 import pss.core.services.fields.JBoolean;
 import pss.core.services.fields.JDate;

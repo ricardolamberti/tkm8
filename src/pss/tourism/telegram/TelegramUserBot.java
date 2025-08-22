@@ -10,14 +10,12 @@ import com.pengrad.telegrambot.TelegramBot;
 import pss.common.event2.telegram.BizTelegramUserChannel;
 import pss.common.event2.telegram.TelegramBotManager;
 import pss.core.JAplicacion;
-import pss.core.data.BizPssConfig;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JDateTools;
 import pss.core.tools.PssLogger;
 import pss.core.tools.WinServiceTools;
 import pss.core.tools.collections.JIterator;
 import pss.tourism.interfaceGDS.log.BizInterfaceLog;
-import pss.tourism.pnr.BizPNRTicket;
 import pss.tourism.telegram.event.BizTelegramEvent;
 
 public class TelegramUserBot extends TelegramBotManager {

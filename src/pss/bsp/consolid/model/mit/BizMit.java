@@ -29,7 +29,6 @@ import pss.core.tools.biblioteca.BizOldBiblioteca;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JMap;
-import pss.core.win.JWins;
 import pss.tourism.pnr.BizPNRTicket;
 
 public class BizMit extends JRecord {

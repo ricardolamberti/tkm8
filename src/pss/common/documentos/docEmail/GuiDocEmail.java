@@ -1,8 +1,6 @@
 package pss.common.documentos.docEmail;
 
-import pss.common.documentos.GuiDocum;
 import pss.common.documentos.GuiDocumento;
-import pss.common.documentos.GuiDocums;
 import pss.common.documentos.docElectronico.GuiDocAdjunto;
 import pss.common.documentos.docElectronico.GuiDocAdjuntos;
 import pss.common.security.BizUsuario;
@@ -12,7 +10,6 @@ import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActFileGenerate;
 import pss.core.win.submits.JActNew;
 import pss.core.win.submits.JActQuery;
 import pss.core.win.submits.JActSubmit;

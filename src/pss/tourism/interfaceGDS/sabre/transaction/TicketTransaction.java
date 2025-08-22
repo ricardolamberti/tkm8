@@ -2,7 +2,6 @@ package pss.tourism.interfaceGDS.sabre.transaction;
 
 import java.util.Date;
 
-import kotlin.coroutines.AbstractCoroutineContextKey;
 import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.bsp.clase.BizClase;
 import pss.bsp.clase.detalle.BizClaseDetail;
@@ -19,7 +18,6 @@ import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JList;
 import pss.core.tools.collections.JMap;
 import pss.tourism.airports.BizAirport;
-import pss.tourism.carrier.BizCarrier;
 import pss.tourism.interfaceGDS.BaseTransaction;
 import pss.tourism.interfaceGDS.FareRecord;
 import pss.tourism.interfaceGDS.FareRecord.ConnectionRecord;

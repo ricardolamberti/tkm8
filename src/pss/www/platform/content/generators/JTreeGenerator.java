@@ -18,7 +18,6 @@ import pss.core.win.actions.BizActions;
 import pss.core.win.submits.JAct;
 import pss.core.winUI.icons.GuiIcon;
 import pss.core.winUI.icons.GuiIconos;
-import pss.www.platform.actions.JWebActionFactory;
 import pss.www.platform.actions.JWinPackager;
 import pss.www.ui.controller.JBusinessNodesWebTreeConstants;
 

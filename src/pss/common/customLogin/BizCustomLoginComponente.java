@@ -1,7 +1,6 @@
 package pss.common.customLogin;
 
 import pss.common.help.BizQuestionDetail;
-import pss.core.services.JExec;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
@@ -198,7 +197,7 @@ public class BizCustomLoginComponente extends JRecord {
 		this.addFixedItem(FIELD, "action", "Accion", true, true, 256);
 		this.addFixedItem(FIELD, "status", "Estado", true, true, 256);
 		this.addFixedItem(FIELD, "step", "Paso", true, true, 18);
-		this.addFixedItem(FIELD, "localization", "Localización imagen", true, true, 18);
+		this.addFixedItem(FIELD, "localization", "Localizaciï¿½n imagen", true, true, 18);
 		this.addFixedItem(FIELD, "image", "Imagen", true, true, 256);
 		this.addFixedItem(FIELD, "link", "Link", true, true, 1000);
 		this.addFixedItem(FIELD, "x", "X", true, true, 5);
@@ -207,7 +206,7 @@ public class BizCustomLoginComponente extends JRecord {
 		this.addFixedItem(FIELD, "width", "Ancho", true, true, 5);
 		this.addFixedItem(FIELD, "height", "Alto", true, true, 5);
 		this.addFixedItem(FIELD, "idhtml", "Idhtml", true, true, 100);
-		this.addFixedItem(FIELD, "typePos", "Tipo posición", true, true, 50);
+		this.addFixedItem(FIELD, "typePos", "Tipo posiciï¿½n", true, true, 50);
 		this.addFixedItem(FIELD, "type", "Tipo", true, true, 50);
 	}
 

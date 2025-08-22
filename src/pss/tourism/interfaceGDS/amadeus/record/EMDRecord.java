@@ -1,11 +1,8 @@
 package pss.tourism.interfaceGDS.amadeus.record;
 
-import java.util.StringTokenizer;
-
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
 import pss.core.tools.collections.JStringTokenizer;
-import pss.tourism.interfaceGDS.amadeus.record.IRecord.EMD;
 
 public class EMDRecord extends AmadeusRecord {
 

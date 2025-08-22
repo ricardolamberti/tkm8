@@ -6,7 +6,6 @@ import pss.common.components.JSetupParameters;
 import pss.common.regions.divitions.BizPais;
 import pss.common.security.BizUsuario;
 import pss.core.services.fields.JInteger;
-import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;

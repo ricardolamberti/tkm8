@@ -1,10 +1,5 @@
 package pss.bsp.contrato.detalleCopaPorRutas.objetivos;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import pss.bsp.contrato.detalleRutas.objetivos.BizObjetivosRuta;
-import pss.bsp.contrato.detalleRutas.objetivos.FormObjetivosRuta;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
 import pss.core.win.JWins;

@@ -2,7 +2,6 @@ package  pss.bsp.config.airportGroups.detalle;
 
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
-import pss.core.winUI.forms.JBaseForm;
 
 public class GuiAirportGroupDetail extends JWin {
 

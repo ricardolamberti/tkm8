@@ -1,6 +1,5 @@
 package pss.core.ui.components;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 import pss.JPss;

@@ -40,9 +40,6 @@ import pss.common.security.GuiUsuario;
 import pss.common.security.GuiUsuarios;
 import pss.core.data.BizPssConfig;
 import pss.core.services.JExec;
-import pss.core.services.records.BizVirtual;
-import pss.core.services.records.JRecord;
-import pss.core.services.records.JRecords;
 import pss.core.tools.JExcepcion;
 import pss.core.tools.JTools;
 import pss.core.tools.collections.JCollectionFactory;
@@ -157,11 +154,11 @@ public abstract class JCompanyBusiness {
 	// Labels
 
 	public String getLabelArticles() throws Exception {
-		return "Artículos";
+		return "Artï¿½culos";
 	}
 
 	public String getLabelArticle() throws Exception {
-		return "Artículo";
+		return "Artï¿½culo";
 	}
 
 	public String getLabelSubCliente() throws Exception {
@@ -173,7 +170,7 @@ public abstract class JCompanyBusiness {
 	}
 
 	public String getLabelRegionOrigen() throws Exception {
-		return "Región de Origen";
+		return "Regiï¿½n de Origen";
 	}
 
 	public String getLabelRegionOrigenPlural() throws Exception {
@@ -181,7 +178,7 @@ public abstract class JCompanyBusiness {
 	}
 
 //	public String getLabelRegionOrigenFiltro() throws Exception {
-//		return "Región";
+//		return "Regiï¿½n";
 //	}
 
 	public long getPageSize() throws Exception {
@@ -368,8 +365,8 @@ public abstract class JCompanyBusiness {
 //	  	mapa.addElement(FECHA_FINAL_EXP, "Fecha final exp");
 	  	mapa.addElement(FECHA_INICIAL_MES, "Fecha inicio mes");
 	  	mapa.addElement(FECHA_FINAL_MES, "Fecha fin de mes");
-	  	mapa.addElement(FECHA_INICIAL_ANO, "Fecha inicio año");
-	  	mapa.addElement(FECHA_FINAL_ANO, "Fecha fin de año");
+	  	mapa.addElement(FECHA_INICIAL_ANO, "Fecha inicio aï¿½o");
+	  	mapa.addElement(FECHA_FINAL_ANO, "Fecha fin de aï¿½o");
 	   	mapa.addElement(FECHA_ACTUAL, "Fecha Actual");
 //	 	  mapa.addElement(ID_EXPEDIENTE, "Id Expediente");
 //	  	mapa.addElement(ID_LEGAJO, "Id Legegajo");

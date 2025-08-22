@@ -2,7 +2,6 @@ package  pss.bsp.pdf.chl.detalle;
 
 import java.util.Date;
 
-import pss.bsp.bo.data.BizBODetalle;
 import pss.bsp.consolidador.IConciliable;
 import pss.bsp.parseo.IFormato;
 import pss.common.customList.config.relation.JRelation;

@@ -10,7 +10,6 @@ import pss.core.services.fields.JInteger;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.tools.JExcepcion;
 import pss.core.tools.JPair;
 import pss.tourism.airports.BizAirport;
 

@@ -1,11 +1,5 @@
 package  pss.bsp.ticketsOracle;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import pss.core.ui.components.JPssEdit;
-import pss.core.ui.components.JPssLabel;
-import pss.core.ui.components.JPssLabelFile;
 import pss.core.win.JWin;
 import pss.core.winUI.forms.JBaseForm;
 

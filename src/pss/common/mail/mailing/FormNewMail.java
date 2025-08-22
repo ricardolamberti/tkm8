@@ -6,7 +6,6 @@ import pss.common.security.type.GuiUsuarioTipos;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.controls.JControlCombo;
-import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.forms.JBaseForm;
 
 
@@ -24,7 +23,7 @@ public class FormNewMail extends JBaseForm {
     AddItemEdit( null, CHAR, OPT, "folder" ).setHide(true);
   	AddItemEdit( null, UINT, OPT, "id_message" ).setHide(true);
 		AddItemEdit( "Destinatarios", CHAR, OPT, "destinatarios",8);
-    AddItemCheck( "Todas las Compañia", OPT, "allcompanies" ,2);
+    AddItemCheck( "Todas las Compaï¿½ia", OPT, "allcompanies" ,2);
     AddItemCheck( "Urgente", OPT, "msg_priority",2);
     AddItemEdit( "Titulo", CHAR, OPT, "msg_title" ,12);
     AddItemCombo( "Tipo", CHAR, OPT, "types", new JControlCombo() {

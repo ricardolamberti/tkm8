@@ -1,14 +1,12 @@
 package pss.bsp.contrato.conocidos2;
 
-import org.mozilla.javascript.EcmaError;
-
 import pss.core.win.JWin;
-import pss.core.winUI.lists.JFormFiltro;
-import pss.core.winUI.lists.JWinList;
 import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActSubmit;
+import pss.core.winUI.lists.JFormFiltro;
+import pss.core.winUI.lists.JWinList;
 
 public class GuiContratoConocidosV2 extends JWins {
 

@@ -1,14 +1,8 @@
 package  pss.bsp.auxiliar.lineaTemporal;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
 import pss.common.security.BizUsuario;
-import pss.core.winUI.forms.JBaseForm;
-import pss.core.ui.components.*;
 import pss.core.win.JWin;
-import pss.core.ui.components.JPssLabel;
-import pss.core.ui.components.JPssCalendarEdit;
+import pss.core.winUI.forms.JBaseForm;
 
 public class FormLineaTemporal extends JBaseForm {
 

@@ -5,7 +5,6 @@ import java.util.Date;
 import com.ibm.icu.util.Calendar;
 import com.ibm.icu.util.GregorianCalendar;
 
-import pss.common.components.JSetupParameters;
 import pss.common.customList.config.relation.JRelation;
 import pss.common.customList.config.relation.JRelations;
 import pss.common.dbManagement.synchro.JDBClassIndex;
@@ -16,7 +15,6 @@ import pss.core.services.fields.JBoolean;
 import pss.core.services.fields.JDate;
 import pss.core.services.fields.JInteger;
 import pss.core.services.fields.JLong;
-import pss.core.services.fields.JObjBD;
 import pss.core.services.fields.JObject;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
@@ -532,7 +530,7 @@ public class BizPersona extends JRecord {
 		addFixedItem(FIELD, "apellido2", getFieldApellidoDescription(), true, false, 250);
 		addFixedItem(FIELD, "apellido_materno", getFieldApellidoDescription()+ " materno", true, false, 100);
 		addFixedItem(FIELD, "ident_adicional", "Ident Adicional", true, false, 200);
-		addFixedItem(FIELD, "description", "Descripción", true, true, 500);
+		addFixedItem(FIELD, "description", "Descripciï¿½n", true, true, 500);
 		addFixedItem(FIELD, "tipo_doc", "Tipo Documento", true, false, 5);
 		addFixedItem(FIELD, "nro_doc", "Nro. Documento", true, false, 20);
 		addFixedItem(FIELD, "tipo_cui", "Tipo Cui", true, false, 5);
@@ -1105,8 +1103,8 @@ public class BizPersona extends JRecord {
 		return pTipoPersona.getValue();
 	}
 	public static String getDescrTipoPersona(String tipo) throws Exception {
-		if (tipo.equals(BizPersona.TIPO_FISICA)) return "Persona Física";
-		if (tipo.equals(BizPersona.TIPO_JURIDICA)) return "Persona Jurídica";
+		if (tipo.equals(BizPersona.TIPO_FISICA)) return "Persona Fï¿½sica";
+		if (tipo.equals(BizPersona.TIPO_JURIDICA)) return "Persona Jurï¿½dica";
 		return "";
 	}
 
@@ -1171,7 +1169,7 @@ public class BizPersona extends JRecord {
 	
 	public void processUnificar(JRecords pers) throws Exception {
 		if (pers.sizeStaticElements()<=1) 
-			JExcepcion.SendError("Funcion habilitada unicamente para unificar dos ó más personas");
+			JExcepcion.SendError("Funcion habilitada unicamente para unificar dos ï¿½ mï¿½s personas");
 
 		int index_master = this.getIndexOfMasterPersona(pers);
 		BizPersona master=(BizPersona)pers.getStaticElement(index_master);
@@ -1198,7 +1196,7 @@ public class BizPersona extends JRecord {
 			ret_index = index-1;
 		}
 		if (master_qty==0)  JExcepcion.SendError("Debe haber una persona que no sea a eliminar. Es la persona maestra ");
-		if (master_qty>1)  JExcepcion.SendError("No puede haber más de una persona maestra ");
+		if (master_qty>1)  JExcepcion.SendError("No puede haber mï¿½s de una persona maestra ");
 		return ret_index ;
 	}
 

@@ -1,7 +1,6 @@
 package pss.core.tools.biblioteca;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 
 import pss.JPath;

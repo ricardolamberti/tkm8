@@ -1,7 +1,6 @@
 package pss.bsp.chat;
 
 import pss.bsp.chat.conversation.BizConversation;
-import pss.common.agenda.evento.BizEvento;
 import pss.core.services.fields.JBoolean;
 import pss.core.services.fields.JObjBDs;
 import pss.core.services.fields.JString;

@@ -1,8 +1,8 @@
 package  pss.bsp.interfaces.copa.cabecera;
 
 import pss.core.win.JWin;
-import pss.core.winUI.lists.JWinList;
 import pss.core.win.JWins;
+import pss.core.winUI.lists.JWinList;
 
 public class GuiCopaCabeceras extends JWins {
 

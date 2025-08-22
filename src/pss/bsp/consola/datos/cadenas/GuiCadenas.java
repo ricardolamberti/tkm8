@@ -19,7 +19,6 @@ import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;
 import pss.core.winUI.responsiveControls.JFormIntervalCDatetimeResponsive;
 import pss.tourism.carrier.GuiCarriers;
-import pss.tourism.pnr.GuiPNRTicket;
 
 public class GuiCadenas extends JWins {
 

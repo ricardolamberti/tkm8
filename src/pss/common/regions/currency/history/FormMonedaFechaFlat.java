@@ -1,7 +1,5 @@
 package pss.common.regions.currency.history;
 
-import pss.common.regions.divitions.BizPais;
-import pss.core.services.fields.JCurrency;
 import pss.core.tools.JDateTools;
 import pss.core.win.JWin;
 import pss.core.winUI.forms.JBaseForm;

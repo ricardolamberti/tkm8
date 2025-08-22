@@ -10,17 +10,16 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.util.Calendar;
+
 import pss.bsp.parseo.IFinder;
 import pss.bsp.parseo.IParseo;
-import pss.bsp.pdf.cri.detalle.BizCRiDetalle;
 import pss.bsp.pdf.ecu.cabecera.BizEcuCabecera;
 import pss.bsp.pdf.ecu.detalle.BizEcuDetalle;
 import pss.bsp.pdf.ecu.impuesto.BizEcuImpuesto;
 import pss.core.tools.JTools;
 import pss.core.tools.PDFTextParser;
 import pss.tourism.carrier.BizCarrier;
-
-import com.ibm.icu.util.Calendar;
 
 public class JParseoEcu implements IParseo {
 

@@ -3,7 +3,6 @@ package  pss.common.customList.config.owner;
 
 import pss.common.customList.config.customlist.BizCustomList;
 import pss.common.security.BizUsuario;
-import pss.core.services.JExec;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;

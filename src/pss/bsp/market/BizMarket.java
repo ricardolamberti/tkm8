@@ -2,15 +2,11 @@ package  pss.bsp.market;
 
 import pss.bsp.market.detalle.BizMarketDetail;
 import pss.common.customList.config.relation.JRelations;
-import pss.common.personalData.personaRegistro.BizPersonaRegistro;
 import pss.core.services.JExec;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
-import pss.core.tools.JDateTools;
-import pss.core.tools.collections.JIterator;
-import pss.tourism.pnr.BizPNRSegmentoAereo;
 import pss.tourism.pnr.BizPNRTicket;
 
 public class BizMarket extends JRecord {

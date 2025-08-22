@@ -1,7 +1,6 @@
 package pss.common.documentos.docEmail;
 
 import pss.core.win.JWin;
-import pss.core.win.actions.BizAction;
 
 public class GuiMailDetails extends GuiDocEmails {
 

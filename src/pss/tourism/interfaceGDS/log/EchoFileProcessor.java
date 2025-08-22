@@ -6,7 +6,6 @@ import java.io.FilenameFilter;
 import java.util.Date;
 
 import pss.JPath;
-import pss.bsp.bspBusiness.BizCompanyExtraData;
 import pss.core.tools.JDateTools;
 import pss.core.tools.JTools;
 import pss.core.tools.PssLogger;

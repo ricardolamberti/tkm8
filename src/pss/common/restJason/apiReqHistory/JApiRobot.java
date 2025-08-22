@@ -1,6 +1,5 @@
 package pss.common.restJason.apiReqHistory;
 
-import pss.common.terminals.connection.server.JTerminalPoolServer;
 import pss.core.JAplicacion;
 import pss.core.services.records.JRecords;
 import pss.core.tools.PssLogger;

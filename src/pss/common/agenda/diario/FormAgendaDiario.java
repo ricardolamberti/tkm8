@@ -5,7 +5,6 @@ import pss.common.agenda.evento.GuiEvento;
 import pss.common.security.BizUsuario;
 import pss.core.tools.collections.JIterator;
 import pss.core.win.JWin;
-import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.forms.JBaseForm;
 import pss.www.ui.JWebIcon;
 

@@ -1,10 +1,8 @@
 package pss.bsp.consolid.model.clientesView;
 
-import pss.bsp.dk.BizClienteDK;
 import pss.core.data.interfaces.connections.JBDatos;
 import pss.core.data.interfaces.sentences.JBaseRegistro;
 import pss.core.services.records.JRecords;
-import pss.tourism.dks.BizDk;
 
 public class BizClienteViews extends JRecords<BizClienteView> {
 ;

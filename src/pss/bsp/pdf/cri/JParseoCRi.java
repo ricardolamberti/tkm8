@@ -14,7 +14,6 @@ import com.ibm.icu.util.Calendar;
 
 import pss.bsp.parseo.IFinder;
 import pss.bsp.parseo.IParseo;
-import pss.bsp.pdf.arg.detalle.BizArgDetalle;
 import pss.bsp.pdf.cri.cabecera.BizCRiCabecera;
 import pss.bsp.pdf.cri.detalle.BizCRiDetalle;
 import pss.bsp.pdf.cri.impuesto.BizCRiImpuesto;

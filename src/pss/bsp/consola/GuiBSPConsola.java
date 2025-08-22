@@ -24,7 +24,6 @@ import pss.bsp.event.GuiBSPSqlEvents;
 import pss.common.customList.config.carpetas.GuiCarpetas;
 import pss.common.customList.config.customlist.GuiCustomLists;
 import pss.common.customList.config.relation.JRelations;
-import pss.common.event.action.history.GuiSqlEventHistories;
 import pss.common.layoutWysiwyg.GuiPlantillas;
 import pss.common.security.BizUsuario;
 import pss.core.services.records.JRecord;

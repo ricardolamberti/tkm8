@@ -1,7 +1,5 @@
 package pss.tourism.interfaceGDS.travelport.record;
 
-import java.util.StringTokenizer;
-
 import pss.core.tools.JTools;
 import pss.core.tools.PssLogger;
 import pss.core.tools.collections.JCollectionFactory;

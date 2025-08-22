@@ -3,7 +3,6 @@ package  pss.bsp.config.airportGroups.detalle;
 import pss.bsp.config.airportGroups.BizAirportGroup;
 import pss.common.customList.config.relation.JRelation;
 import pss.common.customList.config.relation.JRelations;
-import pss.common.security.BizUsuario;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;

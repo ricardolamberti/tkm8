@@ -1,13 +1,9 @@
 package pss.common.regions.entidad.nodos;
 
-import pss.common.regions.divitions.BizPaisLista;
 import pss.common.regions.nodes.BizNodo;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.services.records.JRecords;
-import pss.core.tools.JExcepcion;
-import pss.core.tools.collections.JMap;
 
 
 public class BizEntidadNodo extends JRecord {

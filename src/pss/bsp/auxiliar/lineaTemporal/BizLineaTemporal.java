@@ -2,13 +2,13 @@ package  pss.bsp.auxiliar.lineaTemporal;
 
 import java.util.Date;
 
-import pss.bsp.publicity.BizPublicity;
 import pss.common.customList.config.relation.JRelation;
 import pss.common.customList.config.relation.JRelations;
 import pss.common.event.mailing.BizMailingPersona;
 import pss.common.security.BizUsuario;
+import pss.core.services.fields.JDate;
+import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.services.fields.*;
 import pss.core.tools.JDateTools;
 import pss.tourism.pnr.BizPNRTicket;
 

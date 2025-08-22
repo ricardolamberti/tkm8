@@ -8,12 +8,8 @@ import pss.bsp.bspBusiness.BizBSPUser;
 import pss.bsp.consolid.model.liquidacion.acumulado.BizLiqAcum;
 import pss.bsp.consolid.model.liquidacion.header.BizLiqHeader;
 import pss.bsp.contrato.BizContrato;
-import pss.bsp.contrato.detalle.BizDetalle;
-import pss.bsp.contrato.detalle.nivel.JTipoPremioNivelSobreTotalPorFamilia;
 import pss.bsp.gds.BizInterfazNew;
 import pss.common.event.action.BizSqlEventAction;
-import pss.common.event.action.GuiSqlEventActions;
-import pss.common.event.action.history.BizSqlEventHistory;
 import pss.common.event.sql.BizSqlEvent;
 import pss.common.security.BizUsuario;
 import pss.core.data.interfaces.sentences.JBaseRegistro;
@@ -30,8 +26,6 @@ import pss.core.tools.collections.JIterator;
 import pss.tourism.interfaceGDS.log.BizInterfaceLog;
 import pss.tourism.pnr.BizPNRReserva;
 import pss.tourism.pnr.BizPNRTicket;
-import pss.www.platform.actions.JWebActionFactory;
-import pss.www.platform.actions.JWebWinFactory;
 
 public class BizFuenteDato extends JRecord {
 

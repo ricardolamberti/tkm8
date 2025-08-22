@@ -8,7 +8,6 @@ import java.util.Date;
 
 import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.bsp.consola.config.BizBSPConfig;
-import pss.bsp.gds.BizInterfazNew;
 import pss.common.regions.company.BizCompany;
 import pss.common.security.mail.BizUsrMailSender;
 import pss.core.JAplicacion;

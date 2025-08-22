@@ -1,6 +1,5 @@
 package pss.bsp.consolid.model.repoDK.detailContrato;
 
-import pss.core.services.fields.JBoolean;
 import pss.core.services.fields.JFloat;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;

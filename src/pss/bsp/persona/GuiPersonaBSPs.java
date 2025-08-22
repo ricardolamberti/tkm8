@@ -3,8 +3,6 @@ package pss.bsp.persona;
 import java.awt.event.KeyEvent;
 
 import pss.common.personalData.GuiPersonas;
-import pss.common.personalData.types.GuiPersonaFisica;
-import pss.common.personalData.types.GuiPersonaJuridica;
 import pss.core.win.JWin;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;

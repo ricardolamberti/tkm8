@@ -1,9 +1,7 @@
 package pss.bsp.consolid.model.clientes;
 
 import pss.bsp.dk.GuiClienteDKs;
-import pss.common.event.mailing.BizMailingPersona;
 import pss.common.event.mailing.GuiMailingPersona;
-import pss.common.event.mailing.GuiMailingPersonas;
 import pss.common.regions.company.BizCompany;
 import pss.common.security.BizUsuario;
 import pss.core.services.records.JRecord;

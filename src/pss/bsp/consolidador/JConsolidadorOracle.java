@@ -3,16 +3,8 @@ package pss.bsp.consolidador;
 import java.util.Date;
 import java.util.List;
 
-import pss.bsp.bo.BizInterfazBO;
-import pss.bsp.bo.GuiInterfazBO;
-import pss.bsp.bo.formato.BizFormato;
 import pss.bsp.bspBusiness.BizBSPUser;
-import pss.bsp.consolidador.consolidacion.detalle.BizConsolidacion;
 import pss.bsp.consolidador.consolidacionOracle.BizConsolidacionOracle;
-import pss.bsp.consolidador.diferencia.BizDiferencia;
-import pss.bsp.consolidador.iva.BizImpositivo;
-import pss.bsp.consolidador.over.BizOver;
-import pss.bsp.pdf.GuiPDF;
 import pss.bsp.ticketsOracle.GuiTicketOracle;
 import pss.core.data.interfaces.connections.JBDatos;
 import pss.core.services.records.JRecords;

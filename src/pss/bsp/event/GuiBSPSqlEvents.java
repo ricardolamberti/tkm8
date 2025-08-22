@@ -1,6 +1,5 @@
 package pss.bsp.event;
 
-import pss.common.event.sql.BizSqlEvent;
 import pss.common.event.sql.GuiSqlEvents;
 import pss.common.security.BizUsuario;
 import pss.core.services.records.JRecords;

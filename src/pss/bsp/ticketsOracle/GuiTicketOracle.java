@@ -1,10 +1,8 @@
 package  pss.bsp.ticketsOracle;
 
-import pss.bsp.consolid.model.trx.GuiArTrxDKs;
 import pss.bsp.consolid.model.trxOra.GuiTrxOras;
 import pss.bsp.consolidador.IConsolidador;
 import pss.bsp.consolidador.JConsolidadorOracle;
-import pss.bsp.consolidador.consolidacion.detalle.GuiConsolidaciones;
 import pss.bsp.consolidador.consolidacionOracle.GuiConsolidacionOracles;
 import pss.core.services.records.JRecord;
 import pss.core.tools.JDateTools;

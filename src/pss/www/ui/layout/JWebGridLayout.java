@@ -1,7 +1,6 @@
 package pss.www.ui.layout;
 
 import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 

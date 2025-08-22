@@ -1,16 +1,11 @@
 package  pss.bsp.consola.dashBoard;
 
-import pss.common.customList.config.customlist.GuiCustomList;
 import pss.common.customList.config.customlist.GuiCustomListResult;
-import pss.common.customList.config.dynamic.GuiDynamics;
 import pss.core.services.records.JRecord;
-import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
-import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActQuery;
-import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiDashBoard extends JWin {

@@ -2,7 +2,6 @@ package pss.common.restJason.apiRestBase;
 
 import java.util.Map;
 
-
 import javax.xml.bind.annotation.XmlRootElement;
 
 import pss.common.restJason.JServiceApiRequest;

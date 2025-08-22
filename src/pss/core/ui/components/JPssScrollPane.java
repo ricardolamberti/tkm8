@@ -2,7 +2,6 @@ package pss.core.ui.components;
 
 import java.awt.Adjustable;
 import java.awt.Component;
-import java.awt.Graphics;
 
 import javax.swing.ImageIcon;
 import javax.swing.JScrollBar;

@@ -2,8 +2,6 @@ package pss.www.platform.applications;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 
@@ -11,12 +9,10 @@ import pss.core.tools.JPair;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JList;
-import pss.core.tools.collections.JMap;
 import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.www.platform.actions.JWebActionFactory;
-import pss.www.platform.actions.JWebWinFactory;
 import pss.www.platform.actions.requestBundle.JWebActionData;
 
 public class JWebHistoryManager implements Serializable {

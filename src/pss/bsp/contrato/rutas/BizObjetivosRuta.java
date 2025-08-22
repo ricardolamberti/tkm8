@@ -1,22 +1,10 @@
 package pss.bsp.contrato.rutas;
 
-import java.util.Date;
-
-import pss.bsp.contrato.detalle.nivel.BizNivel;
-import pss.bsp.contrato.series.calculado.GuiSerieCalculadas;
-import pss.core.graph.Graph;
-import pss.core.graph.analize.Dataset;
-import pss.core.graph.implementations.GraphScriptSerieTemporal;
-import pss.core.graph.model.ModelGrid;
 import pss.core.services.fields.JBoolean;
 import pss.core.services.fields.JFloat;
-import pss.core.services.fields.JImage;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.services.records.JRecords;
-import pss.core.tools.collections.JIterator;
-import pss.core.winUI.lists.JWinList;
 
 public class BizObjetivosRuta extends JRecord {
 	public static final String PLANO = "0";

@@ -6,8 +6,6 @@
 
 package pss.www.ui.controller;
 
-import java.lang.ref.WeakReference;
-
 import pss.www.platform.actions.JWebActionFactory;
 import pss.www.platform.applications.JWebApplicationSession;
 

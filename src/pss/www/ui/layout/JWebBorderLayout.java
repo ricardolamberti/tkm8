@@ -7,13 +7,11 @@
 package pss.www.ui.layout;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Component;
 import java.awt.LayoutManager;
 import java.awt.Rectangle;
 
 import javax.swing.JPanel;
-
-import java.awt.Component;
 
 import pss.core.winUI.controls.JFormControl;
 import pss.www.ui.JWebViewComponent;

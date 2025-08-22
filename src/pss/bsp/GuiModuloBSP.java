@@ -1,6 +1,5 @@
 package pss.bsp;
 
-import pss.bsp.bspBusiness.BizBSPUser;
 import pss.bsp.bspBusiness.GuiBSPCompanies;
 import pss.bsp.consola.GuiBSPConsola;
 import pss.bsp.consola.config.GuiBSPConfig;

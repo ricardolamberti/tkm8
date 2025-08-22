@@ -1,8 +1,7 @@
 package  pss.common.event2.mail;
 
-import java.util.Date;
+import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.services.fields.*;
 
 public class BizMailSignature extends JRecord {
 

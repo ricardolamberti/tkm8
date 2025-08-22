@@ -3,7 +3,6 @@ package pss.bsp.contrato.detalle.nivel;
 import pss.common.security.BizUsuario;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
-import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormComboResponsive;
 import pss.core.winUI.responsiveControls.JFormControlResponsive;

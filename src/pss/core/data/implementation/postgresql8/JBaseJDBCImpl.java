@@ -6,7 +6,6 @@ import pss.common.security.BizUsuario;
 import pss.core.data.connectionPool.JDBConnectionPools;
 import pss.core.data.interfaces.connections.JBDato;
 import pss.core.data.interfaces.connections.JBaseJDBC;
-import pss.core.data.interfaces.connections.JConnectionBroken;
 import pss.core.data.interfaces.sentences.JBaseRegistro;
 import pss.core.tools.PssLogger;
 

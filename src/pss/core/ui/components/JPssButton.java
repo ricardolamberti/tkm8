@@ -23,7 +23,6 @@ import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JList;
 import pss.core.tools.collections.JMap;
 import pss.core.tools.collections.JOrderedMap;
-import pss.core.tools.collections.JStringTokenizer;
 
 public class JPssButton extends JButton implements Cloneable {
 

@@ -3,9 +3,6 @@ package pss.bsp.consolid.model.liquidacion.errors;
 import java.util.Date;
 
 import pss.bsp.consolid.model.liquidacion.header.BizLiqHeader;
-import pss.common.agenda.evento.BizEvento;
-import pss.common.agenda.evento.tipo.GuiTipoEventos;
-import pss.common.agenda.turno.GuiTurnos;
 import pss.common.regions.multilanguage.JLanguage;
 import pss.common.security.BizUsuario;
 import pss.core.services.JExec;
@@ -14,7 +11,6 @@ import pss.core.services.fields.JFloat;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.tools.JPair;
 import pss.core.tools.PssLogger;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;

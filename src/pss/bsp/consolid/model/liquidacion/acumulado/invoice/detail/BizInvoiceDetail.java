@@ -2,22 +2,11 @@ package pss.bsp.consolid.model.liquidacion.acumulado.invoice.detail;
 
 import java.util.Date;
 
-import pss.bsp.consolid.model.liquidacion.acumulado.BizLiqAcum;
-import pss.bsp.consolid.model.liquidacion.acumulado.invoice.pdf.GuiInvoicePdf;
-import pss.bsp.dk.BizClienteDK;
-import pss.bsp.organization.BizOrganization;
-import pss.common.regions.multilanguage.JLanguage;
-import pss.common.security.BizUsuario;
 import pss.core.services.fields.JDate;
 import pss.core.services.fields.JFloat;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.services.records.JRecords;
-import pss.core.tools.collections.JCollectionFactory;
-import pss.core.tools.collections.JIterator;
-import pss.core.tools.collections.JMap;
-import pss.core.win.JWins;
 
 public class BizInvoiceDetail extends JRecord {
 

@@ -1,8 +1,5 @@
 package  pss.bsp.familia;
 
-import pss.bsp.contrato.BizContrato;
-import pss.bsp.contrato.detalle.BizDetalle;
-import pss.bsp.contrato.logica.ILogicaContrato;
 import pss.bsp.familia.detalle.BizFamiliaDetail;
 import pss.common.customList.config.relation.JRelations;
 import pss.common.regions.company.BizCompany;
@@ -11,9 +8,6 @@ import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
-import pss.core.tools.JDateTools;
-import pss.core.tools.collections.JIterator;
-import pss.tourism.pnr.BizPNRSegmentoAereo;
 import pss.tourism.pnr.BizPNRTicket;
 
 public class BizFamilia extends JRecord {

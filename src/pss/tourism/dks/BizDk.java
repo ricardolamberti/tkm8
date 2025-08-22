@@ -1,21 +1,11 @@
 package pss.tourism.dks;
 
 
-import pss.bsp.config.airportGroups.detalle.BizAirportGroupDetail;
-import pss.common.components.JSetupParameters;
-import pss.common.customList.config.relation.JRelation;
-import pss.common.customList.config.relation.JRelations;
-import pss.common.regions.divitions.BizPaisLista;
 import pss.core.data.interfaces.sentences.JBaseRegistro;
 import pss.core.services.JExec;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.services.records.JRecords;
-import pss.core.tools.GeoPosition;
-import pss.core.tools.collections.JCollectionFactory;
-import pss.core.tools.collections.JMap;
-import pss.tourism.pnr.PNRCache;
 
 public class BizDk extends JRecord {
 

@@ -1,7 +1,6 @@
 package  pss.bsp.config.airportGroups;
 
 import pss.bsp.config.airportGroups.detalle.GuiAirportGroupDetails;
-import pss.bsp.config.carrierGroups.detalle.GuiCarrierGroupDetails;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.win.JBaseWin;

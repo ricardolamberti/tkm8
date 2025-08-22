@@ -3,15 +3,10 @@ package pss.bsp.contrato.quevender;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.jdesktop.swingx.mapviewer.GeoPosition;
-
 import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.bsp.contrato.detalle.BizDetalle;
 import pss.common.security.BizUsuario;
 import pss.core.graph.Graph;
-import pss.core.graph.analize.Dataset;
-import pss.core.graph.model.ModelGraph;
-import pss.core.graph.model.ModelGrid;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JObjBD;
 import pss.core.services.fields.JString;

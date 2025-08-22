@@ -1,11 +1,8 @@
 package pss.common.documentos.docElectronico;
 
-import pss.common.documentos.BizDocumento;
 import pss.common.documentos.biblioteca.BizBiblioteca;
 import pss.common.documentos.tipos.BizDocFisicoTipo;
-import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
-import pss.core.tools.JTools;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
 

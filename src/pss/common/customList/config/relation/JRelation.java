@@ -4,12 +4,10 @@ import java.io.Serializable;
 
 import pss.common.customList.config.customlist.BizCustomList;
 import pss.common.customList.config.field.campo.BizCampo;
-import pss.common.customList.config.field.funciones.BizFuncion;
 import pss.common.regions.multilanguage.JLanguage;
 import pss.core.data.interfaces.sentences.JRegSQL;
 import pss.core.services.fields.JObject;
 import pss.core.services.records.BizVirtual;
-import pss.core.services.records.JProperty;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JPair;

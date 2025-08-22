@@ -2,15 +2,12 @@ package pss.www.ui.views;
 
 import java.util.Date;
 
-import pss.JPath;
 import pss.common.regions.company.JCompanyBusiness;
 import pss.common.regions.company.JCompanyBusinessModules;
 import pss.common.regions.multilanguage.JLanguage;
-import pss.common.security.BizSegConfiguracion;
 import pss.common.security.BizUsuario;
 import pss.core.JAplicacion;
 import pss.core.data.BizPssConfig;
-import pss.core.services.fields.JPassword;
 import pss.core.services.fields.JString;
 import pss.core.tools.JDateTools;
 import pss.core.tools.JTools;
@@ -27,7 +24,6 @@ import pss.www.ui.JWebFieldsetResponsive;
 import pss.www.ui.JWebForm;
 import pss.www.ui.JWebHResponsive;
 import pss.www.ui.JWebImageResponsive;
-import pss.www.ui.JWebLabelResponsive;
 import pss.www.ui.JWebLink;
 import pss.www.ui.JWebView;
 import pss.www.ui.JWebViewPasswordResponsive;

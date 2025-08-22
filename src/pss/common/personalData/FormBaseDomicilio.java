@@ -5,7 +5,6 @@ import pss.common.personalData.newPerson.BizNewPerson;
 import pss.common.personalData.newPerson.GuiNewPerson;
 import pss.common.regions.cities.GuiCities;
 import pss.common.regions.divitions.BizCiudadCP;
-import pss.common.regions.divitions.BizPais;
 import pss.common.regions.divitions.GuiCiudadCPes;
 import pss.common.regions.divitions.GuiCiudades;
 import pss.common.regions.divitions.GuiPaises;
@@ -114,7 +113,7 @@ public abstract class FormBaseDomicilio extends JMMBaseForm {
 				return new GuiPaisesLista();
 			}
 		});*/
-		c=panel.AddItemCombo("País", CHAR, (hasReq?REQ:OPT), "pais", new JControlCombo() {
+		c=panel.AddItemCombo("Paï¿½s", CHAR, (hasReq?REQ:OPT), "pais", new JControlCombo() {
 			public JWins getRecords(boolean zOneRow) throws Exception {
 				return new GuiPaisesLista();
 			}
@@ -167,7 +166,7 @@ public abstract class FormBaseDomicilio extends JMMBaseForm {
 			}
 		});
 		c.setSizeColumns(4);
-		c=panel.AddItemCombo("País", CHAR, REQ, "pais", new JControlCombo() {
+		c=panel.AddItemCombo("Paï¿½s", CHAR, REQ, "pais", new JControlCombo() {
 			public JWins getRecords(boolean zOneRow) throws Exception {
 				return GuiPaises.getPaises();
 			}
@@ -202,7 +201,7 @@ public abstract class FormBaseDomicilio extends JMMBaseForm {
 //			}
 //		});
 //		c.setSizeColumns(4);
-		c=panel.AddItemEdit("País", CHAR, OPT, "pais");
+		c=panel.AddItemEdit("Paï¿½s", CHAR, OPT, "pais");
 		c.SetValorDefault(this.findPaisDefault());
 		c.setHide(true);
 		c=panel.AddItemDropDownCombo("Provincia", CHAR, OPT, "localidad_id", new JControlCombo() {
@@ -246,7 +245,7 @@ public abstract class FormBaseDomicilio extends JMMBaseForm {
 		this.InicializarPanelTelPerJuridica(false, false);
 	}
 	public void InicializarPanelTelPerJuridica(boolean req_com,boolean req_cel) throws Exception {
-		JFormPanelResponsive panel = this.getMainPanel().AddItemFieldset("Teléfono");
+		JFormPanelResponsive panel = this.getMainPanel().AddItemFieldset("Telï¿½fono");
 		panel.setLabelLeft(6);
 		panel.AddItemEdit("Comercial", CHAR, req_com?REQ:OPT, "tel_comercial", 3);
 		panel.AddItemEdit("Fax/Cel", CHAR, req_cel?REQ:OPT, "tel_fax", 3);
@@ -256,7 +255,7 @@ public abstract class FormBaseDomicilio extends JMMBaseForm {
 		this.InicializarPanelTelPerFisica(false, false, false);
 	}
 	public void InicializarPanelTelPerFisica(boolean req_com,boolean req_cel, boolean req_par) throws Exception {
-		JFormPanelResponsive panel = this.getMainPanel().AddItemFieldset("Teléfono");
+		JFormPanelResponsive panel = this.getMainPanel().AddItemFieldset("Telï¿½fono");
 		panel.setLabelLeft(6);
 		panel.AddItemEdit("Particular", CHAR, req_par?REQ:OPT, "tel_particular", 3);
 		panel.AddItemEdit("Comercial", CHAR, req_com?REQ:OPT, "tel_comercial", 3);
@@ -482,7 +481,7 @@ public abstract class FormBaseDomicilio extends JMMBaseForm {
 	public void makeDomicilioFlat() throws Exception {
 		JFormPanelResponsive all = this.getDatosFlat();
 		JFormPanelResponsive line=all.AddItemColumn().AddInLinePanel();
-		line.AddItemEdit("País", CHAR, REQ, "pais").hide();
+		line.AddItemEdit("Paï¿½s", CHAR, REQ, "pais").hide();
 //		line.addGap(48);
 //		col.AddItemColumn(1);
 //		col.AddItemColumn(1).addButton(20, null, 1);

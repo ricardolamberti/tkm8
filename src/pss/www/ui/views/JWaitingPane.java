@@ -2,7 +2,6 @@ package pss.www.ui.views;
 
 import pss.www.platform.content.generators.JXMLContent;
 import pss.www.ui.JWebLabel;
-import pss.www.ui.skins.JWebSkin;
 
 
 public class JWaitingPane extends JWebLabel {

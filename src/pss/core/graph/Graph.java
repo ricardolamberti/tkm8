@@ -2,7 +2,6 @@ package pss.core.graph;
 
 import java.io.Serializable;
 
-import pss.common.regions.company.JCompanyBusiness;
 import pss.common.security.BizUsuario;
 import pss.core.data.interfaces.sentences.JRegJDBC.RegQueryOptions;
 import pss.core.graph.analize.AnalizeDataGraph;

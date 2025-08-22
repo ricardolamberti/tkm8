@@ -1,15 +1,13 @@
 package pss.www.platform.actions;
 
 import java.io.Serializable;
-import java.lang.ref.SoftReference;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.TreeMap;
-import java.util.UUID;
-import java.util.Base64;
-import java.util.Arrays;
-import java.nio.charset.StandardCharsets;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -19,7 +17,6 @@ import pss.core.services.records.JBaseRecord;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JTools;
-import pss.core.tools.PssLogger;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JList;
@@ -28,16 +25,15 @@ import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActDrop;
 import pss.core.win.submits.JActFieldSwapWins;
 import pss.www.platform.actions.requestBundle.JWebActionData;
 import pss.www.platform.actions.requestBundle.JWebActionDataField;
 import pss.www.platform.applications.JHistory;
 import pss.www.platform.applications.JHistoryProvider;
+import pss.www.platform.applications.JWebApplicationSession;
 import pss.www.platform.applications.JWebHistoryManager;
 import pss.www.platform.cache.CacheProvider;
 import pss.www.platform.cache.DistCache;
-import pss.www.platform.applications.JWebApplicationSession;
 
 public class JWebWinFactory {
 

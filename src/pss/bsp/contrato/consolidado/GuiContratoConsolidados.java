@@ -1,14 +1,11 @@
 package pss.bsp.contrato.consolidado;
 
-import java.net.URLEncoder;
-
 import pss.JPath;
 import pss.bsp.GuiModuloBSP;
 import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.bsp.bspBusiness.BizBSPUser;
 import pss.bsp.contrato.BizContrato;
 import pss.common.customList.config.carpetas.IContenidoCarpeta;
-import pss.common.customList.config.customlist.GuiCustomList;
 import pss.common.event.action.GuiSqlEventAction;
 import pss.common.event.action.history.BizSqlEventHistory;
 import pss.common.event.action.history.GuiSqlEventHistory;
@@ -28,7 +25,6 @@ import pss.core.win.submits.JActNew;
 import pss.core.win.submits.JActQuery;
 import pss.core.win.submits.JActWins;
 import pss.core.winUI.controls.JFormControl;
-import pss.core.winUI.controls.JFormLabel;
 import pss.core.winUI.lists.JEjeMatrix;
 import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;

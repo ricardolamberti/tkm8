@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import pss.common.security.BizUsuario;
 import pss.core.data.implementation.sqlserver8.JBaseJDBCImpl;
 import pss.core.data.interfaces.connections.JPssConnection;
 import pss.core.tools.PssLogger;

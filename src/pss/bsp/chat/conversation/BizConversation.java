@@ -1,7 +1,5 @@
 package pss.bsp.chat.conversation;
 
-import javax.swing.JPanel;
-
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.tools.JTools;

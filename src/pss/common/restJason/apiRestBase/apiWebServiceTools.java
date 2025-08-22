@@ -11,14 +11,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Objects;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.jar.JarInputStream;
-import java.util.stream.IntStream;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -26,14 +21,12 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import pss.JPath;
 import pss.common.regions.multilanguage.JLanguage;
-import pss.common.restJason.JServiceApi;
 import pss.common.security.BizLoginTrace;
 import pss.common.security.BizUsuario;
 import pss.core.JAplicacion;
 import pss.core.tools.JDateTools;
 import pss.core.tools.JExcepcion;
 import pss.core.tools.collections.JCollectionFactory;
-import pss.core.tools.collections.JList;
 import pss.core.tools.collections.JMap;
 import pss.core.tools.collections.JOrderedMap;
 

@@ -1,12 +1,6 @@
 package pss.common.documentos;
 
-import org.apache.cocoon.transformation.AbstractSAXTransformer;
-
-import pss.common.documentos.docElectronico.GuiDocElectronico;
-import pss.common.documentos.docEmail.GuiDocEmail;
-import pss.common.documentos.docLocal.GuiDocLocal;
 import pss.common.documentos.hitos.GuiHitos;
-import pss.common.documentos.tipos.BizDocFisicoTipo;
 import pss.common.security.BizUsuario;
 import pss.core.services.records.JRecord;
 import pss.core.tools.JExcepcion;
@@ -29,7 +23,7 @@ public class GuiDocum extends JWin {
 
   public JRecord ObtenerDato()   throws Exception { return new BizDocum(); }
   public int GetNroIcono()   throws Exception { return 10020; }
-  public String GetTitle()   throws Exception { return "Documento Físico"; }
+  public String GetTitle()   throws Exception { return "Documento Fï¿½sico"; }
   public Class<? extends JBaseForm> getFormBase() throws Exception { return FormDocum.class; }
   public String  getKeyField() throws Exception { return "id_doc"; }
   public String  getDescripField() { return "titulo"; }

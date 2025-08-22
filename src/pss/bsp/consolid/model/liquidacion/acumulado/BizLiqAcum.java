@@ -6,7 +6,6 @@ import org.apache.commons.codec.net.URLCodec;
 
 import pss.JPath;
 import pss.bsp.bspBusiness.BizBSPUser;
-import pss.bsp.consolid.model.liquidacion.acumulado.invoice.pdf.GuiInvoicePdf;
 import pss.bsp.consolid.model.liquidacion.acumulado.report.GuiReporteResumen;
 import pss.bsp.consolid.model.liquidacion.header.BizLiqHeader;
 import pss.bsp.dk.BizClienteDK;
@@ -28,7 +27,6 @@ import pss.core.services.fields.JString;
 import pss.core.services.records.JFilterMap;
 import pss.core.services.records.JRecord;
 import pss.core.tools.JTools;
-import pss.tourism.dks.BizDk;
 
 public class BizLiqAcum extends JRecord {
 

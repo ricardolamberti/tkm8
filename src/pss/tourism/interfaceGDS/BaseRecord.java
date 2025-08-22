@@ -9,7 +9,6 @@ import pss.core.tools.JTools;
 import pss.core.tools.PssLogger;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
-import pss.tourism.interfaceGDS.sabre.record.M3Record;
 
 public class BaseRecord {
 

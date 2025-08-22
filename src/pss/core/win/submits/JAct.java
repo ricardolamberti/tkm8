@@ -2,7 +2,6 @@ package pss.core.win.submits;
 
 import java.awt.event.ActionEvent;
 import java.io.Serializable;
-import java.io.ObjectStreamClass;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;

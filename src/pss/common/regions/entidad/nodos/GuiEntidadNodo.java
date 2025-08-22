@@ -1,6 +1,5 @@
 package  pss.common.regions.entidad.nodos;
 
-import pss.common.security.BizUsuario;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
 import pss.core.winUI.forms.JBaseForm;

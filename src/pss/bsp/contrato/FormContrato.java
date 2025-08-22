@@ -1,29 +1,17 @@
 package  pss.bsp.contrato;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import javax.swing.JCheckBox;
-import javax.swing.JTabbedPane;
-
 import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.common.security.BizUsuario;
-import pss.core.ui.components.JPssCalendarEdit;
-import pss.core.ui.components.JPssEdit;
 import pss.core.ui.components.JPssImage;
-import pss.core.ui.components.JPssLabel;
-import pss.core.ui.components.JScrollableTextArea;
 import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
 import pss.core.winUI.controls.JFormLista;
-import pss.core.winUI.controls.JFormRow;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormColumnResponsive;
 import pss.core.winUI.responsiveControls.JFormFieldsetResponsive;
 import pss.core.winUI.responsiveControls.JFormImageCardResponsive;
 import pss.core.winUI.responsiveControls.JFormImageResponsive;
 import pss.core.winUI.responsiveControls.JFormPanelResponsive;
-import pss.core.winUI.responsiveControls.JFormRowGridResponsive;
 import pss.www.ui.JWebIcon;
 
 public class FormContrato extends JBaseForm {

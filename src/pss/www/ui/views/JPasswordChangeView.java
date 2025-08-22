@@ -6,9 +6,7 @@
 
 package pss.www.ui.views;
 
-import pss.common.regions.company.JCompanyBusiness;
 import pss.common.regions.multilanguage.JLanguage;
-import pss.common.security.BizLogTrace;
 import pss.common.security.BizLoginTrace;
 import pss.common.security.BizSegConfiguracion;
 import pss.common.security.BizUsuario;
@@ -29,7 +27,6 @@ import pss.www.ui.JWebFieldsetResponsive;
 import pss.www.ui.JWebForm;
 import pss.www.ui.JWebHResponsive;
 import pss.www.ui.JWebImageResponsive;
-import pss.www.ui.JWebLabelDataResponsive;
 import pss.www.ui.JWebLabelResponsive;
 import pss.www.ui.JWebLink;
 import pss.www.ui.JWebView;

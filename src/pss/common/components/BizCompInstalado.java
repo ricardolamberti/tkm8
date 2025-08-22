@@ -9,7 +9,6 @@ import pss.JPath;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.tools.JTools;
-import pss.core.tools.PssLogger;
 import pss.core.win.modules.GuiModulo;
 
 public class BizCompInstalado extends JRecord {

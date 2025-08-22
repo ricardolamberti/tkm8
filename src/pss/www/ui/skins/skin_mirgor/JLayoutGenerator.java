@@ -18,13 +18,11 @@ import pss.core.winUI.responsiveControls.JFormCheckResponsive;
 import pss.core.winUI.responsiveControls.JFormControlResponsive;
 import pss.core.winUI.responsiveControls.JFormWinLOVResponsive;
 import pss.www.platform.actions.JWebAction;
-import pss.www.platform.actions.JWebActionFactory;
 import pss.www.ui.JWebDivResponsive;
 import pss.www.ui.JWebEditComponentContainer;
 import pss.www.ui.JWebFilterPaneResponsive;
 import pss.www.ui.JWebHResponsive;
 import pss.www.ui.JWebIcon;
-import pss.www.ui.JWebLabelResponsive;
 import pss.www.ui.JWebLink;
 import pss.www.ui.JWebNavigationBarGroup;
 import pss.www.ui.JWebPanelResponsive;
@@ -35,11 +33,9 @@ import pss.www.ui.JWebViewComposite;
 import pss.www.ui.JWebViewDropDownButton;
 import pss.www.ui.JWebViewHistoryBar;
 import pss.www.ui.JWebViewInternalComposite;
-import pss.www.ui.JWebViewNavigationBar;
 import pss.www.ui.JWebViewZone;
 import pss.www.ui.JWebViewZoneRow;
 import pss.www.ui.JWebWinActionBar;
-import pss.www.ui.JWebWinActionBarSwapList;
 import pss.www.ui.JWebWinForm;
 import pss.www.ui.JWebWinGenericResponsive;
 import pss.www.ui.JWebWinSwapListResponsive;
@@ -521,7 +517,7 @@ public class JLayoutGenerator extends JBasicLayoutGenerator implements ILayoutGe
 		JWebViewZoneRow root = new JWebViewZoneRow();
 		root.setName(parent.getCompletePanelName());
 		root.setClassResponsive(parent.getClassResponsive());
-		parent.setClassResponsive(null);//ya use su tamaño original en la zone que lo incluye
+		parent.setClassResponsive(null);//ya use su tamaï¿½o original en la zone que lo incluye
 
 		if (parent.hasPreviewPanel()) {
 			panelWithPreview.setOrientation(JWebSplit.ORIENT_VERTICAL);

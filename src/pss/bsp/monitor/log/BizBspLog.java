@@ -3,13 +3,10 @@ package pss.bsp.monitor.log;
 import java.util.Calendar;
 import java.util.Date;
 
-import pss.bsp.consolid.model.liquidacion.detail.BizLiqDetail;
-import pss.bsp.consolid.model.liquidacion.errors.BizLiqError;
 import pss.common.regions.multilanguage.JLanguage;
 import pss.common.scheduler.SchedulerHealth;
 import pss.core.data.interfaces.connections.JBDatos;
 import pss.core.services.JExec;
-import pss.core.services.fields.JDate;
 import pss.core.services.fields.JDateTime;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;

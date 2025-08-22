@@ -8,7 +8,6 @@ import pss.bsp.contrato.BizContrato;
 import pss.bsp.contrato.conocidos.BizContratoConocido;
 import pss.bsp.contrato.detalle.BizDetalle;
 import pss.bsp.contrato.detalleObjetivo.BizDetalleObjetivo;
-import pss.bsp.contrato.detalleUpfrontRutas.BizDetalleUpfrontRuta;
 import pss.core.services.JExec;
 import pss.core.services.fields.JDate;
 import pss.core.services.fields.JLong;

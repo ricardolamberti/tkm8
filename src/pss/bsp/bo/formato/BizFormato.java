@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.util.StringTokenizer;
+
 import pss.bsp.bo.BizInterfazBO;
 import pss.bsp.consolidador.IConciliable;
 import pss.bsp.parseo.IFormato;
@@ -18,8 +20,6 @@ import pss.core.services.records.JRecords;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JMap;
-
-import com.ibm.icu.util.StringTokenizer;
 
 public class BizFormato extends JRecord implements IFormato {
 

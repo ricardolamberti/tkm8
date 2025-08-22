@@ -2,14 +2,9 @@ package pss.bsp.consola;
 
 import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.bsp.consola.config.BizBSPConfig;
-import pss.common.customList.config.carpetas.BizCarpeta;
-import pss.common.customList.config.customlist.BizCustomList;
 import pss.common.security.BizUsuario;
-import pss.core.services.JExec;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.services.records.JRecords;
-import pss.core.tools.collections.JIterator;
 
 public class BizBSPConsola extends JRecord {
 

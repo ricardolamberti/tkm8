@@ -1,6 +1,5 @@
 package pss.bsp.consolid.model.rfnd;
 
-import pss.bsp.consolid.model.cuf.detail.GuiCufDetails;
 import pss.bsp.consolid.model.rfnd.detail.GuiRfndDetails;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;

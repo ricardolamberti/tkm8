@@ -1,13 +1,8 @@
 package pss.bsp.parseo.bspParseo;
 
-import java.io.InputStream;
-import java.util.Date;
-import java.util.List;
-
 import pss.bsp.bo.formato.BizFormato;
 import pss.bsp.consolidador.IConciliable;
 import pss.bsp.excel.JParseoExcelVinc;
-import pss.bsp.parseo.IFinder;
 import pss.bsp.pdf.BizPDF;
 import pss.bsp.pdf.mex.cabecera.BizMexCabecera;
 import pss.bsp.pdf.mex.cabecera.GuiMexCabecera;
@@ -16,12 +11,10 @@ import pss.bsp.pdf.mex.detalle.GuiMexDetalles;
 import pss.bsp.pdf.mex.impuesto.BizMexImpuesto;
 import pss.bsp.pdf.mex.impuesto.GuiMexImpuestos;
 import pss.bsp.pdf.mex2.IFinderMex2;
-import pss.core.data.interfaces.sentences.JBaseRegistro;
 import pss.core.services.records.JRecords;
 import pss.core.tools.collections.JIterator;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
-import pss.tourism.pnr.BizPNRTicket;
 
 public class JParseoExcel extends JParseoExcelVinc implements IFinderMex2, IBspSititaParser {
 

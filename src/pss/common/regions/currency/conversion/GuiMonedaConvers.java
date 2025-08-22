@@ -6,7 +6,6 @@ import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActWins;
 import pss.core.winUI.lists.JWinList;
 //import pss.erp.Interfaces.afipCurrExchange.GuiAfipCurrencyExchanges;
 

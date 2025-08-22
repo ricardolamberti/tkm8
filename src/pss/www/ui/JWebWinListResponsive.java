@@ -17,7 +17,6 @@ import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.actions.BizActions;
 import pss.core.win.submits.JActWins;
-import pss.core.win.tools.orders.BizWinsColumn;
 import pss.core.win.totalizer.JTotalizer;
 import pss.core.winUI.controls.JFormLista;
 import pss.core.winUI.lists.JColumnaLista;
@@ -1173,7 +1172,7 @@ public String getClassResponsive() {
 			calculateTotalCount();
 			alerta = getWins().anyAlert(totalCountElement);
 			if (alerta != null)
-				setAlert(alerta); // warning referidos a los resultados, paso el tamaño para no volver a calcularlo
+				setAlert(alerta); // warning referidos a los resultados, paso el tamaï¿½o para no volver a calcularlo
 		}
 
 		void applyOrden() throws Exception {

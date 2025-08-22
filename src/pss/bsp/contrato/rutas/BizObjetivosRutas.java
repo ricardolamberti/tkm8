@@ -1,6 +1,5 @@
 package pss.bsp.contrato.rutas;
 
-import java.sql.Types;
 import java.util.Calendar;
 
 import pss.bsp.contrato.detalle.BizDetalle;

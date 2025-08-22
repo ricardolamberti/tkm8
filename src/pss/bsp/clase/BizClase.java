@@ -1,10 +1,6 @@
 package  pss.bsp.clase;
 
-import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.bsp.clase.detalle.BizClaseDetail;
-import pss.bsp.familia.BizFamilia;
-import pss.common.customList.config.customlist.BizCustomList;
-import pss.common.customList.config.field.campo.BizCampo;
 import pss.common.customList.config.relation.JRelations;
 import pss.common.regions.company.BizCompany;
 import pss.core.services.JExec;
@@ -12,11 +8,6 @@ import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
-import pss.core.tools.JDateTools;
-import pss.core.tools.JTools;
-import pss.core.tools.collections.JCollectionFactory;
-import pss.core.tools.collections.JMap;
-import pss.tourism.pnr.BizPNRSegmentoAereo;
 import pss.tourism.pnr.BizPNRTicket;
 
 public class BizClase extends JRecord {

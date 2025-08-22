@@ -3,7 +3,6 @@ package pss.common.regions.currency;
 import pss.common.components.JSetupParameters;
 import pss.common.regions.currency.history.BizMonedaCotizacion;
 import pss.common.regions.divitions.BizPais;
-import pss.core.services.fields.JFloat;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
@@ -100,9 +99,9 @@ public class BizMonedaPais extends JRecord {
 		addFixedItem(KEY, "company", "Empresa", true, true, 15);
 		addFixedItem(KEY, "moneda", "Moneda", true, true, 15);
 		addFixedItem(KEY, "pais", "Pais", true, true, 2);
-//		addFixedItem(VIRTUAL, "cotiz_venta", "Cotización Venta", true, true, 11, 4);
-//		addFixedItem(VIRTUAL, "cotiz_compra", "Cotización Compra", true, true, 11, 4);
-//		addFixedItem(VIRTUAL, "cotiz_contab", "Cotización Contable", true, true, 11, 4);
+//		addFixedItem(VIRTUAL, "cotiz_venta", "Cotizaciï¿½n Venta", true, true, 11, 4);
+//		addFixedItem(VIRTUAL, "cotiz_compra", "Cotizaciï¿½n Compra", true, true, 11, 4);
+//		addFixedItem(VIRTUAL, "cotiz_contab", "Cotizaciï¿½n Contable", true, true, 11, 4);
 		addFixedItem(VIRTUAL, "descr_moneda", "Moneda", true, true, 18);
 //		addFixedItem(VIRTUAL, "descr_moneda_ctz", "Moneda", true, true, 18);
 		addFixedItem(VIRTUAL, "descr_pais", "Pais", true, true, 18, 4);
@@ -150,13 +149,13 @@ public class BizMonedaPais extends JRecord {
 	@Override
 	public void processDelete() throws Exception {
 		if (JRecords.existsComplete("pss.erp.cashDrawer.BizCajaValor", "company", pCompany.getValue(), "country", pPais.getValue(), "moneda", pMoneda.getValue())) 
-			JExcepcion.SendError("No se puede eliminar una relación Moneda-País que está asociado a un Tipo de Valor en el módulo de Cajas");
+			JExcepcion.SendError("No se puede eliminar una relaciï¿½n Moneda-Paï¿½s que estï¿½ asociado a un Tipo de Valor en el mï¿½dulo de Cajas");
 		if (JRecords.existsComplete("pss.erp.MedioPago.BizFormaPago", "company", pCompany.getValue(), "pais", pPais.getValue(), "sistema_pago", "MONEDA", "vinc1", pMoneda.getValue())) 
-			JExcepcion.SendError("No se puede eliminar una relación Moneda-País que participa en la configuracion de una forma de pago");
+			JExcepcion.SendError("No se puede eliminar una relaciï¿½n Moneda-Paï¿½s que participa en la configuracion de una forma de pago");
 		if (JRecords.existsComplete("pss.erp.MedioPago.BizFormaPago", "company", pCompany.getValue(), "pais", pPais.getValue(), "sistema_pago", "TARJETA", "vinc2", pMoneda.getValue())) 
-			JExcepcion.SendError("No se puede eliminar una relación Moneda-País que participa en la configuracion de una forma de pago");
+			JExcepcion.SendError("No se puede eliminar una relaciï¿½n Moneda-Paï¿½s que participa en la configuracion de una forma de pago");
 		if (JRecords.existsComplete("pss.erp.MedioPago.BizFormaPago", "company", pCompany.getValue(), "pais", pPais.getValue(), "sistema_pago", "CHEQUE", "vinc1", pMoneda.getValue())) 
-			JExcepcion.SendError("No se puede eliminar una relación Moneda-País que participa en la configuracion de una forma de pago");
+			JExcepcion.SendError("No se puede eliminar una relaciï¿½n Moneda-Paï¿½s que participa en la configuracion de una forma de pago");
 		JRecords<BizMonedaCotizacion> oMonedaCotizaciones=new JRecords<BizMonedaCotizacion>(BizMonedaCotizacion.class);
 		oMonedaCotizaciones.addFilter("company", this.pCompany.getValue());
 		oMonedaCotizaciones.addFilter("moneda", this.pMoneda.getValue());
@@ -191,7 +190,7 @@ public class BizMonedaPais extends JRecord {
 //	public BizMonedaCotizacion getCotizacionVigente() throws Exception {
 //		if (this.cotiz!=null) return this.cotiz;
 //		BizMonedaCotizacion record=BizMonedaCotizacion.readCotizacionCorriente(pCompany.getValue(), pPais.getValue(), pMoneda.getValue());
-//		if (record==null) JExcepcion.SendError("No exite cotización");
+//		if (record==null) JExcepcion.SendError("No exite cotizaciï¿½n");
 //		return (this.cotiz=record);
 //	}
 

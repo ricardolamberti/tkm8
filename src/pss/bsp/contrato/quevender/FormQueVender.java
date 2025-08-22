@@ -1,9 +1,7 @@
 package pss.bsp.contrato.quevender;
 
 import pss.core.win.JWin;
-import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.forms.JBaseForm;
-import pss.core.winUI.responsiveControls.JFormTabPanelResponsive;
 
 public class FormQueVender extends JBaseForm {
 

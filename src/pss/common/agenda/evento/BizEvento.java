@@ -18,7 +18,6 @@ import pss.core.services.fields.JBoolean;
 import pss.core.services.fields.JDateTime;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JObjBDs;
-import pss.core.services.fields.JScript;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
@@ -423,7 +422,7 @@ public class BizEvento extends JRecord {
 		h.setUsuario(BizUsuario.getUsr().GetUsuario());
 		h.setEstado(getEstado());
 		h.setCompany(getCompany());
-		h.setTexto("Se creó evento ["+getTitulo()+ "] en estado ["+getEstado()+"]" );
+		h.setTexto("Se creï¿½ evento ["+getTitulo()+ "] en estado ["+getEstado()+"]" );
 		h.processInsert();
 
 		if (getHasAlarma()) JAgenda.getAlarmaServer().clearCache(BizUsuario.getUsr().getCompany(),getUsuarioAlarma());
@@ -453,7 +452,7 @@ public class BizEvento extends JRecord {
 			h.setUsuario(BizUsuario.getUsr().GetUsuario());
 			h.setCompany(getCompany());
 			h.setEstado(getEstado());
-			h.setTexto("Se marcó como elimiando" );
+			h.setTexto("Se marcï¿½ como elimiando" );
 			h.processInsert();
 			if (getHasAlarma()) JAgenda.getAlarmaServer().clearCache(BizUsuario.getUsr().getCompany(),getUsuarioAlarma());
   }
@@ -492,7 +491,7 @@ public class BizEvento extends JRecord {
   	JRecord oBD = getPreInstance();
 		String oldEstado = oBD.getProp("estado").toString();
 		String fecha = oBD.getProp("fecha_inicio").toString();
-		String texto = "Se modificó ";
+		String texto = "Se modificï¿½ ";
 		if (!oldEstado.equals(getEstado())) {
 			texto+="estado ["+oldEstado+"] a ["+getEstado()+"] ";
 		}

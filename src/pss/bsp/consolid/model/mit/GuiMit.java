@@ -10,8 +10,6 @@ import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActSubmit;
 import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
-import pss.tourism.pnr.BizPNRTicket;
-import pss.tourism.pnr.GuiPNRTicket;
 
 public class GuiMit extends JWin {
 

@@ -2,9 +2,7 @@ package pss.common.documentos.hitos;
 
 import java.util.Date;
 
-import pss.common.customList.config.relation.JRelations;
 import pss.common.security.BizUsuario;
-import pss.core.services.fields.JBoolean;
 import pss.core.services.fields.JDateTime;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
@@ -109,7 +107,7 @@ public class BizHito extends JRecord {
   public static JMap<String,String> getTipoHitos() {
 	 	if (tipoHitos!=null) return tipoHitos;
 	 	JMap<String,String> m = JCollectionFactory.createMap();
-	 	m.addElement(CREAR,"Creación documento");
+	 	m.addElement(CREAR,"Creaciï¿½n documento");
 	 	m.addElement(ELIMINAR,"Eliminar documento");
 	 	m.addElement(ESCANEAR,"Escanear documento");
 	 	m.addElement(MODIFICAR,"Modificar documento");

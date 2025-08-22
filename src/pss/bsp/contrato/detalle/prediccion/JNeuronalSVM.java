@@ -16,11 +16,9 @@ import org.encog.util.arrayutil.TemporalWindowArray;
 import pss.bsp.contrato.detalle.BizDetalle;
 import pss.bsp.contrato.detalle.variaciones.BizVariacionPaticular;
 import pss.bsp.contrato.series.calculado.BizSerieCalculada;
-import pss.bsp.contrato.series.variaciones.BizVariacion;
 import pss.common.event.sql.datos.BizSqlEventDato;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JDateTools;
-import pss.core.tools.PssLogger;
 import pss.core.tools.collections.JIterator;
 
 public class JNeuronalSVM  implements IPrediccion {

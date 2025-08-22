@@ -1,7 +1,6 @@
 package  pss.common.agenda.evento.logicas;
 
 import pss.common.agenda.evento.BizEvento;
-import pss.core.win.JWin;
 import pss.core.win.submits.JAct;
 
 public interface IEventoLogica {

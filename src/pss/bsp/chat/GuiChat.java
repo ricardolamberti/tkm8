@@ -1,10 +1,6 @@
 package pss.bsp.chat;
 
 import pss.bsp.chat.conversation.GuiConversations;
-import pss.bsp.contrato.quevender.BizQueVender;
-import pss.bsp.contrato.quevender.FormQueVender;
-import pss.bsp.contrato.quevender.ms.GuiMSs;
-import pss.bsp.contrato.rutas.GuiObjetivosRutas;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
 import pss.core.win.JWins;

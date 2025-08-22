@@ -1,7 +1,5 @@
 package pss.bsp.contrato.quevender;
 
-import pss.bsp.contrato.detalleCopa.objetivos.BizObjetivosCopa;
-import pss.bsp.contrato.detalleCopa.objetivos.GuiObjetivosCopas;
 import pss.bsp.contrato.quevender.ms.GuiMSs;
 import pss.bsp.contrato.rutas.GuiObjetivosRutas;
 import pss.core.services.records.JRecord;

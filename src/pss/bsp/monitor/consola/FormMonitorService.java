@@ -1,13 +1,11 @@
 package pss.bsp.monitor.consola;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
+import pss.core.ui.components.JPssImage;
+import pss.core.win.JWin;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormColumnResponsive;
 import pss.core.winUI.responsiveControls.JFormImageResponsive;
 import pss.core.winUI.responsiveControls.JFormPanelResponsive;
-import pss.core.ui.components.*;
-import pss.core.win.JWin;
 
 public class FormMonitorService extends JBaseForm {
 

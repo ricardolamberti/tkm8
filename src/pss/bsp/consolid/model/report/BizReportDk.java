@@ -19,15 +19,12 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import pss.bsp.consolid.model.liquidacion.detail.BizLiqDetail;
 import pss.bsp.consolid.model.report.detail.BizReportDetailDk;
-import pss.bsp.consolid.model.report.detail.GuiReportDetailDks;
 import pss.bsp.dk.BizClienteDK;
 import pss.bsp.dk.GuiClienteDKs;
-import pss.common.event.mailing.type.GuiMailingPersonaTypes;
 import pss.common.security.BizUsuario;
 import pss.core.services.JExec;
 import pss.core.services.fields.JDate;
 import pss.core.services.fields.JLong;
-import pss.core.services.fields.JMultiple;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
@@ -35,7 +32,6 @@ import pss.core.tools.JDateTools;
 import pss.core.tools.JPair;
 import pss.core.tools.biblioteca.BizOldBiblioteca;
 import pss.core.tools.collections.JIterator;
-import pss.tourism.dks.BizDk;
 
 public class BizReportDk extends JRecord {
 

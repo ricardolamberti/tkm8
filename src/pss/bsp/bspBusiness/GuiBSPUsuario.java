@@ -5,7 +5,6 @@ import pss.common.security.GuiUsuario;
 import pss.core.services.records.JRecord;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActUpdate;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiBSPUsuario extends GuiUsuario {

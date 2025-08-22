@@ -3,8 +3,6 @@ package  pss.bsp.config.carrierGroups.detalle;
 import pss.bsp.config.carrierGroups.BizCarrierGroup;
 import pss.common.customList.config.relation.JRelation;
 import pss.common.customList.config.relation.JRelations;
-import pss.common.regions.divitions.BizPaisLista;
-import pss.common.security.BizUsuario;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;

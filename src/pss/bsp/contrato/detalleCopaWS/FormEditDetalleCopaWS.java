@@ -1,17 +1,9 @@
 package pss.bsp.contrato.detalleCopaWS;
 
-import java.awt.Rectangle;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JTable;
-import javax.swing.JTextField;
-
 import pss.bsp.contrato.detalle.nivel.GuiNiveles;
 import pss.bsp.event.GuiBSPSqlEvents;
 import pss.common.event.sql.GuiSqlEvents;
 import pss.common.security.BizUsuario;
-import pss.core.ui.components.JPssEdit;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.controls.JControlCombo;

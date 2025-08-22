@@ -9,7 +9,6 @@ import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActQuery;
-import pss.core.win.submits.JActSubmit;
 import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
 

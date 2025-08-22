@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.ws.rs.Path;
 import javax.ws.rs.core.Response;
 
 import pss.common.restJason.JServiceApiProcess;

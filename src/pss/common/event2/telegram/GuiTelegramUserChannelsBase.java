@@ -1,19 +1,13 @@
 package pss.common.event2.telegram;
 
+import pss.common.regions.company.GuiCompanies;
 import pss.core.win.JWin;
-import pss.core.winUI.lists.JWinList;
-import pss.core.winUI.lists.JColumnaLista;
-import pss.core.winUI.lists.JFormFiltro;
-import java.util.Date;
-import pss.core.tools.JDateTools;
-import pss.core.winUI.responsiveControls.JFormIntervalCDatetimeResponsive;
 import pss.core.win.JWins;
-import pss.core.winUI.responsiveControls.JFormComboResponsive;
 import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.controls.JFormControl;
-import pss.common.security.BizUsuario;
-import pss.common.regions.company.GuiCompanies;
-import pss.core.win.JWins;
+import pss.core.winUI.lists.JColumnaLista;
+import pss.core.winUI.lists.JFormFiltro;
+import pss.core.winUI.lists.JWinList;
 
 public class GuiTelegramUserChannelsBase extends JWins {
 

@@ -1,17 +1,7 @@
 package pss.tourism.dks;
 
-import pss.common.regions.divitions.GuiPaises;
-import pss.common.regions.divitions.GuiPaisesLista;
-import pss.core.ui.components.JPssEdit;
-import pss.core.ui.components.JPssGoogleMap;
-import pss.core.ui.components.JPssLabel;
-import pss.core.ui.components.JPssLabelFormLov;
-import pss.core.win.JControlWin;
 import pss.core.win.JWin;
-import pss.core.win.JWins;
 import pss.core.winUI.forms.JBaseForm;
-import java.awt.Rectangle;
-import java.awt.Dimension;
 
 public class FormDk extends JBaseForm {
 

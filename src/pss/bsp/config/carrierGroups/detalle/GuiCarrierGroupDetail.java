@@ -2,7 +2,6 @@ package  pss.bsp.config.carrierGroups.detalle;
 
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
-import pss.core.winUI.forms.JBaseForm;
 
 public class GuiCarrierGroupDetail extends JWin {
 

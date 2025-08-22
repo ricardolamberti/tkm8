@@ -1,6 +1,5 @@
 package pss.bsp.contrato.logica;
 
-import pss.bsp.contrato.BizContrato;
 import pss.bsp.contrato.detalle.BizDetalle;
 import pss.bsp.contrato.detalle.GuiDetalle;
 

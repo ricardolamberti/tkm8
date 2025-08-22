@@ -1,10 +1,6 @@
 package pss.core.graph.implementations;
 
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-
-import javax.imageio.ImageIO;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;

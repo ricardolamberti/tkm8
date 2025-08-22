@@ -1,15 +1,5 @@
 package pss.core.ui.components;
 
-import java.awt.Component;
-
-import javax.swing.JComponent;
-import javax.swing.JTextArea;
-import javax.swing.JViewport;
-import javax.swing.RootPaneContainer;
-
-import pss.core.win.JWins;
-import pss.core.winUI.lists.JFormFiltro;
-
 public class JPssComponentFactory {
 
 //  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////

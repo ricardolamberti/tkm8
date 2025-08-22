@@ -1,12 +1,7 @@
 package pss.bsp.contrato.evaluate.detail;
 
-import pss.bsp.contrato.detalle.BizDetalle;
-import pss.bsp.contrato.detalle.GuiDetalle;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
-import pss.core.win.actions.BizAction;
-import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActUpdate;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiEvaluateDetail extends JWin {

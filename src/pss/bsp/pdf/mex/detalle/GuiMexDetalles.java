@@ -1,7 +1,5 @@
 package pss.bsp.pdf.mex.detalle;
 
-import com.f1j.util.o;
-
 import pss.bsp.pdf.mex.cabecera.GuiMexCabecera;
 import pss.core.services.fields.JObject;
 import pss.core.tools.JTools;

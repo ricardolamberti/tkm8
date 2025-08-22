@@ -1,7 +1,10 @@
 package pss.www.platform.cache;
 
-import com.github.benmanes.caffeine.cache.*;
 import java.util.concurrent.TimeUnit;
+
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.Weigher;
 
 public final class PackCaches {
   private PackCaches() {}

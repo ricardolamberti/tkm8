@@ -1,12 +1,10 @@
 package  pss.common.agenda.participantes;
 
 import pss.common.agenda.evento.BizEvento;
-import pss.common.agenda.evento.tipo.GuiTipoEventos;
 import pss.common.agenda.historia.BizEventoHistoria;
 import pss.common.agenda.rol.BizEventoRol;
 import pss.common.agenda.rol.GuiEventoRoles;
 import pss.common.personalData.BizPersona;
-import pss.common.personalData.GuiPersonas;
 import pss.common.security.BizUsuario;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
@@ -166,9 +164,9 @@ public class BizEventoParticipante extends JRecord {
   	JMap<String,String> maps = JCollectionFactory.createMap();
   	maps.addElement(NO_INVITADO, "Invitacion pendiente");
   	maps.addElement(INVITADO, "Invitado");
-  	maps.addElement(CONFIRMADO, "Confirmó presencia");
-  	maps.addElement(CANCELAR, "Canceló");
-  	maps.addElement(NO_ASISTIRA, "No asistirá");
+  	maps.addElement(CONFIRMADO, "Confirmï¿½ presencia");
+  	maps.addElement(CANCELAR, "Cancelï¿½");
+  	maps.addElement(NO_ASISTIRA, "No asistirï¿½");
   	return estados=maps;
   }
   

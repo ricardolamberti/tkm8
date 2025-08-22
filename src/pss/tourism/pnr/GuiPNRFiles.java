@@ -1,13 +1,10 @@
 package pss.tourism.pnr;
 
 import java.io.File;
-import java.io.FilenameFilter;
-import java.util.Date;
 
 import pss.JPath;
 import pss.common.security.BizUsuario;
 import pss.core.services.records.JRecords;
-import pss.core.tools.PssLogger;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.lists.JWinList;

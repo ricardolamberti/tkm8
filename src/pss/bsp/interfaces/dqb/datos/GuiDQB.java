@@ -1,8 +1,5 @@
 package  pss.bsp.interfaces.dqb.datos;
 
-import pss.bsp.consolidador.IConsolidador;
-import pss.bsp.consolidador.JConsolidador;
-import pss.bsp.consolidador.consolidacion.detalle.GuiConsolidaciones;
 import pss.bsp.parseo.JParseoFactory;
 import pss.bsp.parseo.bspParseo.IInterfazParseo;
 import pss.core.services.records.JRecord;

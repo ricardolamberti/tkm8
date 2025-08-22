@@ -1,8 +1,6 @@
 package pss.tourism.interfaceGDS.galileo.record;
 
-import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
-import pss.tourism.interfaceGDS.amadeus.record.IRecord.EMD;
 
 public class RecordA30 extends GalileoRecord {
 

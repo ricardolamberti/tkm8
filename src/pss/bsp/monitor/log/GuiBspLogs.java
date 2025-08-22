@@ -1,16 +1,12 @@
 package  pss.bsp.monitor.log;
 
-import pss.bsp.consolid.model.liquidacion.errors.BizLiqError;
 import pss.common.regions.company.GuiCompanies;
-import pss.common.regions.multilanguage.JLanguage;
-import pss.core.tools.collections.JCollectionFactory;
-import pss.core.tools.collections.JMap;
 import pss.core.win.GuiVirtuals;
 import pss.core.win.JWin;
+import pss.core.win.JWins;
 import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;
-import pss.core.win.JWins;
 
 public class GuiBspLogs extends JWins {
 

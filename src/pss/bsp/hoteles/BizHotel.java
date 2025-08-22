@@ -3,7 +3,6 @@ package  pss.bsp.hoteles;
 import pss.bsp.hoteles.detalle.BizHotelDetail;
 import pss.common.customList.config.relation.JRelations;
 import pss.core.services.JExec;
-import pss.core.services.fields.JBoolean;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;

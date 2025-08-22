@@ -8,7 +8,6 @@ import pss.common.documentos.biblioteca.BizBiblioteca;
 import pss.common.regions.entidad.BizEntidad;
 import pss.common.restJason.JClientApiProcess;
 import pss.common.security.BizUsuario;
-import pss.core.data.interfaces.sentences.JBaseRegistro;
 import pss.core.services.JExec;
 import pss.core.services.fields.JDateTime;
 import pss.core.services.fields.JHtml;
@@ -141,15 +140,15 @@ public class BizApiRequestHistory extends JRecord  {
 		addFixedItem( FIELD, "url", "URL", true, true, 400);
 		addFixedItem( FIELD, "id_request", "Request", true, false, 18);
 		addFixedItem( FIELD, "id_response", "Response", true, false, 18);
-		addFixedItem( FIELD, "method", "Método", true, true, 1000);
-		addFixedItem( FIELD, "oper", "Operación", true, false, 1);
+		addFixedItem( FIELD, "method", "Mï¿½todo", true, true, 1000);
+		addFixedItem( FIELD, "oper", "Operaciï¿½n", true, false, 1);
 		addFixedItem( FIELD, "key", "Key", true, false, 30);
 		addFixedItem( FIELD, "type", "Tipo", true, false, 10);
 		addFixedItem( FIELD, "entidad", "Entidad", true, false, 18);
 		addFixedItem( FIELD, "status", "Status", true, false, 50);
 		addFixedItem( FIELD, "status_msg", "Status Msg", true, false, 4000);
 		addFixedItem( FIELD, "address_source", "Address", true, false, 50);
-		addFixedItem( FIELD, "creation_date", "Fecha Creación", true, true, 18);
+		addFixedItem( FIELD, "creation_date", "Fecha Creaciï¿½n", true, true, 18);
 		addFixedItem( VIRTUAL, "request_html", "request html", true, false, 10000);
 		addFixedItem( VIRTUAL, "response_html", "response html", true, false, 10000);
 	}

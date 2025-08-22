@@ -7,7 +7,6 @@ import java.util.Date;
 
 import pss.core.tools.JDateTools;
 import pss.core.tools.JTools;
-import pss.tourism.interfaceGDS.sabre.record.M3Record;
 
 /**
  * @author sgalli

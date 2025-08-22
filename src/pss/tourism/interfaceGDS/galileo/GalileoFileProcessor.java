@@ -2,7 +2,6 @@ package pss.tourism.interfaceGDS.galileo;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.util.Date;
 
 import pss.tourism.interfaceGDS.BaseTransaction;
 import pss.tourism.interfaceGDS.FileProcessor;

@@ -1,7 +1,5 @@
 package pss.bsp.contrato.detalle.nivel;
 
-import pss.core.tools.collections.JIterator;
-
 public interface ITipoNivel {
 	public double calcule(BizNivel nivel) throws Exception; 
 	public double calculeForPremio(BizNivel nivel,double value) throws Exception;

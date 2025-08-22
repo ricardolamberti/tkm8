@@ -1,23 +1,6 @@
 package pss.bsp.contrato.wizardBackend;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import javax.swing.JLabel;
-
-import pss.bsp.bspBusiness.BizBSPCompany;
-import pss.bsp.bspBusiness.BizBSPUser;
-import pss.bsp.contrato.detalle.BizDetalle;
-import pss.common.event.sql.BizSqlEvent;
-import pss.common.layoutWysiwyg.BizPlantilla;
-import pss.core.ui.components.JPssButton;
-import pss.core.ui.components.JPssEdit;
-import pss.core.ui.components.JPssHtmlTextArea;
-import pss.core.ui.components.JPssImage;
-import pss.core.ui.components.JPssLabel;
 import pss.core.win.JWin;
-import pss.core.win.JWins;
-import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.forms.JBaseForm;
 
 public class FormWizardFinContrato  extends JBaseForm {

@@ -10,7 +10,6 @@ import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.tools.JDateTools;
-import pss.core.tools.JTools;
 
 public class BizArTrxDKSeg extends JRecord implements IConciliable {
 

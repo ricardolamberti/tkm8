@@ -1,12 +1,9 @@
 package pss.common.training.level3;
 
-import pss.common.customList.config.relation.GuiCamposGallery;
 import pss.common.training.level3.sub.GuiSubLevel3;
 import pss.common.training.level3.sub.GuiSubLevels3;
 import pss.core.services.records.JRecord;
 import pss.core.tools.JToolsDB;
-import pss.core.win.GuiVirtuals;
-import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;

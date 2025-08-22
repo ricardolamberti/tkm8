@@ -2,7 +2,6 @@ package  pss.common.agenda.historia;
 
 import java.util.Date;
 
-import pss.core.services.fields.JDate;
 import pss.core.services.fields.JDateTime;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;

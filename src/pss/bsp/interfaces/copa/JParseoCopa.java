@@ -1,30 +1,21 @@
 package pss.bsp.interfaces.copa;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import pss.bsp.parseo.IFinder;
-import pss.bsp.parseo.IParseo;
-import pss.common.security.BizUsuario;
-import pss.bsp.bo.arg.detalle.BizArgDetalle;
+import com.ibm.icu.util.StringTokenizer;
+
 import pss.bsp.bspBusiness.BizBSPUser;
 import pss.bsp.interfaces.copa.cabecera.BizCopaCabecera;
 import pss.bsp.interfaces.copa.detalle.BizCopaDetalle;
+import pss.bsp.parseo.IFinder;
+import pss.bsp.parseo.IParseo;
 import pss.core.tools.ExcelTextParser;
 import pss.core.tools.JDateTools;
 import pss.core.tools.JTools;
-import pss.core.tools.PDFTextParser;
 import pss.core.tools.PssLogger;
-
-import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.StringTokenizer;
 
 public class JParseoCopa implements IParseo {
 

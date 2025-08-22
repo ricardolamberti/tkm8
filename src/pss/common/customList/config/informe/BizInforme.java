@@ -4,7 +4,6 @@ package pss.common.customList.config.informe;
 import java.awt.Rectangle;
 
 import pss.common.customList.config.customlist.BizCustomList;
-import pss.common.regions.company.BizCompany;
 import pss.core.services.JExec;
 import pss.core.services.fields.JFloat;
 import pss.core.services.fields.JLong;

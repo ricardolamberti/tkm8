@@ -1,37 +1,14 @@
 package pss.bsp.consola.datos.cadenas;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import pss.bsp.contrato.GuiContrato;
-import pss.bsp.contrato.detalle.BizDetalle;
-import pss.bsp.contrato.detalle.FormDetalle;
-import pss.bsp.contrato.detalle.GuiDetalle;
-import pss.bsp.contrato.logica.ILogicaContrato;
-import pss.common.customList.config.carpetas.IContenidoCarpeta;
-import pss.common.customList.config.dataBiz.GuiDataBizs;
 import pss.common.security.BizUsuario;
 import pss.core.services.records.JRecord;
-import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
-import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActQuery;
-import pss.core.win.submits.JActSubmit;
-import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
-import pss.tourism.pnr.BizPNRTicket;
 import pss.tourism.pnr.FormPNRTicket;
-import pss.tourism.pnr.GuiBookings;
-import pss.tourism.pnr.GuiPNRConnectedTickets;
-import pss.tourism.pnr.GuiPNRFares;
-import pss.tourism.pnr.GuiPNRFiles;
-import pss.tourism.pnr.GuiPNRSegmentoAereos;
-import pss.tourism.pnr.GuiPNRTaxs;
 import pss.tourism.pnr.GuiPNRTicket;
-import pss.tourism.pnr.GuiPNRTickets;
-import pss.tourism.pnr.PNRCache;
 
 public class GuiCadena  extends JWin {
 

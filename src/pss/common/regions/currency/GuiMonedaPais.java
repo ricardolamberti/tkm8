@@ -1,17 +1,11 @@
 package pss.common.regions.currency;
 
-import pss.common.regions.currency.conversion.GuiMonedaConvers;
-import pss.common.regions.currency.history.GuiMonedaCotizacion;
-import pss.common.regions.currency.history.GuiMonedaCotizaciones;
 import pss.common.regions.divitions.GuiPais;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
-import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActNew;
 import pss.core.win.submits.JActQuery;
-import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiMonedaPais extends JWin {
@@ -34,7 +28,7 @@ public class GuiMonedaPais extends JWin {
   	return this.GetcDato().ObtenerMoneda().getNroIcono(); 
   }
   @Override
-	public String  GetTitle()    throws Exception  { return "Moneda País"; }
+	public String  GetTitle()    throws Exception  { return "Moneda Paï¿½s"; }
   @Override
 	public Class<? extends JBaseForm>   getFormBase() throws Exception  { return FormMonedaPais.class; }
   @Override
@@ -55,9 +49,9 @@ public class GuiMonedaPais extends JWin {
     this.addActionQuery ( 1, "Consultar" );
     this.addActionDelete( 3, "Eliminar"  );
     this.addAction(20, "Moneda", null, 5041, true, true );
-//    this.addAction(8, "País", null, 1, true, true );
+//    this.addAction(8, "Paï¿½s", null, 1, true, true );
 //    this.addAction( 10, "Cotizaciones" , null, 5041, false, false, true, "Detail");
-//    this.addAction( 15, "Cambio de Cotización" , null , 708 , true, true);
+//    this.addAction( 15, "Cambio de Cotizaciï¿½n" , null , 708 , true, true);
 
   }
   

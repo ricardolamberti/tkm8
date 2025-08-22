@@ -2,10 +2,6 @@ package pss.common.restJason.apiRestBase;
 
 import java.io.Serializable;
 
-import javax.ws.rs.core.Response;
-
-import pss.core.tools.JExcepcion;
-
 
 public class apiStatus implements Serializable {
 	/**

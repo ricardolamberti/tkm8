@@ -24,7 +24,6 @@ import pss.core.services.JExec;
 import pss.core.services.records.JRecord;
 import pss.core.tools.JExcepcion;
 import pss.core.tools.PssLogger;
-import pss.core.win.JWin;
 
 public class JServiceApiProcess {
 
@@ -172,7 +171,7 @@ public class JServiceApiProcess {
 	
 	public void checkCompany(apiBasicRequest request) throws Exception {
 		// Si la transaccion recibe el filtro company, la company debe coincidir con el token
-		// para que un token válido no consulte sobre otra company.
+		// para que un token vï¿½lido no consulte sobre otra company.
 		String sCompany = request.getFilters().get("company");
 		if (sCompany==null) {
 			sCompany = this.getCompany();
@@ -205,7 +204,7 @@ public class JServiceApiProcess {
 		Class anotationType = javax.ws.rs.Path.class;
 		Annotation[] anotta = classElement.getAnnotationsByType(anotationType);
 		if (anotta.length<=0) 
-			JExcepcion.SendError( "No existe elemento raíz en el Path de la clase servidora de API-Json" );
+			JExcepcion.SendError( "No existe elemento raï¿½z en el Path de la clase servidora de API-Json" );
 		
 		String service = ((javax.ws.rs.Path)anotta[0]).value();
 		String sclass = classElement.getCanonicalName();

@@ -1,16 +1,15 @@
 package pss.common.event2.telegram;
 
-import pss.core.winUI.forms.JBaseForm;
+import pss.common.regions.company.GuiCompanies;
 import pss.core.win.JWin;
-import pss.core.winUI.responsiveControls.JFormEditResponsive;
-import pss.core.winUI.responsiveControls.JFormCheckResponsive;
-import pss.core.winUI.responsiveControls.JFormCDatetimeResponsive;
 import pss.core.win.JWins;
-import pss.core.winUI.responsiveControls.JFormComboResponsive;
 import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.controls.JFormControl;
-import pss.common.security.BizUsuario;
-import pss.common.regions.company.GuiCompanies;
+import pss.core.winUI.forms.JBaseForm;
+import pss.core.winUI.responsiveControls.JFormCDatetimeResponsive;
+import pss.core.winUI.responsiveControls.JFormCheckResponsive;
+import pss.core.winUI.responsiveControls.JFormComboResponsive;
+import pss.core.winUI.responsiveControls.JFormEditResponsive;
 public class FormTelegramUserChannelBase extends JBaseForm {
 
 

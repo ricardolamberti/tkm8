@@ -1,15 +1,10 @@
 package pss.bsp.reembolsos;
 
-import java.util.Date;
-
-import pss.bsp.contrato.detalle.BizDetalle;
-import pss.bsp.contrato.detalle.nivel.JTipoPremioAmericanAirlines;
-import pss.bsp.contrato.detalle.nivel.JTipoPremioPorcentajeDelTotal;
-import pss.bsp.contrato.detalle.nivel.JTipoPremioPorcentajePorNivel;
+import pss.core.services.fields.JDate;
+import pss.core.services.fields.JFloat;
+import pss.core.services.fields.JLong;
+import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.services.fields.*;
-import pss.core.tools.collections.JCollectionFactory;
-import pss.core.tools.collections.JMap;
 import pss.tourism.pnr.BizPNRTicket;
 
 public class BizReembolso extends JRecord {

@@ -1,11 +1,12 @@
-package pss.report;
+package pss.common.report;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import org.xhtmlrenderer.pdf.ITextRenderer;
+
 import com.lowagie.text.DocumentException;
 import com.lowagie.text.pdf.BaseFont;
-import org.xhtmlrenderer.pdf.ITextRenderer;
 
 /**
  * Renders HTML or generates PDF output from an {@link HtmlPayload}.

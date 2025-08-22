@@ -1,6 +1,5 @@
 package pss.bsp.contrato.detalleAvianca.objetivos;
 
-import pss.bsp.contrato.detalleAvianca.BizDetalleAvianca;
 import pss.bsp.contrato.detalleAvianca.GuiDetalleAvianca;
 import pss.core.services.records.JRecords;
 import pss.core.tools.collections.JCollectionFactory;

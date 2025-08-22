@@ -1,6 +1,5 @@
 package  pss.common.layoutWysiwyg;
 
-import pss.common.layout.GuiLayouts;
 import pss.common.security.BizUsuario;
 import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;

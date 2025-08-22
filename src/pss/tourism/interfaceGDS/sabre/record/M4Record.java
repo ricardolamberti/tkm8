@@ -1,7 +1,5 @@
 package pss.tourism.interfaceGDS.sabre.record;
 
-import com.ibm.icu.util.StringTokenizer;
-
 import pss.core.tools.collections.JMap;
 
 public class M4Record extends SabreRecord {

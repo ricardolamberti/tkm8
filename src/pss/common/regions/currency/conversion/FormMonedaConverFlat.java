@@ -1,13 +1,8 @@
 package pss.common.regions.currency.conversion;
 
 import pss.common.regions.currency.BizMoneda;
-import pss.common.regions.currency.GuiMonedaPaises;
-import pss.core.services.fields.JCurrency;
 import pss.core.win.JWin;
-import pss.core.win.JWins;
-import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.forms.JBaseForm;
-import pss.core.winUI.responsiveControls.JFormControlResponsive;
 import pss.core.winUI.responsiveControls.JFormPanelResponsive;
 
 

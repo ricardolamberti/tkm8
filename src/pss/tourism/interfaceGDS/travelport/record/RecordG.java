@@ -1,7 +1,5 @@
 package pss.tourism.interfaceGDS.travelport.record;
 
-import com.f1j.chart.ta;
-
 import pss.core.tools.JTools;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;

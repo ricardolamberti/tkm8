@@ -1,11 +1,9 @@
 package pss.tourism.pnr;
 
-import pss.common.customList.config.dataBiz.GuiDataBizs;
 import pss.common.security.BizUsuario;
 import pss.core.services.records.JRecord;
 import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
-import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActQuery;

@@ -1,7 +1,6 @@
 package pss.common.customList.config.informe;
 
 import pss.common.customList.config.customlist.BizCustomList;
-import pss.common.customList.config.field.campo.BizCampo;
 import pss.core.data.interfaces.sentences.JBaseRegistro;
 import pss.core.services.records.JRecords;
 

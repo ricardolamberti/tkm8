@@ -1,6 +1,5 @@
 package pss.bsp.persona;
 
-import pss.common.personalData.types.FormPersona;
 import pss.common.personalData.types.FormPersonaFisica;
 
 public class FormPersonaFisicaBSP extends FormPersonaFisica {

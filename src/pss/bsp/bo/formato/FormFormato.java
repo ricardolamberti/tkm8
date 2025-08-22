@@ -1,14 +1,5 @@
 package  pss.bsp.bo.formato;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JTabbedPane;
-
-import pss.core.ui.components.JPssEdit;
-import pss.core.ui.components.JPssLabel;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.forms.JBaseForm;

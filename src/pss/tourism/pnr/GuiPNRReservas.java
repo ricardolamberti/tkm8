@@ -18,7 +18,6 @@ import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActSubmit;
-import pss.core.win.totalizer.JTotalizer;
 import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.lists.JFormFiltro;

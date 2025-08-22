@@ -1,7 +1,5 @@
 package pss.bsp.contrato.detalle.nivel;
 
-import pss.core.tools.JTools;
-
 public abstract class JTipoNivel implements ITipoNivel {
 
 	@Override

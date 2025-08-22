@@ -1,18 +1,12 @@
 package pss.core.data.implementation.hibernate;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Date;
 
 import com.ibm.icu.util.Calendar;
 
 import pss.common.security.BizUsuario;
-import pss.core.data.interfaces.connections.JBaseJDBC;
 import pss.core.data.interfaces.sentences.JRegHibernate;
-import pss.core.data.interfaces.sentences.JRegJDBC.QueryMode;
 import pss.core.data.interfaces.sentences.JRegJDBC.RegQueryOptions;
-import pss.core.data.interfaces.sentences.QueryResult;
 import pss.core.services.fields.JObject;
 import pss.core.tools.JDateTools;
 import pss.core.tools.JTools;

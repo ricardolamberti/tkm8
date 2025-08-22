@@ -1,7 +1,5 @@
 package  pss.bsp.market;
 
-import java.awt.Rectangle;
-
 import javax.swing.JTabbedPane;
 
 import pss.common.security.BizUsuario;

@@ -1,6 +1,5 @@
 package pss.bsp.interfaces.dqb.detalle;
 
-import pss.bsp.consolid.model.liquidacion.errors.BizLiqError;
 import pss.common.regions.multilanguage.JLanguage;
 import pss.core.services.fields.JObject;
 import pss.core.tools.JTools;
@@ -12,7 +11,6 @@ import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;
-import pss.tourism.carrier.GuiCarriers;
 
 public class GuiDQBDetalles extends JWins {
 

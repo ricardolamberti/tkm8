@@ -7,7 +7,6 @@ import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
 import pss.core.tools.collections.JStringTokenizer;
 import pss.tourism.interfaceGDS.Tools;
-import pss.tourism.interfaceGDS.sabre.record.M3Record;
 
 public class HRecord extends AmadeusRecord {
 

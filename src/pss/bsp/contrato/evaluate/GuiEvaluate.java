@@ -1,7 +1,5 @@
 package pss.bsp.contrato.evaluate;
 
-import pss.bsp.contrato.detalle.BizDetalle;
-import pss.bsp.contrato.detalle.GuiDetalle;
 import pss.bsp.contrato.evaluate.detail.BizEvaluateDetail;
 import pss.bsp.contrato.evaluate.detail.GuiEvaluateDetails;
 import pss.core.services.records.JRecord;

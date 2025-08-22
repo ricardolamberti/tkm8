@@ -1,7 +1,5 @@
 package pss.core.graph.implementations;
 
-import java.util.Vector;
-
 import pss.core.graph.analize.Categories;
 import pss.core.graph.analize.Dataset;
 import pss.core.graph.analize.Value;

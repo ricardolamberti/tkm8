@@ -1,12 +1,6 @@
 package pss.tourism.interfaceGDS.galileo.record;
 
-import java.util.Date;
-
-import pss.core.tools.JDateTools;
-import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
-import pss.core.tools.collections.JStringTokenizer;
-import pss.tourism.interfaceGDS.Tools;
 
 public class RecordHeader extends GalileoRecord {
 	

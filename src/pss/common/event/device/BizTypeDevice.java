@@ -1,17 +1,11 @@
 package pss.common.event.device;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-
 import pss.common.event.manager.BizEvent;
 import pss.common.security.BizUsuario;
 import pss.common.security.GuiUsuarios;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.tools.JPair;
-import pss.core.tools.PssLogger;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
 import pss.core.win.JWins;

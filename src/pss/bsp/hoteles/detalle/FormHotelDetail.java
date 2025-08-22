@@ -1,16 +1,7 @@
 package  pss.bsp.hoteles.detalle;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import pss.core.ui.components.JPssEdit;
-import pss.core.ui.components.JPssLabel;
-import pss.core.ui.components.JPssLabelWinLov;
-import pss.core.win.JControlWin;
 import pss.core.win.JWin;
-import pss.core.win.JWins;
 import pss.core.winUI.forms.JBaseForm;
-import pss.tourism.carrier.GuiCarriers;
 
 public class FormHotelDetail extends JBaseForm {
 

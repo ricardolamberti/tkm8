@@ -1,11 +1,7 @@
 package pss.common.customList.config.carpetas;
 
-import java.awt.Dimension;
-
-import pss.core.ui.components.JPssEdit;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
-import pss.core.winUI.controls.JFormLista;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormImageCardResponsive;
 import pss.core.winUI.responsiveControls.JFormPanelResponsive;

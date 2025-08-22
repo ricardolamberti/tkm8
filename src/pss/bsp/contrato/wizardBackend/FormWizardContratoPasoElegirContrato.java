@@ -1,9 +1,7 @@
 package pss.bsp.contrato.wizardBackend;
 
-import pss.bsp.contrato.BizContrato;
 import pss.bsp.contrato.GuiContratos;
 import pss.bsp.contrato.conocidos.BizContratoConocido;
-import pss.core.tools.collections.JIterator;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.controls.JControlCombo;

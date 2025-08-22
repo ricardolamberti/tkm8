@@ -8,7 +8,6 @@ import pss.common.security.BizUsuario;
 import pss.core.win.actions.BizAction;
 import pss.core.win.modules.GuiModulo;
 import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActNew;
 import pss.core.win.submits.JActQuery;
 import pss.core.win.submits.JActQueryActive;
 import pss.core.win.submits.JActWins;
@@ -17,21 +16,21 @@ public class GuiModuloCommon extends GuiModulo {
 
 	public GuiModuloCommon() throws Exception {
 		super();
-		SetModuleName("Configuración");
+		SetModuleName("Configuraciï¿½n");
 		SetNroIcono(10035);
 		GetcDato().pOrden.setValue(10);
 	}
 
 	@Override
 	public BizAction createDynamicAction() throws Exception {
-		return this.addAction(1, "Configuración", null, 10035, true, true, true, "Group");
+		return this.addAction(1, "Configuraciï¿½n", null, 10035, true, true, true, "Group");
 	}
 
 	@Override
 	public void createActionMap() throws Exception {
 		addAction(12, "Paises", null, 1, true, false, true, "Group");
 		addAction(10, "Empresas", null, 1102, true, false, true, "Group");
-		addAction(20, "Configuración Módulos", null, 1, true, false, true, "Group");
+		addAction(20, "Configuraciï¿½n Mï¿½dulos", null, 1, true, false, true, "Group");
 		addAction(30, "Remote desktop", null, 1102, true, false, true, "Group");
 		this.loadDynamicActions(null);
 	}

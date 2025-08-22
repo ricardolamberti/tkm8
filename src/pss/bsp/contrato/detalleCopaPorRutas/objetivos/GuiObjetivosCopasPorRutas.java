@@ -1,6 +1,5 @@
 package pss.bsp.contrato.detalleCopaPorRutas.objetivos;
 
-import pss.bsp.contrato.detalle.GuiDetalle;
 import pss.bsp.contrato.detalleRutas.objetivos.BizObjetivosRuta;
 import pss.core.services.records.JRecords;
 import pss.core.tools.collections.JCollectionFactory;
@@ -8,11 +7,8 @@ import pss.core.tools.collections.JOrderedMap;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.win.totalizer.JTotalizer;
-import pss.core.winUI.controls.JFormControl;
-import pss.core.winUI.controls.JFormSwingEdit;
 import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;
-import pss.core.winUI.responsiveControls.JFormIntervalCDatetimeResponsive;
 
 public class GuiObjetivosCopasPorRutas extends JWins {
 

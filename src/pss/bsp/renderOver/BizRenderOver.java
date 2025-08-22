@@ -1,7 +1,5 @@
 package  pss.bsp.renderOver;
 
-import java.util.Date;
-
 import pss.bsp.contrato.detalle.BizDetalle;
 import pss.core.services.fields.JDate;
 import pss.core.services.fields.JLong;

@@ -19,7 +19,6 @@ import pss.common.event.mailing.BizMailingPersona;
 import pss.common.event.mailing.GuiMailingPersonas;
 import pss.common.event.mailing.type.GuiMailingPersonaTypes;
 import pss.common.layoutWysiwyg.GuiPlantillas;
-import pss.common.regions.company.BizCompany;
 import pss.common.security.BizUsuario;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;

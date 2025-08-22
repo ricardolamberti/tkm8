@@ -19,7 +19,6 @@ import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.tools.collections.JCollectionFactory;
-import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JMap;
 import pss.core.win.JWin;
 import pss.core.win.JWins;

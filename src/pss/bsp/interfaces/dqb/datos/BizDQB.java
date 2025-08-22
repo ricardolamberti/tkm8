@@ -11,7 +11,6 @@ import pss.bsp.interfaces.dqb.detalle.BizDQBDetalle;
 import pss.bsp.pais.BizPais;
 import pss.bsp.parseo.IParseo;
 import pss.bsp.parseo.JParseoFactory;
-import pss.bsp.parseo.bspParseo.IBspParseo;
 import pss.bsp.parseo.bspParseo.IInterfazParseo;
 import pss.common.security.BizUsuario;
 import pss.core.data.files.JStreamGZip;

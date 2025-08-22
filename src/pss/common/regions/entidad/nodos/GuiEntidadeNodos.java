@@ -1,11 +1,7 @@
 package  pss.common.regions.entidad.nodos;
 
-import pss.common.regions.divitions.GuiPaisesLista;
-import pss.common.security.BizUsuario;
-import pss.core.win.JControlWin;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
-import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;
 
 public class GuiEntidadeNodos extends JWins {

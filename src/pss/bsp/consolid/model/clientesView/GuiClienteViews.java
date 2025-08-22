@@ -1,8 +1,6 @@
 package pss.bsp.consolid.model.clientesView;
 
 import pss.bsp.consolid.model.clientes.GuiClientes;
-import pss.bsp.contrato.rutas.ms.BizMS;
-import pss.bsp.contrato.rutas.ms.BizMSs;
 import pss.core.services.records.JRecords;
 import pss.core.win.JWin;
 import pss.core.win.JWins;

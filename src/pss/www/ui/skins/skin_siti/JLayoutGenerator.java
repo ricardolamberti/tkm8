@@ -8,7 +8,6 @@ package pss.www.ui.skins.skin_siti;
 
 import java.awt.Insets;
 
-import pss.JPath;
 import pss.common.security.BizUsuario;
 import pss.core.tools.JTools;
 import pss.core.tools.collections.JIterator;
@@ -21,7 +20,6 @@ import pss.core.winUI.icons.GuiIconos;
 import pss.core.winUI.lists.JWinList;
 import pss.core.winUI.responsiveControls.JFormCheckResponsive;
 import pss.core.winUI.responsiveControls.JFormControlResponsive;
-import pss.core.winUI.responsiveControls.JFormPanelResponsive;
 import pss.core.winUI.responsiveControls.JFormWinLOVResponsive;
 import pss.www.platform.actions.JWebAction;
 import pss.www.ui.JWebDivResponsive;

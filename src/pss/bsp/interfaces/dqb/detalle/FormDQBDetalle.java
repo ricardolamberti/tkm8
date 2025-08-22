@@ -1,23 +1,7 @@
 package  pss.bsp.interfaces.dqb.detalle;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import javax.swing.BorderFactory;
-import javax.swing.JTabbedPane;
-
-import pss.core.ui.components.JPssEdit;
-import pss.core.ui.components.JPssLabel;
 import pss.core.win.JWin;
 import pss.core.winUI.forms.JBaseForm;
-import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
-
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.GridBagLayout;
-import java.awt.Point;
-import java.awt.GridBagConstraints;
 
 public class FormDQBDetalle extends JBaseForm {
 

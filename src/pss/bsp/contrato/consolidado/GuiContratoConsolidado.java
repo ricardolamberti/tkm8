@@ -1,14 +1,12 @@
 package pss.bsp.contrato.consolidado;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import pss.bsp.contrato.GuiContrato;
 import pss.bsp.contrato.detalle.BizDetalle;
 import pss.bsp.contrato.detalle.FormDetalle;
 import pss.bsp.contrato.detalle.GuiDetalle;
 import pss.bsp.contrato.logica.ILogicaContrato;
-import pss.common.customList.config.carpetas.IContenidoCarpeta;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
 import pss.core.win.actions.BizAction;

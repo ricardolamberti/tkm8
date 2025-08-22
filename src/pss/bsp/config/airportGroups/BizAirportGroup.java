@@ -1,14 +1,8 @@
 package  pss.bsp.config.airportGroups;
 
-import pss.bsp.bspBusiness.BizBSPCompany;
-import pss.bsp.clase.BizClase;
-import pss.bsp.clase.detalle.BizClaseDetail;
 import pss.bsp.config.airportGroups.detalle.BizAirportGroupDetail;
-import pss.bsp.config.carrierGroups.BizCarrierGroup;
-import pss.bsp.config.carrierGroups.detalle.BizCarrierGroupDetail;
 import pss.common.customList.config.relation.JRelation;
 import pss.common.customList.config.relation.JRelations;
-import pss.common.security.BizUsuario;
 import pss.core.services.JExec;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JObjBDs;
@@ -17,7 +11,6 @@ import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.collections.JIterator;
 import pss.tourism.airports.BizAirport;
-import pss.tourism.carrier.BizCarrier;
 
 public class BizAirportGroup extends JRecord {
 

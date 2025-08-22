@@ -1,8 +1,6 @@
 package pss.common.tableGenerator;
 
 import pss.common.dbManagement.synchro.base.JBaseSystemDBTable;
-import pss.common.dbManagement.synchro.xml.JXmlSystemDBTable;
-import pss.core.data.files.JStreamFile;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
 import pss.core.win.actions.BizAction;
@@ -32,7 +30,7 @@ public class GuiTable extends JWin {
 	public GuiTable() throws Exception {}
 	
 	public void createActionMap() throws Exception {
-		addAction(10, "Generación Automática", null, 121, true, true);
+		addAction(10, "Generaciï¿½n Automï¿½tica", null, 121, true, true);
 	}
 	
 	@Override

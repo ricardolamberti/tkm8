@@ -1,13 +1,8 @@
 package pss.bsp.bspBusiness;
 
-import java.awt.Rectangle;
-
-import javax.swing.JComboBox;
-
 import pss.common.regions.company.GuiCompanies;
 import pss.common.regions.divitions.GuiPaisesLista;
 import pss.common.security.license.typeLicense.GuiTypeLicenses;
-import pss.core.ui.components.JPssEdit;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.controls.JControlCombo;

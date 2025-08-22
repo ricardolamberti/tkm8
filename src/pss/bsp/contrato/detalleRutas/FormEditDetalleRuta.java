@@ -5,10 +5,10 @@ import pss.common.security.BizUsuario;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.controls.JControlCombo;
+import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormCheckResponsive;
 import pss.core.winUI.responsiveControls.JFormComboResponsive;
 import pss.core.winUI.responsiveControls.JFormTableResponsive;
-import pss.core.winUI.forms.JBaseForm;
 import pss.tourism.carrier.GuiCarriers;
 
 public class FormEditDetalleRuta extends JBaseForm {

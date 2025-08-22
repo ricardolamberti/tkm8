@@ -1,15 +1,7 @@
 package  pss.bsp.consolid.model.liquidacion.acumulado.invoice.detail;
 
-import pss.bsp.consolid.model.liquidacion.acumulado.BizLiqAcum;
-import pss.bsp.dk.BizClienteDK;
-import pss.core.services.records.JRecords;
-import pss.core.tools.collections.JIterator;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
-import pss.core.win.actions.BizAction;
-import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActNew;
-import pss.core.win.submits.JActReport;
 import pss.core.winUI.lists.JWinList;
 
 public class GuiInvoiceDetails extends JWins {

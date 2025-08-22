@@ -3,12 +3,8 @@ package pss.bsp.consola;
 import java.awt.Dimension;
 
 import pss.bsp.bspBusiness.BizBSPCompany;
-import pss.bsp.contrato.BizContrato;
-import pss.bsp.contrato.detalle.BizDetalle;
 import pss.common.customList.config.carpetas.GuiCarpeta;
 import pss.common.security.BizUsuario;
-import pss.core.services.records.JRecords;
-import pss.core.tools.collections.JIterator;
 import pss.core.ui.components.JPssEdit;
 import pss.core.ui.components.JPssLabel;
 import pss.core.win.JWin;

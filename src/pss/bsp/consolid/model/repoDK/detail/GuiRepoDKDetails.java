@@ -2,7 +2,6 @@ package pss.bsp.consolid.model.repoDK.detail;
 
 import pss.bsp.consolid.model.repoDK.BizRepoDK;
 import pss.core.services.fields.JFloat;
-import pss.core.services.fields.JObject;
 import pss.core.services.records.JProperty;
 import pss.core.services.records.JRecord;
 import pss.core.tools.collections.JIterator;

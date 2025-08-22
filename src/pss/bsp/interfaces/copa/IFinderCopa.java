@@ -1,8 +1,8 @@
 package  pss.bsp.interfaces.copa;
 
-import pss.bsp.parseo.IFinder;
 import pss.bsp.interfaces.copa.cabecera.BizCopaCabecera;
 import pss.bsp.interfaces.copa.detalle.BizCopaDetalle;
+import pss.bsp.parseo.IFinder;
 
 
 public interface IFinderCopa extends IFinder {

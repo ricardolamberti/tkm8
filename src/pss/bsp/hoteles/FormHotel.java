@@ -1,13 +1,8 @@
 package  pss.bsp.hoteles;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
 import pss.common.security.BizUsuario;
-import pss.core.winUI.forms.JBaseForm;
-import pss.core.ui.components.*;
 import pss.core.win.JWin;
-import javax.swing.JTabbedPane;
+import pss.core.winUI.forms.JBaseForm;
 
 public class FormHotel extends JBaseForm {
 

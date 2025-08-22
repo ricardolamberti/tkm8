@@ -22,7 +22,6 @@ import pss.core.tools.collections.JList;
 import pss.www.platform.actions.JWebAction;
 import pss.www.platform.actions.JWebActionFactory;
 import pss.www.platform.actions.JWebRequest;
-import pss.www.platform.actions.JWebWinFactory;
 import pss.www.platform.content.generators.JXMLContent;
 import pss.www.ui.processing.JXMLRepresentable;
 

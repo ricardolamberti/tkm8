@@ -2,7 +2,6 @@ package pss.core.data.interfaces.sentences;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,7 +11,6 @@ import pss.core.JAplicacion;
 import pss.core.data.BizPssConfig;
 import pss.core.data.files.JStreamFile;
 import pss.core.data.interfaces.connections.JBaseJDBC;
-import pss.core.data.interfaces.sentences.QueryGuard.Decision;
 import pss.core.tools.JDateTools;
 import pss.core.tools.JExcepcion;
 import pss.core.tools.PssLogger;

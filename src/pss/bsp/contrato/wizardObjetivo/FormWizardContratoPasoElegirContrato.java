@@ -1,15 +1,12 @@
 package pss.bsp.contrato.wizardObjetivo;
 
-import pss.bsp.contrato.BizContrato;
 import pss.bsp.contrato.GuiContratos;
 import pss.bsp.contrato.conocidos.BizContratoConocido;
-import pss.core.tools.collections.JIterator;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormFieldsetResponsive;
-import pss.tourism.carrier.GuiCarriers;
 
 public class FormWizardContratoPasoElegirContrato extends JBaseForm {
 

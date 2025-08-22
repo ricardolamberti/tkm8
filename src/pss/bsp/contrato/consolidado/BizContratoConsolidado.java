@@ -2,8 +2,6 @@ package pss.bsp.contrato.consolidado;
 
 import java.util.Date;
 
-import com.ibm.icu.math.BigDecimal;
-
 import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.bsp.contrato.BizContrato;
 import pss.bsp.contrato.detalle.BizDetalle;
@@ -19,7 +17,6 @@ import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JTools;
-import pss.core.win.JWin;
 
 public class BizContratoConsolidado extends JRecord {
 

@@ -1,17 +1,9 @@
 package  pss.common.customList.config.field.stadistic;
 
-import pss.common.customList.config.customlist.GuiCustomList;
-import pss.common.customList.config.relation.BizCampoGallery;
-import pss.common.customList.config.relation.GuiCampoGallery;
 import pss.core.services.records.JRecord;
-import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
-import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActNew;
-import pss.core.win.submits.JActSubmit;
-import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiSatdistic extends JWin {

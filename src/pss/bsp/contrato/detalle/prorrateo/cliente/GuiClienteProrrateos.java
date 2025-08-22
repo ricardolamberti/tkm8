@@ -4,8 +4,6 @@ import java.util.Date;
 
 import org.apache.commons.codec.net.URLCodec;
 
-import pss.JPath;
-import pss.bsp.GuiModuloBSP;
 import pss.bsp.bspBusiness.BizBSPUser;
 import pss.bsp.contrato.detalle.prorrateo.header.BizHeaderProrrateo;
 import pss.common.event.action.GuiSqlEventAction;
@@ -15,7 +13,6 @@ import pss.common.layoutWysiwyg.BizPlantilla;
 import pss.common.regions.company.BizCompany;
 import pss.core.services.records.JFilterMap;
 import pss.core.tools.JDateTools;
-import pss.core.tools.JTools;
 import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
 import pss.core.win.JWins;

@@ -1,14 +1,10 @@
 package pss.common.documentos.docEmail;
 
-import pss.common.security.BizUsuario;
 import pss.core.tools.JDateTools;
-import pss.core.tools.JTools;
 import pss.core.win.JWin;
-import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormControlResponsive;
 import pss.core.winUI.responsiveControls.JFormPanelResponsive;
-import pss.core.winUI.responsiveControls.JFormTabPanelResponsive;
 
 public class FormDocEmailFlat extends JBaseForm {
 

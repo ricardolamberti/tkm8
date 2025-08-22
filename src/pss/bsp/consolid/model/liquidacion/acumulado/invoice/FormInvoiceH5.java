@@ -1,16 +1,11 @@
 package  pss.bsp.consolid.model.liquidacion.acumulado.invoice;
 
-import pss.common.regions.divitions.GuiPaisesLista;
-import pss.core.win.JControlWin;
 import pss.core.win.JWin;
-import pss.core.win.JWins;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormColumnResponsive;
 import pss.core.winUI.responsiveControls.JFormFieldsetResponsive;
 import pss.core.winUI.responsiveControls.JFormPanelResponsive;
 import pss.core.winUI.responsiveControls.JFormTabPanelResponsive;
-import pss.tourism.airports.GuiAirports;
-import pss.tourism.carrier.GuiCarriers;
 
 public class FormInvoiceH5 extends JBaseForm {
 

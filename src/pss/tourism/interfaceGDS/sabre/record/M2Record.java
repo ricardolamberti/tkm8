@@ -1,7 +1,5 @@
 package pss.tourism.interfaceGDS.sabre.record;
 
-import pss.common.regions.currency.BizMonedaPais;
-import pss.common.regions.currency.GuiMoneda;
 import pss.core.tools.JTools;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;

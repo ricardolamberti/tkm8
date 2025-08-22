@@ -1,10 +1,6 @@
 package  pss.bsp.organization;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-
-import javax.imageio.ImageIO;
 
 import pss.JPath;
 import pss.bsp.organization.detalle.BizOrganizationDetail;

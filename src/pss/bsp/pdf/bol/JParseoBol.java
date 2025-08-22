@@ -10,12 +10,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.axis.message.Detail;
+import com.ibm.icu.util.Calendar;
 
 import pss.bsp.parseo.IFinder;
 import pss.bsp.parseo.IParseo;
-import pss.bsp.pdf.ecu.impuesto.BizEcuImpuesto;
-import pss.bsp.pdf.arg.detalle.BizArgDetalle;
 import pss.bsp.pdf.bol.cabecera.BizBolCabecera;
 import pss.bsp.pdf.bol.detalle.BizBolDetalle;
 import pss.bsp.pdf.bol.impuesto.BizBolImpuesto;
@@ -23,8 +21,6 @@ import pss.core.tools.JTools;
 import pss.core.tools.PDFTextParser;
 import pss.core.tools.PssLogger;
 import pss.tourism.carrier.BizCarrier;
-
-import com.ibm.icu.util.Calendar;
 
 public class JParseoBol implements IParseo {
 

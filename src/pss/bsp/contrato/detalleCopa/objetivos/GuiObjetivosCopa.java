@@ -1,8 +1,5 @@
 package pss.bsp.contrato.detalleCopa.objetivos;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
 import pss.core.win.JWins;

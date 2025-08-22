@@ -1,6 +1,5 @@
 package pss.bsp.carpeta;
 
-import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.bsp.bspBusiness.BizBSPUser;
 import pss.common.customList.config.carpetas.BizCarpeta;
 import pss.common.customList.config.carpetas.GuiCarpeta;

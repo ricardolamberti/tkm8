@@ -1,15 +1,8 @@
 package  pss.bsp.config.carrierGroups;
 
-import pss.bsp.bspBusiness.BizBSPCompany;
-import pss.bsp.config.airportGroups.BizAirportGroup;
-import pss.bsp.config.airportGroups.detalle.BizAirportGroupDetail;
 import pss.bsp.config.carrierGroups.detalle.BizCarrierGroupDetail;
-import pss.bsp.regions.BizRegion;
-import pss.bsp.regions.detalle.BizRegionDetail;
 import pss.common.customList.config.relation.JRelation;
 import pss.common.customList.config.relation.JRelations;
-import pss.common.regions.divitions.BizPaisLista;
-import pss.common.security.BizUsuario;
 import pss.core.services.JExec;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
@@ -17,8 +10,6 @@ import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.collections.JIterator;
 import pss.tourism.carrier.BizCarrier;
-
-import com.actuate.ereport.engine.expreval.functions.E;
 
 public class BizCarrierGroup extends JRecord {
 

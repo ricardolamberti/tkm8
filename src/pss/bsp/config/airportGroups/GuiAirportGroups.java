@@ -1,13 +1,8 @@
 package  pss.bsp.config.airportGroups;
 
-import pss.core.services.records.JRecords;
-import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
-import pss.core.win.submits.JAct;
-import pss.core.winUI.lists.JWinList;
 import pss.core.win.JWins;
-import pss.tourism.carrier.GuiCarrier;
-import pss.tourism.carrier.GuiCarriers;
+import pss.core.winUI.lists.JWinList;
 
 public class GuiAirportGroups extends JWins {
 

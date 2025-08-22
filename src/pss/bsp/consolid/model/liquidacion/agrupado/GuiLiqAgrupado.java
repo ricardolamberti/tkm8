@@ -1,31 +1,15 @@
 package pss.bsp.consolid.model.liquidacion.agrupado;
 
-import java.io.File;
-
-import net.sf.jasperreports.engine.JRDataSource;
-import pss.JPath;
 import pss.bsp.bspBusiness.BizBSPCompany;
-import pss.bsp.consolid.model.liquidacion.acumulado.report.BizReporteResumen;
-import pss.bsp.consolid.model.liquidacion.acumulado.report.GuiReporteResumen;
-import pss.bsp.consolid.model.liquidacion.detail.BizLiqDetail;
 import pss.bsp.consolid.model.liquidacion.detail.GuiLiqDetails;
-import pss.bsp.consolid.model.liquidacion.errors.GuiLiqErrors;
-import pss.bsp.consolid.model.liquidacion.header.BizLiqHeader;
-import pss.bsp.consolid.model.liquidacion.terrestres.GuiLiqTerrestre;
 import pss.common.customList.config.relation.JRelations;
 import pss.common.security.BizUsuario;
-import pss.core.reports.JBDReportes;
-import pss.core.reports.JReport;
 import pss.core.services.records.JRecord;
-import pss.core.services.records.JRecords;
-import pss.core.tools.JTools;
 import pss.core.win.JWin;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActFileGenerate;
-import pss.core.win.submits.JActNew;
 import pss.core.win.submits.JActReport;
-import pss.core.win.submits.JActSubmit;
 import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
 

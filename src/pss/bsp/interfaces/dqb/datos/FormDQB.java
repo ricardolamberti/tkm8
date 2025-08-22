@@ -1,12 +1,5 @@
 package  pss.bsp.interfaces.dqb.datos;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import javax.swing.JTabbedPane;
-
-import pss.core.ui.components.JPssEdit;
-import pss.core.ui.components.JPssLabel;
 import pss.core.win.JWin;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormTabPanelResponsive;

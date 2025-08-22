@@ -1,7 +1,6 @@
 package pss.bsp.contrato.evaluate.detail;
 
 import pss.bsp.contrato.detalle.BizDetalle;
-import pss.core.services.fields.JBoolean;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;

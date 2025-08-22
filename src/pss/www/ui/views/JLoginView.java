@@ -13,10 +13,6 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.security.sasl.AuthenticationException;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.cocoon.environment.http.HttpEnvironment;
 import org.json.JSONObject;
 
 import pss.common.regions.multilanguage.JLanguage;
@@ -33,7 +29,6 @@ import pss.www.platform.actions.JWebActionFactory;
 import pss.www.platform.actions.JWebRequest;
 import pss.www.platform.actions.resolvers.JAbstractLoginResolver;
 import pss.www.platform.actions.results.JWebActionResult;
-import pss.www.platform.applications.JwtTokenUtil;
 import pss.www.ui.JWebCaptcha;
 import pss.www.ui.JWebCheckResponsive;
 import pss.www.ui.JWebDivResponsive;

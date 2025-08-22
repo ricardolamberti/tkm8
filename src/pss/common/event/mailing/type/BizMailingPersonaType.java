@@ -1,14 +1,10 @@
 package  pss.common.event.mailing.type;
 
-import pss.common.agenda.evento.BizEvento;
-import pss.common.agenda.evento.tipo.GuiTipoEventos;
-import pss.common.agenda.turno.GuiTurnos;
 import pss.common.event.mailing.type.detail.BizMailingPersonaTypeDetail;
 import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
-import pss.core.tools.JPair;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
 import pss.core.win.JWins;

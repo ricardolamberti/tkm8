@@ -2,10 +2,8 @@ package  pss.bsp.bspBusiness;
 
 import pss.bsp.consola.config.GuiBSPConfig;
 import pss.common.regions.company.GuiCompany;
-import pss.common.security.BizUsuario;
 import pss.common.security.BizUsuarioRol;
 import pss.common.security.GuiUsuario;
-import pss.common.security.GuiUsuarios;
 import pss.common.security.license.license.GuiLicenses;
 import pss.core.services.records.JRecord;
 import pss.core.win.JBaseWin;

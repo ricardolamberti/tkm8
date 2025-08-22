@@ -9,9 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import pss.bsp.bo.BizInterfazBO;
-import pss.bsp.bo.GuiInterfazBO;
-import pss.bsp.bo.formato.BizFormato;
 import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.bsp.consolid.model.clientes.BizCliente;
 import pss.bsp.consolid.model.diferenciaLiq.BizDiferenciaLiq;
@@ -24,8 +21,6 @@ import pss.bsp.consolid.model.liquidacion.errors.BizLiqError;
 import pss.bsp.consolid.model.trxOra.BizTrxOra;
 import pss.bsp.consolidador.IConciliable;
 import pss.bsp.consolidador.IConsolidador;
-import pss.bsp.consolidador.consolidacion.detalle.BizConsolidacion;
-import pss.bsp.contrato.BizContrato;
 import pss.bsp.contrato.detalle.BizDetalle;
 import pss.bsp.contrato.detalle.prorrateo.BizProrrateo;
 import pss.bsp.dk.BizClienteDK;

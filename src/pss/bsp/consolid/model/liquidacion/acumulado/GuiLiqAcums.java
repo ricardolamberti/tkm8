@@ -4,17 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import pss.JPath;
 import pss.bsp.bspBusiness.BizBSPCompany;
-import pss.bsp.consolid.model.liquidacion.header.BizLiqHeader;
 import pss.common.security.BizUsuario;
 import pss.core.reports.JBDReportes;
 import pss.core.reports.JReport;
-import pss.core.services.JExec;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JConcatenar;
 import pss.core.tools.JDateTools;

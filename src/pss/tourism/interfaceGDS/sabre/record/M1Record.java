@@ -3,8 +3,6 @@ package pss.tourism.interfaceGDS.sabre.record;
 import java.util.StringTokenizer;
 
 import pss.core.tools.JTools;
-import pss.core.tools.PssLogger;
-import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
 
 public class M1Record extends SabreRecord {

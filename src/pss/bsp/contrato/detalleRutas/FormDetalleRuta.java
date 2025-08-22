@@ -1,23 +1,12 @@
 package pss.bsp.contrato.detalleRutas;
 
-import java.awt.Rectangle;
-
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-
-import org.checkerframework.common.returnsreceiver.qual.This;
-
 import pss.bsp.event.GuiBSPSqlEvents;
 import pss.common.event.sql.GuiSqlEvents;
 import pss.common.security.BizUsuario;
-import pss.core.ui.components.JPssEdit;
 import pss.core.ui.components.JPssImage;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.controls.JFormControl;
-import pss.core.winUI.controls.JFormLista;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormImageResponsive;
 import pss.core.winUI.responsiveControls.JFormTabPanelResponsive;

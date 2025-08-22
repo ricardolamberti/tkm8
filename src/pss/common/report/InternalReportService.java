@@ -1,4 +1,4 @@
-package pss.report;
+package pss.common.report;
 
 import java.io.StringWriter;
 import java.util.Map;
@@ -26,10 +26,10 @@ public class InternalReportService {
 
     public HtmlPayload buildHtml(String reportName,
                                  String xslVariant,
-                                 UserContext user,
+                                 UserContext userContext,
                                  Map<String, Object> params) throws Exception {
 
-        Document xml = buildXml(reportName, params, user);
+        Document xml = buildXml(reportName, params, userContext);
 
         String xslPath = "/xsl/" + reportName + '_' + xslVariant + ".xsl";
         Source xsl = new StreamSource(getClass().getResourceAsStream(xslPath));
@@ -50,7 +50,7 @@ public class InternalReportService {
      */
     private Document buildXml(String reportName,
                               Map<String, Object> params,
-                              UserContext user) throws Exception {
+                              UserContext  user) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = dbf.newDocumentBuilder();
         Document doc = db.newDocument();

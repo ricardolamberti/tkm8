@@ -1,8 +1,6 @@
 package pss.common.customList.config.informe;
 
 import pss.common.customList.config.customlist.GuiCustomList;
-import pss.common.customList.config.field.campo.BizCampos;
-import pss.common.customList.config.field.campo.GuiCampo;
 import pss.core.services.records.JRecords;
 import pss.core.win.JWin;
 import pss.core.win.JWins;

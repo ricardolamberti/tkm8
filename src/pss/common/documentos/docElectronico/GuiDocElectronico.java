@@ -6,11 +6,9 @@ import pss.JPath;
 import pss.common.documentos.GuiDocumento;
 import pss.core.services.records.JRecord;
 import pss.core.tools.JTools;
-import pss.core.tools.PssLogger;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActFileGenerate;
-import pss.core.win.submits.JActReport;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiDocElectronico extends GuiDocumento {

@@ -1,7 +1,6 @@
 package  pss.bsp.config.carrierGroups;
 
 import pss.bsp.config.carrierGroups.detalle.GuiCarrierGroupDetails;
-import pss.bsp.regions.detalle.GuiRegionDetails;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.win.JBaseWin;
@@ -10,9 +9,7 @@ import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActWins;
-import pss.core.win.submits.JActWinsSelect;
 import pss.core.winUI.forms.JBaseForm;
-import pss.tourism.carrier.BizCarrier;
 import pss.tourism.carrier.GuiCarrier;
 import pss.tourism.carrier.GuiCarriers;
 

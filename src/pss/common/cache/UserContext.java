@@ -2,7 +2,6 @@ package pss.common.cache;
 
 import pss.common.security.BizUsuario;
 import pss.www.platform.actions.JWebActionFactory;
-import pss.www.platform.actions.JWebRequest;
 
 /** Resolves user and session identifiers from the current request. */
 public final class UserContext {

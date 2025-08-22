@@ -1,7 +1,6 @@
 package  pss.bsp.pdf;
 
 import pss.bsp.bo.BizInterfazBO;
-import pss.bsp.bo.GuiInterfacesBO;
 import pss.bsp.consolidador.IConsolidador;
 import pss.bsp.consolidador.JConsolidador;
 import pss.bsp.consolidador.consolidacion.detalle.GuiConsolidaciones;

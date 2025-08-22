@@ -1,17 +1,8 @@
 package pss.bsp.consolid.model.rfnd;
 
-import java.io.FileOutputStream;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import pss.JPath;
-import pss.bsp.consolid.model.cuf.detail.BizCufDetail;
 import pss.bsp.consolid.model.liquidacion.detail.BizLiqDetail;
 import pss.bsp.consolid.model.rfnd.detail.BizRfndDetail;
 import pss.bsp.consolid.model.rfnd.detail.GuiRfndDetails;
-import pss.bsp.organization.BizOrganization;
 import pss.bsp.pdf.BizPDF;
 import pss.bsp.pdf.mex.detalle.BizMexDetalle;
 import pss.core.services.JExec;
@@ -20,10 +11,7 @@ import pss.core.services.fields.JLong;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
-import pss.core.tools.JDateTools;
 import pss.core.tools.JTools;
-import pss.core.tools.collections.JIterator;
-import pss.core.win.JWinsExcel;
 import pss.tourism.carrier.BizCarrier;
 import pss.tourism.pnr.BizPNRTicket;
 

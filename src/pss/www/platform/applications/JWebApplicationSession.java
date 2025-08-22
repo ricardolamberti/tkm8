@@ -3,20 +3,14 @@ package pss.www.platform.applications;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.Serializable;
-import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.TreeMap;
 
 import javax.servlet.http.HttpSession;
 
 import org.apache.cocoon.environment.Session;
 
 import pss.JPath;
-import pss.common.event.device.BizChannel;
 import pss.common.security.BizLoginTrace;
 import pss.common.security.BizUsuario;
 import pss.common.security.BizWebUserProfile;
@@ -30,8 +24,6 @@ import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JMap;
 import pss.core.tools.collections.JOrderedMap;
 import pss.core.tools.collections.JStringTokenizer;
-import pss.core.win.IInMemory;
-import pss.core.win.JBaseWin;
 import pss.www.platform.actions.JWebActionFactory;
 import pss.www.platform.actions.requestBundle.JWebActionData;
 import pss.www.platform.users.history.BizUserHistory;
@@ -220,7 +212,7 @@ public class JWebApplicationSession implements Serializable {
 		login.execProcessInsert();
 
 		if (login.isOutAccess() && !BizUsuario.getUsr().canOutAccess())
-			throw new Exception("No tiene autorización para loguearse desde fuera de la intranet. Si lo necesita comuniquese con el administrador.");
+			throw new Exception("No tiene autorizaciï¿½n para loguearse desde fuera de la intranet. Si lo necesita comuniquese con el administrador.");
 	
 		
 		traceId = login.getTraceId();
@@ -429,7 +421,7 @@ public class JWebApplicationSession implements Serializable {
 		BizUsuario.SetGlobal(login.getObjUsuario());
 
 		if (login.isOutAccess() && !BizUsuario.getUsr().canOutAccess())
-			throw new Exception("No tiene autorización para loguearse desde fuera de la intranet. Si lo necesita comuniquese con el administrador.");
+			throw new Exception("No tiene autorizaciï¿½n para loguearse desde fuera de la intranet. Si lo necesita comuniquese con el administrador.");
 	
 		
 		traceId = login.getTraceId();

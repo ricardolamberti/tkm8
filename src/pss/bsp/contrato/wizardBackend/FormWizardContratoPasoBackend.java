@@ -1,10 +1,8 @@
 package pss.bsp.contrato.wizardBackend;
 
-import pss.bsp.contrato.detalleUpfrontRutas.GuiDetalleUpfrontRuta;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.winUI.forms.JBaseForm;
-import pss.core.winUI.responsiveControls.JFormPanelResponsive;
 import pss.tourism.carrier.GuiCarriers;
 
 public class FormWizardContratoPasoBackend extends JBaseForm {

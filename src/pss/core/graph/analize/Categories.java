@@ -1,7 +1,6 @@
 package pss.core.graph.analize;
 
 import pss.core.tools.GeoPosition;
-
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JMap;

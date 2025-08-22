@@ -1,10 +1,7 @@
 package  pss.bsp.gds;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import pss.core.winUI.forms.JBaseForm;
-import pss.core.ui.components.*;
 import pss.core.win.JWin;
+import pss.core.winUI.forms.JBaseForm;
 
 public class FormInterfazNew extends JBaseForm {
 

@@ -1,7 +1,6 @@
 package pss.core.win.submits;
 
 import pss.core.win.JBaseWin;
-import pss.core.win.actions.BizAction;
 
 public class JActDrop extends JAct {
 

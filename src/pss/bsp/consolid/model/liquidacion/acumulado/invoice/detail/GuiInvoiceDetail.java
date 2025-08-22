@@ -3,8 +3,6 @@ package pss.bsp.consolid.model.liquidacion.acumulado.invoice.detail;
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
 import pss.core.win.actions.BizAction;
-import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActReport;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiInvoiceDetail extends JWin {

@@ -17,7 +17,6 @@ import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActNew;
 import pss.core.win.submits.JActQuery;
-import pss.core.win.submits.JActUpdate;
 import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.icons.GuiIcon;

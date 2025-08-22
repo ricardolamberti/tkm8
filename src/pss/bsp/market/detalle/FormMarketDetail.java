@@ -1,8 +1,5 @@
 package  pss.bsp.market.detalle;
 
-import java.awt.Rectangle;
-
-import pss.core.ui.components.JPssEdit;
 import pss.core.win.JWin;
 import pss.core.winUI.forms.JBaseForm;
 

@@ -4,7 +4,6 @@ import java.util.Date;
 
 import pss.common.regions.company.BizCompany;
 import pss.common.regions.currency.BizMoneda;
-import pss.common.regions.currency.BizMonedaPais;
 import pss.common.regions.currency.history.BizMonedaCotizacion;
 import pss.common.security.BizUsuario;
 import pss.core.services.fields.JBoolean;
@@ -139,7 +138,7 @@ public class BizMonedaConver extends JRecord {
     this.addFixedItem( FIELD, "modo_fecha", "Modo FEeha", true, false, 1);
 //    this.addFixedItem( FIELD, "usuario", "Usuario", true, false, 15 );
 //    this.addFixedItem( FIELD, "fecha_hora", "Fecha/Hora", true, true, 10 );
-    this.addFixedItem( VIRTUAL, "descr_conver_html", "Conversión", true, true, 10 );
+    this.addFixedItem( VIRTUAL, "descr_conver_html", "Conversiï¿½n", true, true, 10 );
   }
   /**
    * Returns the table name

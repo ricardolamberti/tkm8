@@ -15,7 +15,6 @@ import com.ibm.icu.util.StringTokenizer;
 
 import pss.bsp.parseo.IFinder;
 import pss.bsp.parseo.IParseo;
-import pss.bsp.pdf.mex.detalle.BizMexDetalle;
 import pss.bsp.pdf.pan.cabecera.BizPanCabecera;
 import pss.bsp.pdf.pan.detalle.BizPanDetalle;
 import pss.bsp.pdf.pan.impuesto.BizPanImpuesto;

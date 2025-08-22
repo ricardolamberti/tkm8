@@ -1,17 +1,8 @@
 package pss.common.customList.config.informe;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import javax.swing.JComboBox;
-
 import pss.common.customList.config.customlist.GuiCustomLists;
-import pss.common.customList.config.field.campo.GuiCampo;
-import pss.core.ui.components.JPssEdit;
-import pss.core.ui.components.JPssLabel;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
-import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.forms.JBaseForm;
 
 public class FormInforme extends JBaseForm {

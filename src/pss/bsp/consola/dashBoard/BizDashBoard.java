@@ -1,17 +1,12 @@
 package pss.bsp.consola.dashBoard;
 
-import pss.bsp.consola.config.BizBSPConfig;
 import pss.common.customList.config.customlist.BizCustomList;
-import pss.common.customList.config.relation.JRelations;
 import pss.common.security.BizUsuario;
 import pss.common.security.license.ILicense;
-import pss.core.services.fields.JFloat;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
-import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
-import pss.core.tools.collections.JMap;
 
 public class BizDashBoard extends JRecord {
 

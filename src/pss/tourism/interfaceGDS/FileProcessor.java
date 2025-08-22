@@ -14,8 +14,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.Vector;
 
-import org.codehaus.groovy.util.ManagedReference;
-
 import com.ibm.icu.util.StringTokenizer;
 
 import pss.JPath;

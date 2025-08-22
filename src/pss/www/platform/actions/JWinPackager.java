@@ -14,8 +14,8 @@ import java.util.Map;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 import pss.core.data.interfaces.structure.RFilter;

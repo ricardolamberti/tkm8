@@ -1,4 +1,4 @@
-package pss.report;
+package pss.common.report;
 
 /**
  * Simple value object containing the rendered HTML and its base URL for

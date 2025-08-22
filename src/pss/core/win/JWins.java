@@ -10,7 +10,6 @@ import pss.JPath;
 import pss.common.security.BizUsuario;
 import pss.core.data.BizPssConfig;
 import pss.core.data.interfaces.connections.JBDatos;
-import pss.core.data.interfaces.sentences.JRegJDBC.RegQueryOptions;
 import pss.core.data.interfaces.structure.RFilter;
 import pss.core.reports.GuiReporteBase;
 import pss.core.services.fields.JIntervalDate;
@@ -43,7 +42,6 @@ import pss.core.win.submits.JActNew;
 import pss.core.win.submits.JActQuery;
 import pss.core.win.submits.JActReport;
 import pss.core.win.tools.orders.GuiWinsColumns;
-
 import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.icons.GuiIcon;
 import pss.core.winUI.lists.BizListExcludeCol;
@@ -52,10 +50,6 @@ import pss.core.winUI.lists.JWinList;
 import pss.core.winUI.lists.JWinMatrix;
 import pss.core.winUI.responsiveControls.JFormRadioResponsive;
 import pss.core.winUI.responsiveControls.JFormTwoPropertiesResponsive;
-import pss.www.platform.actions.requestBundle.JWebActionData;
-import pss.www.platform.actions.requestBundle.JWebActionDataField;
-import pss.www.platform.applications.JHistory;
-import pss.www.platform.applications.JHistoryProvider;
 import pss.www.ui.skins.JWebSkin;
 
 /**

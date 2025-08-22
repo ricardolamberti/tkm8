@@ -2,7 +2,6 @@ package pss.core.win.submits;
 
 import pss.core.services.fields.JObjBD;
 import pss.core.services.fields.JObject;
-import pss.core.services.records.JRecord;
 import pss.core.tools.JMessageInfo;
 import pss.core.win.JBaseWin;
 import pss.core.win.JWin;

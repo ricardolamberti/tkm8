@@ -1,6 +1,5 @@
 package pss.bsp.contrato.conocidos2;
 
-import pss.JPath;
 import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.bsp.contrato.BizContrato;
 import pss.bsp.contrato.detalle.BizDetalle;

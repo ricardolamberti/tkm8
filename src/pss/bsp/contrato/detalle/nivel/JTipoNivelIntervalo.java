@@ -1,7 +1,5 @@
 package pss.bsp.contrato.detalle.nivel;
 
-import pss.core.tools.JTools;
-
 public class JTipoNivelIntervalo extends JTipoNivel  implements ITipoNivel {
 	//((act - va)/va)x100)+100=indice 
 	//params1 es fa la media de la aerolinea

@@ -6,12 +6,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.ibm.icu.util.Calendar;
-import com.ibm.icu.util.StringTokenizer;
 
 import pss.JPath;
 import pss.bsp.bspBusiness.BizBSPCompany;
-import pss.bsp.market.BizMarket;
-import pss.bsp.market.detalle.BizMarketDetail;
 import pss.common.customList.config.relation.JRelation;
 import pss.common.customList.config.relation.JRelations;
 import pss.common.event.mailing.BizMailingPersona;
@@ -26,8 +23,6 @@ import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JDateTools;
 import pss.core.tools.JPair;
-import pss.core.tools.JTools;
-import pss.core.tools.PssLogger;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JMap;
@@ -37,7 +32,6 @@ import pss.tourism.interfaceGDS.FileProcessor;
 import pss.tourism.interfaceGDS.amadeus.AmadeusFileProcessor;
 import pss.tourism.interfaceGDS.sabre.SabreFileProcessor;
 import pss.tourism.interfaceGDS.travelport.TravelPortFileProcessor;
-import pss.tourism.pnr.BizPNRTicket.AuxiliarClaseCalculoSegmentos;
 
 public class BizPNRReserva  extends JRecord {
 

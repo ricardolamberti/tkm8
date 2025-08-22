@@ -2,7 +2,6 @@ package pss.core.graph.model;
 
 import pss.core.graph.Column;
 import pss.core.graph.Graph;
-import pss.core.graph.analize.Categories;
 import pss.core.graph.analize.Dataset;
 import pss.core.graph.analize.Value;
 import pss.core.tools.JTools;

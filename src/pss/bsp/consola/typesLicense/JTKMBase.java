@@ -4,14 +4,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import com.ibm.icu.util.StringTokenizer;
+
 import pss.common.security.license.JLicense;
 import pss.common.security.license.typeLicense.detail.BizTypeLicenseDetail;
 import pss.core.tools.JDateTools;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
 import pss.core.win.JWins;
-
-import com.ibm.icu.util.StringTokenizer;
 
 public class JTKMBase extends JLicense implements ITKM {
 

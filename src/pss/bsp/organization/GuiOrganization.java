@@ -1,20 +1,13 @@
 package  pss.bsp.organization;
 
 import pss.bsp.organization.detalle.GuiOrganizationDetails;
-import pss.common.event.mailing.BizBSPPersona;
-import pss.common.event.mailing.GuiBSPPersona;
-import pss.common.event.mailing.GuiBSPPersonas;
-import pss.common.regions.divitions.BizPaisLista;
-import pss.common.regions.divitions.GuiPaisesLista;
 import pss.core.services.records.JRecord;
-import pss.core.tools.collections.JIterator;
 import pss.core.win.JBaseWin;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActWins;
-import pss.core.win.submits.JActWinsSelect;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiOrganization extends JWin {

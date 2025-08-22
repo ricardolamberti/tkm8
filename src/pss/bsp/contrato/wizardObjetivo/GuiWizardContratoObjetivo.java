@@ -1,7 +1,6 @@
 package pss.bsp.contrato.wizardObjetivo;
 
 import pss.bsp.contrato.GuiContrato;
-import pss.bsp.contrato.detalle.BizDetalle;
 import pss.bsp.contrato.detalle.GuiDetalle;
 import pss.bsp.contrato.detalleObjetivo.GuiDetalleObjetivo;
 import pss.core.services.records.JRecord;

@@ -3,7 +3,6 @@ package pss.bsp.contrato.wizardBackend;
 import pss.bsp.contrato.GuiContrato;
 import pss.bsp.contrato.conocidos2.BizContratoConocidoV2;
 import pss.bsp.contrato.conocidos2.GuiContratoConocidoV2;
-import pss.bsp.contrato.detalle.BizDetalle;
 import pss.bsp.contrato.detalle.GuiDetalle;
 import pss.bsp.contrato.detalleAvianca.GuiDetalleAvianca;
 import pss.bsp.contrato.detalleBackendDobleRutas.GuiDetalleBackendDobleRuta;
@@ -22,7 +21,6 @@ import pss.core.win.submits.JActQuery;
 import pss.core.win.submits.JActSubmit;
 import pss.core.win.submits.JActUpdate;
 import pss.core.winUI.forms.JBaseForm;
-import pss.www.ui.JWebIcon;
 
 public class GuiWizardContratoBackend extends JWin {
 

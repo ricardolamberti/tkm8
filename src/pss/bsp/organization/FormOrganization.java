@@ -1,15 +1,10 @@
 package  pss.bsp.organization;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import pss.common.security.BizUsuario;
+import pss.core.ui.components.JPssImage;
+import pss.core.win.JWin;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormImageResponsive;
 import pss.core.winUI.responsiveControls.JFormPanelResponsive;
-import pss.core.ui.components.*;
-import pss.core.win.JWin;
-import javax.swing.JTabbedPane;
 
 public class FormOrganization extends JBaseForm {
 

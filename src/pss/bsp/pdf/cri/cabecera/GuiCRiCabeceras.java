@@ -1,8 +1,8 @@
 package  pss.bsp.pdf.cri.cabecera;
 
 import pss.core.win.JWin;
-import pss.core.winUI.lists.JWinList;
 import pss.core.win.JWins;
+import pss.core.winUI.lists.JWinList;
 
 public class GuiCRiCabeceras extends JWins {
 

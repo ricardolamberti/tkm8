@@ -4,7 +4,6 @@ import pss.core.win.JWins;
 import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.lists.JFormFiltro;
-import pss.core.winUI.lists.JWinList;
 
 public class GuiMailSents extends GuiDocEmails {
 

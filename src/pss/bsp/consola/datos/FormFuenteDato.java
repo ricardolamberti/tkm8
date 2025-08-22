@@ -1,7 +1,5 @@
 package  pss.bsp.consola.datos;
 
-import javax.swing.JTabbedPane;
-
 import pss.core.win.JWin;
 import pss.core.winUI.controls.JFormLista;
 import pss.core.winUI.forms.JBaseForm;

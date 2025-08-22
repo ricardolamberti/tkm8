@@ -2,13 +2,8 @@ package pss.www.platform.applications;
 
 import java.io.File;
 
-import javax.servlet.http.HttpSession;
-
 import org.apache.cocoon.environment.Context;
-import org.apache.cocoon.environment.Request;
 
-import pss.core.data.BizPssConfig;
-import pss.www.platform.actions.resolvers.JBasicWebActionResolver;
 import pss.www.platform.content.compression.JClientContentCompressionManager;
 import pss.www.platform.users.online.JStadistics;
 

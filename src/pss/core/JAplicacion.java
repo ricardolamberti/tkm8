@@ -6,7 +6,6 @@ import java.lang.reflect.Method;
 import org.apache.log4j.Logger;
 
 import pss.JPath;
-import pss.JPssVersion;
 import pss.common.help.BizQuestion;
 import pss.common.publicity.BizCampaign;
 import pss.common.security.BizUsuario;
@@ -235,12 +234,12 @@ public class JAplicacion  {
 
 	public static void Exit() {
 		try {
-			PssLogger.logWait("Cerrando aplicación...");
+			PssLogger.logWait("Cerrando aplicaciï¿½n...");
 			GetApp().shutdownApp();
 			GetApp().closeApp();
 			GetApp().ExitApp();
 		} catch (Exception ex) {
-			PssLogger.logInfo("No se pudo cerrar la aplicación");
+			PssLogger.logInfo("No se pudo cerrar la aplicaciï¿½n");
 			PssLogger.logError(ex);
 		}
 	}
@@ -347,7 +346,7 @@ public class JAplicacion  {
 			}
 			JBDatos.closeAllDatabases();
 		} catch (JConnectionBroken eCB) {
-			PssLogger.logInfo("No se cierra la Base de Datos porque no hay conexión");
+			PssLogger.logInfo("No se cierra la Base de Datos porque no hay conexiï¿½n");
 		}
 	}
 	

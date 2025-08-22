@@ -7,8 +7,8 @@ import pss.core.services.fields.JBoolean;
 import pss.core.services.fields.JInteger;
 import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.tools.PssLogger;
 import pss.core.tools.JTools;
+import pss.core.tools.PssLogger;
 
 public class BizCompAlta extends JRecord {
 

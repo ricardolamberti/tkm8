@@ -2,10 +2,6 @@ package pss.common.customList.config.field.operadores;
 
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
-import pss.core.win.actions.BizAction;
-import pss.core.win.submits.JAct;
-import pss.core.win.submits.JActSubmit;
-import pss.core.winUI.forms.JBaseForm;
 
 public class GuiOperador extends JWin {
 

@@ -1,6 +1,5 @@
 package pss.bsp.consolid.model.clientes;
 
-import pss.bsp.consolid.model.liquidacion.acumulado.BizLiqAcum;
 import pss.common.regions.company.BizCompany;
 import pss.common.security.BizUsuario;
 import pss.core.services.records.JRecords;

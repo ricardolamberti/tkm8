@@ -2,7 +2,6 @@ package pss.common.regions.currency.history;
 
 import pss.core.services.records.JRecord;
 import pss.core.win.JWin;
-import pss.core.win.actions.BizAction;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiMonedaCotizacion extends JWin {
@@ -20,7 +19,7 @@ public class GuiMonedaCotizacion extends JWin {
   @Override
 	public int GetNroIcono()   throws Exception { return 54; }
   @Override
-	public String GetTitle()   throws Exception { return "Cotización"; }
+	public String GetTitle()   throws Exception { return "Cotizaciï¿½n"; }
   @Override
 	public Class<? extends JBaseForm> getFormBase() throws Exception { return FormMonedaCotizacion.class; }
 

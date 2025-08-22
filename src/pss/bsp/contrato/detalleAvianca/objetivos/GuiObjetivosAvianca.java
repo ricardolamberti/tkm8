@@ -1,19 +1,12 @@
 package pss.bsp.contrato.detalleAvianca.objetivos;
 
-import java.util.Calendar;
-import java.util.Date;
-
-import pss.bsp.contrato.detalle.BizDetalle;
 import pss.core.services.records.JRecord;
-import pss.core.services.records.JRecords;
-import pss.core.tools.JDateTools;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
-import pss.tourism.pnr.BizPNRTicket;
 import pss.tourism.pnr.GuiPNRTickets;
 
 public class GuiObjetivosAvianca extends JWin {

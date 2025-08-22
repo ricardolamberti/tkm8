@@ -1,6 +1,5 @@
 package pss.www.platform.users.online;
 
-import java.lang.ref.WeakReference;
 import java.util.Date;
 
 import pss.common.security.BizUsuario;
@@ -227,7 +226,7 @@ public class BizOnlineUser extends JRecord {
 
 //  public BizUserHistory getLastHistory() throws Exception {
 //   	JWebApplicationSession session = s;
-//    if (session==null) throw new Exception("La session Expiró");
+//    if (session==null) throw new Exception("La session Expirï¿½");
 //
 //    BizUserHistory last=null;
 //  	JIterator<BizUserHistory> it = session.getStadistics().getValueIterator();

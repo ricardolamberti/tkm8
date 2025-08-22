@@ -1,8 +1,5 @@
 package pss.tourism.interfaceGDS.amadeus.record;
 
-import java.util.Date;
-
-import pss.core.tools.JDateTools;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JMap;
 import pss.core.tools.collections.JStringTokenizer;

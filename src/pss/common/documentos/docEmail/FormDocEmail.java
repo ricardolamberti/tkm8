@@ -1,13 +1,10 @@
 package pss.common.documentos.docEmail;
 
 import pss.common.documentos.docElectronico.GuiDocAdjunto;
-import pss.common.layoutWysiwyg.GuiPlantillas;
 import pss.common.security.BizUsuario;
 import pss.core.tools.JDateTools;
 import pss.core.tools.collections.JIterator;
 import pss.core.win.JWin;
-import pss.core.win.JWins;
-import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormButtonResponsive;
 import pss.core.winUI.responsiveControls.JFormPanelResponsive;

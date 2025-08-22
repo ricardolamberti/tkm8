@@ -2,8 +2,12 @@ package pss.bsp.contrato.detalle.variaciones;
 
 import java.util.Calendar;
 import java.util.Date;
+
+import pss.core.services.fields.JDate;
+import pss.core.services.fields.JFloat;
+import pss.core.services.fields.JLong;
+import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.services.fields.*;
 
 public class BizVariacionPaticular extends JRecord {
 

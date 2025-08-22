@@ -4,8 +4,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.StringTokenizer;
 
-import org.apache.fop.fonts.type1.PFMInputStream;
-
 import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.bsp.contrato.detalle.BizDetalle;
 import pss.bsp.contrato.detalle.nivel.BizNivel;

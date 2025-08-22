@@ -4,7 +4,6 @@ import org.apache.cocoon.environment.Response;
 
 import pss.core.data.BizPssConfig;
 import pss.www.platform.actions.JWebActionFactory;
-import pss.www.platform.applications.JWebApplication;
 import pss.www.ui.controller.JWebClientConfiguration;
 
 public class JClosedAndLoginPageGenerator extends JLoginByIniPageGenerator {

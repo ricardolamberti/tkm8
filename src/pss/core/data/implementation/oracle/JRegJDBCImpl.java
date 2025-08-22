@@ -9,23 +9,19 @@ import java.sql.Statement;
 import pss.core.data.interfaces.connections.JBaseJDBC;
 import pss.core.data.interfaces.sentences.JRegJDBC;
 import pss.core.data.interfaces.sentences.JRegSQL;
+import pss.core.data.interfaces.sentences.QueryResult;
 import pss.core.data.interfaces.structure.RField;
-import pss.core.data.interfaces.structure.RFilter;
 import pss.core.data.interfaces.structure.RFixedOrderBy;
 import pss.core.data.interfaces.structure.RGroupBy;
 import pss.core.data.interfaces.structure.RJoins;
 import pss.core.data.interfaces.structure.ROrderBy;
 import pss.core.services.fields.JObject;
 import pss.core.services.records.BizVirtual;
-import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JExcepcion;
 import pss.core.tools.JTools;
 import pss.core.tools.collections.JIterator;
 import pss.core.tools.collections.JList;
-import pss.core.data.interfaces.sentences.PlanInfo;
-import pss.core.data.interfaces.sentences.QueryGuard;
-import pss.core.data.interfaces.sentences.QueryResult;
 
 public class JRegJDBCImpl extends JRegJDBC {
 

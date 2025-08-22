@@ -15,13 +15,9 @@ import com.ibm.icu.util.StringTokenizer;
 
 import pss.bsp.parseo.IFinder;
 import pss.bsp.parseo.IParseo;
-import pss.bsp.pdf.arg.detalle.BizArgDetalle;
 import pss.bsp.pdf.col.cabecera.BizColCabecera;
 import pss.bsp.pdf.col.detalle.BizColDetalle;
 import pss.bsp.pdf.col.impuesto.BizColImpuesto;
-import pss.bsp.pdf.ecu.impuesto.BizEcuImpuesto;
-import pss.bsp.pdf.mex.impuesto.BizMexImpuesto;
-import pss.core.tools.JDateTools;
 import pss.core.tools.JTools;
 import pss.core.tools.PDFTextParser;
 import pss.core.tools.PssLogger;

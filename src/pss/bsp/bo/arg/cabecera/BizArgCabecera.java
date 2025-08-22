@@ -3,8 +3,10 @@ package  pss.bsp.bo.arg.cabecera;
 import java.util.Date;
 
 import pss.common.security.BizUsuario;
+import pss.core.services.fields.JDate;
+import pss.core.services.fields.JLong;
+import pss.core.services.fields.JString;
 import pss.core.services.records.JRecord;
-import pss.core.services.fields.*;
 
 public class BizArgCabecera extends JRecord {
 

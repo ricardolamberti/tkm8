@@ -1,8 +1,7 @@
 package pss.common.event2.telegram;
 
-import pss.core.winUI.forms.JBaseForm;
-import pss.core.ui.components.*;
 import pss.core.win.JWin;
+import pss.core.winUI.forms.JBaseForm;
 import pss.core.winUI.responsiveControls.JFormCheckResponsive;
 import pss.core.winUI.responsiveControls.JFormEditResponsive;
 
@@ -38,7 +37,7 @@ private static final long serialVersionUID = 1586180232148L;
 		edit = AddItemEdit( "Usuario",  CHAR, OPT, "USERID" );
 		edit.setHide(true);
 		edit.setSizeColumns(6);
-		JFormCheckResponsive chk = AddItemCheck("Confirma su vinculación?", REQ, "CONFIRMED");
+		JFormCheckResponsive chk = AddItemCheck("Confirma su vinculaciï¿½n?", REQ, "CONFIRMED");
 		chk.setSizeColumns(6);
 
   } 

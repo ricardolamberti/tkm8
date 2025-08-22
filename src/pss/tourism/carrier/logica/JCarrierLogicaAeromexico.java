@@ -1,6 +1,5 @@
 package pss.tourism.carrier.logica;
 
-import pss.bsp.familia.BizFamilia;
 import pss.tourism.pnr.BizBooking;
 import pss.tourism.pnr.BizPNRSegmentoAereo;
 

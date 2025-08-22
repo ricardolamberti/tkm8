@@ -1,7 +1,5 @@
 package  pss.common.customList.config.dataBiz;
 
-import pss.common.regions.company.BizCompany;
-import pss.common.security.BizUsuario;
 import pss.core.services.records.JRecord;
 import pss.core.services.records.JRecords;
 import pss.core.tools.JTools;

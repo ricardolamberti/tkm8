@@ -1,18 +1,6 @@
 package pss.bsp.clase.detalle;
 
-import java.awt.Dimension;
-import java.awt.Rectangle;
-
-import pss.common.regions.divitions.GuiPaisesLista;
 import pss.core.winUI.forms.JBaseForm;
-import pss.core.ui.components.*;
-import pss.core.win.JControlWin;
-import pss.core.win.JWin;
-import pss.core.win.JWins;
-import pss.tourism.carrier.GuiCarriers;
-import pss.core.ui.components.JPssLabel;
-import javax.swing.JTextArea;
-import pss.core.ui.components.JPssEdit;
 
 public class FormClaseDetail extends JBaseForm {
 
@@ -55,7 +43,7 @@ private static final long serialVersionUID = 1245253307166L;
   protected void jbInit() throws Exception {
 //    lpais1111 = new JPssLabel();
 //    lpais1111.setBounds(new Rectangle(176, 95, 283, 16));
-//    lpais1111.setText("el sistema tomará el de prioridad mas alta");
+//    lpais1111.setText("el sistema tomarï¿½ el de prioridad mas alta");
 //    lpais111 = new JPssLabel();
 //    lpais111.setBounds(new Rectangle(176, 71, 289, 22));
 //    lpais111.setText("SI una ruta esta compuesta por varios segmentos");

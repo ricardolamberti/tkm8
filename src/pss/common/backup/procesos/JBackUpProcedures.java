@@ -1,6 +1,7 @@
 package  pss.common.backup.procesos;
 
 import java.util.Date;
+
 import pss.JPath;
 import pss.common.backup.settings.BizBackUpGroup;
 import pss.common.backup.settings.BizBackUpGroupDetail;
@@ -74,7 +75,7 @@ public class JBackUpProcedures {
 			if (this.getBackGroups().sizeStaticElements() > 0) {
 				while (this.getBackGroups().nextRecord()) { 
 					// llenar todos los objetos para todos los procesos.
-					// luego se insertarán todos en la nueva conexión
+					// luego se insertarï¿½n todos en la nueva conexiï¿½n
 					BizBackUpGroup oBackGroup = this.getBackGroups().getRecord();
 					JRecords<BizBackUpGroupDetail> oBackGroupDetails = new JRecords<BizBackUpGroupDetail>(BizBackUpGroupDetail.class);
 					oBackGroupDetails.addFilter("company", oBackGroup.getCompany());
@@ -83,7 +84,7 @@ public class JBackUpProcedures {
 					while (oBackGroupDetails.nextRecord()) { 
 						BizBackUpGroupDetail oBackGroupDet = oBackGroupDetails.getRecord();
 						this.BackUpTableData(oBackGroupDet);
-						PssLogger.logInfo("Se realizó BackUp de la tabla " + oBackGroupDet.getTabla());
+						PssLogger.logInfo("Se realizï¿½ BackUp de la tabla " + oBackGroupDet.getTabla());
 					}
 				} // end while
 				String filenameToSend = "";
@@ -191,7 +192,7 @@ public class JBackUpProcedures {
 			sJoin +=  " " + oBackGroupDetCriterio.getOperator1();
 			sJoin +=  " " + sHeaderTable  + "." + oBackGroupDetCriterio.getValue1() ;
 			
-			// Traigo el resto del join con los criterios de selección de la tabla padre
+			// Traigo el resto del join con los criterios de selecciï¿½n de la tabla padre
 			sJoin += " " + this.getWhereCriteria(sCompany, sGrupo, sHeaderTable, true);
 		}
 		return sJoin;
@@ -246,7 +247,7 @@ public class JBackUpProcedures {
 	
 		private void sendMail(String filename) throws Exception {
 			
-			  // Acá registro el evento. Ahora tengo que ver cómo paso el String del archivo
+			  // Acï¿½ registro el evento. Ahora tengo que ver cï¿½mo paso el String del archivo
 //			BizEvent.registerEvent(oBackUpSetting.getCompany(), "1", Long.parseLong(JBackUpEventOperations.BACKUP_END) , "BackUp","BackUp Realizado",filename);
 
 			/*BizMailSender ms = new BizMailSender();

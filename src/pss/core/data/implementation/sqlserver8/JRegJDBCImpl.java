@@ -11,6 +11,7 @@ import java.util.Iterator;
 import pss.core.data.interfaces.connections.JBDatos;
 import pss.core.data.interfaces.connections.JBaseJDBC;
 import pss.core.data.interfaces.sentences.JRegJDBC;
+import pss.core.data.interfaces.sentences.QueryResult;
 import pss.core.data.interfaces.structure.RField;
 import pss.core.data.interfaces.structure.RJoins;
 import pss.core.services.records.BizVirtual;
@@ -20,7 +21,6 @@ import pss.core.tools.JExcepcion;
 import pss.core.tools.PssLogger;
 import pss.core.tools.collections.JCollectionFactory;
 import pss.core.tools.collections.JList;
-import pss.core.data.interfaces.sentences.QueryResult;
 
 public class JRegJDBCImpl extends JRegJDBC {
 

@@ -1,7 +1,5 @@
 package  pss.bsp.regions;
 
-import pss.bsp.clase.BizClase;
-import pss.bsp.clase.detalle.BizClaseDetail;
 import pss.bsp.regions.detalle.BizRegionDetail;
 import pss.common.customList.config.relation.JRelation;
 import pss.common.customList.config.relation.JRelations;

@@ -5,7 +5,6 @@ import pss.core.win.JWin;
 import pss.core.win.actions.BizAction;
 import pss.core.win.submits.JAct;
 import pss.core.win.submits.JActSubmit;
-import pss.core.win.submits.JActWins;
 import pss.core.winUI.forms.JBaseForm;
 
 public class GuiRemoteDesktop extends JWin {

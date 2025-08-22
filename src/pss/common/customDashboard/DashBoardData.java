@@ -1,7 +1,5 @@
 package pss.common.customDashboard;
 
-import pss.core.win.JWin;
-
 public class DashBoardData {
 	
 	private DashBoardModule module;

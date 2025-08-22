@@ -7,8 +7,6 @@ import pss.bsp.bspBusiness.BizBSPUser;
 import pss.bsp.contrato.detalle.BizDetalle;
 import pss.bsp.contrato.detalle.GuiDetalle;
 import pss.bsp.contrato.detalle.GuiDetalles;
-import pss.bsp.contrato.quevender.ms.BizMS;
-import pss.bsp.contrato.quevender.ms.GuiMSs;
 import pss.bsp.contrato.total.GuiTotales;
 import pss.common.customList.config.carpetas.IContenidoCarpeta;
 import pss.common.event.action.GuiSqlEventAction;

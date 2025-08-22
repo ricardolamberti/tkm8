@@ -1,8 +1,5 @@
 package pss.bsp.persona;
 
-import pss.common.personalData.BizPersona;
-import pss.common.personalData.GuiPersona;
-import pss.common.personalData.types.FormPersonaJuridica;
 import pss.common.personalData.types.GuiPersonaFisica;
 import pss.core.services.records.JRecord;
 import pss.core.winUI.forms.JBaseForm;

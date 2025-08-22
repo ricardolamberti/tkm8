@@ -5,7 +5,6 @@ import java.util.Date;
 import pss.bsp.bspBusiness.BizBSPCompany;
 import pss.bsp.bspBusiness.BizNewBSPCompany;
 import pss.bsp.dk.BizClienteDK;
-import pss.common.event.mailing.BizMailingPersona;
 import pss.common.regions.company.BizCompany;
 import pss.common.security.BizUsuario;
 import pss.common.security.BizWebUserProfile;

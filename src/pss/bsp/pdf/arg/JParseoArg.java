@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.ibm.icu.util.Calendar;
+
 import pss.bsp.parseo.IFinder;
 import pss.bsp.parseo.IParseo;
 import pss.bsp.pdf.arg.cabecera.BizArgCabecera;
@@ -18,8 +20,6 @@ import pss.bsp.pdf.arg.impuesto.BizArgImpuesto;
 import pss.core.tools.JTools;
 import pss.core.tools.PDFTextParser;
 import pss.core.tools.PssLogger;
-
-import com.ibm.icu.util.Calendar;
 
 public class JParseoArg implements IParseo {
 

@@ -19,7 +19,6 @@ import pss.core.tools.PssLogger;
 import pss.www.platform.JConstantes;
 import pss.www.platform.actions.JWebActionFactory;
 import pss.www.platform.actions.JWebRequest;
-import pss.www.platform.actions.JWebWinFactory;
 import pss.www.platform.applications.JApplicationContext;
 import pss.www.platform.applications.JSessionedApplication;
 import pss.www.platform.applications.JWebApplication;

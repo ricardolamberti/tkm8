@@ -1,13 +1,9 @@
 package pss.bsp.pdf.arg.detalle;
 
-import pss.common.regions.multilanguage.JLanguage;
 import pss.core.services.fields.JObject;
 import pss.core.tools.JTools;
-import pss.core.tools.collections.JCollectionFactory;
-import pss.core.tools.collections.JMap;
 import pss.core.win.JWin;
 import pss.core.win.JWins;
-import pss.core.winUI.controls.JControlCombo;
 import pss.core.winUI.controls.JFormControl;
 import pss.core.winUI.lists.JFormFiltro;
 import pss.core.winUI.lists.JWinList;
