@@ -1339,77 +1339,28 @@ public abstract class JBaseWin implements IInMemory, Transferable, Serializable 
 		return getHtmlView(action, builderArguments, params, false, false, false, false);
 	}
 
-        public String getHtmlView(int action, String builderArguments, JFilterMap params, boolean convertScriptRefToFile, boolean convertScriptRefToPrefix, boolean convertInjectStyle, boolean convertImageRef) throws Exception {
-                if ("csv".equalsIgnoreCase(builderArguments)) {
-                        return getCsvView(action, params);
-                }
-                if ("excel".equalsIgnoreCase(builderArguments) || "xls".equalsIgnoreCase(builderArguments)) {
-                        return getExcelView(action, params);
-                }
+	public String getHtmlView(int action, String builderArguments, JFilterMap params, boolean convertScriptRefToFile, boolean convertScriptRefToPrefix, boolean convertInjectStyle, boolean convertImageRef) throws Exception {
 
-                String variant = "html";
-                if ("htmlfull".equalsIgnoreCase(builderArguments)) {
-                        variant = "htmlfull";
-                }
+		String variant = "html";
+		if ("htmlfull".equalsIgnoreCase(builderArguments)) {
+			variant = "htmlfull";
+		}
 
-                Map<String, Object> filters = toMap(params);
-                filters.put("action", action);
-                filters.put("serializer", builderArguments);
-
-                Map<String, Object> xsltParams = new HashMap<>();
-                xsltParams.put("basedir", BizPssConfig.getPssConfig().getAppURLPreview());
-
-                UserContext user = UserContext.from(BizUsuario.getUsr());
-
-                InternalReportService internalReportService = new InternalReportService();
-                HtmlPayload payload = internalReportService.buildHtmlForOwner(
-                                this,
-                                "win_list_x",
-                                variant,
-                                user,
-                                filters,
-                                xsltParams,
-                                null);
-
-                ReportRenderer renderer = new ReportRenderer();
-                return renderer.renderHtml(payload);
-        }
-
-	public byte[] getPdfBytes(int action, String builderArguments, JFilterMap params) throws Exception {
 		Map<String, Object> filters = toMap(params);
 		filters.put("action", action);
+		filters.put("serializer", builderArguments);
+
+		Map<String, Object> xsltParams = new HashMap<>();
+		xsltParams.put("basedir", BizPssConfig.getPssConfig().getAppURLPreview());
 
 		UserContext user = UserContext.from(BizUsuario.getUsr());
-		String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
 
-		InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
-		return resolver.resolvePdf("win_list_x", builderArguments, null, basedir, null, null, user, filters);
+		InternalReportService internalReportService = new InternalReportService();
+		HtmlPayload payload = internalReportService.buildHtmlForOwner(this, "win_list_x", variant, user, filters, xsltParams, null);
+
+		ReportRenderer renderer = new ReportRenderer();
+		return renderer.renderHtml(payload);
 	}
-
-	public String getCsvView(int action, JFilterMap params) throws Exception {
-		Map<String, Object> map = toMap(params);
-		map.put("action", action);
-
-		UserContext user = UserContext.from(BizUsuario.getUsr());
-		String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
-
-		InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
-		byte[] bytes = resolver.resolveCsv("win_list_x", null, basedir, null, null, user, map);
-		return new String(bytes, StandardCharsets.UTF_8);
-	}
-
-	public String getExcelView(int action, JFilterMap params) throws Exception {
-		Map<String, Object> map = toMap(params);
-		map.put("action", action);
-
-		UserContext user = UserContext.from(BizUsuario.getUsr());
-		String basedir = BizPssConfig.getPssConfig().getAppURLPreview();
-
-		InternalRequestResolverEmu resolver = new InternalRequestResolverEmu();
-		byte[] bytes = resolver.resolveExcel("win_list_x", null, basedir, null, null, user, map);
-		return new String(bytes, StandardCharsets.UTF_8);
-	}
-
 	private Map<String, Object> toMap(JFilterMap params) throws Exception {
 		Map<String, Object> map = new HashMap<>();
 		if (params != null && params.getMap() != null) {

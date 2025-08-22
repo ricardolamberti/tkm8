@@ -37,36 +37,6 @@ public class ReportController {
 		return UserContext.fromCurrentUser();
 	}
 
-	/**
-	 * Builds and returns the HTML representation of the given report.
-	 */
-	public String getHtmlView(String reportName, String xslVariant, JFilterMap params) throws Exception {
-		HtmlPayload payload = reportService.buildHtml(reportName, xslVariant, buildUserContext(), toMap(params));
-		return renderer.renderHtml(payload);
-	}
-
-	/**
-	 * Generates a PDF for the given report and returns it as a byte array.
-	 */
-	public byte[] getPdfBytes(String reportName, String xslVariant, JFilterMap params) throws Exception {
-		HtmlPayload payload = reportService.buildHtml(reportName, xslVariant, buildUserContext(), toMap(params));
-		return renderer.renderPdf(payload);
-	}
-
-	/**
-	 * Returns the CSV output for the report using a dedicated XSLT variant.
-	 */
-	public String getCsvView(String reportName, JFilterMap params) throws Exception {
-		HtmlPayload payload = reportService.buildHtml(reportName, "csv", buildUserContext(), toMap(params));
-		return payload.getHtml();
-	}
-
-	/**
-	 * Returns the Excel output for the report using a dedicated XSLT variant.
-	 */
-	public String getExcelView(String reportName, JFilterMap params) throws Exception {
-		HtmlPayload payload = reportService.buildHtml(reportName, "excel", buildUserContext(), toMap(params));
-		return payload.getHtml();
-	}
+	
 
 }
