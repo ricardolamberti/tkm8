@@ -38,7 +38,7 @@ public class JMessageViewAjax extends JMessageView {
 	JWebDivResponsive panelHeading = new JWebDivResponsive();
 	JWebDivResponsive panelBody = new JWebDivResponsive();
 	JWebImageResponsive imagen = new JWebImageResponsive(JPssImage.SOURCE_PSS,"logos/"+BizPssConfig.getPssConfig().getLogo(),null);
-	JWebHResponsive title = new JWebHResponsive(3,JLanguage.translate("Inicio de sesión"));
+	JWebHResponsive title = new JWebHResponsive(3,JLanguage.translate("Inicio de sesiÃ³n"));
 	JWebFieldsetResponsive fieldset = new JWebFieldsetResponsive();
 	JWebForm oForm = new JWebForm();
 

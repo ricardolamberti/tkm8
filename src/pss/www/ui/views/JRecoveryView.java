@@ -56,7 +56,7 @@ public class JRecoveryView  extends JWebView implements IActionPerform, ILoginPa
 	@Override
 	protected void build() throws Exception {
 
-		// this.setTitle("Inicio de sesión");
+		// this.setTitle("Inicio de sesiÃ³n");
 		// this.setIcon(JWebIcon.getPssIcon(GuiIcon.LOGIN_ICON));
 		analizeIniConfiguration();
 		
@@ -72,7 +72,7 @@ public class JRecoveryView  extends JWebView implements IActionPerform, ILoginPa
 		JWebDivResponsive formDiv = new JWebDivResponsive();
 		JWebDivResponsive formDiv2 = new JWebDivResponsive();
 		JWebImageResponsive imagen = new JWebImageResponsive(JPssImage.SOURCE_PSS,"logos/"+BizPssConfig.getPssConfig().getLogo(),null);
-		JWebHResponsive title = new JWebHResponsive(3,getMessage("Inicio de sesión"));
+		JWebHResponsive title = new JWebHResponsive(3,getMessage("Inicio de sesiÃ³n"));
 		JWebFieldsetResponsive fieldset = new JWebFieldsetResponsive();
 		JWebForm oForm = new JWebForm();
 		panel.setClassResponsive("login-panel panel panel-default");
@@ -166,7 +166,7 @@ public class JRecoveryView  extends JWebView implements IActionPerform, ILoginPa
 			BizUsuario user = new BizUsuario();
 			user.Read(usuario);
 			if (!user.getCompany().equals(company))
-				throw new Exception("Solicitud inválida");
+				throw new Exception("Solicitud invï¿½lida");
 			user.execBlanquearClave();
 			JAplicacion.GetApp().closeApp();
 			JAplicacion.GetApp().closeSession();
@@ -184,7 +184,7 @@ public class JRecoveryView  extends JWebView implements IActionPerform, ILoginPa
 		String captcha = loginResolver.getRequest().getFormData("login_form").get("cpt");
 		if (captcha != null) {
 			if (!sCaptcha.equals(JTools.PasswordToString(captcha)))
-				throw new Exception(getMessage("Fallo verificación contra bots"));
+				throw new Exception(getMessage("Fallo verificaciï¿½n contra bots"));
 		}
 		
 		JAplicacion.GetApp().openSession();
@@ -196,12 +196,12 @@ public class JRecoveryView  extends JWebView implements IActionPerform, ILoginPa
 		JAplicacion.GetApp().closeApp();
 		JAplicacion.GetApp().closeSession();
 			
-		return loginResolver.getRedirector().goShowMessage(JWebViewsConstants.MESSAGE_TYPE_INFO, "Recuperación", "Se envió un mail con el link de acceso");
+		return loginResolver.getRedirector().goShowMessage(JWebViewsConstants.MESSAGE_TYPE_INFO, "Recuperaciï¿½n", "Se enviï¿½ un mail con el link de acceso");
 	}
 
 	// LOGIN_WELCOME_TITLE=Bienvenido
 	// LOGIN_WELCOME_TITLE_LOGO=15000
-	// LOGIN_WELCOME_TEXT=Ud ha ingresado al área privada del SITI. Ingrese los
+	// LOGIN_WELCOME_TEXT=Ud ha ingresado al ï¿½rea privada del SITI. Ingrese los
 	// datos de su usuario y presione 'confirmar' para comenzar a administrar su
 	// Empresa
 	// LOGIN_WELCOME_FOOTER=* Sitio optimizado para : Internet Explorer 7 o
@@ -215,7 +215,7 @@ public class JRecoveryView  extends JWebView implements IActionPerform, ILoginPa
 		loginTitle = cfg.getCachedValue(secc, "LOGIN_WELCOME_TITLE", "Bienvenido");
 		loginTitleLogo = cfg.getCachedValue(secc, "LOGIN_WELCOME_TITLE_LOGO", "15000");
 		loginText = cfg.getCachedValue(secc, "LOGIN_WELCOME_TEXT",
-				"Ud ha ingresado al área privada del SITI. Ingrese los datos de su usuario y presione 'confirmar' para comenzar a administrar su Empresa");
+				"Ud ha ingresado al ï¿½rea privada del SITI. Ingrese los datos de su usuario y presione 'confirmar' para comenzar a administrar su Empresa");
 		loginFooter = cfg.getCachedValue(secc, "LOGIN_WELCOME_FOOTER", "* Sitio optimizado para : Internet Explorer 7 o superior, Mozilla Firefox 3 o superior");
 		loginTextLink = cfg.getCachedValue(secc, "LOGIN_WELCOME_TEXT_LINK", "Pentaware S.A.");
 		loginLink = cfg.getCachedValue(secc, "LOGIN_WELCOME_LINK", "http://www.pentaware.com.ar");

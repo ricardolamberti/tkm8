@@ -1073,11 +1073,11 @@ public class JLayoutGenerator extends JBasicLayoutGenerator implements ILayoutGe
   public String getMessage(String zMsg, Object[] zParams)  {
   		if (zMsg.toLowerCase().length()>9 && zMsg.toLowerCase().substring(0, 9).equals("clave inv")) 
   			zMsg = "form.wrong.password";
-  		else if (zMsg.indexOf("Información")!=-1) 
+  		else if (zMsg.indexOf("Informaciï¿½n")!=-1) 
   			zMsg = "form.title.information";
    		else if (zMsg.equalsIgnoreCase("error")) 
   			zMsg = "form.title.error";
-  		else if (zMsg.indexOf("Atrás")!=-1) 
+  		else if (zMsg.indexOf("Atrï¿½s")!=-1) 
   			zMsg = "form.button.back";
    		else if (zMsg.equalsIgnoreCase("ingresar")) 
   			zMsg = "form.login.button.confirm";
@@ -1089,7 +1089,7 @@ public class JLayoutGenerator extends JBasicLayoutGenerator implements ILayoutGe
   			zMsg = "form.login.pass";
    		else if (zMsg.indexOf("confirm")==0) 
   			zMsg = "form.login.title";
-   		else if (zMsg.equalsIgnoreCase("Inicio de sesión")) 
+   		else if (zMsg.equalsIgnoreCase("Inicio de sesiÃ³n")) 
   			zMsg = "form.login.session";
   		else if (zMsg.equalsIgnoreCase("si")) 
   			zMsg = "form.checkbox.yes";
@@ -1107,7 +1107,7 @@ public class JLayoutGenerator extends JBasicLayoutGenerator implements ILayoutGe
   			zMsg = "navbar.preference";
    		else if (zMsg.equalsIgnoreCase("Cambiar clave")) 
   			zMsg = "navbar.changepassword";
-   		else if (zMsg.equalsIgnoreCase("Cerrar sesión")) 
+   		else if (zMsg.equalsIgnoreCase("Cerrar sesiÃ³n")) 
   			zMsg = "navbar.closesession";
    		else if (zMsg.equalsIgnoreCase("Multiples usuarios, la sesion ha caducado, debe reingresar su usuario y clave")) 
   			zMsg = "navbar.multipleusers";
@@ -1119,13 +1119,13 @@ public class JLayoutGenerator extends JBasicLayoutGenerator implements ILayoutGe
   			zMsg = "pref.user";
    		else if (zMsg.equalsIgnoreCase("Skin")) 
   			zMsg = "pref.skin";
-   		else if (zMsg.equalsIgnoreCase("Página Inicial")) 
+   		else if (zMsg.equalsIgnoreCase("Pï¿½gina Inicial")) 
   			zMsg = "pref.paginitial";
-   		else if (zMsg.equalsIgnoreCase("Líneas por pág.")) 
+   		else if (zMsg.equalsIgnoreCase("Lï¿½neas por pï¿½g.")) 
   			zMsg = "pref.sizepage";
    		else if (zMsg.equalsIgnoreCase("Max.Reg.Matriz")) 
   			zMsg = "pref.maxreg";
-   		else if (zMsg.equalsIgnoreCase("Usuario Inválido")) 
+   		else if (zMsg.equalsIgnoreCase("Usuario Invï¿½lido")) 
   			zMsg = "form.login.invaliduser";
    		else if (zMsg.equalsIgnoreCase("Session cerrada")) 
   			zMsg = "navbar.closesession";
@@ -1135,19 +1135,19 @@ public class JLayoutGenerator extends JBasicLayoutGenerator implements ILayoutGe
   			zMsg = "date.today";
    		else if (zMsg.equalsIgnoreCase("Ayer")) 
   			zMsg = "date.yesterday";
-   		else if (zMsg.equalsIgnoreCase("Los últimos 7 días")) 
+   		else if (zMsg.equalsIgnoreCase("Los ï¿½ltimos 7 dï¿½as")) 
   			zMsg = "date.lastweek";
-   		else if (zMsg.equalsIgnoreCase("Los últimos 30 días")) 
+   		else if (zMsg.equalsIgnoreCase("Los ï¿½ltimos 30 dï¿½as")) 
   			zMsg = "date.lastdays";
    		else if (zMsg.equalsIgnoreCase("Este mes")) 
   			zMsg = "date.month";
-  		else if (zMsg.equalsIgnoreCase("Fecha inválida")) 
+  		else if (zMsg.equalsIgnoreCase("Fecha invï¿½lida")) 
   			zMsg = "msg.invalid.date";
-  		else if (zMsg.equalsIgnoreCase("Hora inválida")) 
+  		else if (zMsg.equalsIgnoreCase("Hora invï¿½lida")) 
   			zMsg = "msg.invalid.time";
   		else if (zMsg.equalsIgnoreCase("Anterior mes")) 
   			zMsg = "date.lastmonth";
-   		else if (zMsg.equalsIgnoreCase("Este Año")) 
+   		else if (zMsg.equalsIgnoreCase("Este Aï¿½o")) 
   			zMsg = "date.year";
    		else if (zMsg.equalsIgnoreCase("Enero")) 
   			zMsg = "str.january";
@@ -1215,7 +1215,7 @@ public class JLayoutGenerator extends JBasicLayoutGenerator implements ILayoutGe
   			zMsg = "msg.others";
    		else if (zMsg.equalsIgnoreCase("Sistema info")) 
   			zMsg = "msg.system.info";
-  		else if (zMsg.equalsIgnoreCase("Error de la aplicación")) 
+  		else if (zMsg.equalsIgnoreCase("Error de la aplicaciï¿½n")) 
   			zMsg = "form.title.error";
   		else if (zMsg.equalsIgnoreCase("Cancelado por el usuario")) 
   			zMsg = "form.cancel.usaer";

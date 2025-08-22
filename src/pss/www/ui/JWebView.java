@@ -438,7 +438,7 @@ public abstract class JWebView extends JWebViewComposite implements JWebTitledCo
 		if (this.getUICoordinator().getSession().isSubsession())
 			getNavBar().addNavigationAction(parent,JWebActionFactory.createDoLogoutClosed(), icon,label==null?BizUsuario.getMessage("Cerrar ventana", null):label ,false);
 		else
-			getNavBar().addNavigationAction(parent,JWebActionFactory.createDoLogout(), icon,label==null?BizUsuario.getMessage("Cerrar sesión", null ):label,false);
+			getNavBar().addNavigationAction(parent,JWebActionFactory.createDoLogout(), icon,label==null?BizUsuario.getMessage("Cerrar sesiÃ³n", null ):label,false);
 	}		
 	public void addInfoSystem(JWebNavigationBarGroup parent,JWebIcon icon,String label) throws Exception {
 			getNavBar().addNavigationAction(parent,JWebActionFactory.createInfo(), icon,label==null?BizUsuario.getMessage("Sistema info", null ):label,false);

@@ -558,14 +558,16 @@ public class JRecords<TRecord extends JRecord> extends JBaseRecord {
 	@Override
 	public void unSerializeRoot(Element zRoot) throws Exception {
 		Element eTabla = (Element) zRoot.getElementsByTagName("tabla").item(0);
-		this.DeserializarElementObject(eTabla);
+		this.DeserializarElement(eTabla);
 	}
+	
 
 	@Override
 	public Serializable unSerializeRootObject(Element zRoot) throws Exception {
 		Element eTabla = (Element) zRoot.getElementsByTagName("tabla").item(0);
 		return this.DeserializarElementObject(eTabla);
 	}
+
 
 	@SuppressWarnings("unchecked")
 	public Serializable DeserializarElementObject(Element zTabla) throws Exception {

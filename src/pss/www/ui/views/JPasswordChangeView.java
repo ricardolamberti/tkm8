@@ -56,7 +56,7 @@ public class JPasswordChangeView extends JWebView {
 
   @Override
 	protected void build() throws Exception {
-  //  this.setTitle("Cambio de contraseña");
+  //  this.setTitle("Cambio de contraseï¿½a");
   //  this.setIcon(JWebIcon.getPssIcon(GuiIcon.LOGIN_ICON));
 
     // create the form
@@ -66,7 +66,7 @@ public class JPasswordChangeView extends JWebView {
 		JWebDivResponsive panelHeading = new JWebDivResponsive();
 		JWebDivResponsive panelBody = new JWebDivResponsive();
 		JWebImageResponsive imagen = new JWebImageResponsive(JPssImage.SOURCE_PSS,"logos/"+BizPssConfig.getPssConfig().getLogo(),null);
-		title = new JWebHResponsive(3,JLanguage.translate("Cambio contraseña."));
+		title = new JWebHResponsive(3,JLanguage.translate("Cambio contraseï¿½a."));
 		JWebFieldsetResponsive fieldset = new JWebFieldsetResponsive();
 		JWebForm oForm = new JWebForm();
 		
@@ -101,21 +101,21 @@ public class JPasswordChangeView extends JWebView {
 		fieldset.add("real_username",oUsuario);
 
 		oPassword = new JWebViewPasswordResponsive();
-		oPassword.setLabelLateral(JLanguage.translate("Contraseña actual"));
+		oPassword.setLabelLateral(JLanguage.translate("Contraseï¿½a actual"));
 		fieldset.add("password",oPassword);
 
 		oPasswordNew = new JWebViewPasswordResponsive();
-		oPasswordNew.setLabelLateral(JLanguage.translate("Contraseña nueva"));
+		oPasswordNew.setLabelLateral(JLanguage.translate("Contraseï¿½a nueva"));
 		fieldset.add("new_password",oPasswordNew);
 
 		oPasswordNewConf = new JWebViewPasswordResponsive();
-		oPasswordNewConf.setLabelLateral(JLanguage.translate("Contraseña nueva"));
+		oPasswordNewConf.setLabelLateral(JLanguage.translate("Contraseï¿½a nueva"));
 		fieldset.add("new_password_confirmation",oPasswordNewConf);
 
 		oUser.setController(new JString(), "Usuario", true, BizSegConfiguracion.C_MAX_USERNAME_LENGTH, JObject.JUPPERCASE);
-//		oPassword.setController(new JPassword(), "Contraseña actual",  false, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
-		oPasswordNew.setController(new JPassword(), "Contraseña nueva",  false, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
-		oPasswordNewConf.setController(new JPassword(), "Contraseña nueva confimación",  false, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
+//		oPassword.setController(new JPassword(), "Contraseï¿½a actual",  false, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
+		oPasswordNew.setController(new JPassword(), "Contraseï¿½a nueva",  false, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
+		oPasswordNewConf.setController(new JPassword(), "Contraseï¿½a nueva confimaciï¿½n",  false, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
 
 		JWebLink olink = new JWebLink();
 		olink = new JWebLink(JLanguage.translate("Confirmar"));
@@ -170,13 +170,13 @@ public class JPasswordChangeView extends JWebView {
     if (sPassword==null || sPassword.trim().length() < 1) {
       this.oPassword.setEditable(false);
       this.oPassword.setText("");
-      this.title.setLabel("Ingreso inicial de contraseña");
-      this.oMsgLabel.setLabel("Su contraseña está en blanco. Por favor, ingrese una nueva para poder iniciar sesión.");
-      oPassword.setController(new JPassword(), JLanguage.translate("Contraseña actual"), false, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
+      this.title.setLabel("Ingreso inicial de contraseï¿½a");
+      this.oMsgLabel.setLabel("Su contraseï¿½a estï¿½ en blanco. Por favor, ingrese una nueva para poder iniciar sesiÃ³n.");
+      oPassword.setController(new JPassword(), JLanguage.translate("Contraseï¿½a actual"), false, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
     } else {
-    	this.title.setLabel("Cambio obligatorio de contraseña");
-      this.oMsgLabel.setLabel("Su contraseña ha caducado. Por favor, ingrese una nueva para poder iniciar sesión.");
-      oPassword.setController(new JPassword(), JLanguage.translate("Contraseña actual"), true, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
+    	this.title.setLabel("Cambio obligatorio de contraseï¿½a");
+      this.oMsgLabel.setLabel("Su contraseï¿½a ha caducado. Por favor, ingrese una nueva para poder iniciar sesiÃ³n.");
+      oPassword.setController(new JPassword(), JLanguage.translate("Contraseï¿½a actual"), true, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
     }
     this.oUser.setText(realUsername);
     this.oUsuario.setText(sUsername);
@@ -195,7 +195,7 @@ public class JPasswordChangeView extends JWebView {
       oLOCALAplicacion.openApp(zApplication.getName(), zApplication.getType(), true); 
        oLOCALUsuario.dontThrowException(true);
       if( !oLOCALUsuario.Read(zUsername) ) {
-     			JExcepcion.SendError(getMessage("Usuario inválido"));
+     			JExcepcion.SendError(getMessage("Usuario invï¿½lido"));
       }
       String sPassword = oLOCALUsuario.getPasswordDecrypt();
       return sPassword;

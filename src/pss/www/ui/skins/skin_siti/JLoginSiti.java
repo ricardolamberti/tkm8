@@ -75,7 +75,7 @@ public class JLoginSiti extends JWebView implements IActionPerform, ILoginPage {
 		panelHeading.setClassResponsive("panel-heading");
 		panel.add("heading", panelHeading);
 
-		JWebHResponsive title = new JWebHResponsive(3,getMessage("Inicio de sesión"));
+		JWebHResponsive title = new JWebHResponsive(3,getMessage("Inicio de sesiÃ³n"));
 		panelHeading.add("body", title);
 
 		JWebDivResponsive panelBody = new JWebDivResponsive();
@@ -168,7 +168,7 @@ public class JLoginSiti extends JWebView implements IActionPerform, ILoginPage {
 		String captcha = loginResolver.getRequest().getFormData("login_form").get("cpt");
 		if (captcha != null) {
 			if (!sCaptcha.equals(JTools.PasswordToString(captcha)))
-				throw new Exception(getMessage("Fallo verificación contra bots"));
+				throw new Exception(getMessage("Fallo verificaciï¿½n contra bots"));
 		}
 		if (BizPssConfig.getPssConfig().acceptLoginWithMail()) {
 			//Pasar de mail a usuario para logearse con mail
@@ -188,7 +188,7 @@ public class JLoginSiti extends JWebView implements IActionPerform, ILoginPage {
 
 	// LOGIN_WELCOME_TITLE=Bienvenido
 	// LOGIN_WELCOME_TITLE_LOGO=15000
-	// LOGIN_WELCOME_TEXT=Ud ha ingresado al área privada del SITI. Ingrese los
+	// LOGIN_WELCOME_TEXT=Ud ha ingresado al ï¿½rea privada del SITI. Ingrese los
 	// datos de su usuario y presione 'confirmar' para comenzar a administrar su
 	// Empresa
 	// LOGIN_WELCOME_FOOTER=* Sitio optimizado para : Internet Explorer 7 o
@@ -202,7 +202,7 @@ public class JLoginSiti extends JWebView implements IActionPerform, ILoginPage {
 //		loginTitle = cfg.getCachedValue(secc, "LOGIN_WELCOME_TITLE", "Bienvenido");
 //		loginTitleLogo = cfg.getCachedValue(secc, "LOGIN_WELCOME_TITLE_LOGO", "15000");
 //		loginText = cfg.getCachedValue(secc, "LOGIN_WELCOME_TEXT",
-//				"Ud ha ingresado al área privada del SITI. Ingrese los datos de su usuario y presione 'confirmar' para comenzar a administrar su Empresa");
+//				"Ud ha ingresado al ï¿½rea privada del SITI. Ingrese los datos de su usuario y presione 'confirmar' para comenzar a administrar su Empresa");
 //		loginFooter = cfg.getCachedValue(secc, "LOGIN_WELCOME_FOOTER", "* Sitio optimizado para : Internet Explorer 7 o superior, Mozilla Firefox 3 o superior");
 //		loginTextLink = cfg.getCachedValue(secc, "LOGIN_WELCOME_TEXT_LINK", "Pentaware S.A.");
 //		loginLink = cfg.getCachedValue(secc, "LOGIN_WELCOME_LINK", "http://www.pentaware.com.ar");

@@ -268,6 +268,11 @@ public class JWinPackager {
 		assignFilters(dto, actionOwner);
 		assignProps(dto, actionOwner);
 		assignElements(dto, actionOwner);
+		
+		if (actionOwner instanceof JRecord && dto.readed && actionOwner.getStructure().hasFilters()) {
+			((JRecord)actionOwner).read();
+			
+		}
 		return actionOwner;
 	}
 
@@ -515,19 +520,25 @@ public class JWinPackager {
 		if (rec.getUniqueId().indexOf("rec_9a5ca46d-9ea6-47a1-a477-6bb8c5fe694c") != -1)
 			PssLogger.logInfo("log point");
 
-		if (serializableRec.cls.indexOf("allCampos") != -1)
+		if (serializableRec.cls.indexOf("BizCampo") != -1)
 			PssLogger.logInfo("log point");
 		if (serializableRec.cls.indexOf("CustomList") != -1)
 			PssLogger.logInfo("log point");
 		serializableRec.uniqueId = rec.getUniqueId();
 		serializableRec.vision = rec.GetVision();
-		serializableRec.readed = rec instanceof JRecord && ((JRecord) rec).wasDbRead() && rec.isStatic();
+		serializableRec.readed = rec instanceof JRecord && ((JRecord) rec).wasDbRead();//&& rec.isStatic();
 		serializableRec.recordClass = rec instanceof JRecords ? ((JRecords) rec).getBasedClass() : null;
 		serializableRec.rowid = rec instanceof JRecord ? ((JRecord) rec).getRowId() : null;
 		serializableRec.extraData = rec instanceof JRecord && ((JRecord) rec).getExtraData() != null ? ((JRecord) rec).getExtraData().toMap() : null;
 		serializableRec.parent = rec.getParent() == null ? null : JWebActionFactory.getCurrentRequest().registerRecObjectObj(rec.getParent(), null);
 		serializableRec.filters = new ArrayList<SerializableFilter>();
 		JList<RFilter> filters = rec.getFilters();
+		if (serializableRec.readed && rec instanceof JRecord ) {
+			JRecord record =(JRecord)rec;
+			if (filters != null && filters.isEmpty())
+			record.keysToFilters();
+			filters = record.getFilters();
+		}
 		if (filters != null && !filters.isEmpty()) {
 			JIterator<RFilter> iter = filters.getIterator();
 			RFilter filter;

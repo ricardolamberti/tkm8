@@ -1669,10 +1669,7 @@ public class BizCustomList extends JRecord implements IActionData {
 	}
 	
 	public void setObjAllCampos(BizCampos origCampos,boolean cleanKeys) throws Exception {
-		BizCampos allCampos=new BizCampos();
-		pCampos.setValue(allCampos);
 		JIterator<BizCampo> it = origCampos.getStaticIterator();
-		allCampos.setStatic(true);
 		while (it.hasMoreElements()) {
 			BizCampo origCampo = it.nextElement();
 			BizCampo campo = new BizCampo();
@@ -1687,7 +1684,7 @@ public class BizCustomList extends JRecord implements IActionData {
 					campo.setListId(getListId());
 				campo.setNullToSecuencia();
 			}
-			allCampos.addItem(campo);
+			getCampos().addItem(campo);
 		}
 
 		

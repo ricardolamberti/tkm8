@@ -455,7 +455,7 @@ public abstract class JBasicXMLContentGenerator extends AbstractGenerator  imple
 		
 //		this.setSession(oApplication.getWebApplicationSession(ObjectModelHelper.getRequest(objectModel)));
 //		if (this.isSessionDependent()&&this.getSession()==null) {
-//			JExcepcion.SendError("La página no se puede mostrar porque la sesión es inválida");
+//			JExcepcion.SendError("La pï¿½gina no se puede mostrar porque la sesiÃ³n es invï¿½lida");
 //		}
 	}
 

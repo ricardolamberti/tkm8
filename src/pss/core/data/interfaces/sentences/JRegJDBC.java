@@ -167,7 +167,7 @@ public class JRegJDBC extends JRegSQL {
 			oResultSet = oStatement.executeQuery(sSQL);
 			long time = System.currentTimeMillis() - startTime;
 			if (time > 20)
-				PssLogger.logDebugSQL("Low Query = " + time);
+				PssLogger.logDebugSQL("Low Query = " + time,true);
 			this.getBaseJDBC().addTransactionCursors(oStatement);
 		} catch (SQLException e) {
 			this.manageSQLException(e);

@@ -84,12 +84,12 @@ public abstract class JWebActionFactory {
 	public static JWebAction createDoLogout() throws Exception {
 //		JWebAction oAction=JWebActionFactory.create(BizUsuario.getCurrentLoginPage(), false);
 		JWebAction oAction=JWebActionFactory.create("closed", false);
-		oAction.setDescription("Cerrar sesi�n");
+		oAction.setDescription("Cerrar sesión");
 		return oAction; 
 	}
 	public static JWebAction createDoLogoutClosed() throws Exception {
 		JWebAction oAction=JWebActionFactory.create("closed_subsession", false);
-		oAction.setDescription("Cerrar sesi�n");
+		oAction.setDescription("Cerrar sesión");
 		return oAction; 
 	}
 	

@@ -38,7 +38,7 @@ public class GuiLoginTrace extends JWin {
   @Override
 	public int GetNroIcono()       throws Exception { return GuiIcon.LOGIN_ICON; }
   @Override
-	public String GetTitle()       throws Exception { return "Ingreso a la Aplicación"; }
+	public String GetTitle()       throws Exception { return "Ingreso a la Aplicaciï¿½n"; }
   @Override
 	public Class<? extends JBaseForm> getFormBase()     throws Exception { return FormLoginTrace.class; }
 
@@ -98,7 +98,7 @@ public class GuiLoginTrace extends JWin {
 //      boolean isMarkingSteps = this.isFirstLogIn() && UITools.desktop().isDesktopActive();
 //
 //      if (isMarkingSteps) {
-//        JDebugPrint.logWait("Creando form de inicio de sesión...");
+//        JDebugPrint.logWait("Creando form de inicio de sesiÃ³n...");
 //      }
 //
 //      oForm = this.createNewForm(this.getSubmitFor(0));
@@ -174,12 +174,12 @@ public class GuiLoginTrace extends JWin {
 //    newUser = newUser==null ? "" : newUser.trim();
 //    String msg = null;
 //    if (currUser.equalsIgnoreCase(newUser)) {
-//      msg = "Se cerrarán todas las ventanas abiertas y se cargará su perfil nuevamente. ¿Desea continuar?";
+//      msg = "Se cerrarï¿½n todas las ventanas abiertas y se cargarï¿½ su perfil nuevamente. ï¿½Desea continuar?";
 //    } else if (!newUser.equals("")) {
-//      msg = "Se cerrarán todas las ventanas abiertas y se cargará el perfil para el usuario {"
-//            + newUser + "}. ¿Desea continuar?";
+//      msg = "Se cerrarï¿½n todas las ventanas abiertas y se cargarï¿½ el perfil para el usuario {"
+//            + newUser + "}. ï¿½Desea continuar?";
 //    }
-////      if (msg!=null && UITools.MostrarYesNoMensaje("Inicio de sesión", msg) != JOptionPane.YES_OPTION) {
+////      if (msg!=null && UITools.MostrarYesNoMensaje("Inicio de sesiÃ³n", msg) != JOptionPane.YES_OPTION) {
 //    return msg;
 ////      }
 //  }
@@ -190,7 +190,7 @@ public class GuiLoginTrace extends JWin {
   
 //  private void logoutAndLoginAsGUEST(boolean zConfirm) throws Exception {
 //    if (zConfirm && !this.isFirstLogIn() && UITools.desktop().isDesktopActive()) {
-//      int answer = UITools.MostrarYesNoMensaje("Cierre de sesión", "Se cerrarán todas las ventanas abiertas. ¿Desea continuar?");
+//      int answer = UITools.MostrarYesNoMensaje("Cierre de sesiÃ³n", "Se cerrarï¿½n todas las ventanas abiertas. ï¿½Desea continuar?");
 //      if (answer != JOptionPane.YES_OPTION) {
 //        return;
 //      }

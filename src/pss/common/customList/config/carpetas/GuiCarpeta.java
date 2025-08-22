@@ -96,7 +96,7 @@ public class GuiCarpeta extends JWin implements IContenidoCarpeta {
 			if (a.getId()==900) return false;
 			if (a.getId()==1001) return false;
 			if (a.getId()==1000) return false;
-			return getContenidoCarpeta().OkAction(a);
+			return this.getContenidoCarpeta().OkAction(a);
 		}
 		if (a.getId()==18) return true;
 

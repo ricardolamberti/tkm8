@@ -58,7 +58,7 @@ public class JLayoutGenerator extends JBasicLayoutGenerator implements ILayoutGe
 //			parent.addUserListExcludeCols(g3, JWebIcon.getResponsiveIcon("fa fa-fw fa-columns"),"Preferencias Vista");
 			parent.addChangePassword(g3, JWebIcon.getResponsiveIcon("fa fa-fw fa-lock"),"Cambiar clave");
 			parent.addSeparator(g3);
-			parent.addCloseSession(g3,JWebIcon.getResponsiveIcon("fa fa-fw fa-sign-out"),"Cerrar sesión" );
+			parent.addCloseSession(g3,JWebIcon.getResponsiveIcon("fa fa-fw fa-sign-out"),"Cerrar sesiÃ³n" );
 		}
 		parent.addRefresh(null, JWebIcon.getResponsiveIcon("fa fa-fw fa-sync-alt"),null);
 		parent.addActiveHelp(null,null,"Ayuda");

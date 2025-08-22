@@ -575,13 +575,10 @@ public class JDoPssActionResolver extends JIndoorsActionResolver implements ICon
 				winFactory.loadData(actionOwner, true, getRequest().hasTableProvider() ? getRequest().getTableProvider() : null, contextAtionOwner);
 			return actionOwner;
 		}
-		if (obj instanceof String) {
+//		if (obj instanceof String) {
 //			PssLogger.logDebug("|------------------------------------------------> FIND STRING "+id);
-//			this.getRequest().addDataBundle("act_owner", (String) obj);
-//			JWebActionData bundle=this.loadWinBundle();
-//			if (bundle==null) return null;
-			return winFactory.getBaseWinFromBundle((String) obj, true, id);
-		}
+//			return winFactory.getBaseWinFromBundle((String) obj, true, id);
+//		}
 //		PssLogger.logDebug("|------------------------------------------------> NO FIND STRING "+id);
 
 		return null;

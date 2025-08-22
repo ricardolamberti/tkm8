@@ -51,7 +51,7 @@ public class PssLogger {
 
 			}
 		}
-		if (BizUsuario.getUsr()==null || BizUsuario.getUsr().getLogEnabledValue(type)==-1)
+		if (BizUsuario.getUsr() == null || BizUsuario.getUsr().getLogEnabledValue(type) == -1)
 			return logEnable[type];
 
 		return logEnable[type];
@@ -106,126 +106,125 @@ public class PssLogger {
 		}
 		return null;
 	}
-	
+
 	private static void configureLog4j() throws Exception {
 		if (new File(JPath.PssPathData() + "/log4j.properties").exists())
 			PropertyConfigurator.configure(JPath.PssPathData() + "/log4j.properties");
 		else
 			DOMConfigurator.configure(JPath.PssPathData() + "/log4j.xml");
 	}
+
 	public static void endLogs() throws Exception {
 		String logId = getDebugFileName();
 		Logger logger = Logger.getLogger(logId);
 		logger.removeAllAppenders();
 	}
 
-        public static void logDebug(String zMessage) {
-                logDebug(zMessage, false);
-        }
+	public static void logDebug(String zMessage) {
+		logDebug(zMessage, false);
+	}
 
-        public static void logDebug(String zMessage, boolean printLink) {
-                printWithLevel(PssLogger.LOG_DEBUG, zMessage, printLink);
-        }
+	public static void logDebug(String zMessage, boolean printLink) {
+		printWithLevel(PssLogger.LOG_DEBUG, zMessage, printLink);
+	}
 
-        public static void logDebug(Throwable zException) {
-                logDebug(zException, false);
-        }
+	public static void logDebug(Throwable zException) {
+		logDebug(zException, false);
+	}
 
-        public static void logDebug(Throwable zException, boolean printLink) {
-                printWithLevel(PssLogger.LOG_ERROR, zException, true, printLink);
-        }
+	public static void logDebug(Throwable zException, boolean printLink) {
+		printWithLevel(PssLogger.LOG_ERROR, zException, true, printLink);
+	}
 
-        public static void logDebug(Throwable zException, String zHeading) {
-                logDebug(zException, zHeading, false);
-        }
+	public static void logDebug(Throwable zException, String zHeading) {
+		logDebug(zException, zHeading, false);
+	}
 
-        public static void logDebug(Throwable zException, String zHeading, boolean printLink) {
-                logDebug(zHeading, printLink);
-                logDebug(zException, printLink);
-        }
+	public static void logDebug(Throwable zException, String zHeading, boolean printLink) {
+		logDebug(zHeading, printLink);
+		logDebug(zException, printLink);
+	}
 
-        public static void logError(Throwable zException, String zHeading,
-                        boolean zDumpStack) {
-                logError(zException, zHeading, zDumpStack, false);
-        }
+	public static void logError(Throwable zException, String zHeading, boolean zDumpStack) {
+		logError(zException, zHeading, zDumpStack, false);
+	}
 
-        public static void logError(Throwable zException, String zHeading,
-                        boolean zDumpStack, boolean printLink) {
-                logError(zHeading, printLink);
-                logError(zException, zDumpStack, printLink);
-        }
+	public static void logError(Throwable zException, String zHeading, boolean zDumpStack, boolean printLink) {
+		logError(zHeading, printLink);
+		logError(zException, zDumpStack, printLink);
+	}
 
-        public static void logError(Throwable zException, String zHeading) {
-                logError(zException, zHeading, true, false);
-        }
+	public static void logError(Throwable zException, String zHeading) {
+		logError(zException, zHeading, true, false);
+	}
 
-        public static void logError(Throwable zException, boolean zDumpStack) {
-                logError(zException, zDumpStack, false);
-        }
+	public static void logError(Throwable zException, boolean zDumpStack) {
+		logError(zException, zDumpStack, false);
+	}
 
-        public static void logError(Throwable zException, boolean zDumpStack, boolean printLink) {
-                printWithLevel(PssLogger.LOG_ERROR, zException, zDumpStack, printLink);
-        }
+	public static void logError(Throwable zException, boolean zDumpStack, boolean printLink) {
+		printWithLevel(PssLogger.LOG_ERROR, zException, zDumpStack, printLink);
+	}
 
-        public static void logError(Throwable zException) {
-                logError(zException, true, false);
-        }
+	public static void logError(Throwable zException) {
+		logError(zException, true, false);
+	}
 
-        public static void logError(String zMessage) {
-                logError(zMessage, false);
-        }
+	public static void logError(String zMessage) {
+		logError(zMessage, false);
+	}
 
-        public static void logError(String zMessage, boolean printLink) {
-                printWithLevel(PssLogger.LOG_ERROR, zMessage, printLink);
-        }
+	public static void logError(String zMessage, boolean printLink) {
+		printWithLevel(PssLogger.LOG_ERROR, zMessage, printLink);
+	}
 
-        public static void logDebugSQL(String zMessage) {
-                logDebugSQL(zMessage, false);
-        }
+	public static void logDebugSQL(String zMessage) {
+		logDebugSQL(zMessage, false);
+	}
 
-        public static void logDebugSQL(String zMessage, boolean printLink) {
-                printWithLevel(PssLogger.LOG_DEBUG_SQL, zMessage, printLink);
-        }
+	public static void logDebugSQL(String zMessage, boolean printLink) {
+		printWithLevel(PssLogger.LOG_DEBUG_SQL, zMessage, printLink);
+	}
 
-        public static void logDebugXML(String zMessage) {
-                logDebugXML(zMessage, false);
-        }
+	public static void logDebugXML(String zMessage) {
+		logDebugXML(zMessage, false);
+	}
 
-        public static void logDebugXML(String zMessage, boolean printLink) {
-                printWithLevel(PssLogger.LOG_DEBUG_XML, zMessage, printLink);
-        }
+	public static void logDebugXML(String zMessage, boolean printLink) {
+		printWithLevel(PssLogger.LOG_DEBUG_XML, zMessage, printLink);
+	}
 
-        public static void logInfo(String zMessage) {
-                logInfo(zMessage, false);
-        }
+	public static void logInfo(String zMessage) {
+		logInfo(zMessage, false);
+	}
 
-        public static void logInfo(String zMessage, boolean printLink) {
-                printWithLevel(PssLogger.LOG_INFO, zMessage, printLink);
-        }
+	public static void logInfo(String zMessage, boolean printLink) {
+		printWithLevel(PssLogger.LOG_INFO, zMessage, printLink);
+	}
 
-        public static void logWait(String zMessage) {
-                logWait(zMessage, false);
-        }
+	public static void logWait(String zMessage) {
+		logWait(zMessage, false);
+	}
 
-        public static void logWait(String zMessage, boolean printLink) {
-                printWithLevel(PssLogger.LOG_WAIT, zMessage, printLink);
-        }
+	public static void logWait(String zMessage, boolean printLink) {
+		printWithLevel(PssLogger.LOG_WAIT, zMessage, printLink);
+	}
 
-        public static void logFiscal(String zMessage) {
-                logFiscal(zMessage, false);
-        }
+	public static void logFiscal(String zMessage) {
+		logFiscal(zMessage, false);
+	}
 
-        public static void logFiscal(String zMessage, boolean printLink) {
-                printWithLevel(PssLogger.LOG_FISCAL, zMessage, printLink);
-        }
+	public static void logFiscal(String zMessage, boolean printLink) {
+		printWithLevel(PssLogger.LOG_FISCAL, zMessage, printLink);
+	}
 
-        public static void logMM(String zMessage) {
-                logMM(zMessage, false);
-        }
+	public static void logMM(String zMessage) {
+		logMM(zMessage, false);
+	}
 
-        public static void logMM(String zMessage, boolean printLink) {
-                printWithLevel(PssLogger.LOG_MM, zMessage, printLink);
-        }
+	public static void logMM(String zMessage, boolean printLink) {
+		printWithLevel(PssLogger.LOG_MM, zMessage, printLink);
+	}
 
 	public static void logFiscalMessage(String sTitulo, String zMessage) {
 		int len = zMessage.length();
@@ -233,105 +232,109 @@ public class PssLogger {
 		sHexa.append(sTitulo);
 		sHexa.append('[');
 		for (int iCont = 0; iCont < len; iCont++) {
-			if (iCont != 0) sHexa.append(' ');
+			if (iCont != 0)
+				sHexa.append(' ');
 			sHexa.append(JTools.CharToHex(zMessage.charAt(iCont)));
 		}
 		sHexa.append(']');
 		printWithLevel(PssLogger.LOG_FISCAL, sHexa.toString());
 	}
 
-        private static void printWithLevel(int Log_Id, String zMensaje) {
-                if (!isLogEnable(Log_Id))
-                        return;
-                printWithLevel(Log_Id, zMensaje, null, false, false);
-        }
+	private static void printWithLevel(int Log_Id, String zMensaje) {
+		if (!isLogEnable(Log_Id))
+			return;
+		printWithLevel(Log_Id, zMensaje, null, false, false);
+	}
 
-        private static void printWithLevel(int Log_Id, String zMensaje, boolean printLink) {
-                if (!isLogEnable(Log_Id))
-                        return;
-                printWithLevel(Log_Id, zMensaje, null, false, printLink);
-        }
+	private static void printWithLevel(int Log_Id, String zMensaje, boolean printLink) {
+		if (!isLogEnable(Log_Id))
+			return;
+		printWithLevel(Log_Id, zMensaje, null, false, printLink);
+	}
 
-        private static void printWithLevel(int Log_Id, Throwable t,
-                        boolean dumpStack) {
-                if (!isLogEnable(Log_Id))
-                        return;
-                printWithLevel(Log_Id, null, t, dumpStack, false);
-        }
+	private static void printWithLevel(int Log_Id, Throwable t, boolean dumpStack) {
+		if (!isLogEnable(Log_Id))
+			return;
+		printWithLevel(Log_Id, null, t, dumpStack, false);
+	}
 
-        private static void printWithLevel(int Log_Id, Throwable t,
-                        boolean dumpStack, boolean printLink) {
-                if (!isLogEnable(Log_Id))
-                        return;
-                printWithLevel(Log_Id, null, t, dumpStack, printLink);
-        }
+	private static void printWithLevel(int Log_Id, Throwable t, boolean dumpStack, boolean printLink) {
+		if (!isLogEnable(Log_Id))
+			return;
+		printWithLevel(Log_Id, null, t, dumpStack, printLink);
+	}
 
-        private static void printWithLevel(int Log_Id, String message, Throwable t,
-                        boolean dumpStack, boolean printLink) {
-                if (!isLogEnable(Log_Id))
-                        return;
-                try {
-                        StackTraceElement caller = null;
-                        String srcInfo = "";
-                        if (printLink) {
-                                StackTraceElement[] stack = Thread.currentThread().getStackTrace();
-                                for (StackTraceElement ste : stack) {
-                                        if (!ste.getClassName().equals(PssLogger.class.getName())
-                                                        && !ste.getClassName().equals(Thread.class.getName())) {
-                                                caller = ste;
-                                                break;
-                                        }
-                                }
-                                if (caller != null) {
-                                        String location = caller.getClassName() + "." + caller.getMethodName()
-                                                        + "(" + caller.getFileName() + ":" + caller.getLineNumber() + ")";
-                                        String repoUrl = System.getProperty("pss.logger.repoUrl");
-                                        String ref = System.getProperty("pss.logger.ref");
-                                        String srcPrefix = System.getProperty("pss.logger.srcPrefix");
-                                        if (repoUrl != null && ref != null && srcPrefix != null) {
-                                                String blob = repoUrl.contains("gitlab") ? "/-/blob/" : "/blob/";
-                                                String path = caller.getClassName().replace('.', '/') + ".java";
-                                                String link = repoUrl + blob + ref + "/" + srcPrefix + "/" + path
-                                                                + "#L" + caller.getLineNumber();
-                                                srcInfo = " [src: " + location + " " + link + "]";
-                                        } else {
-                                                srcInfo = " [src: " + location + "]";
-                                        }
-                                }
-                        }
+	private static void printWithLevel(int Log_Id, String message, Throwable t, boolean dumpStack, boolean printLink) {
+		if (!isLogEnable(Log_Id))
+			return;
+		try {
+			StackTraceElement caller = null;
+			String srcInfo = "";
+			if (printLink) {
+		    StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+		    int count = 0;
+		    StringBuilder sb = new StringBuilder();
 
-                        String text;
-                        if (message != null) {
-                                text = message + srcInfo;
-                        } else if (t != null) {
-                                if (dumpStack) {
-                                        StringWriter sw = new StringWriter();
-                                        PrintWriter pw = new PrintWriter(sw);
-                                        t.printStackTrace(pw);
-                                        text = (srcInfo.length() > 0 ? srcInfo + System.lineSeparator() : "") + sw.toString();
-                                } else {
-                                        String msg = t.getMessage();
-                                        text = (msg == null ? "" : msg) + srcInfo;
-                                }
-                        } else {
-                                text = srcInfo;
-                        }
+		    for (StackTraceElement ste : stack) {
+		        if (ste.getClassName().equals(PssLogger.class.getName()) ||
+		            ste.getClassName().equals(Thread.class.getName())) {
+		            continue;
+		        }
+		        String location = ste.getClassName() + "." + ste.getMethodName()
+		                + "(" + ste.getFileName() + ":" + ste.getLineNumber() + ")";
 
-                        Logger logger = initialize();
-                        if (logger == null) {
-                                System.out.println(text);
-                                return;
-                        }
-                        printStartInfo();
-                        printDebugPrint(logger, Log_Id, text);
-                } catch (Exception e) {
-                        System.out.println("Error en debug print de excepción:");
-                        e.printStackTrace();
-                }
-        }
+		        String repoUrl = System.getProperty("pss.logger.repoUrl");
+		        String ref     = System.getProperty("pss.logger.ref");
+		        String srcPref = System.getProperty("pss.logger.srcPrefix");
 
-	private static void printDebugPrint(Logger logger, int level,
-			String zMensaje) throws Exception {
+		        if (repoUrl != null && ref != null && srcPref != null) {
+		            String blob = repoUrl.contains("gitlab") ? "/-/blob/" : "/blob/";
+		            String path = ste.getClassName().replace('.', '/') + ".java";
+		            String link = repoUrl + blob + ref + "/" + srcPref + "/" + path + "#L" + ste.getLineNumber();
+		            sb.append(" [src: ").append(location).append(" ").append(link).append("]");
+		        } else {
+		            sb.append(" [src: ").append(location).append("]");
+		        }
+
+		        count++;
+		        if (count >= 10) break; // solo 5 niveles
+		    }
+
+		    srcInfo = sb.toString();
+	  	}
+			
+
+			String text;
+			if (message != null) {
+				text = message + srcInfo;
+			} else if (t != null) {
+				if (dumpStack) {
+					StringWriter sw = new StringWriter();
+					PrintWriter pw = new PrintWriter(sw);
+					t.printStackTrace(pw);
+					text = (srcInfo.length() > 0 ? srcInfo + System.lineSeparator() : "") + sw.toString();
+				} else {
+					String msg = t.getMessage();
+					text = (msg == null ? "" : msg) + srcInfo;
+				}
+			} else {
+				text = srcInfo;
+			}
+
+			Logger logger = initialize();
+			if (logger == null) {
+				System.out.println(text);
+				return;
+			}
+			printStartInfo();
+			printDebugPrint(logger, Log_Id, text);
+		} catch (Exception e) {
+			System.out.println("Error en debug print de excepción:");
+			e.printStackTrace();
+		}
+	}
+
+	private static void printDebugPrint(Logger logger, int level, String zMensaje) throws Exception {
 		if (!isLogEnable(level))
 			return;
 
@@ -349,14 +352,13 @@ public class PssLogger {
 			logger.debug(zMensaje);
 			break;
 		case LOG_DEBUG_SQL:
-			logger.debug("[DB:"+JBDatos.getDefaultDatabase().GetName()+"] "+zMensaje);
+			logger.debug("[DB:" + JBDatos.getDefaultDatabase().GetName() + "] " + zMensaje);
 			break;
 		default:
 			logger.debug(zMensaje);
 			break;
 		}
 	}
-
 
 	public static int getLevelForPrefix(String zPrefix) {
 		if (zPrefix == null) {
@@ -396,6 +398,7 @@ public class PssLogger {
 		return (String) getAppMethod.invoke(null, new Object[] {});
 
 	}
+
 	private static String getDebugName() throws Exception {
 		Class<?> application;
 		Method getAppMethod;
@@ -416,9 +419,11 @@ public class PssLogger {
 	}
 
 	static boolean showStartInfo = false;
+
 	public static void printStartInfo() {
-		if (showStartInfo) return;
-		showStartInfo=true;
+		if (showStartInfo)
+			return;
+		showStartInfo = true;
 		PssLogger.logInfo("______________________________________________________________________________________________________________"); //$NON-NLS-1$ //$NON-NLS-2$
 		PssLogger.logInfo(" "); //$NON-NLS-1$ //$NON-NLS-2$
 		PssLogger.logInfo(" Pentaware Group - Copyright 2017 ");
@@ -429,34 +434,34 @@ public class PssLogger {
 		long heapSize = Runtime.getRuntime().totalMemory();
 		long heapMaxSize = Runtime.getRuntime().maxMemory();
 		long heapFreeSize = Runtime.getRuntime().freeMemory();
-		PssLogger.logInfo(" Total Memory  : " +  JTools.formatFileSize(heapSize));
-		PssLogger.logInfo(" Max Memory    : " +  JTools.formatFileSize(heapMaxSize));
-		PssLogger.logInfo(" Free Memory   : " + JTools.formatFileSize( heapFreeSize));
-		
-		try {
-			InetAddress ip= Inet4Address.getLocalHost();
-			PssLogger.logInfo(" IP host       : " + ip.getHostAddress()+" ("+ ip.getHostName()+")");
-	    NetworkInterface network = NetworkInterface.getByInetAddress(ip);
-	    
-	    byte[] mac = network.getHardwareAddress();
+		PssLogger.logInfo(" Total Memory  : " + JTools.formatFileSize(heapSize));
+		PssLogger.logInfo(" Max Memory    : " + JTools.formatFileSize(heapMaxSize));
+		PssLogger.logInfo(" Free Memory   : " + JTools.formatFileSize(heapFreeSize));
 
-	    StringBuilder sb = new StringBuilder();
-	    for (int i = 0; i < mac.length; i++) {
-	        sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));     
-	    }
-			PssLogger.logInfo( " MAC           : "+ sb.toString());
+		try {
+			InetAddress ip = Inet4Address.getLocalHost();
+			PssLogger.logInfo(" IP host       : " + ip.getHostAddress() + " (" + ip.getHostName() + ")");
+			NetworkInterface network = NetworkInterface.getByInetAddress(ip);
+
+			byte[] mac = network.getHardwareAddress();
+
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0; i < mac.length; i++) {
+				sb.append(String.format("%02X%s", mac[i], (i < mac.length - 1) ? "-" : ""));
+			}
+			PssLogger.logInfo(" MAC           : " + sb.toString());
 		} catch (Throwable e) {
-			PssLogger.logInfo(" IP host       : (exception)" +e.getMessage());
+			PssLogger.logInfo(" IP host       : (exception)" + e.getMessage());
 		}
 
-		PssLogger.logInfo( " OS Name       : "+ System.getProperty("os.name"));
-		PssLogger.logInfo( " OS Version    : "+ System.getProperty("os.version"));
-		PssLogger.logInfo( " OS Arch       : "+ System.getProperty("os.arch"));
-		
-		PssLogger.logInfo( " CPU id        : "+ System.getenv("PROCESSOR_IDENTIFIER"));
-		PssLogger.logInfo( " CPU arch      : "+ System.getenv("PROCESSOR_ARCHITECTURE"));
-		PssLogger.logInfo( " CPU arch bits : "+ System.getenv("PROCESSOR_ARCHITEW6432"));
-		PssLogger.logInfo( " CPU nro       : "+ Runtime.getRuntime().availableProcessors());
+		PssLogger.logInfo(" OS Name       : " + System.getProperty("os.name"));
+		PssLogger.logInfo(" OS Version    : " + System.getProperty("os.version"));
+		PssLogger.logInfo(" OS Arch       : " + System.getProperty("os.arch"));
+
+		PssLogger.logInfo(" CPU id        : " + System.getenv("PROCESSOR_IDENTIFIER"));
+		PssLogger.logInfo(" CPU arch      : " + System.getenv("PROCESSOR_ARCHITECTURE"));
+		PssLogger.logInfo(" CPU arch bits : " + System.getenv("PROCESSOR_ARCHITEW6432"));
+		PssLogger.logInfo(" CPU nro       : " + Runtime.getRuntime().availableProcessors());
 
 		try {
 //			File[] paths;
@@ -464,58 +469,54 @@ public class PssLogger {
 //			paths = File.listRoots();
 //			for(File path:paths)
 //				PssLogger.logInfo(" Drive Name    : "+path+" - "+fsv.getSystemTypeDescription(path)+" - Total ["+ JTools.formatFileSize(path.getTotalSpace())+"] Free ["+  JTools.formatFileSize(path.getFreeSpace())+ "] Usable ["+ JTools.formatFileSize(path.getUsableSpace())+"]");
-			
+
 			PrintService[] printServices = PrintServiceLookup.lookupPrintServices(null, null);
 			for (PrintService printer : printServices)
-				PssLogger.logInfo(" Printer       : "+ printer.getName());
+				PssLogger.logInfo(" Printer       : " + printer.getName());
 		} catch (Exception e1) {
-			PssLogger.logInfo( " Drive Name    : (error)"+ e1.getMessage());
-		} 
+			PssLogger.logInfo(" Drive Name    : (error)" + e1.getMessage());
+		}
 
-		PssLogger.logInfo( " APP name      : "+ JPssVersion.getPssTitle());
-		PssLogger.logInfo( " APP version   : "+ JPssVersion.getPssVersion());
-		PssLogger.logInfo( " APP date      : "+ JPssVersion.getPssDate());
+		PssLogger.logInfo(" APP name      : " + JPssVersion.getPssTitle());
+		PssLogger.logInfo(" APP version   : " + JPssVersion.getPssVersion());
+		PssLogger.logInfo(" APP date      : " + JPssVersion.getPssDate());
 
 		try {
-			PssLogger.logInfo( " Path pssData  : "+ JPath.PssPathData());
-			PssLogger.logInfo( " Path bin      : "+ JPath.PssPathBin());
-			PssLogger.logInfo( " Path temp     : "+ JPath.PssPathTempFiles());
-			PssLogger.logInfo( " Path input    : "+ JPath.PssPathInput());
-			PssLogger.logInfo( " Path output   : "+ JPath.PssPathOutput());
-			PssLogger.logInfo( " Path log      : "+ JPath.PssPathLog());
-			PssLogger.logInfo( " Path resource : "+ JPath.PssPathResource());
+			PssLogger.logInfo(" Path pssData  : " + JPath.PssPathData());
+			PssLogger.logInfo(" Path bin      : " + JPath.PssPathBin());
+			PssLogger.logInfo(" Path temp     : " + JPath.PssPathTempFiles());
+			PssLogger.logInfo(" Path input    : " + JPath.PssPathInput());
+			PssLogger.logInfo(" Path output   : " + JPath.PssPathOutput());
+			PssLogger.logInfo(" Path log      : " + JPath.PssPathLog());
+			PssLogger.logInfo(" Path resource : " + JPath.PssPathResource());
 		} catch (Exception e) {
-			PssLogger.logInfo( " Path          : (error)"+ e.getMessage());
+			PssLogger.logInfo(" Path          : (error)" + e.getMessage());
 		}
 
 		try {
-			PssLogger.logInfo( " CFG nr.user conc: "+ BizPssConfig.GetMaximumConcurrentSessions());
-			PssLogger.logInfo( " CFG language    : "+ BizPssConfig.GetDefaultLanguage());
-			PssLogger.logInfo( " CFG prefix      : "+ BizPssConfig.getPssConfig().getAppURLPrefix());
-			PssLogger.logInfo( " CFG use captcha : "+ BizPssConfig.getPssConfig().getUseCaptcha());
-			PssLogger.logInfo( " CFG s.timeout df: "+ BizPssConfig.getPssConfig().getSessionTimeout());
-			PssLogger.logInfo( " CFG business    : "+ BizPssConfig.getPssConfig().getBusinessDefault());
-			PssLogger.logInfo( " CFG autologin   : "+ BizPssConfig.getPssConfig().getAutoLogin());
-			PssLogger.logInfo( " CFG databases   : "+ BizPssConfig.getPssConfig().getNameDatabases());
-			PssLogger.logInfo( " CFG skin df     : "+ BizPssConfig.getPssConfig().getSkinDefault());
-			PssLogger.logInfo( " CFG skin mobile : "+ BizPssConfig.getPssConfig().getSkinMobileDefault());
-			PssLogger.logInfo( " CFG DB Name     : "+ BizPssConfig.getPssConfig().GetDatabaseNameDefault());
-			PssLogger.logInfo( " CFG DB driver   : "+ BizPssConfig.getPssConfig().getCachedStrictValue(BizPssConfig.getPssConfig().GetDatabaseNameDefault(), "DRIVER_NAME", "Desconocido"));
-			PssLogger.logInfo( " CFG DB auth     : "+ BizPssConfig.getPssConfig().getCachedStrictValue(BizPssConfig.getPssConfig().GetDatabaseNameDefault(), "AUTHENTICATION", "No"));
-			PssLogger.logInfo( " CFG DB conn     : "+ BizPssConfig.getPssConfig().getCachedStrictValue(BizPssConfig.getPssConfig().GetDatabaseNameDefault(), "CONNECTION_URL", "Desconocido"));
+			PssLogger.logInfo(" CFG nr.user conc: " + BizPssConfig.GetMaximumConcurrentSessions());
+			PssLogger.logInfo(" CFG language    : " + BizPssConfig.GetDefaultLanguage());
+			PssLogger.logInfo(" CFG prefix      : " + BizPssConfig.getPssConfig().getAppURLPrefix());
+			PssLogger.logInfo(" CFG use captcha : " + BizPssConfig.getPssConfig().getUseCaptcha());
+			PssLogger.logInfo(" CFG s.timeout df: " + BizPssConfig.getPssConfig().getSessionTimeout());
+			PssLogger.logInfo(" CFG business    : " + BizPssConfig.getPssConfig().getBusinessDefault());
+			PssLogger.logInfo(" CFG autologin   : " + BizPssConfig.getPssConfig().getAutoLogin());
+			PssLogger.logInfo(" CFG databases   : " + BizPssConfig.getPssConfig().getNameDatabases());
+			PssLogger.logInfo(" CFG skin df     : " + BizPssConfig.getPssConfig().getSkinDefault());
+			PssLogger.logInfo(" CFG skin mobile : " + BizPssConfig.getPssConfig().getSkinMobileDefault());
+			PssLogger.logInfo(" CFG DB Name     : " + BizPssConfig.getPssConfig().GetDatabaseNameDefault());
+			PssLogger.logInfo(" CFG DB driver   : " + BizPssConfig.getPssConfig().getCachedStrictValue(BizPssConfig.getPssConfig().GetDatabaseNameDefault(), "DRIVER_NAME", "Desconocido"));
+			PssLogger.logInfo(" CFG DB auth     : " + BizPssConfig.getPssConfig().getCachedStrictValue(BizPssConfig.getPssConfig().GetDatabaseNameDefault(), "AUTHENTICATION", "No"));
+			PssLogger.logInfo(" CFG DB conn     : " + BizPssConfig.getPssConfig().getCachedStrictValue(BizPssConfig.getPssConfig().GetDatabaseNameDefault(), "CONNECTION_URL", "Desconocido"));
 		} catch (Exception e) {
-			PssLogger.logInfo( " CFG             : (error)"+ e.getMessage());
+			PssLogger.logInfo(" CFG             : (error)" + e.getMessage());
 		}
-/*
-		try {
-			File n = new File("\\\\34.214.94.33\\homes");
-			for (File arch:n.listFiles()) {
-				PssLogger.logInfo( arch.getName() );
-			}
-		} catch (Exception e) {
-			PssLogger.logInfo( " MAP             : (error)"+ e.getMessage());
-		}
-		*/
+		/*
+		 * try { File n = new File("\\\\34.214.94.33\\homes"); for (File
+		 * arch:n.listFiles()) { PssLogger.logInfo( arch.getName() ); } } catch
+		 * (Exception e) { PssLogger.logInfo( " MAP             : (error)"+
+		 * e.getMessage()); }
+		 */
 		PssLogger.logInfo("______________________________________________________________________________________________________________"); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -526,12 +527,12 @@ public class PssLogger {
 
 	public static void habilitarSQLLog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public static void deshabilitarSQLLog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

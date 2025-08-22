@@ -55,7 +55,7 @@ public class JRegistrationView  extends JLoginView implements IActionPerform, IL
 	@Override
 	protected void build() throws Exception {
 
-		// this.setTitle("Inicio de sesión");
+		// this.setTitle("Inicio de sesiÃ³n");
 		// this.setIcon(JWebIcon.getPssIcon(GuiIcon.LOGIN_ICON));
 		analizeIniConfiguration();
 		
@@ -71,7 +71,7 @@ public class JRegistrationView  extends JLoginView implements IActionPerform, IL
 		JWebDivResponsive formDiv = new JWebDivResponsive();
 		JWebDivResponsive formDiv2 = new JWebDivResponsive();
 		JWebImageResponsive imagen = new JWebImageResponsive(JPssImage.SOURCE_PSS,"logos/"+BizPssConfig.getPssConfig().getLogo(),null);
-		JWebHResponsive title = new JWebHResponsive(3,getMessage("Inicio de sesión"));
+		JWebHResponsive title = new JWebHResponsive(3,getMessage("Inicio de sesiÃ³n"));
 		JWebFieldsetResponsive fieldset = new JWebFieldsetResponsive();
 		JWebForm oForm = new JWebForm();
 		panel.setClassResponsive("login-panel panel panel-default");
@@ -110,13 +110,13 @@ public class JRegistrationView  extends JLoginView implements IActionPerform, IL
 		
 //		this.oPais = new JWebComboResponsive();
 //		this.oPais.setLabelLateral(getMessage("Pais"));
-//		fieldset.add("País",this.oPais);
+//		fieldset.add("Paï¿½s",this.oPais);
 
 		oPasswordNew = new JWebViewPasswordResponsive();
-		oPasswordNew.setLabelLateral(JLanguage.translate("Contraseña"));
+		oPasswordNew.setLabelLateral(JLanguage.translate("Contraseï¿½a"));
 		fieldset.add("new_password",oPasswordNew);
 		oPasswordNewConf = new JWebViewPasswordResponsive();
-		oPasswordNewConf.setLabelLateral(JLanguage.translate("Re-ingrese Contraseña"));
+		oPasswordNewConf.setLabelLateral(JLanguage.translate("Re-ingrese Contraseï¿½a"));
 		fieldset.add("new_password_confirmation",oPasswordNewConf);
 
 		oCompany.setController(new JString(), "Empresa", true, 250, null);
@@ -128,8 +128,8 @@ public class JRegistrationView  extends JLoginView implements IActionPerform, IL
 //				return new GuiPaisesLista();
 //			}
 //		});
-		oPasswordNew.setController(new JPassword(), "Contraseña nueva",  false, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
-		oPasswordNewConf.setController(new JPassword(), "Contraseña nueva confimación",  false, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
+		oPasswordNew.setController(new JPassword(), "Contraseï¿½a nueva",  false, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
+		oPasswordNewConf.setController(new JPassword(), "Contraseï¿½a nueva confimaciï¿½n",  false, BizSegConfiguracion.C_MAX_PASSWORD_LEN, null);
 
 		addCaptcha(fieldset);
 	
@@ -191,16 +191,16 @@ public class JRegistrationView  extends JLoginView implements IActionPerform, IL
 			String sKey = JTools.PasswordToString(sKeyEnc);
 			BizTracingUser track=BizTracingUser.registerSecond(sEmail,sKey);
 			if (track==null) {
-				throw new Exception("Acceso inválido");
+				throw new Exception("Acceso invï¿½lido");
 			}
 			
 			if (sKey.indexOf(sUsername+"_|_")==-1) {
 				track.registerProblem("Clave corrupta");
-				throw new Exception("Acceso inválido");
+				throw new Exception("Acceso invï¿½lido");
 			}
 			if (sKey.indexOf(sCompany+"_#_")==-1) {
 				track.registerProblem("Clave corrupta");
-				throw new Exception("Acceso inválido");
+				throw new Exception("Acceso invï¿½lido");
 			}
 
 			sUsername = sKey.substring( 0, sKey.indexOf("_|_"));
@@ -249,7 +249,7 @@ public class JRegistrationView  extends JLoginView implements IActionPerform, IL
 		checkCaptcha(loginResolver);
 		
 		if (!sPassword.equals(sPasswordRepeat)) {
-			throw new Exception(getMessage("Contraseñas no coinciden"));
+			throw new Exception(getMessage("Contraseï¿½as no coinciden"));
 
 		}
 		try {
@@ -267,12 +267,12 @@ public class JRegistrationView  extends JLoginView implements IActionPerform, IL
 			throw e;
 		}
 			
-		return loginResolver.getRedirector().goShowMessage(JWebViewsConstants.MESSAGE_TYPE_INFO, "Registración", "Se envió un mail con el link de acceso");
+		return loginResolver.getRedirector().goShowMessage(JWebViewsConstants.MESSAGE_TYPE_INFO, "Registraciï¿½n", "Se enviï¿½ un mail con el link de acceso");
 	}
 
 	// LOGIN_WELCOME_TITLE=Bienvenido
 	// LOGIN_WELCOME_TITLE_LOGO=15000
-	// LOGIN_WELCOME_TEXT=Ud ha ingresado al área privada del SITI. Ingrese los
+	// LOGIN_WELCOME_TEXT=Ud ha ingresado al ï¿½rea privada del SITI. Ingrese los
 	// datos de su usuario y presione 'confirmar' para comenzar a administrar su
 	// Empresa
 	// LOGIN_WELCOME_FOOTER=* Sitio optimizado para : Internet Explorer 7 o
@@ -286,7 +286,7 @@ public class JRegistrationView  extends JLoginView implements IActionPerform, IL
 		loginTitle = cfg.getCachedValue(secc, "LOGIN_WELCOME_TITLE", "Bienvenido");
 		loginTitleLogo = cfg.getCachedValue(secc, "LOGIN_WELCOME_TITLE_LOGO", "15000");
 		loginText = cfg.getCachedValue(secc, "LOGIN_WELCOME_TEXT",
-				"Ud ha ingresado al área privada del SITI. Ingrese los datos de su usuario y presione 'confirmar' para comenzar a administrar su Empresa");
+				"Ud ha ingresado al ï¿½rea privada del SITI. Ingrese los datos de su usuario y presione 'confirmar' para comenzar a administrar su Empresa");
 		loginFooter = cfg.getCachedValue(secc, "LOGIN_WELCOME_FOOTER", "* Sitio optimizado para : Internet Explorer 7 o superior, Mozilla Firefox 3 o superior");
 		loginTextLink = cfg.getCachedValue(secc, "LOGIN_WELCOME_TEXT_LINK", "Pentaware S.A.");
 		loginLink = cfg.getCachedValue(secc, "LOGIN_WELCOME_LINK", "http://www.pentaware.com.ar");

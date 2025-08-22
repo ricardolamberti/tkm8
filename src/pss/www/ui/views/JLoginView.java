@@ -65,7 +65,7 @@ public class JLoginView extends JWebView implements IActionPerform, ILoginPage {
 	@Override
 	protected void build() throws Exception {
 
-		// this.setTitle("Inicio de sesi�n");
+		// this.setTitle("Inicio de sesión");
 		// this.setIcon(JWebIcon.getPssIcon(GuiIcon.LOGIN_ICON));
 		analizeIniConfiguration();
 
@@ -81,7 +81,7 @@ public class JLoginView extends JWebView implements IActionPerform, ILoginPage {
 		JWebDivResponsive formDiv = new JWebDivResponsive();
 		JWebDivResponsive formDiv2 = new JWebDivResponsive();
 		JWebImageResponsive imagen = new JWebImageResponsive(JPssImage.SOURCE_PSS, "logos/" + BizPssConfig.getPssConfig().getLogo(), null);
-		JWebHResponsive title = new JWebHResponsive(3, getMessage("Inicio de sesi�n"));
+		JWebHResponsive title = new JWebHResponsive(3, getMessage("Inicio de sesión"));
 		JWebFieldsetResponsive fieldset = new JWebFieldsetResponsive();
 		JWebForm oForm = new JWebForm();
 		panel.setClassResponsive("login-panel panel panel-default");
